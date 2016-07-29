@@ -1,4 +1,4 @@
-package com.umbrella.util;
+package com.umbrella.worker.util;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConvertUtils;

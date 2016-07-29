@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.umbrella.util.BeanUtilsExtends;
+import com.umbrella.worker.util.BeanUtilsExtends;
 import com.umbrella.worker.dao.WMembersMapper;
 import com.umbrella.worker.dto.MembersDO;
 import com.umbrella.worker.entity.WMembers;
