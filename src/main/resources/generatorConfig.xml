@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-genrator-config_1_0.dtd" >
+<generatorConfiguration >
+  <context id="context1" targetRuntime="MyBatis3">
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost:3306/worker" userId="root" password="1234" />
+    <javaModelGenerator targetPackage="com.umbrella.worker.entity" targetProject="src/main/java" />
+    <sqlMapGenerator targetPackage="com.umbrella.worker.dao" targetProject="src/main/java" />
+    <javaClientGenerator targetPackage="com.umbrella.worker.dao"	targetProject="src/main/java" type="XMLMAPPER" />																														
+     
+     <table schema="worker" tableName="w_admin" ></table>  
+     <table schema="worker" tableName="w_certificore" ></table> 
+     <table schema="worker" tableName="w_comment" ></table> 
+     <table schema="worker" tableName="w_contact"></table> 
+     <table schema="worker" tableName="w_member_coupon" ></table> 
+     <table schema="worker" tableName="w_members" ></table> 
+     <table schema="worker" tableName="w_order" ></table> 
+     <table schema="worker" tableName="w_order_detail" ></table> 
+     <table schema="worker" tableName="w_order_staff" ></table> 
+     <table schema="worker" tableName="w_payrecord" ></table> 
+     <table schema="worker" tableName="w_ratin" ></table> 
+     <table schema="worker" tableName="w_schedule" ></table> 
+     <table schema="worker" tableName="w_staff" ></table> 
+     <table schema="worker" tableName="w_supplier" ></table> 
+     <table schema="worker" tableName="w_transaction" ></table> 
+  </context>
+</generatorConfiguration>
