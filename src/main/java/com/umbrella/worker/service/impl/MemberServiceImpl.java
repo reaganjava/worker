@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.umbrella.worker.util.BeanUtilsExtends;
+import com.umbrella.worker.util.StringUtil;
 import com.umbrella.worker.dao.WMembersMapper;
 import com.umbrella.worker.dto.MembersDO;
 import com.umbrella.worker.entity.WMembers;
@@ -116,14 +117,64 @@ public class MemberServiceImpl implements IMemberService {
 
 	@Override
 	public ResultDO remove(Integer memberId) {
-		// TODO Auto-generated method stub
-		return null;
+		ResultSupport result = new ResultSupport();
+		WMembers members = new WMembers();
+		
+		if(StringUtil.isGreatOne(memberId)) {
+			members.setId(memberId);
+		} else {
+		    result.setSuccess(false);
+		    return result;
+		}
+		members.setDatalevel(-1);
+		int recordNum = -1;
+		try {
+			recordNum = membersMapper.updateByPrimaryKeySelective(members);
+		} catch (Exception e) {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+	        logger.error("[obj:member][opt:remove][msg:"+e.getMessage()+"]");
+	        return result;
+		}
+		if (recordNum != 1) {
+			result.setSuccess(false);
+		}
+		return result;
 	}
 
 	@Override
 	public ResultDO get(Integer memberId) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		ResultSupport result = new ResultSupport();
+		
+		WMembers members = null;
+		if(!StringUtil.isGreatOne(memberId)) {
+			 result.setSuccess(false);
+			 return result;
+		} 
+		
+		try {
+			members = membersMapper.selectByPrimaryKey(memberId);
+		} catch (Exception e) {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+	        logger.error("[obj:member][opt:get][msg:"+e.getMessage()+"]");
+	        return result;
+		}
+		
+		MembersDO membersDO = getMemberDO(members);
+		if(membersDO != null) {
+			result.setModel(ResultSupport.FIRST_MODEL_KEY, membersDO);
+		} else {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			return result;
+		}
+		
+		return result;
 	}
 
 	@Override
