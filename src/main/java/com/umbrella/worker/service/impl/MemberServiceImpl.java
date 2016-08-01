@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 
 import com.umbrella.worker.util.BeanUtilsExtends;
 import com.umbrella.worker.util.StringUtil;
+import com.umbrella.worker.dao.WContactMapper;
 import com.umbrella.worker.dao.WMemberCouponMapper;
 import com.umbrella.worker.dao.WMembersMapper;
 import com.umbrella.worker.dto.MemberCouponDO;
@@ -189,20 +190,31 @@ public class MemberServiceImpl implements IMemberService {
 	        return result;
 		}
 		
-		WMemberCouponExample example = new WMemberCouponExample();
-		example.createCriteria().andWMcMemberIdEqualTo(memberId);
-		try {
-			memberCouponMapper.selectByExample(example);
-		} catch (Exception e) {
-			result.setSuccess(false);
-	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
-	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
-	        logger.error("[obj:memberCoupon][opt:get][msg:"+e.getMessage()+"]");
-	        return result;
-		}
-		
 		MembersDO membersDO = getMemberDO(members);
 		if(membersDO != null) {
+			WMemberCouponExample example = new WMemberCouponExample();
+			example.createCriteria().andWMcMemberIdEqualTo(memberId);
+			
+			List<MemberCouponDO> memberCouponDOList = null;
+			try {
+				List<WMemberCoupon> list = memberCouponMapper.selectByExample(example);
+				memberCouponDOList = getMemberCouponDOList(list);
+			} catch (Exception e) {
+				result.setSuccess(false);
+		        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+		        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+		        logger.error("[obj:memberCoupon][opt:get][msg:"+e.getMessage()+"]");
+		        return result;
+			}
+			
+			if(memberCouponDOList != null) {
+				membersDO.setMemberCoupons(memberCouponDOList);
+			} else {
+				result.setSuccess(false);
+		        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+		        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+				return result;
+			}
 			result.setModel(ResultSupport.FIRST_MODEL_KEY, membersDO);
 		} else {
 			result.setSuccess(false);

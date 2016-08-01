@@ -47,7 +47,7 @@ public class CouponServiceImpl implements ICouponService {
 			result.setSuccess(false);
 			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
 			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
-			logger.error("[obj:supplier][opt:create][msg:" + e.getMessage()
+			logger.error("[obj:coupon][opt:create][msg:" + e.getMessage()
 			+ "]");
 			return result;
 		}
@@ -78,7 +78,7 @@ public class CouponServiceImpl implements ICouponService {
 			result.setSuccess(false);
 			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
 			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
-			logger.error("[obj:supplier][opt:modifi][msg:" + e.getMessage()
+			logger.error("[obj:coupon][opt:modifi][msg:" + e.getMessage()
 					+ "]");
 			return result;
 		}
@@ -110,7 +110,7 @@ public class CouponServiceImpl implements ICouponService {
 			result.setSuccess(false);
 	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
 	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
-	        logger.error("[obj:supplier][opt:remove][msg:"+e.getMessage()+"]");
+	        logger.error("[obj:coupon][opt:remove][msg:"+e.getMessage()+"]");
 	        return result;
 		}
 		if (recordNum != 1) {
@@ -136,7 +136,7 @@ public class CouponServiceImpl implements ICouponService {
 			result.setSuccess(false);
 	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
 	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
-	        logger.error("[obj:supplier][opt:get][msg:"+e.getMessage()+"]");
+	        logger.error("[obj:coupon][opt:get][msg:"+e.getMessage()+"]");
 	        return result;
 		}
 		
@@ -202,14 +202,14 @@ public class CouponServiceImpl implements ICouponService {
 			result.setSuccess(false);
 	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
 	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
-	        logger.error("[obj:supplier][opt:get][msg:"+e.getMessage()+"]");
+	        logger.error("[obj:coupon][opt:get][msg:"+e.getMessage()+"]");
 	        return result;
 		}
 		
-		List<CouponDO> supplierList = getCouponDOList(list);
+		List<CouponDO> couponList = getCouponDOList(list);
 		
-		if(supplierList.size() > 0) {
-			result.setModel(ResultSupport.FIRST_MODEL_KEY, supplierList);
+		if(couponList.size() > 0) {
+			result.setModel(ResultSupport.FIRST_MODEL_KEY, couponList);
 		} else {
 			result.setSuccess(false);
 	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
