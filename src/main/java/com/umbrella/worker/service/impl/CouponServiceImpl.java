@@ -6,29 +6,29 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.umbrella.worker.dao.WSupplierMapper;
-import com.umbrella.worker.dto.SupplierDO;
-import com.umbrella.worker.entity.WSupplier;
-import com.umbrella.worker.entity.WSupplierExample;
-import com.umbrella.worker.query.SupplierQuery;
+import com.umbrella.worker.dao.WCouponMapper;
+import com.umbrella.worker.dto.CouponDO;
+import com.umbrella.worker.entity.WCoupon;
+import com.umbrella.worker.entity.WCouponExample;
+import com.umbrella.worker.query.CouponQuery;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
-import com.umbrella.worker.service.ISuppliersService;
+import com.umbrella.worker.service.ICouponService;
 import com.umbrella.worker.util.BeanUtilsExtends;
 import com.umbrella.worker.util.StringUtil;
 
-public class SuppliersServiceImpl implements ISuppliersService {
+public class CouponServiceImpl implements ICouponService {
 	
-	private static Logger logger = Logger.getLogger(SuppliersServiceImpl.class);
+	private static Logger logger = Logger.getLogger(CouponServiceImpl.class);
 	
-	private WSupplierMapper supplierMapper;
+	private WCouponMapper couponMapper;
 
 	@Override
-	public ResultDO create(SupplierDO supplierDO) {
+	public ResultDO create(CouponDO couponDO) {
 		
-		WSupplier supplier = new WSupplier();
+		WCoupon coupon = new WCoupon();
 		
-		ResultSupport result = BeanUtilsExtends.copy(supplierDO, supplier);
+		ResultSupport result = BeanUtilsExtends.copy(couponDO, coupon);
 		
 		if(!result.isSuccess()) {
 			return result;
@@ -36,13 +36,13 @@ public class SuppliersServiceImpl implements ISuppliersService {
 		
 		int recordNum = -1;
 		
-		supplier.setDatalevel(1);
-		supplier.setStatus(1);
-		supplier.setCreateTime(Calendar.getInstance().getTime());
-		supplier.setModifiTime(Calendar.getInstance().getTime());
+		coupon.setDatalevel(1);
+		coupon.setStatus(1);
+		coupon.setCreateTime(Calendar.getInstance().getTime());
+		coupon.setModifiTime(Calendar.getInstance().getTime());
 		
 		try {
-			recordNum = supplierMapper.insertSelective(supplier);
+			recordNum = couponMapper.insertSelective(coupon);
 		} catch (Exception e) {
 			result.setSuccess(false);
 			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
@@ -53,7 +53,7 @@ public class SuppliersServiceImpl implements ISuppliersService {
 		}
 		
 		if(recordNum == 1) {
-			result.setModel(ResultDO.FIRST_MODEL_KEY, supplier.getId());
+			result.setModel(ResultDO.FIRST_MODEL_KEY, coupon.getId());
 		} else {
 			result.setSuccess(false);
 		}
@@ -61,19 +61,19 @@ public class SuppliersServiceImpl implements ISuppliersService {
 	}
 
 	@Override
-	public ResultDO modifi(SupplierDO supplierDO) {
+	public ResultDO modifi(CouponDO couponDO) {
 		
-		WSupplier supplier = new WSupplier();
+		WCoupon coupon = new WCoupon();
 
-		ResultSupport result = BeanUtilsExtends.copy(supplierDO, supplier);
+		ResultSupport result = BeanUtilsExtends.copy(couponDO, coupon);
 		// 拷贝失败
 		if (!result.isSuccess()) {
 			return result;
 		}
-		supplier.setModifiTime(Calendar.getInstance().getTime());
+		coupon.setModifiTime(Calendar.getInstance().getTime());
 		int recordNum = -1;
 		try {
-			recordNum = supplierMapper.updateByPrimaryKey(supplier);
+			recordNum = couponMapper.updateByPrimaryKey(coupon);
 		} catch (Exception e) {
 			result.setSuccess(false);
 			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
@@ -90,22 +90,22 @@ public class SuppliersServiceImpl implements ISuppliersService {
 	}
 
 	@Override
-	public ResultDO remove(int supplierId) {
+	public ResultDO remove(int couponId) {
 		
 		ResultSupport result = new ResultSupport();
 		
-		WSupplier supplier = new WSupplier();
+		WCoupon coupon = new WCoupon();
 		
-		if(StringUtil.isGreatOne(supplierId)) {
-			supplier.setId(supplierId);
+		if(StringUtil.isGreatOne(couponId)) {
+			coupon.setId(couponId);
 		} else {
 		    result.setSuccess(false);
 		    return result;
 		}
-		supplier.setDatalevel(-1);
+		coupon.setDatalevel(-1);
 		int recordNum = -1;
 		try {
-			recordNum = supplierMapper.updateByPrimaryKeySelective(supplier);
+			recordNum = couponMapper.updateByPrimaryKeySelective(coupon);
 		} catch (Exception e) {
 			result.setSuccess(false);
 	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
@@ -120,18 +120,18 @@ public class SuppliersServiceImpl implements ISuppliersService {
 	}
 
 	@Override
-	public ResultDO get(int supplierId) {
+	public ResultDO get(int couponId) {
 		
 		ResultSupport result = new ResultSupport();
 		
-		WSupplier supplier = null;
-		if(!StringUtil.isGreatOne(supplierId)) {
+		WCoupon coupon = null;
+		if(!StringUtil.isGreatOne(couponId)) {
 			 result.setSuccess(false);
 			 return result;
 		} 
 		
 		try {
-			supplier = supplierMapper.selectByPrimaryKey(supplierId);
+			coupon = couponMapper.selectByPrimaryKey(couponId);
 		} catch (Exception e) {
 			result.setSuccess(false);
 	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
@@ -140,9 +140,9 @@ public class SuppliersServiceImpl implements ISuppliersService {
 	        return result;
 		}
 		
-		SupplierDO supplierDO = getSupplierDO(supplier);
-		if(supplierDO != null) {
-			result.setModel(ResultSupport.FIRST_MODEL_KEY, supplierDO);
+		CouponDO couponDO = getCouponDO(coupon);
+		if(couponDO!= null) {
+			result.setModel(ResultSupport.FIRST_MODEL_KEY, couponDO);
 		} else {
 			result.setSuccess(false);
 	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
@@ -154,27 +154,27 @@ public class SuppliersServiceImpl implements ISuppliersService {
 	}
 
 	@Override
-	public ResultDO list(SupplierQuery supplierQuery) {
+	public ResultDO list(CouponQuery couponQuery) {
 		
 		ResultSupport result = new ResultSupport();
 		
-		WSupplierExample example = new WSupplierExample();
-		WSupplierExample.Criteria c = example.createCriteria();
+		WCouponExample example = new WCouponExample();
+		WCouponExample.Criteria c = example.createCriteria();
 		
-		if(StringUtil.isEmpty(supplierQuery.getName())) {
-			c.andWSNameEqualTo("%" + supplierQuery.getName() + "%");
+		if(StringUtil.isEmpty(couponQuery.getTitle())) {
+			c.andWCTitleEqualTo("%" + couponQuery.getTitle() + "%");
 		}
 		
-		if(StringUtil.isNotEmpty(supplierQuery.getOrderByClause())) {	
-			example.setOrderByClause(" " + supplierQuery.getOrderByClause() + " " + supplierQuery.getSort());
+		if(StringUtil.isNotEmpty(couponQuery.getOrderByClause())) {	
+			example.setOrderByClause(" " + couponQuery.getOrderByClause() + " " + couponQuery.getSort());
 		} else {
 			example.setOrderByClause(" W_M_REGISTER_TIME DESC");
 		}
 		
-		if(supplierQuery.isPage()) {
+		if(couponQuery.isPage()) {
 			long count = 0;
 			try {
-				count = supplierMapper.countByExample(example);
+				count = couponMapper.countByExample(example);
 			} catch (Exception e) {
 				result.setSuccess(false);
 		        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
@@ -184,20 +184,20 @@ public class SuppliersServiceImpl implements ISuppliersService {
 		        return result;
 			}
 			result.setModel(ResultSupport.SECOND_MODEL_KEY, count);
-			int pageNO = supplierQuery.getPageNO();
+			int pageNO = couponQuery.getPageNO();
 			if(pageNO > 0) {
 				pageNO = pageNO -1;
 			}
-			String pageByClause = " limit " + (pageNO * supplierQuery.getPageRows())
-					+ "," + supplierQuery.getPageRows();
+			String pageByClause = " limit " + (pageNO * couponQuery.getPageRows())
+					+ "," + couponQuery.getPageRows();
 			
 			example.setPageByClause(pageByClause);
 		}
 		
-		List<WSupplier> list = null;
+		List<WCoupon> list = null;
 		
 		try {
-			list = supplierMapper.selectByExample(example);
+			list = couponMapper.selectByExample(example);
 		} catch (Exception e) {
 			result.setSuccess(false);
 	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
@@ -206,7 +206,7 @@ public class SuppliersServiceImpl implements ISuppliersService {
 	        return result;
 		}
 		
-		List<SupplierDO> supplierList = getSupplierDOList(list);
+		List<CouponDO> supplierList = getCouponDOList(list);
 		
 		if(supplierList.size() > 0) {
 			result.setModel(ResultSupport.FIRST_MODEL_KEY, supplierList);
@@ -219,19 +219,19 @@ public class SuppliersServiceImpl implements ISuppliersService {
 		return result;
 	}
 	
-	private SupplierDO getSupplierDO(WSupplier obj) {
+	private CouponDO getCouponDO(WCoupon obj) {
 		if(obj == null) return null;
-		SupplierDO dst = new SupplierDO();
+		CouponDO dst = new CouponDO();
 		return BeanUtilsExtends.copyProperties(dst, obj) ? dst : null;
 	}
 	
-	private List<SupplierDO> getSupplierDOList(List<WSupplier> list) {
-		List<SupplierDO> resultList = new ArrayList<SupplierDO>();
+	private List<CouponDO> getCouponDOList(List<WCoupon> list) {
+		List<CouponDO> resultList = new ArrayList<CouponDO>();
 		if(list != null && list.isEmpty()) {
-			for(WSupplier supplier : list) {
-				SupplierDO supplierDO = this.getSupplierDO(supplier);
-				if(supplierDO != null) {
-					resultList.add(supplierDO);
+			for(WCoupon coupon : list) {
+				CouponDO couponDO = this.getCouponDO(coupon);
+				if(couponDO != null) {
+					resultList.add(couponDO);
 				} else {
 					return null;
 				}
