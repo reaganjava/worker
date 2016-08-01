@@ -140,7 +140,9 @@ public class MemberServiceImpl implements IMemberService {
 
 	@Override
 	public ResultDO remove(Integer memberId) {
+		
 		ResultSupport result = new ResultSupport();
+		
 		WMembers members = new WMembers();
 		
 		if(StringUtil.isGreatOne(memberId)) {

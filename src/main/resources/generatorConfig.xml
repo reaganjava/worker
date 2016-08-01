@@ -10,18 +10,18 @@
      <!-- <table schema="worker" tableName="w_admin" ></table>  
      <table schema="worker" tableName="w_certificore" ></table> 
      <table schema="worker" tableName="w_comment" ></table> 
-     <table schema="worker" tableName="w_contact"></table>  -->
+     <table schema="worker" tableName="w_contact"></table>
      <table schema="worker" tableName="w_member_coupon" ></table> 
-      <!--<table schema="worker" tableName="w_coupon" ></table> 
+     <table schema="worker" tableName="w_coupon" ></table> 
      <table schema="worker" tableName="w_members_login_log" ></table> 
      <table schema="worker" tableName="w_order" ></table> 
      <table schema="worker" tableName="w_order_detail" ></table> 
      <table schema="worker" tableName="w_order_staff" ></table> 
      <table schema="worker" tableName="w_payrecord" ></table> 
      <table schema="worker" tableName="w_ratin" ></table> 
-     <table schema="worker" tableName="w_schedule" ></table> 
+     <table schema="worker" tableName="w_schedule" ></table>  -->
      <table schema="worker" tableName="w_staff" ></table> 
-     <table schema="worker" tableName="w_supplier" ></table> 
-     <table schema="worker" tableName="w_transaction" ></table>  -->
+     <!-- <table schema="worker" tableName="w_supplier" ></table> 
+     <table schema="worker" tableName="w_transaction" ></table> -->
   </context>
 </generatorConfiguration>
