@@ -65,7 +65,7 @@ public class StaffServiceImpl implements IStaffService {
 		
 		WStaff staff = new WStaff();
 
-		ResultSupport result = BeanUtilsExtends.copy(staff, staffDO);
+		ResultSupport result = BeanUtilsExtends.copy(staffDO, staff);
 		// 拷贝失败
 		if (!result.isSuccess()) {
 			return result;
@@ -163,6 +163,25 @@ public class StaffServiceImpl implements IStaffService {
 		WStaffExample example = new WStaffExample();
 		WStaffExample.Criteria c = example.createCriteria();
 		
+		if(StringUtil.isEmpty(staffQuery.getStaffName())) {
+			c.andWStaffNameLike("%" + staffQuery.getStaffName() + "%");
+		}
+		
+		if(StringUtil.isEmpty(staffQuery.getIdcard())) {
+			c.andWSIdcardEqualTo(staffQuery.getIdcard());
+		}
+		
+		if(StringUtil.isGreatOne(staffQuery.getSupplierId())) {
+			c.andWSSupplierIdEqualTo(staffQuery.getSupplierId());
+		}
+		
+		if(StringUtil.isGreatOne(staffQuery.getServiceType())) {
+			c.andWSServiceTypeEqualTo(staffQuery.getServiceType());
+		}
+		
+		if(StringUtil.isGreatOne(staffQuery.getStatus())) {
+			c.andStatusEqualTo(staffQuery.getStatus());
+		}
 		
 		
 		if(StringUtil.isNotEmpty(staffQuery.getOrderByClause())) {	

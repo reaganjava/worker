@@ -225,6 +225,9 @@ public class MemberServiceImpl implements IMemberService {
 		if(StringUtil.isNotEmpty(membersQuery.getMobile())) {
 			c.andWMMobileEqualTo(membersQuery.getMobile());
 		}
+		if(StringUtil.isGreatOne(membersQuery.getStart())) { 
+			//c.andStatusEqualTo(membersQuery.getStart());
+		}
 		
 		if(StringUtil.isNotEmpty(membersQuery.getOrderByClause())) {	
 			example.setOrderByClause(" " + membersQuery.getOrderByClause() + " " + membersQuery.getSort());
