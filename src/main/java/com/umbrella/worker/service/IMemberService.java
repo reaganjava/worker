@@ -16,6 +16,6 @@ public interface IMemberService {
 	
 	public ResultDO get(Integer memberId);
 	
-	public ResultDO list(MembersDO membersDO);
+	public ResultDO list(MembersQuery membersQuery);
 	
 }

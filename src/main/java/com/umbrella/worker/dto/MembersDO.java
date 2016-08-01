@@ -29,7 +29,7 @@ public class MembersDO extends BaseDO {
     private Date wMLastLoginTime;
     
     
-    private MemberCouponDO memberCouponDO;
+    private List<MemberCouponDO> memberCoupons;
     
     private List<ContactDO> contacts;
 
@@ -113,14 +113,13 @@ public class MembersDO extends BaseDO {
 		this.wMLastLoginTime = wMLastLoginTime;
 	}
 
-
-	public MemberCouponDO getMemberCouponDO() {
-		return memberCouponDO;
+	public List<MemberCouponDO> getMemberCoupons() {
+		return memberCoupons;
 	}
 
 
-	public void setMemberCouponDO(MemberCouponDO memberCouponDO) {
-		this.memberCouponDO = memberCouponDO;
+	public void setMemberCoupons(List<MemberCouponDO> memberCoupons) {
+		this.memberCoupons = memberCoupons;
 	}
 
 

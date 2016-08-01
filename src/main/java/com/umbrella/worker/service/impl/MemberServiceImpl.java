@@ -8,8 +8,12 @@ import org.apache.log4j.Logger;
 
 import com.umbrella.worker.util.BeanUtilsExtends;
 import com.umbrella.worker.util.StringUtil;
+import com.umbrella.worker.dao.WMemberCouponMapper;
 import com.umbrella.worker.dao.WMembersMapper;
+import com.umbrella.worker.dto.MemberCouponDO;
 import com.umbrella.worker.dto.MembersDO;
+import com.umbrella.worker.entity.WMemberCoupon;
+import com.umbrella.worker.entity.WMemberCouponExample;
 import com.umbrella.worker.entity.WMembers;
 import com.umbrella.worker.entity.WMembersExample;
 import com.umbrella.worker.query.MembersQuery;
@@ -22,6 +26,8 @@ public class MemberServiceImpl implements IMemberService {
 	private static Logger logger = Logger.getLogger(MemberServiceImpl.class);
 	
 	private WMembersMapper membersMapper;
+	
+	private WMemberCouponMapper memberCouponMapper;
 
 	@Override
 	public ResultDO register(MembersDO membersDO) {
@@ -83,17 +89,11 @@ public class MemberServiceImpl implements IMemberService {
             return result;
 		}
 		
-		if(list != null && list.isEmpty()) {
-			if(list.size() == 1) {
-				MembersDO membersDO = getMemberDO(list.get(0));
-				if(membersDO != null) {
-					result.setModel(ResultSupport.FIRST_MODEL_KEY, membersDO);
-				} else {
-					result.setSuccess(false);
-					result.setErrorCode(ResultDO.MEMBER_LOGIN_FAILED);
-		            result.setErrorMsg(ResultDO.MEMBER_LOGIN_FAILED_MSG);
-					return result;
-				}
+		
+		if(list.size() == 1) {
+			MembersDO membersDO = getMemberDO(list.get(0));
+			if(membersDO != null) {
+				result.setModel(ResultSupport.FIRST_MODEL_KEY, membersDO);
 			} else {
 				result.setSuccess(false);
 				result.setErrorCode(ResultDO.MEMBER_LOGIN_FAILED);
@@ -106,13 +106,36 @@ public class MemberServiceImpl implements IMemberService {
             result.setErrorMsg(ResultDO.MEMBER_LOGIN_FAILED_MSG);
 			return result;
 		}
+		
 		return result;
 	}
 
 	@Override
 	public ResultDO modifi(MembersDO membersDO) {
-		// TODO Auto-generated method stub
-		return null;
+		WMembers members = new WMembers();
+
+		ResultSupport result = BeanUtilsExtends.copy(members, membersDO);
+		// 拷贝失败
+		if (!result.isSuccess()) {
+			return result;
+		}
+		members.setModifiTime(Calendar.getInstance().getTime());
+		int recordNum = -1;
+		try {
+			recordNum = membersMapper.updateByPrimaryKey(members);
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			logger.error("[obj:members][opt:modifi][msg:" + e.getMessage()
+					+ "]");
+			return result;
+		}
+		if (recordNum < 1) {
+			result.setSuccess(false);
+		}
+
+		return result;
 	}
 
 	@Override
@@ -164,6 +187,18 @@ public class MemberServiceImpl implements IMemberService {
 	        return result;
 		}
 		
+		WMemberCouponExample example = new WMemberCouponExample();
+		example.createCriteria().andWMcMemberIdEqualTo(memberId);
+		try {
+			memberCouponMapper.selectByExample(example);
+		} catch (Exception e) {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+	        logger.error("[obj:memberCoupon][opt:get][msg:"+e.getMessage()+"]");
+	        return result;
+		}
+		
 		MembersDO membersDO = getMemberDO(members);
 		if(membersDO != null) {
 			result.setModel(ResultSupport.FIRST_MODEL_KEY, membersDO);
@@ -178,9 +213,69 @@ public class MemberServiceImpl implements IMemberService {
 	}
 
 	@Override
-	public ResultDO list(MembersDO membersDO) {
-		// TODO Auto-generated method stub
-		return null;
+	public ResultDO list(MembersQuery membersQuery) {
+		
+		ResultSupport result = new ResultSupport();
+		
+		WMembersExample example = new WMembersExample();
+		WMembersExample.Criteria c = example.createCriteria();
+		
+		if(StringUtil.isNotEmpty(membersQuery.getMobile())) {
+			c.andWMMobileEqualTo(membersQuery.getMobile());
+		}
+		
+		if(StringUtil.isNotEmpty(membersQuery.getOrderByClause())) {	
+			example.setOrderByClause(" " + membersQuery.getOrderByClause() + " " + membersQuery.getSort());
+		} else {
+			example.setOrderByClause(" W_M_REGISTER_TIME DESC");
+		}
+		
+		if(membersQuery.isPage()) {
+			long count = 0;
+			try {
+				count = membersMapper.countByExample(example);
+			} catch (Exception e) {
+				result.setSuccess(false);
+		        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+		        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+		        e.printStackTrace();
+		        logger.error("[obj:member][opt:get][msg:"+e.getMessage()+"]");
+		        return result;
+			}
+			result.setModel(ResultSupport.SECOND_MODEL_KEY, count);
+			int pageNO = membersQuery.getPageNO();
+			if(pageNO > 0) {
+				pageNO = pageNO -1;
+			}
+			String pageByClause = " limit " + (pageNO * membersQuery.getPageRows())
+					+ "," + membersQuery.getPageRows();
+			
+			example.setPageByClause(pageByClause);
+		}
+		
+		List<WMembers> list = null;
+		
+		try {
+			list = membersMapper.selectByExample(example);
+		} catch (Exception e) {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+	        logger.error("[obj:member][opt:get][msg:"+e.getMessage()+"]");
+	        return result;
+		}
+		
+		List<MembersDO> memberList = getMemberDOList(list);
+		
+		if(memberList.size() > 0) {
+			result.setModel(ResultSupport.FIRST_MODEL_KEY, memberList);
+		} else {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+	        return result;
+		}
+		return result;
 	}
 	
 	private MembersDO getMemberDO(WMembers obj) {
@@ -196,6 +291,29 @@ public class MemberServiceImpl implements IMemberService {
 				MembersDO memberDO = this.getMemberDO(members);
 				if(memberDO != null) {
 					resultList.add(memberDO);
+				} else {
+					return null;
+				}
+			}
+		} else {
+			return null;
+		}
+		return resultList;
+	}
+	
+	private MemberCouponDO getMemberCouponDO(WMemberCoupon obj) {
+		if(obj == null) return null;
+		MemberCouponDO dst = new MemberCouponDO();
+		return BeanUtilsExtends.copyProperties(dst, obj) ? dst : null;
+	}
+	
+	private List<MemberCouponDO> getMemberCouponDOList(List<WMemberCoupon> list) {
+		List<MemberCouponDO> resultList = new ArrayList<MemberCouponDO>();
+		if(list != null && list.isEmpty()) {
+			for(WMemberCoupon memberCoupon : list) {
+				MemberCouponDO memberCouponDO = this.getMemberCouponDO(memberCoupon);
+				if(memberCouponDO != null) {
+					resultList.add(memberCouponDO);
 				} else {
 					return null;
 				}
