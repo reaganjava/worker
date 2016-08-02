@@ -7,19 +7,13 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.umbrella.worker.dao.WCommentMapper;
-import com.umbrella.worker.dao.WContactMapper;
 import com.umbrella.worker.dto.CommentDO;
-import com.umbrella.worker.dto.ContactDO;
 import com.umbrella.worker.entity.WComment;
 import com.umbrella.worker.entity.WCommentExample;
-import com.umbrella.worker.entity.WContact;
-import com.umbrella.worker.entity.WContactExample;
 import com.umbrella.worker.query.CommentQuery;
-import com.umbrella.worker.query.ContactQuery;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.ICommentService;
-import com.umbrella.worker.service.IContactService;
 import com.umbrella.worker.util.BeanUtilsExtends;
 import com.umbrella.worker.util.StringUtil;
 
