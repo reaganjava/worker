@@ -4,40 +4,40 @@ import java.util.Date;
 
 public class OrderDetailDO extends BaseDO {
     
-    private Integer id;
+	private Integer id;
 
-    
-    private ScheduleDO scheduleDO;
+   
+    private Integer wOStiffId;
 
-    
+   
+    private String wOSupplierName;
+
+  
     private String wOContact;
 
-    
+   
     private String wOCity;
 
     
     private String wODistrict;
 
-    
+   
     private String wOTelephone;
 
-   
+    
+    private String wOStaffTelephone;
+
+    
+    private String wOStaffContact;
+
+    
     private String wOAddress;
 
     
-    private String wOSupplierName;
-
-    
-    private Date wOBeginTime;
-
-    
-    private Date wOEndTime;
-
-    
-    private Integer wOHour;
+    private Date wOSubscribe;
 
    
-    private Integer wOStaffCount;
+    private WorkerTaskDO workerTaskDO;
 
 
 	public Integer getId() {
@@ -49,17 +49,7 @@ public class OrderDetailDO extends BaseDO {
 		this.id = id;
 	}
 
-
-	public ScheduleDO getScheduleDO() {
-		return scheduleDO;
-	}
-
-
-	public void setScheduleDO(ScheduleDO scheduleDO) {
-		this.scheduleDO = scheduleDO;
-	}
-
-
+	
 	public String getwOContact() {
 		return wOContact;
 	}
@@ -120,44 +110,53 @@ public class OrderDetailDO extends BaseDO {
 	}
 
 
-	public Date getwOBeginTime() {
-		return wOBeginTime;
+	public WorkerTaskDO getWorkerTaskDO() {
+		return workerTaskDO;
 	}
 
 
-	public void setwOBeginTime(Date wOBeginTime) {
-		this.wOBeginTime = wOBeginTime;
+	public void setWorkerTaskDO(WorkerTaskDO workerTaskDO) {
+		this.workerTaskDO = workerTaskDO;
 	}
 
 
-	public Date getwOEndTime() {
-		return wOEndTime;
+	public Integer getwOStiffId() {
+		return wOStiffId;
 	}
 
 
-	public void setwOEndTime(Date wOEndTime) {
-		this.wOEndTime = wOEndTime;
+	public void setwOStiffId(Integer wOStiffId) {
+		this.wOStiffId = wOStiffId;
 	}
 
 
-	public Integer getwOHour() {
-		return wOHour;
+	public String getwOStaffTelephone() {
+		return wOStaffTelephone;
 	}
 
 
-	public void setwOHour(Integer wOHour) {
-		this.wOHour = wOHour;
+	public void setwOStaffTelephone(String wOStaffTelephone) {
+		this.wOStaffTelephone = wOStaffTelephone;
 	}
 
 
-	public Integer getwOStaffCount() {
-		return wOStaffCount;
+	public String getwOStaffContact() {
+		return wOStaffContact;
 	}
 
 
-	public void setwOStaffCount(Integer wOStaffCount) {
-		this.wOStaffCount = wOStaffCount;
+	public void setwOStaffContact(String wOStaffContact) {
+		this.wOStaffContact = wOStaffContact;
 	}
 
-   
+
+	public Date getwOSubscribe() {
+		return wOSubscribe;
+	}
+
+
+	public void setwOSubscribe(Date wOSubscribe) {
+		this.wOSubscribe = wOSubscribe;
+	}
+
 }

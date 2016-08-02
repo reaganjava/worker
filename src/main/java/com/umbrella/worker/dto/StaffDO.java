@@ -1,51 +1,98 @@
 package com.umbrella.worker.dto;
 
+import java.math.BigDecimal;
+import java.util.Date;
 
 public class StaffDO extends BaseDO {
     
-    private Integer id;
-
-     
-    private SupplierDO SupplierDO;
+	private Integer id;
+ 
+	
+    private Integer wSSupplierId;
 
      
     private Integer wSAttacId;
 
-    
+     
     private String wStaffName;
 
      
     private Integer wStaffGender;
 
-     
+    
     private String wSIdcard;
 
-    
+     
     private Integer wSAge;
 
     
     private Integer wSWokerYear;
 
-    
+     
     private Integer wSGrade;
 
     
-    private Integer wSServiceType;
+    private Integer wSType;
 
-    
-    private String wSTitle;
-
-    
+     
     private Integer wSScore;
+
+     
+    private String wSAddress;
+
+     
+    private String wSTelephone;
+
+     
+    private String wSPlace;
+
+     
+    private String wSItems;
+
+    
+    private String wSTerget;
 
     
     private Integer wSWorkCount;
 
-    
+     
     private String wSDesc;
 
-    
+     
     private Integer wSComplaintCount;
+
+     
+    private BigDecimal wSPriceFirst;
+
+     
+    private BigDecimal wSPriceSecond;
+
+   
+    private BigDecimal wSPriceThrid;
+
+   
+    private Integer wSRestDay;
+
+    
+    private String wSNation;
+
+    
+    private Integer wSIsMarri;
+
+    
+    private String wSAttribute;
+
+    
+    private String wSEdu;
+
+   
+    private String wSTrainOrg;
+
+    
+    private Date wSTrainDate;
+
+    
+    private String wSTrainItems;
 
 
 	public Integer getId() {
@@ -58,13 +105,13 @@ public class StaffDO extends BaseDO {
 	}
 
 
-	public SupplierDO getSupplierDO() {
-		return SupplierDO;
+	public Integer getwSSupplierId() {
+		return wSSupplierId;
 	}
 
 
-	public void setSupplierDO(SupplierDO supplierDO) {
-		SupplierDO = supplierDO;
+	public void setwSSupplierId(Integer wSSupplierId) {
+		this.wSSupplierId = wSSupplierId;
 	}
 
 
@@ -138,23 +185,13 @@ public class StaffDO extends BaseDO {
 	}
 
 
-	public Integer getwSServiceType() {
-		return wSServiceType;
+	public Integer getwSType() {
+		return wSType;
 	}
 
 
-	public void setwSServiceType(Integer wSServiceType) {
-		this.wSServiceType = wSServiceType;
-	}
-
-
-	public String getwSTitle() {
-		return wSTitle;
-	}
-
-
-	public void setwSTitle(String wSTitle) {
-		this.wSTitle = wSTitle;
+	public void setwSType(Integer wSType) {
+		this.wSType = wSType;
 	}
 
 
@@ -165,6 +202,56 @@ public class StaffDO extends BaseDO {
 
 	public void setwSScore(Integer wSScore) {
 		this.wSScore = wSScore;
+	}
+
+
+	public String getwSAddress() {
+		return wSAddress;
+	}
+
+
+	public void setwSAddress(String wSAddress) {
+		this.wSAddress = wSAddress;
+	}
+
+
+	public String getwSTelephone() {
+		return wSTelephone;
+	}
+
+
+	public void setwSTelephone(String wSTelephone) {
+		this.wSTelephone = wSTelephone;
+	}
+
+
+	public String getwSPlace() {
+		return wSPlace;
+	}
+
+
+	public void setwSPlace(String wSPlace) {
+		this.wSPlace = wSPlace;
+	}
+
+
+	public String getwSItems() {
+		return wSItems;
+	}
+
+
+	public void setwSItems(String wSItems) {
+		this.wSItems = wSItems;
+	}
+
+
+	public String getwSTerget() {
+		return wSTerget;
+	}
+
+
+	public void setwSTerget(String wSTerget) {
+		this.wSTerget = wSTerget;
 	}
 
 
@@ -197,5 +284,115 @@ public class StaffDO extends BaseDO {
 		this.wSComplaintCount = wSComplaintCount;
 	}
 
-    
+
+	public BigDecimal getwSPriceFirst() {
+		return wSPriceFirst;
+	}
+
+
+	public void setwSPriceFirst(BigDecimal wSPriceFirst) {
+		this.wSPriceFirst = wSPriceFirst;
+	}
+
+
+	public BigDecimal getwSPriceSecond() {
+		return wSPriceSecond;
+	}
+
+
+	public void setwSPriceSecond(BigDecimal wSPriceSecond) {
+		this.wSPriceSecond = wSPriceSecond;
+	}
+
+
+	public BigDecimal getwSPriceThrid() {
+		return wSPriceThrid;
+	}
+
+
+	public void setwSPriceThrid(BigDecimal wSPriceThrid) {
+		this.wSPriceThrid = wSPriceThrid;
+	}
+
+
+	public Integer getwSRestDay() {
+		return wSRestDay;
+	}
+
+
+	public void setwSRestDay(Integer wSRestDay) {
+		this.wSRestDay = wSRestDay;
+	}
+
+
+	public String getwSNation() {
+		return wSNation;
+	}
+
+
+	public void setwSNation(String wSNation) {
+		this.wSNation = wSNation;
+	}
+
+
+	public Integer getwSIsMarri() {
+		return wSIsMarri;
+	}
+
+
+	public void setwSIsMarri(Integer wSIsMarri) {
+		this.wSIsMarri = wSIsMarri;
+	}
+
+
+	public String getwSAttribute() {
+		return wSAttribute;
+	}
+
+
+	public void setwSAttribute(String wSAttribute) {
+		this.wSAttribute = wSAttribute;
+	}
+
+
+	public String getwSEdu() {
+		return wSEdu;
+	}
+
+
+	public void setwSEdu(String wSEdu) {
+		this.wSEdu = wSEdu;
+	}
+
+
+	public String getwSTrainOrg() {
+		return wSTrainOrg;
+	}
+
+
+	public void setwSTrainOrg(String wSTrainOrg) {
+		this.wSTrainOrg = wSTrainOrg;
+	}
+
+
+	public Date getwSTrainDate() {
+		return wSTrainDate;
+	}
+
+
+	public void setwSTrainDate(Date wSTrainDate) {
+		this.wSTrainDate = wSTrainDate;
+	}
+
+
+	public String getwSTrainItems() {
+		return wSTrainItems;
+	}
+
+
+	public void setwSTrainItems(String wSTrainItems) {
+		this.wSTrainItems = wSTrainItems;
+	}
+
+
 }

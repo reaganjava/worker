@@ -176,7 +176,7 @@ public class StaffServiceImpl implements IStaffService {
 		}
 		
 		if(StringUtil.isGreatOne(staffQuery.getServiceType())) {
-			c.andWSServiceTypeEqualTo(staffQuery.getServiceType());
+			c.andWSTypeEqualTo(staffQuery.getServiceType());
 		}
 		
 		if(StringUtil.isGreatOne(staffQuery.getStatus())) {

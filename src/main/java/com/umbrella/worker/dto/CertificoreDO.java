@@ -6,7 +6,7 @@ public class CertificoreDO extends BaseDO {
     
     private Integer id;
   
-    private ScheduleDO scheduleDO;
+    private StaffDO staffDO;
  
     private String wCeName;
 
@@ -22,12 +22,13 @@ public class CertificoreDO extends BaseDO {
 		this.id = id;
 	}
 
-	public ScheduleDO getScheduleDO() {
-		return scheduleDO;
+	
+	public StaffDO getStaffDO() {
+		return staffDO;
 	}
 
-	public void setScheduleDO(ScheduleDO scheduleDO) {
-		this.scheduleDO = scheduleDO;
+	public void setStaffDO(StaffDO staffDO) {
+		this.staffDO = staffDO;
 	}
 
 	public String getwCeName() {

@@ -5,28 +5,32 @@ import java.math.BigDecimal;
 public class OrderDO extends BaseDO {
    
     private Integer id;
-
     
-    private MembersDO membersDO;
 
-   
+    private MembersDO membersDO;
+    
+
     private SupplierDO supplierDO;
+    
     
     private OrderDetailDO orderDetailDO;
 
-    
+   
     private String wOOrderNo;
-
     
-    private Integer wOPayType;
-
     
-    private BigDecimal wOFee;
+    private String wOServiceName;
 
    
-    private Integer wOIsEnd;
+    private Integer wOPayType;
+
+   
+    private BigDecimal wOFee;
 
     
+    private Integer wOIsEnd;
+
+   
     private Integer wOIsConfim;
 
    
@@ -50,6 +54,16 @@ public class OrderDO extends BaseDO {
 
 	public void setMembersDO(MembersDO membersDO) {
 		this.membersDO = membersDO;
+	}
+
+
+	public String getwOServiceName() {
+		return wOServiceName;
+	}
+
+
+	public void setwOServiceName(String wOServiceName) {
+		this.wOServiceName = wOServiceName;
 	}
 
 
