@@ -215,8 +215,6 @@ public class OrderServiceImpl implements IOrderService {
 		WOrderExample example = new WOrderExample();
 		WOrderExample.Criteria c = example.createCriteria();
 		
-		
-		
 		if(StringUtil.isNotEmpty(orderQuery.getOrderByClause())) {	
 			example.setOrderByClause(" " + orderQuery.getOrderByClause() + " " + orderQuery.getSort());
 		} else {
