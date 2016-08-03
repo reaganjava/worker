@@ -13,6 +13,7 @@ import com.umbrella.worker.entity.WTransactionExample;
 import com.umbrella.worker.query.TransactionQuery;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
+import com.umbrella.worker.service.ITransactionService;
 import com.umbrella.worker.util.BeanUtilsExtends;
 import com.umbrella.worker.util.StringUtil;
 

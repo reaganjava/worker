@@ -1,4 +1,4 @@
-package com.umbrella.worker.service.impl;
+package com.umbrella.worker.service;
 
 import com.umbrella.worker.dto.TransactionDO;
 import com.umbrella.worker.query.TransactionQuery;
