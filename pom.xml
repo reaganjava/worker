@@ -5,7 +5,7 @@
   <groupId>com.umbrella</groupId>
   <artifactId>worker</artifactId>
   <version>0.0.1</version>
-  <packaging>jar</packaging>
+  <packaging>war</packaging>
 
   <name>worker</name>
   <url>http://maven.apache.org</url>
@@ -20,6 +20,12 @@
 	</properties>
 
   <dependencies>
+    <dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+	</dependency>
     <dependency>  
             <groupId>org.springframework</groupId>  
             <artifactId>spring-core</artifactId>  
@@ -202,7 +208,7 @@
   <build>
 		<finalName>worker</finalName>
 		<plugins>
-		<plugin>
+		<!-- <plugin>
 				<groupId>org.mybatis.generator</groupId>
 				<artifactId>mybatis-generator-maven-plugin</artifactId>
 				<version>${mybatis-generator.version}</version>
@@ -229,7 +235,7 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin> 
+			</plugin>  -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>

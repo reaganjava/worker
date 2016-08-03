@@ -6,21 +6,16 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.umbrella.worker.dao.WCommentMapper;
 import com.umbrella.worker.dao.WOrderDetailMapper;
 import com.umbrella.worker.dao.WOrderMapper;
 import com.umbrella.worker.dto.OrderDO;
 import com.umbrella.worker.dto.OrderDetailDO;
-import com.umbrella.worker.entity.WComment;
-import com.umbrella.worker.entity.WCommentExample;
 import com.umbrella.worker.entity.WOrder;
 import com.umbrella.worker.entity.WOrderDetail;
 import com.umbrella.worker.entity.WOrderExample;
-import com.umbrella.worker.query.CommentQuery;
 import com.umbrella.worker.query.OrderQuery;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
-import com.umbrella.worker.service.ICommentService;
 import com.umbrella.worker.service.IOrderService;
 import com.umbrella.worker.util.BeanUtilsExtends;
 import com.umbrella.worker.util.StringUtil;

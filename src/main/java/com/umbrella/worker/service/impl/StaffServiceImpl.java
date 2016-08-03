@@ -6,8 +6,12 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.umbrella.worker.dao.WCertificoreMapper;
 import com.umbrella.worker.dao.WStaffMapper;
+import com.umbrella.worker.dto.CertificoreDO;
 import com.umbrella.worker.dto.StaffDO;
+import com.umbrella.worker.entity.WCertificore;
+import com.umbrella.worker.entity.WCertificoreExample;
 import com.umbrella.worker.entity.WStaff;
 import com.umbrella.worker.entity.WStaffExample;
 import com.umbrella.worker.query.StaffQuery;
@@ -22,6 +26,8 @@ public class StaffServiceImpl implements IStaffService {
 	private static Logger logger = Logger.getLogger(StaffServiceImpl.class);
 	
 	private WStaffMapper staffMapper;
+	
+	private WCertificoreMapper certificoreMapper;
 
 	@Override
 	public ResultDO create(StaffDO staffDO) {
@@ -52,11 +58,40 @@ public class StaffServiceImpl implements IStaffService {
 			return result;
 		}
 		
-		if(recordNum == 1) {
-			result.setModel(ResultDO.FIRST_MODEL_KEY, staff.getId());
-		} else {
+		if(recordNum < 1) {
 			result.setSuccess(false);
+			return result;
 		}
+	
+		for(CertificoreDO certificoreDO : staffDO.getCertificores()) {
+			recordNum = -1;
+			
+			WCertificore certificore = new WCertificore();
+			result = BeanUtilsExtends.copy(certificoreDO, certificore);
+			
+			if(!result.isSuccess()) {
+				return result;
+			}
+			
+			try {
+				recordNum = certificoreMapper.insertSelective(certificore);
+			} catch (Exception e) {
+				result.setSuccess(false);
+				result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+				result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+				logger.error("[obj:Staff][opt:create][msg:" + e.getMessage()
+				+ "]");
+				return result;
+			}
+			
+			if(recordNum < 1) {
+				result.setSuccess(false);
+				return result;
+			}
+		}
+		
+		result.setModel(ResultDO.FIRST_MODEL_KEY, staff.getId());
+		
 		return result;
 	}
 
@@ -82,8 +117,39 @@ public class StaffServiceImpl implements IStaffService {
 					+ "]");
 			return result;
 		}
+		
 		if (recordNum < 1) {
 			result.setSuccess(false);
+			return result;
+		}
+		
+		for(CertificoreDO certificoreDO : staffDO.getCertificores()) {
+			recordNum = -1;
+			
+			WCertificore certificore = new WCertificore();
+			result = BeanUtilsExtends.copy(certificoreDO, certificore);
+			
+			if(!result.isSuccess()) {
+				return result;
+			}
+			
+			WCertificoreExample example = new WCertificoreExample();
+			example.createCriteria().andWCeStaffIdEqualTo(staffDO.getId());
+			try {
+				recordNum = certificoreMapper.updateByExample(certificore, example);
+			} catch (Exception e) {
+				result.setSuccess(false);
+				result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+				result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+				logger.error("[obj:Staff][opt:create][msg:" + e.getMessage()
+				+ "]");
+				return result;
+			}
+			
+			if(recordNum < 1) {
+				result.setSuccess(false);
+				return result;
+			}
 		}
 
 		return result;
@@ -115,7 +181,34 @@ public class StaffServiceImpl implements IStaffService {
 		}
 		if (recordNum != 1) {
 			result.setSuccess(false);
+			return result;
 		}
+		
+		
+		recordNum = -1;
+		
+		WCertificore certificore = new WCertificore();
+		
+		WCertificoreExample example = new WCertificoreExample();
+		certificore.setDatalevel(-1);
+		example.createCriteria().andWCeStaffIdEqualTo(staffId);
+		try {
+			recordNum = certificoreMapper.updateByExample(certificore, example);
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+			logger.error("[obj:Staff][opt:create][msg:" + e.getMessage()
+			+ "]");
+			return result;
+		}
+		
+		if(recordNum < 1) {
+			result.setSuccess(false);
+			return result;
+		}
+		
+		
 		return result;
 	}
 
@@ -140,8 +233,6 @@ public class StaffServiceImpl implements IStaffService {
 	        return result;
 		}
 		
-		
-		
 		StaffDO staffDO = getStaffDO(staff);
 		if(staffDO != null) {
 			result.setModel(ResultSupport.FIRST_MODEL_KEY, staffDO);
@@ -150,6 +241,27 @@ public class StaffServiceImpl implements IStaffService {
 	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
 	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
 			return result;
+		}
+		
+		List<WCertificore> certificoreList = null; 
+		
+		WCertificoreExample cfex = new WCertificoreExample();
+		cfex.createCriteria().andWCeStaffIdEqualTo(staffId);
+		try {
+			certificoreList = certificoreMapper.selectByExample(cfex);
+		} catch (Exception e) {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+	        logger.error("[obj:supplier][opt:get][msg:"+e.getMessage()+"]");
+	        return result;
+		}
+		
+		if(certificoreList.size() > 0) {
+			staffDO.setCertificores(getCertificoreDOList(certificoreList));
+		} else {
+			result.setSuccess(false);
+			 return result;
 		}
 		
 		return result;
@@ -236,6 +348,29 @@ public class StaffServiceImpl implements IStaffService {
 	        return result;
 		}
 		return result;
+	}
+	
+	private CertificoreDO getCertificoreDO(WCertificore obj) {
+		if(obj == null) return null;
+		CertificoreDO dst = new CertificoreDO();
+		return BeanUtilsExtends.copyProperties(dst, obj) ? dst : null;
+	}
+	
+	private List<CertificoreDO> getCertificoreDOList(List<WCertificore> list) {
+		List<CertificoreDO> resultList = new ArrayList<CertificoreDO>();
+		if(list != null && list.isEmpty()) {
+			for(WCertificore certificore : list) {
+				CertificoreDO certificoreDO = this.getCertificoreDO(certificore);
+				if(certificoreDO != null) {
+					resultList.add(certificoreDO);
+				} else {
+					return null;
+				}
+			}
+		} else {
+			return null;
+		}
+		return resultList;
 	}
 	
 	private StaffDO getStaffDO(WStaff obj) {

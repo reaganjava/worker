@@ -2,6 +2,7 @@ package com.umbrella.worker.dto;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 public class StaffDO extends BaseDO {
     
@@ -93,6 +94,9 @@ public class StaffDO extends BaseDO {
 
     
     private String wSTrainItems;
+    
+    
+    private List<CertificoreDO> certificores;
 
 
 	public Integer getId() {
@@ -395,4 +399,12 @@ public class StaffDO extends BaseDO {
 	}
 
 
+	public List<CertificoreDO> getCertificores() {
+		return certificores;
+	}
+
+
+	public void setCertificores(List<CertificoreDO> certificores) {
+		this.certificores = certificores;
+	}
 }

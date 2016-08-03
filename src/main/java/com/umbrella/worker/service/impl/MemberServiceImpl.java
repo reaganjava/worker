@@ -191,37 +191,39 @@ public class MemberServiceImpl implements IMemberService {
 		}
 		
 		MembersDO membersDO = getMemberDO(members);
-		if(membersDO != null) {
-			WMemberCouponExample example = new WMemberCouponExample();
-			example.createCriteria().andWMcMemberIdEqualTo(memberId);
-			
-			List<MemberCouponDO> memberCouponDOList = null;
-			try {
-				List<WMemberCoupon> list = memberCouponMapper.selectByExample(example);
-				memberCouponDOList = getMemberCouponDOList(list);
-			} catch (Exception e) {
-				result.setSuccess(false);
-		        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
-		        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
-		        logger.error("[obj:memberCoupon][opt:get][msg:"+e.getMessage()+"]");
-		        return result;
-			}
-			
-			if(memberCouponDOList != null) {
-				membersDO.setMemberCoupons(memberCouponDOList);
-			} else {
-				result.setSuccess(false);
-		        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
-		        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
-				return result;
-			}
-			result.setModel(ResultSupport.FIRST_MODEL_KEY, membersDO);
+		
+		if(membersDO == null) {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			return result;
+		}
+		
+		WMemberCouponExample example = new WMemberCouponExample();
+		example.createCriteria().andWMcMemberIdEqualTo(memberId);
+		
+		List<MemberCouponDO> memberCouponDOList = null;
+		try {
+			List<WMemberCoupon> list = memberCouponMapper.selectByExample(example);
+			memberCouponDOList = getMemberCouponDOList(list);
+		} catch (Exception e) {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+	        logger.error("[obj:memberCoupon][opt:get][msg:"+e.getMessage()+"]");
+	        return result;
+		}
+		
+		if(memberCouponDOList != null) {
+			membersDO.setMemberCoupons(memberCouponDOList);
 		} else {
 			result.setSuccess(false);
 	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
 	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
 			return result;
 		}
+		
+		result.setModel(ResultSupport.FIRST_MODEL_KEY, membersDO);
 		
 		return result;
 	}
