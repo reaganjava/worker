@@ -23,7 +23,7 @@ public class OrderController {
 			mav.setViewName("login");
 		}
 		
-		
+		orderService.create(orderDO);
 		return mav;
 	}
 }

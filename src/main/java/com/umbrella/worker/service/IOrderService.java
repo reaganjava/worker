@@ -7,7 +7,7 @@ import com.umbrella.worker.result.ResultDO;
 
 public interface IOrderService {
 	
-	public ResultDO create(OrderDO orderDO, OrderDetailDO orderDetailDO);
+	public ResultDO create(OrderDO orderDO);
 	
 	public ResultDO modifi(OrderDO orderDO);
 	

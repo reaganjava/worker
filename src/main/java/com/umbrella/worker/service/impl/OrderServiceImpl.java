@@ -29,7 +29,7 @@ public class OrderServiceImpl implements IOrderService {
 	private WOrderDetailMapper orderDetailMapper;
 
 	@Override
-	public ResultDO create(OrderDO orderDO, OrderDetailDO orderDetailDO) {
+	public ResultDO create(OrderDO orderDO) {
 		
 		WOrder order = new WOrder();
 		
@@ -60,12 +60,12 @@ public class OrderServiceImpl implements IOrderService {
 		}
 		
 		if(recordNum == 1) {
-			result.setModel(ResultDO.FIRST_MODEL_KEY, order.getId());
+			
 		} else {
 			result.setSuccess(false);
 		}
 		
-		result = BeanUtilsExtends.copy(orderDetailDO, orderDetail);
+		result = BeanUtilsExtends.copy(orderDO.getOrderDetailDO(), orderDetail);
 		
 		orderDetail.setId(order.getId());
 		
@@ -79,6 +79,8 @@ public class OrderServiceImpl implements IOrderService {
 			+ "]");
 			return result;
 		}
+		
+		result.setModel(ResultDO.FIRST_MODEL_KEY, order.getId());
 		
 		return result;
 	}
