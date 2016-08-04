@@ -25,8 +25,17 @@
 	<!-- handerMapping -->
 	<!-- <bean id="handlerMapping"  class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" /> -->
 	
-		<bean id="handlerMapping"  class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>
+	<bean id="handlerMapping"  class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>
 	
+	<mvc:interceptors>  
+		<mvc:interceptor>  
+			<mvc:mapping path="/order/**"/>
+			<bean class="com.changh.incubator.web.interceptor.MemberCommentInterceptor">
+				<property name="url" value="contest/joined/index.html;project/create.html;project/edit;project/perfect;member/project.html;member/jdemand.html;member/fdemand;member/uc_index.html;member/uc_userInfo.html;member/edit_user_password.html;member/displayImage;member/message" />
+			</bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+    
 	<!-- 视图解析器 -->
 	<bean
 		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver"
