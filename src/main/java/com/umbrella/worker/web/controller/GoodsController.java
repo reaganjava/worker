@@ -18,8 +18,8 @@ public class GoodsController {
 
 	IWorkerService workerService;
 	
-	@RequestMapping(value = "/worker_task/{id}.html", method = RequestMethod.GET)
-	public ModelAndView task_goods(ModelAndView mav, 
+	@RequestMapping(value = "/task_goods/{id}.html", method = RequestMethod.GET)
+	public ModelAndView taskGoods(ModelAndView mav, 
 			@PathVariable(value="id") Integer id,
 			HttpServletRequest request) {
 		
@@ -33,7 +33,7 @@ public class GoodsController {
 		
 		if(result.isSuccess()) {
 			mav.addObject("TASK_GOODS", result.getModel(ResultSupport.FIRST_MODEL_KEY));
-			mav.setViewName("goods/worker_task");
+			mav.setViewName("goods/task_goods");
 		} else {
 			mav.setViewName("error");
 		}

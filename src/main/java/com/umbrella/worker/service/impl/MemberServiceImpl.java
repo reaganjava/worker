@@ -5,16 +5,21 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.umbrella.worker.util.BeanUtilsExtends;
 import com.umbrella.worker.util.StringUtil;
-import com.umbrella.worker.dao.WContactMapper;
 import com.umbrella.worker.dao.WMemberCouponMapper;
+import com.umbrella.worker.dao.WMemberDetailMapper;
 import com.umbrella.worker.dao.WMembersMapper;
 import com.umbrella.worker.dto.MemberCouponDO;
+import com.umbrella.worker.dto.MemberDetailDO;
 import com.umbrella.worker.dto.MembersDO;
 import com.umbrella.worker.entity.WMemberCoupon;
 import com.umbrella.worker.entity.WMemberCouponExample;
+import com.umbrella.worker.entity.WMemberDetail;
+import com.umbrella.worker.entity.WMemberDetailExample;
 import com.umbrella.worker.entity.WMembers;
 import com.umbrella.worker.entity.WMembersExample;
 import com.umbrella.worker.query.MembersQuery;
@@ -22,16 +27,22 @@ import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.IMemberService;
 
+@Service("memberService")
 public class MemberServiceImpl implements IMemberService {
 	
 	private static Logger logger = Logger.getLogger(MemberServiceImpl.class);
 	
+	@Autowired
 	private WMembersMapper membersMapper;
 	
+	@Autowired
+	private WMemberDetailMapper memberDetailMapper;
+	
+	@Autowired
 	private WMemberCouponMapper memberCouponMapper;
 
 	@Override
-	public ResultDO register(MembersDO membersDO) {
+	public ResultDO create(MembersDO membersDO) {
 		
 		WMembers members = new WMembers();
 		
@@ -43,7 +54,7 @@ public class MemberServiceImpl implements IMemberService {
 		
 		int recordNum = -1;
 		
-		members.setwMRegisterTime(Calendar.getInstance().getTime());
+		members.setwMRegTime(Calendar.getInstance().getTime());
 		members.setDatalevel(1);
 		members.setStatus(1);
 		members.setCreateTime(Calendar.getInstance().getTime());
@@ -60,24 +71,52 @@ public class MemberServiceImpl implements IMemberService {
 			return result;
 		}
 		
-		if(recordNum == 1) {
-			result.setModel(ResultDO.FIRST_MODEL_KEY, members.getId());
-		} else {
+		if(recordNum < 1) {
 			result.setSuccess(false);
+			return result;
 		}
+		
+		recordNum = -1;
+		
+		WMemberDetail memberDetail = new WMemberDetail();
+		
+		result = BeanUtilsExtends.copy(membersDO.getMemberDetailDO(), memberDetail);
+		
+		if(!result.isSuccess()) {
+			return result;
+		}
+		
+		try {
+			recordNum = memberDetailMapper.insertSelective(memberDetail);
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+			logger.error("[obj:catalogs][opt:create][msg:" + e.getMessage()
+			+ "]");
+			return result;
+		}
+		
+		if(recordNum < 1) {
+			result.setSuccess(false);
+			return result;
+		}
+		
+		result.setModel(ResultDO.FIRST_MODEL_KEY, members.getId());
+		
 		return result;
 	}
 
 	@Override
-	public ResultDO login(MembersQuery membersQuery) {
+	public ResultDO validate(MembersDO membersDO) {
 		
 		ResultSupport result = new ResultSupport();
 		
 		WMembersExample example = new WMembersExample();
 		
 		example.createCriteria()
-			.andWMMobileEqualTo(membersQuery.getMobile())
-			.andWMPasswordEqualTo(membersQuery.getPassword())
+			.andWMMobileEqualTo(membersDO.getwMMobile())
+			.andWMPasswordEqualTo(membersDO.getwMPassword())
 			.andDatalevelNotEqualTo(-1);
 		List<WMembers> list = null;
 		try {
@@ -110,12 +149,15 @@ public class MemberServiceImpl implements IMemberService {
 		
 		return result;
 	}
-
+	
 	@Override
-	public ResultDO modifi(MembersDO membersDO) {
+	public ResultDO modifiPwd(MembersDO membersDO) {
+		
+		ResultSupport result = new ResultSupport();
+		
 		WMembers members = new WMembers();
-
-		ResultSupport result = BeanUtilsExtends.copy(members, membersDO);
+		
+		result = BeanUtilsExtends.copy(membersDO, members);
 		// 拷贝失败
 		if (!result.isSuccess()) {
 			return result;
@@ -124,6 +166,34 @@ public class MemberServiceImpl implements IMemberService {
 		int recordNum = -1;
 		try {
 			recordNum = membersMapper.updateByPrimaryKey(members);
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			logger.error("[obj:members][opt:modifi][msg:" + e.getMessage()
+					+ "]");
+			return result;
+		}
+		if (recordNum < 1) {
+			result.setSuccess(false);
+		}
+		return result;
+	}
+
+	@Override
+	public ResultDO modifi(MemberDetailDO memberDetailDO) {
+		
+		WMemberDetail memberDetail = new WMemberDetail();
+
+		ResultSupport result = BeanUtilsExtends.copy(memberDetail, memberDetailDO);
+		// 拷贝失败
+		if (!result.isSuccess()) {
+			return result;
+		}
+		memberDetail.setModifiTime(Calendar.getInstance().getTime());
+		int recordNum = -1;
+		try {
+			recordNum = memberDetailMapper.updateByPrimaryKey(memberDetail);
 		} catch (Exception e) {
 			result.setSuccess(false);
 			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
@@ -165,7 +235,30 @@ public class MemberServiceImpl implements IMemberService {
 		}
 		if (recordNum != 1) {
 			result.setSuccess(false);
+			return result;
 		}
+		
+		recordNum = -1;
+		WMemberDetail memberDetail = new WMemberDetail();
+		
+		memberDetail.setId(memberId);
+		memberDetail.setDatalevel(-1);
+		
+		try {
+			recordNum = memberDetailMapper.updateByPrimaryKeySelective(memberDetail);
+		} catch (Exception e) {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+	        logger.error("[obj:member][opt:remove][msg:"+e.getMessage()+"]");
+	        return result;
+		}
+		
+		if (recordNum != 1) {
+			result.setSuccess(false);
+			return result;
+		}
+		
 		return result;
 	}
 
@@ -198,6 +291,28 @@ public class MemberServiceImpl implements IMemberService {
 	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
 			return result;
 		}
+		
+		WMemberDetail memberDetail = null;
+		try {
+			memberDetail = memberDetailMapper.selectByPrimaryKey(memberId);
+		} catch (Exception e) {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+	        logger.error("[obj:member][opt:get][msg:"+e.getMessage()+"]");
+	        return result;
+		}
+		
+		MemberDetailDO memberDetailDO = getMemberDetailDO(memberDetail);
+		
+		if(memberDetailDO == null) {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			return result;
+		}
+		
+		membersDO.setMemberDetailDO(memberDetailDO);
 		
 		WMemberCouponExample example = new WMemberCouponExample();
 		example.createCriteria().andWMcMemberIdEqualTo(memberId);
@@ -318,6 +433,12 @@ public class MemberServiceImpl implements IMemberService {
 			return null;
 		}
 		return resultList;
+	}
+	
+	private MemberDetailDO getMemberDetailDO(WMemberDetail obj) {
+		if(obj == null) return null;
+		MemberDetailDO dst = new MemberDetailDO();
+		return BeanUtilsExtends.copyProperties(dst, obj) ? dst : null;
 	}
 	
 	private MemberCouponDO getMemberCouponDO(WMemberCoupon obj) {

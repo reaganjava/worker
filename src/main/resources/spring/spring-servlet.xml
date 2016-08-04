@@ -29,9 +29,9 @@
 	
 	<mvc:interceptors>  
 		<mvc:interceptor>  
-			<mvc:mapping path="/order/**"/>
-			<bean class="com.changh.incubator.web.interceptor.MemberCommentInterceptor">
-				<property name="url" value="contest/joined/index.html;project/create.html;project/edit;project/perfect;member/project.html;member/jdemand.html;member/fdemand;member/uc_index.html;member/uc_userInfo.html;member/edit_user_password.html;member/displayImage;member/message" />
+			<mvc:mapping path="/"/>
+			<bean class="com.umbrella.worker.interceptor.AuthenticationInterceptor">
+				<property name="notLoginUrl" value="contest/joined/index.html;project/create.html;project/edit;project/perfect;member/project.html;member/jdemand.html;member/fdemand;member/uc_index.html;member/uc_userInfo.html;member/edit_user_password.html;member/displayImage;member/message" />
 			</bean>
         </mvc:interceptor>
     </mvc:interceptors>

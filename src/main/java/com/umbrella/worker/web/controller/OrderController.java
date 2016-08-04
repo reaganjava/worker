@@ -13,7 +13,7 @@ public class OrderController {
 	private IOrderService orderService;
 	
 	
-	public ModelAndView create_order(ModelAndView mav, 
+	public ModelAndView getOrder(ModelAndView mav, 
 			OrderDO orderDO,
 			HttpServletRequest request) {
 		

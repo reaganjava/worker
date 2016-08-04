@@ -5,13 +5,16 @@ import java.util.List;
 
 public class MembersDO extends BaseDO {
     
-    private Integer id;
+	private Integer id;
 
-   
+
     private String wMMobile;
 
     
     private Integer wMFace;
+    
+    
+    private String oldPassword;
 
     
     private String wMPassword;
@@ -23,11 +26,16 @@ public class MembersDO extends BaseDO {
     private String wMLoginIp;
 
     
-    private Date wMRegisterTime;
+    private Date wMRegTime;
 
    
-    private Date wMLastLoginTime;
+    private String wMRegDevice;
+
+   
+    private String wMRegIp;
+
     
+    private MemberDetailDO memberDetailDO;
     
     private List<MemberCouponDO> memberCoupons;
     
@@ -64,6 +72,16 @@ public class MembersDO extends BaseDO {
 	}
 
 
+	public String getOldPassword() {
+		return oldPassword;
+	}
+
+
+	public void setOldPassword(String oldPassword) {
+		this.oldPassword = oldPassword;
+	}
+
+
 	public String getwMPassword() {
 		return wMPassword;
 	}
@@ -94,24 +112,45 @@ public class MembersDO extends BaseDO {
 	}
 
 
-	public Date getwMRegisterTime() {
-		return wMRegisterTime;
+	public Date getwMRegTime() {
+		return wMRegTime;
 	}
 
 
-	public void setwMRegisterTime(Date wMRegisterTime) {
-		this.wMRegisterTime = wMRegisterTime;
+	public void setwMRegTime(Date wMRegTime) {
+		this.wMRegTime = wMRegTime;
 	}
 
 
-	public Date getwMLastLoginTime() {
-		return wMLastLoginTime;
+	public String getwMRegDevice() {
+		return wMRegDevice;
 	}
 
 
-	public void setwMLastLoginTime(Date wMLastLoginTime) {
-		this.wMLastLoginTime = wMLastLoginTime;
+	public void setwMRegDevice(String wMRegDevice) {
+		this.wMRegDevice = wMRegDevice;
 	}
+
+
+	public String getwMRegIp() {
+		return wMRegIp;
+	}
+
+
+	public void setwMRegIp(String wMRegIp) {
+		this.wMRegIp = wMRegIp;
+	}
+
+
+	public MemberDetailDO getMemberDetailDO() {
+		return memberDetailDO;
+	}
+
+
+	public void setMemberDetailDO(MemberDetailDO memberDetailDO) {
+		this.memberDetailDO = memberDetailDO;
+	}
+
 
 	public List<MemberCouponDO> getMemberCoupons() {
 		return memberCoupons;
