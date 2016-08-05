@@ -44,7 +44,7 @@ public class WorkerServiceImpl implements IWorkerService {
 		
 		WWorkerTask workerTask = new WWorkerTask();
 		
-		ResultSupport result = BeanUtilsExtends.copy(workerTaskDO, workerTask);
+		ResultSupport result = BeanUtilsExtends.copy(workerTask, workerTaskDO);
 		
 		if(!result.isSuccess()) {
 			return result;
@@ -76,7 +76,7 @@ public class WorkerServiceImpl implements IWorkerService {
 		for(WorkerItemDO workerItemDO : workerTaskDO.getWorkerItems()) {
 			recordNum = -1;
 			WWorkerItem workerItem = new WWorkerItem();
-			result = BeanUtilsExtends.copy(workerItemDO, workerItem);
+			result = BeanUtilsExtends.copy(workerTask, workerTaskDO);
 			workerItem.setDatalevel(1);
 			workerItem.setStatus(1);
 			workerItem.setCreateTime(Calendar.getInstance().getTime());
@@ -102,7 +102,7 @@ public class WorkerServiceImpl implements IWorkerService {
 		for(WorkerStaffDO workerStaffDO : workerTaskDO.getWorkerStaffs()) {
 			recordNum = -1;
 			WWorkerStaff workerStaff = new WWorkerStaff();
-			result = BeanUtilsExtends.copy(workerStaffDO, workerStaff);
+			result = BeanUtilsExtends.copy(workerStaff, workerStaffDO);
 			workerStaff.setDatalevel(1);
 			workerStaff.setStatus(1);
 			workerStaff.setCreateTime(Calendar.getInstance().getTime());
@@ -138,7 +138,7 @@ public class WorkerServiceImpl implements IWorkerService {
 		
 		WWorkerTask workerTask = new WWorkerTask();
 
-		ResultSupport result = BeanUtilsExtends.copy(workerTaskDO, workerTask);
+		ResultSupport result = BeanUtilsExtends.copy(workerTask, workerTaskDO);
 		// 拷贝失败
 		if (!result.isSuccess()) {
 			return result;
@@ -164,7 +164,7 @@ public class WorkerServiceImpl implements IWorkerService {
 		for(WorkerItemDO workerItemDO : workerTaskDO.getWorkerItems()) {
 			WWorkerItem workerItem = new WWorkerItem();
 			recordNum = -1;
-			result = BeanUtilsExtends.copy(workerItemDO, workerItem);
+			result = BeanUtilsExtends.copy(workerItem, workerItemDO);
 			// 拷贝失败
 			if (!result.isSuccess()) {
 				return result;
@@ -190,7 +190,7 @@ public class WorkerServiceImpl implements IWorkerService {
 		for(WorkerStaffDO workerStaffDO : workerTaskDO.getWorkerStaffs()) {
 			WWorkerStaff workerStaff = new WWorkerStaff();
 			recordNum = -1;
-			result = BeanUtilsExtends.copy(workerStaffDO, workerStaff);
+			result = BeanUtilsExtends.copy(workerStaff, workerStaffDO);
 			// 拷贝失败
 			if (!result.isSuccess()) {
 				return result;

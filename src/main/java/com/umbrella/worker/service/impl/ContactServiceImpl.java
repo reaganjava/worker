@@ -28,7 +28,7 @@ public class ContactServiceImpl implements IContactService {
 		
 		WContact contact = new WContact();
 		
-		ResultSupport result = BeanUtilsExtends.copy(contactDO, contact);
+		ResultSupport result = BeanUtilsExtends.copy(contact,contactDO);
 		
 		if(!result.isSuccess()) {
 			return result;

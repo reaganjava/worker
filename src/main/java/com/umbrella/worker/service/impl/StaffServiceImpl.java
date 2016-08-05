@@ -34,7 +34,7 @@ public class StaffServiceImpl implements IStaffService {
 		
 		WStaff staff = new WStaff();
 		
-		ResultSupport result = BeanUtilsExtends.copy(staffDO, staff);
+		ResultSupport result = BeanUtilsExtends.copy(staff, staffDO);
 		
 		if(!result.isSuccess()) {
 			return result;
@@ -67,7 +67,7 @@ public class StaffServiceImpl implements IStaffService {
 			recordNum = -1;
 			
 			WCertificore certificore = new WCertificore();
-			result = BeanUtilsExtends.copy(certificoreDO, certificore);
+			result = BeanUtilsExtends.copy(certificore, certificoreDO);
 			
 			if(!result.isSuccess()) {
 				return result;
@@ -100,7 +100,7 @@ public class StaffServiceImpl implements IStaffService {
 		
 		WStaff staff = new WStaff();
 
-		ResultSupport result = BeanUtilsExtends.copy(staffDO, staff);
+		ResultSupport result = BeanUtilsExtends.copy(staff, staffDO);
 		// 拷贝失败
 		if (!result.isSuccess()) {
 			return result;
@@ -127,7 +127,7 @@ public class StaffServiceImpl implements IStaffService {
 			recordNum = -1;
 			
 			WCertificore certificore = new WCertificore();
-			result = BeanUtilsExtends.copy(certificoreDO, certificore);
+			result = BeanUtilsExtends.copy(certificore, certificoreDO);
 			
 			if(!result.isSuccess()) {
 				return result;

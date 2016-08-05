@@ -28,7 +28,7 @@ public class SuppliersServiceImpl implements ISuppliersService {
 		
 		WSupplier supplier = new WSupplier();
 		
-		ResultSupport result = BeanUtilsExtends.copy(supplierDO, supplier);
+		ResultSupport result = BeanUtilsExtends.copy(supplier, supplierDO);
 		
 		if(!result.isSuccess()) {
 			return result;
@@ -65,7 +65,7 @@ public class SuppliersServiceImpl implements ISuppliersService {
 		
 		WSupplier supplier = new WSupplier();
 
-		ResultSupport result = BeanUtilsExtends.copy(supplierDO, supplier);
+		ResultSupport result = BeanUtilsExtends.copy(supplier, supplierDO);
 		// 拷贝失败
 		if (!result.isSuccess()) {
 			return result;

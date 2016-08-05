@@ -11,9 +11,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.umbrella.worker.dto.MemberDetailDO;
 import com.umbrella.worker.dto.MembersDO;
+import com.umbrella.worker.dto.SmsCodeDO;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.IMemberService;
+import com.umbrella.worker.service.ISmsService;
 import com.umbrella.worker.util.GetHttpMemberInfo;
 import com.umbrella.worker.util.MD5;
 
@@ -23,6 +25,9 @@ public class MembersController {
 	
 	@Autowired
 	private IMemberService memberService;
+	
+	@Autowired
+	private ISmsService smsService;
 
 	@RequestMapping(value = "/register.html", method = RequestMethod.GET)
 	public ModelAndView register(ModelAndView mav, HttpServletRequest request) {
@@ -162,5 +167,24 @@ public class MembersController {
 		}
 		
 		return mav; 
+	}
+	
+	@RequestMapping(value = "/vm/{mobile}/{vcode}.json", method = RequestMethod.GET)
+	public ModelAndView ajaxMobileVaidate(ModelAndView mav,
+			@PathVariable(value="mobile") String mobile,
+			@PathVariable(value="vcode") String vcode,
+			HttpServletRequest request) {
+		
+		SmsCodeDO smsCodeDO = new SmsCodeDO();
+		smsCodeDO.setwSmMobile(mobile);
+		smsCodeDO.setCreateAuthor(mobile);
+		ResultDO  resultDO = smsService.create(smsCodeDO);
+		if(resultDO.isSuccess()) {
+			mav.addObject("JSON_DATA", resultDO.getModel(ResultSupport.FIRST_MODEL_KEY));
+		} else {
+			mav.addObject("JSON_DATA", "0");
+		}
+		
+		return mav;
 	}
 }

@@ -48,7 +48,7 @@
 		<!-- 默认视图 -->
 		<property name="defaultViews">
 			<list>
-				<bean class="com.umbrella.worker.util.MappingJacksonJsonView" p:renderedAttributes="jsonData"/>
+				<bean class="com.umbrella.worker.util.MappingJacksonJsonView" p:renderedAttributes="JSON_DATA"/>
 			</list>
 		</property>
 		

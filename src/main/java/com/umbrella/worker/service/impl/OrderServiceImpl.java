@@ -35,7 +35,7 @@ public class OrderServiceImpl implements IOrderService {
 		
 		WOrderDetail orderDetail = new WOrderDetail();
 		
-		ResultSupport result = BeanUtilsExtends.copy(orderDO, order);
+		ResultSupport result = BeanUtilsExtends.copy(order, orderDO);
 		
 		if(!result.isSuccess()) {
 			return result;
@@ -65,7 +65,7 @@ public class OrderServiceImpl implements IOrderService {
 			result.setSuccess(false);
 		}
 		
-		result = BeanUtilsExtends.copy(orderDO.getOrderDetailDO(), orderDetail);
+		result = BeanUtilsExtends.copy(orderDetail, orderDO.getOrderDetailDO());
 		
 		orderDetail.setId(order.getId());
 		

@@ -34,7 +34,7 @@ public class PayServiceImpl implements IPayService {
 		
 		WPayrecord payrecord = new WPayrecord();
 		
-		ResultSupport result = BeanUtilsExtends.copy(payrecordDO, payrecord);
+		ResultSupport result = BeanUtilsExtends.copy(payrecord, payrecordDO);
 		
 		if(!result.isSuccess()) {
 			return result;
@@ -71,7 +71,7 @@ public class PayServiceImpl implements IPayService {
 		
 		WPayrecord payrecord = new WPayrecord();
 
-		ResultSupport result = BeanUtilsExtends.copy(payrecordDO, payrecord);
+		ResultSupport result = BeanUtilsExtends.copy(payrecord, payrecordDO);
 		// 拷贝失败
 		if (!result.isSuccess()) {
 			return result;

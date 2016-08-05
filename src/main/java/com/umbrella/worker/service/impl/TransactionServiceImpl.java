@@ -28,7 +28,7 @@ public class TransactionServiceImpl implements ITransactionService {
 		
 		WTransaction transaction = new WTransaction();
 		
-		ResultSupport result = BeanUtilsExtends.copy(transactionDO, transaction);
+		ResultSupport result = BeanUtilsExtends.copy(transaction, transactionDO);
 		
 		if(!result.isSuccess()) {
 			return result;
@@ -65,7 +65,7 @@ public class TransactionServiceImpl implements ITransactionService {
 		
 		WTransaction transaction = new WTransaction();
 
-		ResultSupport result = BeanUtilsExtends.copy(transactionDO, transaction);
+		ResultSupport result = BeanUtilsExtends.copy(transaction, transactionDO);
 		// 拷贝失败
 		if (!result.isSuccess()) {
 			return result;

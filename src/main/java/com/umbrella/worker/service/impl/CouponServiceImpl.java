@@ -28,7 +28,7 @@ public class CouponServiceImpl implements ICouponService {
 		
 		WCoupon coupon = new WCoupon();
 		
-		ResultSupport result = BeanUtilsExtends.copy(couponDO, coupon);
+		ResultSupport result = BeanUtilsExtends.copy(coupon, couponDO);
 		
 		if(!result.isSuccess()) {
 			return result;
@@ -65,7 +65,7 @@ public class CouponServiceImpl implements ICouponService {
 		
 		WCoupon coupon = new WCoupon();
 
-		ResultSupport result = BeanUtilsExtends.copy(couponDO, coupon);
+		ResultSupport result = BeanUtilsExtends.copy(coupon, couponDO);
 		// 拷贝失败
 		if (!result.isSuccess()) {
 			return result;

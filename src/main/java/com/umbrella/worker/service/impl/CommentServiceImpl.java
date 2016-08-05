@@ -28,7 +28,7 @@ public class CommentServiceImpl implements ICommentService {
 		
 		WComment comment = new WComment();
 		
-		ResultSupport result = BeanUtilsExtends.copy(commentDO, comment);
+		ResultSupport result = BeanUtilsExtends.copy(comment, commentDO);
 		
 		if(!result.isSuccess()) {
 			return result;
@@ -65,7 +65,7 @@ public class CommentServiceImpl implements ICommentService {
 		
 		WComment comment = new WComment();
 
-		ResultSupport result = BeanUtilsExtends.copy(commentDO, comment);
+		ResultSupport result = BeanUtilsExtends.copy(comment, commentDO);
 		// 拷贝失败
 		if (!result.isSuccess()) {
 			return result;

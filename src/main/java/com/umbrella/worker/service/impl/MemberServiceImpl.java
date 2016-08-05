@@ -46,7 +46,7 @@ public class MemberServiceImpl implements IMemberService {
 		
 		WMembers members = new WMembers();
 		
-		ResultSupport result = BeanUtilsExtends.copy(membersDO, members);
+		ResultSupport result = BeanUtilsExtends.copy(members, membersDO);
 		
 		if(!result.isSuccess()) {
 			return result;
@@ -157,7 +157,7 @@ public class MemberServiceImpl implements IMemberService {
 		
 		WMembers members = new WMembers();
 		
-		result = BeanUtilsExtends.copy(membersDO, members);
+		result = BeanUtilsExtends.copy(members, membersDO);
 		// 拷贝失败
 		if (!result.isSuccess()) {
 			return result;
