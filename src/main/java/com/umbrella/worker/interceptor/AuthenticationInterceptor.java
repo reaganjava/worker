@@ -46,7 +46,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 		if(notLoginUrl != null) {
 			logger.info("notLoginUrl:" + notLoginUrl);
 			if(notLoginUrl.indexOf(requestURL) != -1) {
-				MembersDO memberDO = (MembersDO) session.getAttribute("MEMBER_LOGIN_INFO");
+				MembersDO memberDO = (MembersDO) session.getAttribute("MEMBER_ID");
 				if(memberDO == null) {
 					response.sendRedirect(request.getContextPath() + "/login.html");
 					return false;
