@@ -131,7 +131,7 @@ public class MemberServiceImpl implements IMemberService {
 		
 		
 		if(list.size() == 1) {
-			MembersDO membersDO = getMemberDO(list.get(0));
+			membersDO = getMemberDO(list.get(0));
 			if(membersDO != null) {
 				result.setModel(ResultSupport.FIRST_MODEL_KEY, membersDO);
 			} else {
