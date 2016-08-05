@@ -76,7 +76,7 @@ public class WorkerServiceImpl implements IWorkerService {
 		for(WorkerItemDO workerItemDO : workerTaskDO.getWorkerItems()) {
 			recordNum = -1;
 			WWorkerItem workerItem = new WWorkerItem();
-			result = BeanUtilsExtends.copy(workerTask, workerTaskDO);
+			result = BeanUtilsExtends.copy(workerItem, workerItemDO);
 			workerItem.setDatalevel(1);
 			workerItem.setStatus(1);
 			workerItem.setCreateTime(Calendar.getInstance().getTime());
@@ -348,6 +348,80 @@ public class WorkerServiceImpl implements IWorkerService {
 			result.setSuccess(false);
 			return result;
 		}
+		
+		result.setModel(ResultSupport.FIRST_MODEL_KEY, workerTaskDO);
+		
+		return result;
+	}
+	
+	@Override
+	public ResultDO get(int	taskId, int itemId, int staffId) {
+		
+		ResultSupport result = new ResultSupport();
+		
+		WWorkerTask workerTask = null;
+		if(!StringUtil.isGreatOne(taskId)) {
+			 result.setSuccess(false);
+			 return result;
+		} 
+		
+		if(!StringUtil.isGreatOne(itemId)) {
+			 result.setSuccess(false);
+			 return result;
+		} 
+		
+		if(!StringUtil.isGreatOne(staffId)) {
+			 result.setSuccess(false);
+			 return result;
+		} 
+		
+		try {
+			workerTask = workerTaskMapper.selectByPrimaryKey(taskId);
+		} catch (Exception e) {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+	        logger.error("[obj:supplier][opt:get][msg:"+e.getMessage()+"]");
+	        return result;
+		}
+		
+		WorkerTaskDO workerTaskDO = getWorkerTaskDO(workerTask);
+		if(workerTaskDO == null) {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			return result;
+		}
+	
+		WWorkerItem workerItem = null;
+		
+		try {
+			workerItem = workerItemMapper.selectByPrimaryKey(itemId);
+		} catch (Exception e) {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+	        logger.error("[obj:supplier][opt:get][msg:"+e.getMessage()+"]");
+	        return result;
+		}
+		
+		WorkerItemDO workerItemDO = getWorkerItemDO(workerItem);
+		
+		WWorkerStaff workerStaff = null;
+		try {
+			workerStaff = workerStaffMapper.selectByPrimaryKey(taskId);
+			
+		} catch (Exception e) {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+	        logger.error("[obj:supplier][opt:get][msg:"+e.getMessage()+"]");
+	        return result;
+		}
+		
+		WorkerStaffDO workerStaffDO = getWorkerStaffDO(workerStaff);
+		workerTaskDO.getWorkerItems().add(workerItemDO);
+		workerTaskDO.getWorkerStaffs().add(workerStaffDO);
 		
 		result.setModel(ResultSupport.FIRST_MODEL_KEY, workerTaskDO);
 		

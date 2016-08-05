@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.umbrella.worker.dto.MemberDetailDO;
 import com.umbrella.worker.dto.MembersDO;
 import com.umbrella.worker.dto.SmsCodeDO;
+import com.umbrella.worker.query.SmsCodeQuery;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.IMemberService;
@@ -169,8 +170,8 @@ public class MembersController {
 		return mav; 
 	}
 	
-	@RequestMapping(value = "/vm/{mobile}/{vcode}.json", method = RequestMethod.GET)
-	public ModelAndView ajaxMobileVaidate(ModelAndView mav,
+	@RequestMapping(value = "/getCode/{mobile}/{vcode}.json", method = RequestMethod.GET)
+	public ModelAndView ajaxGetCode(ModelAndView mav,
 			@PathVariable(value="mobile") String mobile,
 			@PathVariable(value="vcode") String vcode,
 			HttpServletRequest request) {
@@ -181,6 +182,27 @@ public class MembersController {
 		ResultDO  resultDO = smsService.create(smsCodeDO);
 		if(resultDO.isSuccess()) {
 			mav.addObject("JSON_DATA", resultDO.getModel(ResultSupport.FIRST_MODEL_KEY));
+		} else {
+			mav.addObject("JSON_DATA", "0");
+		}
+		
+		return mav;
+	}
+	
+	@RequestMapping(value = "/vaidateMobile/{mobile}/{smsCode}.json", method = RequestMethod.GET)
+	public ModelAndView ajaxMobileVaidate(ModelAndView mav,
+			@PathVariable(value="mobile") String mobile,
+			@PathVariable(value="smsCode") String smsCode,
+			HttpServletRequest request) {
+		
+		SmsCodeQuery smsCodeQuery = new SmsCodeQuery();
+		smsCodeQuery.setMobile(mobile);
+		smsCodeQuery.setCode(smsCode);
+		
+		ResultDO resultDO = smsService.validate(smsCodeQuery);
+		
+		if(resultDO.isSuccess()) {
+			mav.addObject("JSON_DATA", "1");
 		} else {
 			mav.addObject("JSON_DATA", "0");
 		}

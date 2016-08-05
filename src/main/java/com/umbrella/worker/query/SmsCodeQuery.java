@@ -2,29 +2,31 @@ package com.umbrella.worker.query;
 
 public class SmsCodeQuery extends BaseQuery {
 
-	  private String wSmMobile;
+	private String mobile;
 
 	    
-	  private String wSmCode;
+	private String code;
 
 
-	public String getwSmMobile() {
-		return wSmMobile;
+	public String getMobile() {
+		return mobile;
 	}
 
 
-	public void setwSmMobile(String wSmMobile) {
-		this.wSmMobile = wSmMobile;
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
 	}
 
 
-	public String getwSmCode() {
-		return wSmCode;
+	public String getCode() {
+		return code;
 	}
 
 
-	public void setwSmCode(String wSmCode) {
-		this.wSmCode = wSmCode;
+	public void setCode(String code) {
+		this.code = code;
 	}
-	  
+
+
+	
 }

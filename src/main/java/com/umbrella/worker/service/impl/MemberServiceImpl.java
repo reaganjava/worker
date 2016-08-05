@@ -10,12 +10,16 @@ import org.springframework.stereotype.Service;
 
 import com.umbrella.worker.util.BeanUtilsExtends;
 import com.umbrella.worker.util.StringUtil;
+import com.umbrella.worker.dao.WContactMapper;
 import com.umbrella.worker.dao.WMemberCouponMapper;
 import com.umbrella.worker.dao.WMemberDetailMapper;
 import com.umbrella.worker.dao.WMembersMapper;
+import com.umbrella.worker.dto.ContactDO;
 import com.umbrella.worker.dto.MemberCouponDO;
 import com.umbrella.worker.dto.MemberDetailDO;
 import com.umbrella.worker.dto.MembersDO;
+import com.umbrella.worker.entity.WContact;
+import com.umbrella.worker.entity.WContactExample;
 import com.umbrella.worker.entity.WMemberCoupon;
 import com.umbrella.worker.entity.WMemberCouponExample;
 import com.umbrella.worker.entity.WMemberDetail;
@@ -40,6 +44,9 @@ public class MemberServiceImpl implements IMemberService {
 	
 	@Autowired
 	private WMemberCouponMapper memberCouponMapper;
+	
+	@Autowired
+	private WContactMapper contactMapper;
 
 	@Override
 	public ResultDO create(MembersDO membersDO) {
@@ -331,12 +338,27 @@ public class MemberServiceImpl implements IMemberService {
 		
 		if(memberCouponDOList != null) {
 			membersDO.setMemberCoupons(memberCouponDOList);
-		} else {
+		} 
+		
+		
+		WContactExample wcex = new WContactExample();
+		wcex.createCriteria().andWCMembersIdEqualTo(memberId);
+		
+		List<ContactDO> contactDOList = null;
+		try {
+			List<WContact> list = contactMapper.selectByExample(wcex);
+			contactDOList = getContactDOList(list);
+		} catch (Exception e) {
 			result.setSuccess(false);
 	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
 	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
-			return result;
+	        logger.error("[obj:memberCoupon][opt:get][msg:"+e.getMessage()+"]");
+	        return result;
 		}
+		
+		if(contactDOList != null) {
+			membersDO.setContacts(contactDOList);
+		} 
 		
 		result.setModel(ResultSupport.FIRST_MODEL_KEY, membersDO);
 		
@@ -454,6 +476,29 @@ public class MemberServiceImpl implements IMemberService {
 				MemberCouponDO memberCouponDO = this.getMemberCouponDO(memberCoupon);
 				if(memberCouponDO != null) {
 					resultList.add(memberCouponDO);
+				} else {
+					return null;
+				}
+			}
+		} else {
+			return null;
+		}
+		return resultList;
+	}
+	
+	private ContactDO getContactDO(WContact obj) {
+		if(obj == null) return null;
+		ContactDO dst = new ContactDO();
+		return BeanUtilsExtends.copyProperties(dst, obj) ? dst : null;
+	}
+	
+	private List<ContactDO> getContactDOList(List<WContact> list) {
+		List<ContactDO> resultList = new ArrayList<ContactDO>();
+		if(list != null && list.isEmpty()) {
+			for(WContact contact : list) {
+				ContactDO contactDO = this.getContactDO(contact);
+				if(contactDO != null) {
+					resultList.add(contactDO);
 				} else {
 					return null;
 				}

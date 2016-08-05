@@ -15,6 +15,8 @@ public interface IOrderService {
 	
 	public ResultDO list(OrderQuery orderQuery);
 	
+	public ResultDO confirm(int orderId);
+	
 	public ResultDO get(int orderId);
 	
 	public ResultDO modifiDetail(OrderDetailDO orderDetailDO);

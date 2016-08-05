@@ -41,7 +41,7 @@ public class WorkerServiceTest {
 		List<WorkerStaffDO> workerStaffs = new ArrayList<WorkerStaffDO>();
 		WorkerTaskDO workerTaskDO = new WorkerTaskDO();
 		workerTaskDO.setwWName("保洁服务");
-		workerTaskDO.setwWPrice(30);
+		//workerTaskDO.setwWPrice(30);
 		workerTaskDO.setwWPriceUnit(1);
 		workerTaskDO.setwWType(1);
 		workerTaskDO.setCreateAuthor("admin");

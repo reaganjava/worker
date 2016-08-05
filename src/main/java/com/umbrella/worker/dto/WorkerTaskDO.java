@@ -1,5 +1,7 @@
 package com.umbrella.worker.dto;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 public class WorkerTaskDO extends BaseDO {
@@ -13,7 +15,7 @@ public class WorkerTaskDO extends BaseDO {
     private String wWName;
 
     
-    private Integer wWPrice;
+    private BigDecimal wWPrice;
 
     
     private Integer wWPriceUnit;
@@ -25,10 +27,10 @@ public class WorkerTaskDO extends BaseDO {
     private String wWDesc;
     
     
-    private List<WorkerItemDO> workerItems;
+    private List<WorkerItemDO> workerItems = new ArrayList<WorkerItemDO>();
     
     
-    private List<WorkerStaffDO> workerStaffs;
+    private List<WorkerStaffDO> workerStaffs = new ArrayList<WorkerStaffDO>();
 
 
 	public Integer getId() {
@@ -51,12 +53,12 @@ public class WorkerTaskDO extends BaseDO {
 	}
 
 
-	public Integer getwWPrice() {
+	public BigDecimal getwWPrice() {
 		return wWPrice;
 	}
 
 
-	public void setwWPrice(Integer wWPrice) {
+	public void setwWPrice(BigDecimal wWPrice) {
 		this.wWPrice = wWPrice;
 	}
 

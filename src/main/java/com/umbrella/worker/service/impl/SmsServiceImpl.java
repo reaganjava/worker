@@ -82,8 +82,8 @@ public class SmsServiceImpl implements ISmsService {
 		
 		WSmsCodeExample exmaple = new WSmsCodeExample();
 		exmaple.createCriteria()
-		.andWSmMobileEqualTo(smsCodeQuery.getwSmCode())
-		.andWSmCodeEqualTo(smsCodeQuery.getwSmCode())
+		.andWSmMobileEqualTo(smsCodeQuery.getMobile())
+		.andWSmCodeEqualTo(smsCodeQuery.getCode())
 		.andStatusEqualTo(1);
 		
 		List<WSmsCode> list = null;
@@ -108,7 +108,7 @@ public class SmsServiceImpl implements ISmsService {
 		try {
 			WSmsCode smsCode = list.get(0);
 			smsCode.setStatus(-1);
-			smsCode.setModifiAuthor(smsCodeQuery.getwSmMobile());
+			smsCode.setModifiAuthor(smsCodeQuery.getMobile());
 			smsCode.setwSmValidTime(Calendar.getInstance().getTime());
 			smsCode.setModifiTime(smsCode.getwSmValidTime());
 			recordNum = smsCodeMapper.updateByPrimaryKey(smsCode);

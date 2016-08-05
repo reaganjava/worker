@@ -1,5 +1,6 @@
 package com.umbrella.worker.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -10,6 +11,7 @@ import com.umbrella.worker.dao.WOrderDetailMapper;
 import com.umbrella.worker.dao.WOrderMapper;
 import com.umbrella.worker.dto.OrderDO;
 import com.umbrella.worker.dto.OrderDetailDO;
+import com.umbrella.worker.dto.WorkerTaskDO;
 import com.umbrella.worker.entity.WOrder;
 import com.umbrella.worker.entity.WOrderDetail;
 import com.umbrella.worker.entity.WOrderExample;
@@ -18,6 +20,7 @@ import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.IOrderService;
 import com.umbrella.worker.util.BeanUtilsExtends;
+import com.umbrella.worker.util.MakeOrderNum;
 import com.umbrella.worker.util.StringUtil;
 
 public class OrderServiceImpl implements IOrderService {
@@ -43,6 +46,24 @@ public class OrderServiceImpl implements IOrderService {
 		
 		int recordNum = -1;
 		
+		WorkerTaskDO workerTaskDO = orderDO.getOrderDetailDO().getWorkerTaskDO();
+		
+		BigDecimal price = workerTaskDO.getwWPrice();
+		int staffCount = workerTaskDO.getWorkerStaffs().get(0).getwWsStaffCount();
+		int hours = workerTaskDO.getWorkerStaffs().get(0).getwWsHours();
+		int workerHours = staffCount * hours;
+		BigDecimal fee = price.multiply(new BigDecimal(workerHours));
+		
+		MakeOrderNum makeOrder = new MakeOrderNum();  
+        String orderNO = makeOrder.makeOrderNum();
+        if(StringUtil.isEmpty(orderNO)) {
+        	result.setSuccess(false);
+			return result;
+        }
+        
+        order.setwOOrderNo(orderNO);
+		order.setwOServiceName(workerTaskDO.getwWName());
+		order.setwOFee(fee);
 		order.setDatalevel(1);
 		order.setStatus(1);
 		order.setCreateTime(Calendar.getInstance().getTime());
@@ -59,10 +80,9 @@ public class OrderServiceImpl implements IOrderService {
 			return result;
 		}
 		
-		if(recordNum == 1) {
-			
-		} else {
+		if(recordNum < 1) {
 			result.setSuccess(false);
+			return result;
 		}
 		
 		result = BeanUtilsExtends.copy(orderDetail, orderDO.getOrderDetailDO());
@@ -174,6 +194,47 @@ public class OrderServiceImpl implements IOrderService {
 		}
 		return result;
 	}
+	
+	@Override
+	public ResultDO confirm(int orderId) {
+		
+		ResultSupport result = new ResultSupport();
+		
+		WOrder order = null;
+		if(!StringUtil.isGreatOne(orderId)) {
+			 result.setSuccess(false);
+			 return result;
+		} 
+		
+		try {
+			order = orderMapper.selectByPrimaryKey(orderId);
+		} catch (Exception e) {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+	        logger.error("[obj:supplier][opt:get][msg:"+e.getMessage()+"]");
+	        return result;
+		}
+		
+		int recordNum = -1;
+		
+		order.setwOIsConfim(1);
+		try {
+			recordNum = orderMapper.updateByPrimaryKey(order);
+		} catch (Exception e) {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+	        logger.error("[obj:supplier][opt:get][msg:"+e.getMessage()+"]");
+	        return result;
+		}
+		
+		if(recordNum < 1) {
+			result.setSuccess(false);
+		}
+		return result;
+	}
+
 
 	@Override
 	public ResultDO get(int orderId) {

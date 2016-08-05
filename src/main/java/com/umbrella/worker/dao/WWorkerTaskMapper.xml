@@ -10,7 +10,7 @@
     <id column="ID" jdbcType="INTEGER" property="id" />
     <result column="W_W_SUPPLIER" jdbcType="INTEGER" property="wWSupplier" />
     <result column="W_W_NAME" jdbcType="VARCHAR" property="wWName" />
-    <result column="W_W_PRICE" jdbcType="INTEGER" property="wWPrice" />
+    <result column="W_W_PRICE" jdbcType="DECIMAL" property="wWPrice" />
     <result column="W_W_PRICE_UNIT" jdbcType="INTEGER" property="wWPriceUnit" />
     <result column="W_W_TYPE" jdbcType="INTEGER" property="wWType" />
     <result column="W_W_DESC" jdbcType="VARCHAR" property="wWDesc" />
@@ -160,7 +160,7 @@
       MODIFI_TIME, MODIFI_AUTHOR, DATALEVEL, 
       STATUS)
     values (#{id,jdbcType=INTEGER}, #{wWSupplier,jdbcType=INTEGER}, #{wWName,jdbcType=VARCHAR}, 
-      #{wWPrice,jdbcType=INTEGER}, #{wWPriceUnit,jdbcType=INTEGER}, #{wWType,jdbcType=INTEGER}, 
+      #{wWPrice,jdbcType=DECIMAL}, #{wWPriceUnit,jdbcType=INTEGER}, #{wWType,jdbcType=INTEGER}, 
       #{wWDesc,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createAuthor,jdbcType=VARCHAR}, 
       #{modifiTime,jdbcType=TIMESTAMP}, #{modifiAuthor,jdbcType=VARCHAR}, #{datalevel,jdbcType=INTEGER}, 
       #{status,jdbcType=INTEGER})
@@ -224,7 +224,7 @@
         #{wWName,jdbcType=VARCHAR},
       </if>
       <if test="wWPrice != null">
-        #{wWPrice,jdbcType=INTEGER},
+        #{wWPrice,jdbcType=DECIMAL},
       </if>
       <if test="wWPriceUnit != null">
         #{wWPriceUnit,jdbcType=INTEGER},
@@ -284,7 +284,7 @@
         W_W_NAME = #{record.wWName,jdbcType=VARCHAR},
       </if>
       <if test="record.wWPrice != null">
-        W_W_PRICE = #{record.wWPrice,jdbcType=INTEGER},
+        W_W_PRICE = #{record.wWPrice,jdbcType=DECIMAL},
       </if>
       <if test="record.wWPriceUnit != null">
         W_W_PRICE_UNIT = #{record.wWPriceUnit,jdbcType=INTEGER},
@@ -328,7 +328,7 @@
     set ID = #{record.id,jdbcType=INTEGER},
       W_W_SUPPLIER = #{record.wWSupplier,jdbcType=INTEGER},
       W_W_NAME = #{record.wWName,jdbcType=VARCHAR},
-      W_W_PRICE = #{record.wWPrice,jdbcType=INTEGER},
+      W_W_PRICE = #{record.wWPrice,jdbcType=DECIMAL},
       W_W_PRICE_UNIT = #{record.wWPriceUnit,jdbcType=INTEGER},
       W_W_TYPE = #{record.wWType,jdbcType=INTEGER},
       W_W_DESC = #{record.wWDesc,jdbcType=VARCHAR},
@@ -357,7 +357,7 @@
         W_W_NAME = #{wWName,jdbcType=VARCHAR},
       </if>
       <if test="wWPrice != null">
-        W_W_PRICE = #{wWPrice,jdbcType=INTEGER},
+        W_W_PRICE = #{wWPrice,jdbcType=DECIMAL},
       </if>
       <if test="wWPriceUnit != null">
         W_W_PRICE_UNIT = #{wWPriceUnit,jdbcType=INTEGER},
@@ -398,7 +398,7 @@
     update w_worker_task
     set W_W_SUPPLIER = #{wWSupplier,jdbcType=INTEGER},
       W_W_NAME = #{wWName,jdbcType=VARCHAR},
-      W_W_PRICE = #{wWPrice,jdbcType=INTEGER},
+      W_W_PRICE = #{wWPrice,jdbcType=DECIMAL},
       W_W_PRICE_UNIT = #{wWPriceUnit,jdbcType=INTEGER},
       W_W_TYPE = #{wWType,jdbcType=INTEGER},
       W_W_DESC = #{wWDesc,jdbcType=VARCHAR},
