@@ -23,7 +23,6 @@ import com.umbrella.worker.entity.WContactExample;
 import com.umbrella.worker.entity.WMemberCoupon;
 import com.umbrella.worker.entity.WMemberCouponExample;
 import com.umbrella.worker.entity.WMemberDetail;
-import com.umbrella.worker.entity.WMemberDetailExample;
 import com.umbrella.worker.entity.WMembers;
 import com.umbrella.worker.entity.WMembersExample;
 import com.umbrella.worker.query.MembersQuery;

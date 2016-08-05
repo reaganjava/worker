@@ -10,12 +10,12 @@
      <!-- <table schema="worker" tableName="w_admin" ></table>  
      <table schema="worker" tableName="w_certificore" ></table> 
      <table schema="worker" tableName="w_comment" ></table> 
-     <table schema="worker" tableName="w_contact"></table>  -->
+     <table schema="worker" tableName="w_contact"></table>  
      <table schema="worker" tableName="w_members" ></table> 
-     <table schema="worker" tableName="w_member_detail" ></table>
+     <table schema="worker" tableName="w_member_detail" ></table>-->
      <table schema="worker" tableName="w_sms_code" ></table> 
-     <table schema="worker" tableName="w_sms_template" ></table>
-     <!-- <table schema="worker" tableName="w_member_coupon" ></table> 
+     <!-- <table schema="worker" tableName="w_sms_template" ></table>
+     <table schema="worker" tableName="w_member_coupon" ></table> 
      <table schema="worker" tableName="w_coupon" ></table> 
      <table schema="worker" tableName="w_members_login_log" ></table>
      <table schema="worker" tableName="w_order" ></table>

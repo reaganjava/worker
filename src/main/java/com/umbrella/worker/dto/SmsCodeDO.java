@@ -8,6 +8,9 @@ public class SmsCodeDO extends BaseDO {
 
     
     private String wSmMobile;
+    
+    
+    private String wSmTempKey;
 
     
     private String wSmCode;
@@ -33,6 +36,16 @@ public class SmsCodeDO extends BaseDO {
 
 	public void setwSmMobile(String wSmMobile) {
 		this.wSmMobile = wSmMobile;
+	}
+
+
+	public String getwSmTempKey() {
+		return wSmTempKey;
+	}
+
+
+	public void setwSmTempKey(String wSmTempKey) {
+		this.wSmTempKey = wSmTempKey;
 	}
 
 

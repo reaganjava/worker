@@ -17,6 +17,7 @@ import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.IMemberService;
 import com.umbrella.worker.service.ISmsService;
+import com.umbrella.worker.util.Constant;
 import com.umbrella.worker.util.GetHttpMemberInfo;
 import com.umbrella.worker.util.MD5;
 
@@ -179,6 +180,7 @@ public class MembersController {
 		SmsCodeDO smsCodeDO = new SmsCodeDO();
 		smsCodeDO.setwSmMobile(mobile);
 		smsCodeDO.setCreateAuthor(mobile);
+		smsCodeDO.setwSmTempKey(Constant.SMS_MOBILE_VAIDATE_KEY);
 		ResultDO  resultDO = smsService.create(smsCodeDO);
 		if(resultDO.isSuccess()) {
 			mav.addObject("JSON_DATA", resultDO.getModel(ResultSupport.FIRST_MODEL_KEY));

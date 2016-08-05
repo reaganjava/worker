@@ -6,19 +6,13 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.umbrella.worker.dao.WCouponMapper;
 import com.umbrella.worker.dao.WPayrecordMapper;
-import com.umbrella.worker.dto.CouponDO;
 import com.umbrella.worker.dto.PayrecordDO;
-import com.umbrella.worker.entity.WCoupon;
-import com.umbrella.worker.entity.WCouponExample;
 import com.umbrella.worker.entity.WPayrecord;
 import com.umbrella.worker.entity.WPayrecordExample;
-import com.umbrella.worker.query.CouponQuery;
 import com.umbrella.worker.query.PayrecordQuery;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
-import com.umbrella.worker.service.ICouponService;
 import com.umbrella.worker.service.IPayService;
 import com.umbrella.worker.util.BeanUtilsExtends;
 import com.umbrella.worker.util.StringUtil;
