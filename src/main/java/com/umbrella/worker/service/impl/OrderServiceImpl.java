@@ -5,6 +5,8 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.umbrella.worker.dao.WOrderDetailMapper;
 import com.umbrella.worker.dao.WOrderMapper;
@@ -21,13 +23,13 @@ import com.umbrella.worker.service.IOrderService;
 import com.umbrella.worker.util.BeanUtilsExtends;
 import com.umbrella.worker.util.MakeOrderNum;
 import com.umbrella.worker.util.StringUtil;
-
+@Service("orderService")
 public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService {
 	
 	private static Logger logger = Logger.getLogger(OrderServiceImpl.class);
-	
+	@Autowired
 	private WOrderMapper orderMapper;
-	
+	@Autowired
 	private WOrderDetailMapper orderDetailMapper;
 
 	@Override

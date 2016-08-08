@@ -17,7 +17,7 @@ import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.ISuppliersService;
 import com.umbrella.worker.util.BeanUtilsExtends;
 import com.umbrella.worker.util.StringUtil;
-@Service("adminService")
+@Service("suppliersService")
 public class SuppliersServiceImpl  extends BaseServiceImpl implements ISuppliersService {
 	
 	private static Logger logger = Logger.getLogger(SuppliersServiceImpl.class);

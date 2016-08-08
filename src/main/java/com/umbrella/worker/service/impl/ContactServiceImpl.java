@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.umbrella.worker.dao.WContactMapper;
 import com.umbrella.worker.dto.ContactDO;
@@ -15,11 +17,11 @@ import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.IContactService;
 import com.umbrella.worker.util.BeanUtilsExtends;
 import com.umbrella.worker.util.StringUtil;
-
+@Service("contactService")
 public class ContactServiceImpl  extends BaseServiceImpl implements IContactService {
 	
 	private static Logger logger = Logger.getLogger(ContactServiceImpl.class);
-	
+	@Autowired
 	private WContactMapper contactMapper;
 
 	@Override
