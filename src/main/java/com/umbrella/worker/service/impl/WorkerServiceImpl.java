@@ -440,7 +440,7 @@ public class WorkerServiceImpl  extends BaseServiceImpl implements IWorkerServic
 		if(StringUtil.isNotEmpty(workerTaskQuery.getOrderByClause())) {	
 			example.setOrderByClause(" " + workerTaskQuery.getOrderByClause() + " " + workerTaskQuery.getSort());
 		} else {
-			example.setOrderByClause(" W_M_REGISTER_TIME DESC");
+			example.setOrderByClause(" CREATE_TIME DESC");
 		}
 		
 		List<WWorkerTask> list = null;

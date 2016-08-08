@@ -411,7 +411,7 @@ public class MemberServiceImpl  extends BaseServiceImpl implements IMemberServic
 		if(StringUtil.isNotEmpty(membersQuery.getOrderByClause())) {	
 			example.setOrderByClause(" " + membersQuery.getOrderByClause() + " " + membersQuery.getSort());
 		} else {
-			example.setOrderByClause(" W_M_REGISTER_TIME DESC");
+			example.setOrderByClause(" CREATE_TIME DESC");
 		}
 		
 		if(membersQuery.isPage()) {

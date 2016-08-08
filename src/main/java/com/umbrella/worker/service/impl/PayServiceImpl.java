@@ -164,7 +164,7 @@ public class PayServiceImpl  extends BaseServiceImpl implements IPayService {
 		if(StringUtil.isNotEmpty(payrecordQuery.getOrderByClause())) {	
 			example.setOrderByClause(" " + payrecordQuery.getOrderByClause() + " " + payrecordQuery.getSort());
 		} else {
-			example.setOrderByClause(" W_M_REGISTER_TIME DESC");
+			example.setOrderByClause(" CREATE_TIME DESC");
 		}
 		
 		if(payrecordQuery.isPage()) {

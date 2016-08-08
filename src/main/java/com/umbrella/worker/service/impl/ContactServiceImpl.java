@@ -165,7 +165,7 @@ public class ContactServiceImpl  extends BaseServiceImpl implements IContactServ
 		if(StringUtil.isNotEmpty(contactQuery.getOrderByClause())) {	
 			example.setOrderByClause(" " + contactQuery.getOrderByClause() + " " + contactQuery.getSort());
 		} else {
-			example.setOrderByClause(" W_M_REGISTER_TIME DESC");
+			example.setOrderByClause(" CREATE_TIME DESC");
 		}
 		
 		List<WContact> list = null;

@@ -167,7 +167,7 @@ public class CouponServiceImpl  extends BaseServiceImpl implements ICouponServic
 		if(StringUtil.isNotEmpty(couponQuery.getOrderByClause())) {	
 			example.setOrderByClause(" " + couponQuery.getOrderByClause() + " " + couponQuery.getSort());
 		} else {
-			example.setOrderByClause(" W_M_REGISTER_TIME DESC");
+			example.setOrderByClause(" CREATE_TIME DESC");
 		}
 		
 		if(couponQuery.isPage()) {

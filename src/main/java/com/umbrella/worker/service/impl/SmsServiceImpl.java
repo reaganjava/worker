@@ -58,7 +58,6 @@ public class SmsServiceImpl  extends BaseServiceImpl implements ISmsService {
 		smsCode.setModifiAuthor(smsCode.getCreateAuthor());
 
 		try {
-			System.out.println(smsCode.getwSmMobile());
 			recordNum = smsCodeMapper.insertSelective(smsCode);
 		} catch (Exception e) {
 			result.setSuccess(false);
@@ -96,7 +95,6 @@ public class SmsServiceImpl  extends BaseServiceImpl implements ISmsService {
             logger.error("[obj:member][opt:login][msg:"+e.getMessage()+"]");
             return result;
 		}
-		
 		
 		if(list.size() < 1) {
 			result.setSuccess(false);

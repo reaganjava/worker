@@ -298,7 +298,7 @@ public class StaffServiceImpl  extends BaseServiceImpl implements IStaffService 
 		if(StringUtil.isNotEmpty(staffQuery.getOrderByClause())) {	
 			example.setOrderByClause(" " + staffQuery.getOrderByClause() + " " + staffQuery.getSort());
 		} else {
-			example.setOrderByClause(" W_M_REGISTER_TIME DESC");
+			example.setOrderByClause(" CREATE_TIME DESC");
 		}
 		
 		if(staffQuery.isPage()) {

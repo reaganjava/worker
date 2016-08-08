@@ -271,11 +271,41 @@ public class AdminServiceImpl extends BaseServiceImpl implements IAdminService {
 		
 		WAdminExample example = new WAdminExample();
 		WAdminExample.Criteria c = example.createCriteria();
+		
+		if(StringUtil.isNotEmpty(adminQuery.getUsername())) {
+			c.andWAUsernameEqualTo(adminQuery.getUsername());
+		}
+		
+		if(StringUtil.isNotEmpty(adminQuery.getRealName())) {
+			c.andWAUsernameEqualTo(adminQuery.getRealName());
+		}
 	
 		if(StringUtil.isNotEmpty(adminQuery.getOrderByClause())) {	
 			example.setOrderByClause(" " + adminQuery.getOrderByClause() + " " + adminQuery.getSort());
 		} else {
 			example.setOrderByClause(" CREATE_TIME DESC");
+		}
+		
+		if(adminQuery.isPage()) {
+			long count = 0;
+			try {
+				count = adminMapper.countByExample(example);
+			} catch (Exception e) {
+				result.setSuccess(false);
+		        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+		        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+		        e.printStackTrace();
+		        logger.error("[obj:member][opt:get][msg:"+e.getMessage()+"]");
+		        return result;
+			}
+			result.setModel(ResultSupport.SECOND_MODEL_KEY, count);
+			int pageNO = adminQuery.getPageNO();
+			if(pageNO > 0) {
+				pageNO = pageNO -1;
+			}
+			String pageByClause = " limit " + (pageNO * adminQuery.getPageRows())
+					+ "," + adminQuery.getPageRows();
+			example.setPageByClause(pageByClause);
 		}
 		
 		List<WAdmin> list = null;

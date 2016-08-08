@@ -163,7 +163,7 @@ public class TransactionServiceImpl  extends BaseServiceImpl implements ITransac
 		if(StringUtil.isNotEmpty(transactionQuery.getOrderByClause())) {	
 			example.setOrderByClause(" " + transactionQuery.getOrderByClause() + " " + transactionQuery.getSort());
 		} else {
-			example.setOrderByClause(" W_M_REGISTER_TIME DESC");
+			example.setOrderByClause(" CREATE_TIME DESC");
 		}
 		
 		List<WTransaction> list = null;

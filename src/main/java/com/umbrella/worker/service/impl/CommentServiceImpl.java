@@ -165,7 +165,7 @@ public class CommentServiceImpl extends BaseServiceImpl implements ICommentServi
 		if(StringUtil.isNotEmpty(commentQuery.getOrderByClause())) {	
 			example.setOrderByClause(" " + commentQuery.getOrderByClause() + " " + commentQuery.getSort());
 		} else {
-			example.setOrderByClause(" W_M_REGISTER_TIME DESC");
+			example.setOrderByClause(" CREATE_TIME DESC");
 		}
 		
 		List<WComment> list = null;

@@ -53,6 +53,7 @@ public class ManagerContrlloer {
 		if(result.isSuccess()) {
 			adminDO = (AdminDO) result.getModel(ResultSupport.FIRST_MODEL_KEY);
 			request.getSession().setAttribute("ADMIN_ID", adminDO.getId());
+			request.getSession().setAttribute("ADMIN_NAME", adminDO.getwAUsername());
 			request.getSession().setAttribute("ADMIN_ROLE_ID", adminDO.getwARoleId());
 			mav.setViewName("");
 		} else {

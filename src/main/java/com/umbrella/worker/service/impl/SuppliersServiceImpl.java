@@ -169,7 +169,7 @@ public class SuppliersServiceImpl  extends BaseServiceImpl implements ISuppliers
 		if(StringUtil.isNotEmpty(supplierQuery.getOrderByClause())) {	
 			example.setOrderByClause(" " + supplierQuery.getOrderByClause() + " " + supplierQuery.getSort());
 		} else {
-			example.setOrderByClause(" W_M_REGISTER_TIME DESC");
+			example.setOrderByClause(" CREATE_TIME DESC");
 		}
 		
 		if(supplierQuery.isPage()) {

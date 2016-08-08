@@ -132,9 +132,12 @@ public class OrderController {
 		
 		OrderQuery query = new OrderQuery();
 		query.setMemberId(id);
+		query.setPage(true);
+		query.setPageNO(pageNo);
+		
 		ResultDO result = orderService.list(query);
 		if(result.isSuccess()) {
-			PageBeanUtil pageBean = new com.umbrella.worker.util.PageBeanUtil();
+			PageBeanUtil pageBean = new PageBeanUtil();
 			long count = (Long) result.getModel(ResultSupport.SECOND_MODEL_KEY);
 			pageBean.setCurrentPage(pageNo);
 			pageBean.setPageSize(18);
