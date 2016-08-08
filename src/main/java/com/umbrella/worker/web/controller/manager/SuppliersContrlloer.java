@@ -1,5 +1,7 @@
 package com.umbrella.worker.web.controller.manager;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +12,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.umbrella.worker.dto.SupplierDO;
+import com.umbrella.worker.query.SupplierQuery;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.ISuppliersService;
+import com.umbrella.worker.util.PageBeanUtil;
 
 @Controller
 @RequestMapping(value = "/supplier")
@@ -77,4 +81,34 @@ public class SuppliersContrlloer {
 		}
 		return mav;
 	} 
+	
+	
+	@RequestMapping(value = "/list/{name}/{pageNo}.html", method = RequestMethod.POST)
+	public ModelAndView query(ModelAndView mav,
+			@PathVariable(value="name") String name,
+			@PathVariable(value="pageNo") Integer pageNo,
+			HttpServletRequest request) {
+		
+		SupplierQuery query = new SupplierQuery();
+		query.setPage(true);
+		query.setPageNO(pageNo);
+		ResultDO result = suppliersService.list(query);
+		
+		if(result.isSuccess()) {
+			PageBeanUtil pageBean = new PageBeanUtil();
+			long count = (Long) result.getModel(ResultSupport.SECOND_MODEL_KEY);
+			pageBean.setCurrentPage(pageNo);
+			pageBean.setPageSize(18);
+			pageBean.setRecordCount(count);
+			pageBean.setPageCount(count);
+			pageBean.setPages(pageNo);
+			pageBean.setDataList((List<Object>) result.getModel(ResultSupport.FIRST_MODEL_KEY));
+			mav.addObject("PAGE_BEAN", pageBean);
+			mav.setViewName("manager/admin/list");
+		} else {
+			mav.setViewName("error");
+		}
+		return mav;
+		
+	}
 }
