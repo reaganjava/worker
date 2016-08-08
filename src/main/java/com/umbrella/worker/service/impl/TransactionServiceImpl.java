@@ -1,6 +1,5 @@
 package com.umbrella.worker.service.impl;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -17,7 +16,7 @@ import com.umbrella.worker.service.ITransactionService;
 import com.umbrella.worker.util.BeanUtilsExtends;
 import com.umbrella.worker.util.StringUtil;
 
-public class TransactionServiceImpl implements ITransactionService {
+public class TransactionServiceImpl  extends BaseServiceImpl implements ITransactionService {
 	
 	private static Logger logger = Logger.getLogger(TransactionServiceImpl.class);
 	
@@ -192,27 +191,5 @@ public class TransactionServiceImpl implements ITransactionService {
 		return result;
 	}
 	
-	private TransactionDO getTransactionDO(WTransaction obj) {
-		if(obj == null) return null;
-		TransactionDO dst = new TransactionDO();
-		return BeanUtilsExtends.copyProperties(dst, obj) ? dst : null;
-	}
 	
-	private List<TransactionDO> getTransactionDOList(List<WTransaction> list) {
-		List<TransactionDO> resultList = new ArrayList<TransactionDO>();
-		if(list != null && list.isEmpty()) {
-			for(WTransaction transaction : list) {
-				TransactionDO transactionDO = this.getTransactionDO(transaction);
-				if(transactionDO != null) {
-					resultList.add(transactionDO);
-				} else {
-					return null;
-				}
-			}
-		} else {
-			return null;
-		}
-		return resultList;
-	}
-
 }

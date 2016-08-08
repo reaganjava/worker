@@ -12,8 +12,9 @@
      <table schema="worker" tableName="w_comment" ></table> 
      <table schema="worker" tableName="w_contact"></table>  
      <table schema="worker" tableName="w_members" ></table> 
-     <table schema="worker" tableName="w_member_detail" ></table>-->
-     <table schema="worker" tableName="w_sms_code" ></table> 
+     <table schema="worker" tableName="w_member_detail" ></table>
+     <table schema="worker" tableName="w_sms_code" ></table> -->
+      <table schema="worker" tableName="w_menu" ></table> 
      <!-- <table schema="worker" tableName="w_sms_template" ></table>
      <table schema="worker" tableName="w_member_coupon" ></table> 
      <table schema="worker" tableName="w_coupon" ></table> 

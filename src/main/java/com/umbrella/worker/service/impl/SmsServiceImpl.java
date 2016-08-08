@@ -20,7 +20,7 @@ import com.umbrella.worker.service.ISmsService;
 import com.umbrella.worker.util.BeanUtilsExtends;
 
 @Service("smsService")
-public class SmsServiceImpl implements ISmsService {
+public class SmsServiceImpl  extends BaseServiceImpl implements ISmsService {
 
 	private static Logger logger = Logger.getLogger(SmsServiceImpl.class);
 

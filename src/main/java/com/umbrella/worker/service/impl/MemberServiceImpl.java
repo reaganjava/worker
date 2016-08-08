@@ -1,6 +1,5 @@
 package com.umbrella.worker.service.impl;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -31,7 +30,7 @@ import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.IMemberService;
 
 @Service("memberService")
-public class MemberServiceImpl implements IMemberService {
+public class MemberServiceImpl  extends BaseServiceImpl implements IMemberService {
 	
 	private static Logger logger = Logger.getLogger(MemberServiceImpl.class);
 	
@@ -151,6 +150,36 @@ public class MemberServiceImpl implements IMemberService {
 			result.setErrorCode(ResultDO.MEMBER_LOGIN_FAILED);
             result.setErrorMsg(ResultDO.MEMBER_LOGIN_FAILED_MSG);
 			return result;
+		}
+		
+		return result;
+	}
+	
+	@Override
+	public ResultDO isMobileReg(MembersQuery membersQuery) {
+		
+		ResultSupport result = new ResultSupport();
+		
+		WMembersExample example = new WMembersExample();
+		WMembersExample.Criteria c = example.createCriteria();
+		
+		if(StringUtil.isNotEmpty(membersQuery.getMobile())) {
+			c.andWMMobileEqualTo(membersQuery.getMobile());
+		}
+		
+		int recordNum = 0;
+		try {
+			recordNum = membersMapper.countByExample(example);
+		} catch (Exception e) {
+            result.setSuccess(false);
+            result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+            result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+            logger.error("[obj:member][opt:login][msg:"+e.getMessage()+"]");
+            return result;
+		}
+		
+		if(recordNum > 0) {
+			result.setSuccess(false);
 		}
 		
 		return result;
@@ -433,79 +462,8 @@ public class MemberServiceImpl implements IMemberService {
 		return result;
 	}
 	
-	private MembersDO getMemberDO(WMembers obj) {
-		if(obj == null) return null;
-		MembersDO dst = new MembersDO();
-		return BeanUtilsExtends.copyProperties(dst, obj) ? dst : null;
-	}
 	
-	private List<MembersDO> getMemberDOList(List<WMembers> list) {
-		List<MembersDO> resultList = new ArrayList<MembersDO>();
-		if(list != null && list.isEmpty()) {
-			for(WMembers members : list) {
-				MembersDO memberDO = this.getMemberDO(members);
-				if(memberDO != null) {
-					resultList.add(memberDO);
-				} else {
-					return null;
-				}
-			}
-		} else {
-			return null;
-		}
-		return resultList;
-	}
 	
-	private MemberDetailDO getMemberDetailDO(WMemberDetail obj) {
-		if(obj == null) return null;
-		MemberDetailDO dst = new MemberDetailDO();
-		return BeanUtilsExtends.copyProperties(dst, obj) ? dst : null;
-	}
 	
-	private MemberCouponDO getMemberCouponDO(WMemberCoupon obj) {
-		if(obj == null) return null;
-		MemberCouponDO dst = new MemberCouponDO();
-		return BeanUtilsExtends.copyProperties(dst, obj) ? dst : null;
-	}
-	
-	private List<MemberCouponDO> getMemberCouponDOList(List<WMemberCoupon> list) {
-		List<MemberCouponDO> resultList = new ArrayList<MemberCouponDO>();
-		if(list != null && list.isEmpty()) {
-			for(WMemberCoupon memberCoupon : list) {
-				MemberCouponDO memberCouponDO = this.getMemberCouponDO(memberCoupon);
-				if(memberCouponDO != null) {
-					resultList.add(memberCouponDO);
-				} else {
-					return null;
-				}
-			}
-		} else {
-			return null;
-		}
-		return resultList;
-	}
-	
-	private ContactDO getContactDO(WContact obj) {
-		if(obj == null) return null;
-		ContactDO dst = new ContactDO();
-		return BeanUtilsExtends.copyProperties(dst, obj) ? dst : null;
-	}
-	
-	private List<ContactDO> getContactDOList(List<WContact> list) {
-		List<ContactDO> resultList = new ArrayList<ContactDO>();
-		if(list != null && list.isEmpty()) {
-			for(WContact contact : list) {
-				ContactDO contactDO = this.getContactDO(contact);
-				if(contactDO != null) {
-					resultList.add(contactDO);
-				} else {
-					return null;
-				}
-			}
-		} else {
-			return null;
-		}
-		return resultList;
-	}
 
 }

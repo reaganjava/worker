@@ -1,10 +1,11 @@
 package com.umbrella.worker.service.impl;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.umbrella.worker.dao.WSupplierMapper;
 import com.umbrella.worker.dto.SupplierDO;
@@ -16,11 +17,11 @@ import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.ISuppliersService;
 import com.umbrella.worker.util.BeanUtilsExtends;
 import com.umbrella.worker.util.StringUtil;
-
-public class SuppliersServiceImpl implements ISuppliersService {
+@Service("adminService")
+public class SuppliersServiceImpl  extends BaseServiceImpl implements ISuppliersService {
 	
 	private static Logger logger = Logger.getLogger(SuppliersServiceImpl.class);
-	
+	@Autowired
 	private WSupplierMapper supplierMapper;
 
 	@Override
@@ -219,27 +220,5 @@ public class SuppliersServiceImpl implements ISuppliersService {
 		return result;
 	}
 	
-	private SupplierDO getSupplierDO(WSupplier obj) {
-		if(obj == null) return null;
-		SupplierDO dst = new SupplierDO();
-		return BeanUtilsExtends.copyProperties(dst, obj) ? dst : null;
-	}
 	
-	private List<SupplierDO> getSupplierDOList(List<WSupplier> list) {
-		List<SupplierDO> resultList = new ArrayList<SupplierDO>();
-		if(list != null && list.isEmpty()) {
-			for(WSupplier supplier : list) {
-				SupplierDO supplierDO = this.getSupplierDO(supplier);
-				if(supplierDO != null) {
-					resultList.add(supplierDO);
-				} else {
-					return null;
-				}
-			}
-		} else {
-			return null;
-		}
-		return resultList;
-	}
-
 }

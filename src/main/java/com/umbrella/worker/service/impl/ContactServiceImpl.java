@@ -1,6 +1,5 @@
 package com.umbrella.worker.service.impl;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -17,7 +16,7 @@ import com.umbrella.worker.service.IContactService;
 import com.umbrella.worker.util.BeanUtilsExtends;
 import com.umbrella.worker.util.StringUtil;
 
-public class ContactServiceImpl implements IContactService {
+public class ContactServiceImpl  extends BaseServiceImpl implements IContactService {
 	
 	private static Logger logger = Logger.getLogger(ContactServiceImpl.class);
 	
@@ -194,27 +193,6 @@ public class ContactServiceImpl implements IContactService {
 		return result;
 	}
 	
-	private ContactDO getContactDO(WContact obj) {
-		if(obj == null) return null;
-		ContactDO dst = new ContactDO();
-		return BeanUtilsExtends.copyProperties(dst, obj) ? dst : null;
-	}
 	
-	private List<ContactDO> getContactDOList(List<WContact> list) {
-		List<ContactDO> resultList = new ArrayList<ContactDO>();
-		if(list != null && list.isEmpty()) {
-			for(WContact contact : list) {
-				ContactDO contactDO = this.getContactDO(contact);
-				if(contactDO != null) {
-					resultList.add(contactDO);
-				} else {
-					return null;
-				}
-			}
-		} else {
-			return null;
-		}
-		return resultList;
-	}
 
 }

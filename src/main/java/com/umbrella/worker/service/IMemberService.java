@@ -20,5 +20,7 @@ public interface IMemberService {
 	public ResultDO list(MembersQuery membersQuery);
 
 	public ResultDO modifiPwd(MembersDO membersDO);
+
+	public ResultDO isMobileReg(MembersQuery membersQuery);
 	
 }

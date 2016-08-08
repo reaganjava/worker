@@ -1,6 +1,5 @@
 package com.umbrella.worker.service.impl;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -17,7 +16,7 @@ import com.umbrella.worker.service.ICouponService;
 import com.umbrella.worker.util.BeanUtilsExtends;
 import com.umbrella.worker.util.StringUtil;
 
-public class CouponServiceImpl implements ICouponService {
+public class CouponServiceImpl  extends BaseServiceImpl implements ICouponService {
 	
 	private static Logger logger = Logger.getLogger(CouponServiceImpl.class);
 	
@@ -219,27 +218,6 @@ public class CouponServiceImpl implements ICouponService {
 		return result;
 	}
 	
-	private CouponDO getCouponDO(WCoupon obj) {
-		if(obj == null) return null;
-		CouponDO dst = new CouponDO();
-		return BeanUtilsExtends.copyProperties(dst, obj) ? dst : null;
-	}
 	
-	private List<CouponDO> getCouponDOList(List<WCoupon> list) {
-		List<CouponDO> resultList = new ArrayList<CouponDO>();
-		if(list != null && list.isEmpty()) {
-			for(WCoupon coupon : list) {
-				CouponDO couponDO = this.getCouponDO(coupon);
-				if(couponDO != null) {
-					resultList.add(couponDO);
-				} else {
-					return null;
-				}
-			}
-		} else {
-			return null;
-		}
-		return resultList;
-	}
 
 }

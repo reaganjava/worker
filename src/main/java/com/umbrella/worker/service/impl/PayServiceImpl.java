@@ -1,6 +1,5 @@
 package com.umbrella.worker.service.impl;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -17,7 +16,7 @@ import com.umbrella.worker.service.IPayService;
 import com.umbrella.worker.util.BeanUtilsExtends;
 import com.umbrella.worker.util.StringUtil;
 
-public class PayServiceImpl implements IPayService {
+public class PayServiceImpl  extends BaseServiceImpl implements IPayService {
 	
 	private static Logger logger = Logger.getLogger(PayServiceImpl.class);
 	
@@ -216,27 +215,6 @@ public class PayServiceImpl implements IPayService {
 		return result;
 	}
 	
-	private PayrecordDO getPayrecordDO(WPayrecord obj) {
-		if(obj == null) return null;
-		PayrecordDO dst = new PayrecordDO();
-		return BeanUtilsExtends.copyProperties(dst, obj) ? dst : null;
-	}
 	
-	private List<PayrecordDO> getPayrecordDOList(List<WPayrecord> list) {
-		List<PayrecordDO> resultList = new ArrayList<PayrecordDO>();
-		if(list != null && list.isEmpty()) {
-			for(WPayrecord payrecord : list) {
-				PayrecordDO payrecordDO = this.getPayrecordDO(payrecord);
-				if(payrecordDO != null) {
-					resultList.add(payrecordDO);
-				} else {
-					return null;
-				}
-			}
-		} else {
-			return null;
-		}
-		return resultList;
-	}
 
 }

@@ -1,6 +1,5 @@
 package com.umbrella.worker.service.impl;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -21,7 +20,7 @@ import com.umbrella.worker.service.IStaffService;
 import com.umbrella.worker.util.BeanUtilsExtends;
 import com.umbrella.worker.util.StringUtil;
 
-public class StaffServiceImpl implements IStaffService {
+public class StaffServiceImpl  extends BaseServiceImpl implements IStaffService {
 	
 	private static Logger logger = Logger.getLogger(StaffServiceImpl.class);
 	
@@ -350,50 +349,5 @@ public class StaffServiceImpl implements IStaffService {
 		return result;
 	}
 	
-	private CertificoreDO getCertificoreDO(WCertificore obj) {
-		if(obj == null) return null;
-		CertificoreDO dst = new CertificoreDO();
-		return BeanUtilsExtends.copyProperties(dst, obj) ? dst : null;
-	}
 	
-	private List<CertificoreDO> getCertificoreDOList(List<WCertificore> list) {
-		List<CertificoreDO> resultList = new ArrayList<CertificoreDO>();
-		if(list != null && list.isEmpty()) {
-			for(WCertificore certificore : list) {
-				CertificoreDO certificoreDO = this.getCertificoreDO(certificore);
-				if(certificoreDO != null) {
-					resultList.add(certificoreDO);
-				} else {
-					return null;
-				}
-			}
-		} else {
-			return null;
-		}
-		return resultList;
-	}
-	
-	private StaffDO getStaffDO(WStaff obj) {
-		if(obj == null) return null;
-		StaffDO dst = new StaffDO();
-		return BeanUtilsExtends.copyProperties(dst, obj) ? dst : null;
-	}
-	
-	private List<StaffDO> getStaffDOList(List<WStaff> list) {
-		List<StaffDO> resultList = new ArrayList<StaffDO>();
-		if(list != null && list.isEmpty()) {
-			for(WStaff staff : list) {
-				StaffDO staffDO = this.getStaffDO(staff);
-				if(staffDO != null) {
-					resultList.add(staffDO);
-				} else {
-					return null;
-				}
-			}
-		} else {
-			return null;
-		}
-		return resultList;
-	}
-
 }

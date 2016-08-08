@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.umbrella.worker.dto.MemberDetailDO;
 import com.umbrella.worker.dto.MembersDO;
 import com.umbrella.worker.dto.SmsCodeDO;
+import com.umbrella.worker.query.MembersQuery;
 import com.umbrella.worker.query.SmsCodeQuery;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
@@ -207,6 +208,26 @@ public class MembersController {
 			mav.addObject("JSON_DATA", "1");
 		} else {
 			mav.addObject("JSON_DATA", "0");
+		}
+		
+		return mav;
+	}
+	
+	@RequestMapping(value = "/checkMobile/{mobile}.json", method = RequestMethod.GET)
+	public ModelAndView ajaxCheckMobile(ModelAndView mav,
+			@PathVariable(value="mobile") String mobile,
+			HttpServletRequest request) {
+		
+		MembersQuery query = new MembersQuery();
+		
+		query.setMobile(mobile);
+		
+		ResultDO result = memberService.isMobileReg(query);
+		
+		if(result.isSuccess()) {
+			mav.addObject("JSON_DATA", 1);
+		} else {
+			mav.addObject("JSON_DATA", 0);
 		}
 		
 		return mav;

@@ -1,5 +1,7 @@
 package com.umbrella.worker.web.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,11 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.umbrella.worker.util.PageBeanUtil;
 import com.umbrella.worker.dto.ContactDO;
 import com.umbrella.worker.dto.MembersDO;
 import com.umbrella.worker.dto.OrderDO;
 import com.umbrella.worker.dto.OrderDetailDO;
 import com.umbrella.worker.dto.WorkerTaskDO;
+import com.umbrella.worker.query.OrderQuery;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.IContactService;
@@ -112,10 +116,38 @@ public class OrderController {
 			HttpServletRequest request) {
 	
 		ResultDO resultDO = orderService.confirm(id);
-		if(!resultDO.isSuccess()) {
+		if(resultDO.isSuccess()) {
+			mav.setViewName("order/grade");
+		} else {
 			mav.setViewName("error");
 		}
-		mav.setViewName("order/grade");
+		return mav;
+	}
+	
+	@RequestMapping(value = "/userOrders/{id}/{pageNo}.html", method = RequestMethod.GET)
+	public ModelAndView getUserOrders(ModelAndView mav,
+			@PathVariable(value="id") Integer id,
+			@PathVariable(value="pageNo") Integer pageNo,
+			HttpServletRequest request) {
+		
+		OrderQuery query = new OrderQuery();
+		query.setMemberId(id);
+		ResultDO result = orderService.list(query);
+		if(result.isSuccess()) {
+			PageBeanUtil pageBean = new com.umbrella.worker.util.PageBeanUtil();
+			long count = (Long) result.getModel(ResultSupport.SECOND_MODEL_KEY);
+			pageBean.setCurrentPage(pageNo);
+			pageBean.setPageSize(18);
+			pageBean.setRecordCount(count);
+			pageBean.setPageCount(count);
+			pageBean.setPages(pageNo);
+			pageBean.setDataList((List<Object>) result.getModel(ResultSupport.FIRST_MODEL_KEY));
+			mav.addObject("PAGE_BEAN", pageBean);
+			mav.setViewName("order/userOrders");
+		} else {
+			mav.setViewName("error");
+		}
+		
 		return mav;
 	}
 }

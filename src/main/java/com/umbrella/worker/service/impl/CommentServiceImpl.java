@@ -1,6 +1,5 @@
 package com.umbrella.worker.service.impl;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -17,7 +16,7 @@ import com.umbrella.worker.service.ICommentService;
 import com.umbrella.worker.util.BeanUtilsExtends;
 import com.umbrella.worker.util.StringUtil;
 
-public class CommentServiceImpl implements ICommentService {
+public class CommentServiceImpl extends BaseServiceImpl implements ICommentService {
 	
 	private static Logger logger = Logger.getLogger(CommentServiceImpl.class);
 	
@@ -194,27 +193,6 @@ public class CommentServiceImpl implements ICommentService {
 		return result;
 	}
 	
-	private CommentDO getCommentDO(WComment obj) {
-		if(obj == null) return null;
-		CommentDO dst = new CommentDO();
-		return BeanUtilsExtends.copyProperties(dst, obj) ? dst : null;
-	}
 	
-	private List<CommentDO> getCommentDOList(List<WComment> list) {
-		List<CommentDO> resultList = new ArrayList<CommentDO>();
-		if(list != null && list.isEmpty()) {
-			for(WComment comment : list) {
-				CommentDO commentDO = this.getCommentDO(comment);
-				if(commentDO != null) {
-					resultList.add(commentDO);
-				} else {
-					return null;
-				}
-			}
-		} else {
-			return null;
-		}
-		return resultList;
-	}
 
 }

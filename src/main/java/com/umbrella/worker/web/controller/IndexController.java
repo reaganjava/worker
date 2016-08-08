@@ -13,7 +13,7 @@ public class IndexController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ModelAndView index(ModelAndView mav, 
 			HttpServletRequest request) {
-		
+		mav.setViewName("index");
 		return mav;
 	}
 }

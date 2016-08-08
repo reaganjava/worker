@@ -1,6 +1,7 @@
 package com.umbrella.worker.dto;
 
 import java.util.Date;
+import java.util.List;
 
 public class AdminDO extends BaseDO {
   
@@ -29,6 +30,9 @@ public class AdminDO extends BaseDO {
 
    
     private String wALoginIp;
+    
+    
+    private List<MenuDO> menus;
 
 
 	public Integer getId() {
@@ -118,6 +122,16 @@ public class AdminDO extends BaseDO {
 
 	public void setwALoginIp(String wALoginIp) {
 		this.wALoginIp = wALoginIp;
+	}
+
+
+	public List<MenuDO> getMenus() {
+		return menus;
+	}
+
+
+	public void setMenus(List<MenuDO> menus) {
+		this.menus = menus;
 	}
 
  

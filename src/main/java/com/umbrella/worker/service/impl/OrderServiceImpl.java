@@ -1,7 +1,6 @@
 package com.umbrella.worker.service.impl;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -23,7 +22,7 @@ import com.umbrella.worker.util.BeanUtilsExtends;
 import com.umbrella.worker.util.MakeOrderNum;
 import com.umbrella.worker.util.StringUtil;
 
-public class OrderServiceImpl implements IOrderService {
+public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService {
 	
 	private static Logger logger = Logger.getLogger(OrderServiceImpl.class);
 	
@@ -257,15 +256,32 @@ public class OrderServiceImpl implements IOrderService {
 	        return result;
 		}
 		
-		OrderDO OrderDO = getOrderDO(order);
-		if(OrderDO != null) {
-			result.setModel(ResultSupport.FIRST_MODEL_KEY, OrderDO);
+		WOrderDetail orderDetail = null;
+		
+		try {
+			orderDetail = orderDetailMapper.selectByPrimaryKey(orderId);
+		} catch (Exception e) {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+	        logger.error("[obj:supplier][opt:get][msg:"+e.getMessage()+"]");
+	        return result;
+		}
+		
+		OrderDetailDO orderDetailDO = getOrderDetailDO(orderDetail);
+		
+		OrderDO orderDO = getOrderDO(order);
+		if(orderDO != null) {
+			orderDO.setOrderDetailDO(orderDetailDO);
+			result.setModel(ResultSupport.FIRST_MODEL_KEY, orderDO);
 		} else {
 			result.setSuccess(false);
 	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
 	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
 			return result;
 		}
+		
+		
 		
 		return result;
 	}
@@ -278,10 +294,42 @@ public class OrderServiceImpl implements IOrderService {
 		WOrderExample example = new WOrderExample();
 		WOrderExample.Criteria c = example.createCriteria();
 		
+		if(StringUtil.isGreatOne(orderQuery.getMemberId())) {
+			c.andWOMembersIdEqualTo(orderQuery.getMemberId());
+		}
+		
+		if(StringUtil.isNotEmpty(orderQuery.getOrderNo())) {
+			c.andWOOrderNoEqualTo(orderQuery.getOrderNo());
+		}
+		
 		if(StringUtil.isNotEmpty(orderQuery.getOrderByClause())) {	
 			example.setOrderByClause(" " + orderQuery.getOrderByClause() + " " + orderQuery.getSort());
 		} else {
-			example.setOrderByClause(" W_M_REGISTER_TIME DESC");
+			example.setOrderByClause(" CREATE_TIME DESC");
+		}
+		
+		if(orderQuery.isPage()) {
+			long count = 0;
+			try {
+				count = orderMapper.countByExample(example);
+			} catch (Exception e) {
+				result.setSuccess(false);
+		        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+		        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+		        e.printStackTrace();
+		        logger.error("[obj:member][opt:get][msg:"+e.getMessage()+"]");
+		        return result;
+			}
+			result.setModel(ResultSupport.SECOND_MODEL_KEY, count);
+			int pageNO = orderQuery.getPageNO();
+			if(pageNO > 0) {
+				pageNO = pageNO -1;
+			}
+			String pageByClause = " limit " + (pageNO * orderQuery.getPageRows())
+					+ "," + orderQuery.getPageRows();
+			System.out.println("count:" + count);
+			System.out.println(pageByClause);
+			example.setPageByClause(pageByClause);
 		}
 		
 		List<WOrder> list = null;
@@ -309,27 +357,6 @@ public class OrderServiceImpl implements IOrderService {
 		return result;
 	}
 	
-	private OrderDO getOrderDO(WOrder obj) {
-		if(obj == null) return null;
-		OrderDO dst = new OrderDO();
-		return BeanUtilsExtends.copyProperties(dst, obj) ? dst : null;
-	}
 	
-	private List<OrderDO> getOrderDOList(List<WOrder> list) {
-		List<OrderDO> resultList = new ArrayList<OrderDO>();
-		if(list != null && list.isEmpty()) {
-			for(WOrder order : list) {
-				OrderDO OrderDO = this.getOrderDO(order);
-				if(OrderDO != null) {
-					resultList.add(OrderDO);
-				} else {
-					return null;
-				}
-			}
-		} else {
-			return null;
-		}
-		return resultList;
-	}
 
 }

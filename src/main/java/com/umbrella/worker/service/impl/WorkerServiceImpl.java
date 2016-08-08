@@ -1,6 +1,5 @@
 package com.umbrella.worker.service.impl;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -28,7 +27,7 @@ import com.umbrella.worker.util.BeanUtilsExtends;
 import com.umbrella.worker.util.StringUtil;
 
 @Service("workerService")
-public class WorkerServiceImpl implements IWorkerService {
+public class WorkerServiceImpl  extends BaseServiceImpl implements IWorkerService {
 	
 	private static Logger logger = Logger.getLogger(WorkerServiceImpl.class);
 	
@@ -469,73 +468,6 @@ public class WorkerServiceImpl implements IWorkerService {
 		return result;
 	}
 	
-	private WorkerTaskDO getWorkerTaskDO(WWorkerTask obj) {
-		if(obj == null) return null;
-		WorkerTaskDO dst = new WorkerTaskDO();
-		return BeanUtilsExtends.copyProperties(dst, obj) ? dst : null;
-	}
 	
-	private List<WorkerTaskDO> getWorkerTaskDOList(List<WWorkerTask> list) {
-		List<WorkerTaskDO> resultList = new ArrayList<WorkerTaskDO>();
-		if(list != null && list.isEmpty()) {
-			for(WWorkerTask workerTask : list) {
-				WorkerTaskDO workerTaskDO = this.getWorkerTaskDO(workerTask);
-				if(workerTaskDO != null) {
-					resultList.add(workerTaskDO);
-				} else {
-					return null;
-				}
-			}
-		} else {
-			return null;
-		}
-		return resultList;
-	}
-	
-	private WorkerItemDO getWorkerItemDO(WWorkerItem obj) {
-		if(obj == null) return null;
-		WorkerItemDO dst = new WorkerItemDO();
-		return BeanUtilsExtends.copyProperties(dst, obj) ? dst : null;
-	}
-	
-	private List<WorkerItemDO> getWorkerItemDOList(List<WWorkerItem> list) {
-		List<WorkerItemDO> resultList = new ArrayList<WorkerItemDO>();
-		if(list != null && list.isEmpty()) {
-			for(WWorkerItem workerItem : list) {
-				WorkerItemDO workerItemDO = this.getWorkerItemDO(workerItem);
-				if(workerItemDO != null) {
-					resultList.add(workerItemDO);
-				} else {
-					return null;
-				}
-			}
-		} else {
-			return null;
-		}
-		return resultList;
-	}
-	
-	private WorkerStaffDO getWorkerStaffDO(WWorkerStaff obj) {
-		if(obj == null) return null;
-		WorkerStaffDO dst = new WorkerStaffDO();
-		return BeanUtilsExtends.copyProperties(dst, obj) ? dst : null;
-	}
-	
-	private List<WorkerStaffDO> getWorkerStaffDOList(List<WWorkerStaff> list) {
-		List<WorkerStaffDO> resultList = new ArrayList<WorkerStaffDO>();
-		if(list != null && list.isEmpty()) {
-			for(WWorkerStaff workerStaff : list) {
-				WorkerStaffDO workerStaffDO = this.getWorkerStaffDO(workerStaff);
-				if(workerStaffDO != null) {
-					resultList.add(workerStaffDO);
-				} else {
-					return null;
-				}
-			}
-		} else {
-			return null;
-		}
-		return resultList;
-	}
 
 }
