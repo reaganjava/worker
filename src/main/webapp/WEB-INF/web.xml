@@ -46,7 +46,7 @@
 <!--   </filter-mapping> -->
  <servlet>  
     <servlet-name>imageCodeMakerServlet</servlet-name>  
-    <servlet-class>com.reagan.cqhot.web.servlet.ImageCodeMakerServlet</servlet-class>  
+    <servlet-class>com.umbrella.worker.web.servlet.ImageCodeMakerServlet</servlet-class>  
   </servlet>
   <servlet-mapping>  
     <servlet-name>imageCodeMakerServlet</servlet-name>  
