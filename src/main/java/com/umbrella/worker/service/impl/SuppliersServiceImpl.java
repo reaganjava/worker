@@ -166,6 +166,12 @@ public class SuppliersServiceImpl  extends BaseServiceImpl implements ISuppliers
 			c.andWSNameEqualTo("%" + supplierQuery.getName() + "%");
 		}
 		
+		if(StringUtil.isGreatOne(supplierQuery.getStart())) {
+			c.andStatusEqualTo(supplierQuery.getStart());
+		}
+		
+		c.andDatalevelEqualTo(1);
+		
 		if(StringUtil.isNotEmpty(supplierQuery.getOrderByClause())) {	
 			example.setOrderByClause(" " + supplierQuery.getOrderByClause() + " " + supplierQuery.getSort());
 		} else {

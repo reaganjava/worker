@@ -13,9 +13,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.umbrella.worker.dto.AdminDO;
 import com.umbrella.worker.query.AdminQuery;
+import com.umbrella.worker.query.SupplierQuery;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.IAdminService;
+import com.umbrella.worker.service.ISuppliersService;
 import com.umbrella.worker.util.MD5;
 import com.umbrella.worker.util.PageBeanUtil;
 import com.umbrella.worker.util.StringUtil;
@@ -27,11 +29,22 @@ public class AdminContrlloer {
 	@Autowired
 	public IAdminService adminService;
 	
+	@Autowired
+	private ISuppliersService suppliersService;
+	
 	@RequestMapping(value = "/add.html", method = RequestMethod.GET)
 	public ModelAndView add(ModelAndView mav, 
 			HttpServletRequest request) {
-		mav.setViewName("manager/admin/add");
-		return mav;
+		
+		SupplierQuery query = new SupplierQuery();
+		ResultDO result = suppliersService.list(query);
+		if(result.isSuccess()) {
+			mav.addObject("SUPPLIER_LIST", result.getModel(ResultSupport.FIRST_MODEL_KEY));
+			mav.setViewName("manager/admin/add");
+		} else {
+			mav.setViewName("error");
+		}
+		return mav; 
 	}
 	
 	@RequestMapping(value = "/add.html", method = RequestMethod.POST)
