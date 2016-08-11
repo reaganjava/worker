@@ -80,6 +80,8 @@ public class WorkerServiceImpl  extends BaseServiceImpl implements IWorkerServic
 			workerItem.setStatus(1);
 			workerItem.setCreateTime(Calendar.getInstance().getTime());
 			workerItem.setModifiTime(Calendar.getInstance().getTime());
+			workerItem.setCreateAuthor(workerTask.getCreateAuthor());
+			workerItem.setModifiAuthor(workerTask.getCreateAuthor());
 			workerItem.setwWiTaskId(workerTask.getId());
 			try {
 				recordNum = workerItemMapper.insertSelective(workerItem);
@@ -106,6 +108,8 @@ public class WorkerServiceImpl  extends BaseServiceImpl implements IWorkerServic
 			workerStaff.setStatus(1);
 			workerStaff.setCreateTime(Calendar.getInstance().getTime());
 			workerStaff.setModifiTime(Calendar.getInstance().getTime());
+			workerStaff.setCreateAuthor(workerTask.getCreateAuthor());
+			workerStaff.setModifiAuthor(workerTask.getCreateAuthor());
 			workerStaff.setwWsTaskId(workerTask.getId());
 			try {
 				recordNum = workerStaffMapper.insertSelective(workerStaff);

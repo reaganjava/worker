@@ -1,5 +1,6 @@
 package com.umbrella.worker.service.impl;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -9,16 +10,20 @@ import org.springframework.stereotype.Service;
 
 import com.umbrella.worker.dao.WAdminMapper;
 import com.umbrella.worker.dao.WMenuMapper;
+import com.umbrella.worker.dao.WSupplierMapper;
 import com.umbrella.worker.dto.AdminDO;
 import com.umbrella.worker.dto.MenuDO;
+import com.umbrella.worker.dto.SupplierDO;
 import com.umbrella.worker.entity.WAdmin;
 import com.umbrella.worker.entity.WAdminExample;
 import com.umbrella.worker.entity.WMenu;
 import com.umbrella.worker.entity.WMenuExample;
+import com.umbrella.worker.entity.WSupplier;
 import com.umbrella.worker.query.AdminQuery;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.IAdminService;
+import com.umbrella.worker.service.ISuppliersService;
 import com.umbrella.worker.util.BeanUtilsExtends;
 import com.umbrella.worker.util.StringUtil;
 @Service("adminService")
@@ -29,7 +34,8 @@ public class AdminServiceImpl extends BaseServiceImpl implements IAdminService {
 	private WAdminMapper adminMapper;
 	@Autowired
 	private WMenuMapper menuMapper;
-
+	@Autowired
+	private WSupplierMapper supplierMapper;
 	@Override
 	public ResultDO create(AdminDO adminDO) {
 		
@@ -77,7 +83,8 @@ public class AdminServiceImpl extends BaseServiceImpl implements IAdminService {
 		example.createCriteria()
 			.andWAUsernameEqualTo(adminDO.getwAUsername())
 			.andWAPasswordEqualTo(adminDO.getwAPassword())
-			.andDatalevelNotEqualTo(-1);
+			.andDatalevelNotEqualTo(-1)
+			.andStatusEqualTo(1);
 		List<WAdmin> list = null;
 		try {
 			list = adminMapper.selectByExample(example);
@@ -160,7 +167,7 @@ public class AdminServiceImpl extends BaseServiceImpl implements IAdminService {
 		admin.setModifiTime(Calendar.getInstance().getTime());
 		int recordNum = -1;
 		try {
-			recordNum = adminMapper.updateByPrimaryKey(admin);
+			recordNum = adminMapper.updateByPrimaryKeySelective(admin);
 		} catch (Exception e) {
 			result.setSuccess(false);
 			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
@@ -249,9 +256,10 @@ public class AdminServiceImpl extends BaseServiceImpl implements IAdminService {
 			result.setSuccess(false);
 			return result;
 		}
-		
+		WSupplier supplier = supplierMapper.selectByPrimaryKey(admin.getwASupplierId());
 		AdminDO adminDO = getAdminDO(admin);
 		if(adminDO != null) {
+			adminDO.setSupplierName(supplier.getwSName());
 			adminDO.setMenus(menuDOList);
 			result.setModel(ResultSupport.FIRST_MODEL_KEY, adminDO);
 		} else {
@@ -283,8 +291,10 @@ public class AdminServiceImpl extends BaseServiceImpl implements IAdminService {
 		if(StringUtil.isNotEmpty(adminQuery.getOrderByClause())) {	
 			example.setOrderByClause(" " + adminQuery.getOrderByClause() + " " + adminQuery.getSort());
 		} else {
-			example.setOrderByClause(" CREATE_TIME DESC");
+			example.setOrderByClause(" CREATE_TIME ASC");
 		}
+		
+		c.andDatalevelEqualTo(1);
 		
 		if(adminQuery.isPage()) {
 			long count = 0;
@@ -320,16 +330,23 @@ public class AdminServiceImpl extends BaseServiceImpl implements IAdminService {
 	        return result;
 		}
 		
+		
 		List<AdminDO> adminList = getAdminDOList(list);
 		
-		if(adminList.size() > 0) {
-			result.setModel(ResultSupport.FIRST_MODEL_KEY, adminList);
-		} else {
-			result.setSuccess(false);
-	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
-	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
-	        return result;
+		List<AdminDO> adminList2 = new ArrayList<AdminDO>();
+		
+		for(int i = 0; i < adminList.size(); i++) {
+			AdminDO admin = adminList.get(i);
+			System.out.println(admin.getwASupplierId());
+			WSupplier supplier = supplierMapper.selectByPrimaryKey(admin.getwASupplierId());
+			System.out.println(supplier.getwSName());
+			
+			admin.setSupplierName(supplier.getwSName());
+			adminList2.add(admin);
 		}
+		
+		result.setModel(ResultSupport.FIRST_MODEL_KEY, adminList2);
+		
 		return result;
 	}
 	

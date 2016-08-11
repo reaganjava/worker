@@ -39,6 +39,8 @@ public class SuppliersServiceImpl  extends BaseServiceImpl implements ISuppliers
 		
 		supplier.setDatalevel(1);
 		supplier.setStatus(1);
+		supplier.setwSSector(0);
+		supplier.setwSGrade(1);
 		supplier.setCreateTime(Calendar.getInstance().getTime());
 		supplier.setModifiTime(Calendar.getInstance().getTime());
 		
@@ -74,7 +76,7 @@ public class SuppliersServiceImpl  extends BaseServiceImpl implements ISuppliers
 		supplier.setModifiTime(Calendar.getInstance().getTime());
 		int recordNum = -1;
 		try {
-			recordNum = supplierMapper.updateByPrimaryKey(supplier);
+			recordNum = supplierMapper.updateByPrimaryKeySelective(supplier);
 		} catch (Exception e) {
 			result.setSuccess(false);
 			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
@@ -119,7 +121,8 @@ public class SuppliersServiceImpl  extends BaseServiceImpl implements ISuppliers
 		}
 		return result;
 	}
-
+	
+	
 	@Override
 	public ResultDO get(int supplierId) {
 		
@@ -140,6 +143,7 @@ public class SuppliersServiceImpl  extends BaseServiceImpl implements ISuppliers
 	        logger.error("[obj:supplier][opt:get][msg:"+e.getMessage()+"]");
 	        return result;
 		}
+		
 		
 		SupplierDO supplierDO = getSupplierDO(supplier);
 		if(supplierDO != null) {
@@ -162,12 +166,12 @@ public class SuppliersServiceImpl  extends BaseServiceImpl implements ISuppliers
 		WSupplierExample example = new WSupplierExample();
 		WSupplierExample.Criteria c = example.createCriteria();
 		
-		if(StringUtil.isEmpty(supplierQuery.getName())) {
+		if(StringUtil.isNotEmpty(supplierQuery.getName())) {
 			c.andWSNameEqualTo("%" + supplierQuery.getName() + "%");
 		}
 		
-		if(StringUtil.isGreatOne(supplierQuery.getStart())) {
-			c.andStatusEqualTo(supplierQuery.getStart());
+		if(StringUtil.isGreatOne(supplierQuery.getStatus())) {
+			c.andStatusEqualTo(supplierQuery.getStatus());
 		}
 		
 		c.andDatalevelEqualTo(1);
@@ -175,7 +179,7 @@ public class SuppliersServiceImpl  extends BaseServiceImpl implements ISuppliers
 		if(StringUtil.isNotEmpty(supplierQuery.getOrderByClause())) {	
 			example.setOrderByClause(" " + supplierQuery.getOrderByClause() + " " + supplierQuery.getSort());
 		} else {
-			example.setOrderByClause(" CREATE_TIME DESC");
+			example.setOrderByClause(" CREATE_TIME ASC");
 		}
 		
 		if(supplierQuery.isPage()) {
@@ -195,6 +199,7 @@ public class SuppliersServiceImpl  extends BaseServiceImpl implements ISuppliers
 			if(pageNO > 0) {
 				pageNO = pageNO -1;
 			}
+			System.out.println(pageNO);
 			String pageByClause = " limit " + (pageNO * supplierQuery.getPageRows())
 					+ "," + supplierQuery.getPageRows();
 			
@@ -215,14 +220,10 @@ public class SuppliersServiceImpl  extends BaseServiceImpl implements ISuppliers
 		
 		List<SupplierDO> supplierList = getSupplierDOList(list);
 		
-		if(supplierList.size() > 0) {
-			result.setModel(ResultSupport.FIRST_MODEL_KEY, supplierList);
-		} else {
-			result.setSuccess(false);
-	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
-	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
-	        return result;
-		}
+		
+		
+		result.setModel(ResultSupport.FIRST_MODEL_KEY, supplierList);
+		
 		return result;
 	}
 	

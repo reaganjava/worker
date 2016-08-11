@@ -8,7 +8,10 @@ public class AdminDO extends BaseDO {
     private Integer id;
 
   
-    private SupplierDO supplierDO;
+    private Integer wASupplierId;
+    
+    
+    private String supplierName;
 
     
     private String wAUsername;
@@ -33,6 +36,9 @@ public class AdminDO extends BaseDO {
     
     
     private List<MenuDO> menus;
+    
+    
+    private String vcode;
 
 
 	public Integer getId() {
@@ -44,14 +50,23 @@ public class AdminDO extends BaseDO {
 		this.id = id;
 	}
 
-
-	public SupplierDO getSupplierDO() {
-		return supplierDO;
+	public Integer getwASupplierId() {
+		return wASupplierId;
 	}
 
 
-	public void setSupplierDO(SupplierDO supplierDO) {
-		this.supplierDO = supplierDO;
+	public void setwASupplierId(Integer wASupplierId) {
+		this.wASupplierId = wASupplierId;
+	}
+
+
+	public String getSupplierName() {
+		return supplierName;
+	}
+
+
+	public void setSupplierName(String supplierName) {
+		this.supplierName = supplierName;
 	}
 
 
@@ -134,5 +149,15 @@ public class AdminDO extends BaseDO {
 		this.menus = menus;
 	}
 
- 
+
+	public String getVcode() {
+		return vcode;
+	}
+
+
+	public void setVcode(String vcode) {
+		this.vcode = vcode;
+	}
+
+    
 }

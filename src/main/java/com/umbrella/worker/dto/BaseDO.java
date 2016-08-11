@@ -1,10 +1,14 @@
 package com.umbrella.worker.dto;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class BaseDO {
 	
 	private Date createTime;
+	
+	
+	private String formatDate;
 
    
     private String createAuthor;
@@ -20,6 +24,13 @@ public class BaseDO {
 
   
     private Integer status;
+
+
+	public String getFormatDate() {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		this.formatDate = dateFormat.format(this.getCreateTime());
+		return formatDate;
+	}
 
 
 	public Date getCreateTime() {

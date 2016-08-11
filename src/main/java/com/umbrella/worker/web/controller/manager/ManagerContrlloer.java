@@ -39,6 +39,12 @@ public class ManagerContrlloer {
 	public ModelAndView login(ModelAndView mav, 
 			AdminDO adminDO, HttpServletRequest request) {
 		
+		String verityCode = (String) request.getSession().getAttribute("VERITY_CODE");
+		
+		if(!adminDO.getVcode().equals(verityCode)) {
+			mav.setViewName("manager/login");
+		}
+		
 		String loginIP = GetHttpMemberInfo.getIpAddr(request);
 		adminDO.setwALoginIp(loginIP);
 		
@@ -48,29 +54,47 @@ public class ManagerContrlloer {
 		
 		adminDO.setwAPassword(md5Pwd);
 		
-		ResultDO result = adminService.validate(adminDO);
 		
+		ResultDO result = adminService.validate(adminDO);
+
 		if(result.isSuccess()) {
 			adminDO = (AdminDO) result.getModel(ResultSupport.FIRST_MODEL_KEY);
-			request.getSession().setAttribute("ADMIN_ID", adminDO.getId());
-			request.getSession().setAttribute("ADMIN_NAME", adminDO.getwAUsername());
-			request.getSession().setAttribute("ADMIN_ROLE_ID", adminDO.getwARoleId());
-			mav.setViewName("");
+			request.getSession().setAttribute("MANAGER_ID", adminDO.getId());
+			request.getSession().setAttribute("MANAGER_NAME", adminDO.getwAUsername());
+			request.getSession().setAttribute("MANAGER_ROLE_ID", adminDO.getwARoleId());
+			request.getSession().setAttribute("MANAGER_SUPPLIER_ID", adminDO.getwASupplierId());
+			return new ModelAndView("redirect:/manager/index.html");
 		} else {
-			mav.setViewName("error");
+			mav.setViewName("manager/login");
 		}
-		
 		return mav;
+	}
+	
+	@RequestMapping(value = "/loginout.html", method = RequestMethod.GET)
+	public ModelAndView loginOut(ModelAndView mav, 
+			HttpServletRequest request) {
+		request.getSession().removeAttribute("MANAGER_ID");
+		request.getSession().removeAttribute("MANAGER_NAME");
+		request.getSession().removeAttribute("MANAGER_ROLE_ID");
+		request.getSession().removeAttribute("MANAGER_SUPPLIER_ID");
+		return new ModelAndView("redirect:/manager/login.html");
 	}
 	
 	@RequestMapping(value = "/index.html", method = RequestMethod.GET)
 	public ModelAndView index(ModelAndView mav, 
 			HttpServletRequest request) {
 		
-		int roleId = (int) request.getSession().getAttribute("ADMIN_ROLE_ID");
+		Integer roleId = (Integer) request.getSession().getAttribute("MANAGER_ROLE_ID");
+		
+		if(roleId == null) {
+			mav.setViewName("error");
+			return mav;
+		}
 		
 		MenuQuery query = new MenuQuery();
 		query.setRoleId(roleId);
+		
+		
 		ResultDO result = menuService.list(query);
 		
 		if(result.isSuccess()) {
@@ -79,7 +103,7 @@ public class ManagerContrlloer {
 		} else {
 			mav.setViewName("error");
 		}
-		
+		mav.setViewName("manager/index");
 		return mav;
 	}
 }

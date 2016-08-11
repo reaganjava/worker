@@ -78,7 +78,7 @@ public class ImageCodeMakerServlet extends HttpServlet {
         HttpSession session = request.getSession();
         
         // 将生成的随机数字字符串写入Session
-        session.setAttribute("randcode", sRand);
+        session.setAttribute("VERITY_CODE", sRand);
         // 使图像生效
         g.dispose();
         // 输出图像到页面

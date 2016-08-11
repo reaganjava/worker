@@ -14,6 +14,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.umbrella.worker.dto.AdminDO;
 import com.umbrella.worker.query.AdminQuery;
 import com.umbrella.worker.query.SupplierQuery;
+import com.umbrella.worker.result.JsonResultDO;
+import com.umbrella.worker.result.JsonResultSupport;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.IAdminService;
@@ -47,13 +49,14 @@ public class AdminContrlloer {
 		return mav; 
 	}
 	
-	@RequestMapping(value = "/add.html", method = RequestMethod.POST)
+	@RequestMapping(value = "/add.json", method = RequestMethod.POST)
 	public ModelAndView add(ModelAndView mav,
 			AdminDO adminDO,
 			HttpServletRequest request) {
 		
+		JsonResultDO jsonResultDO = new JsonResultSupport();
 		
-		adminDO.setCreateAuthor((String) request.getSession().getAttribute("ADMIN_NAME"));
+		adminDO.setCreateAuthor((String) request.getSession().getAttribute("MANAGER_NAME"));
 		
 		MD5 md5 = new MD5();
 		String md5Pwd = md5.getMD5ofStr(adminDO.getwAPassword() 
@@ -61,12 +64,82 @@ public class AdminContrlloer {
 		
 		adminDO.setwAPassword(md5Pwd);
 		
-		ResultDO resultDO = adminService.create(adminDO);
+		ResultDO result = adminService.create(adminDO);
 		
-		if(resultDO.isSuccess()) {
-			mav.setViewName("success");
+		if(result.isSuccess()) {
+			jsonResultDO.setInfo("提交成功");
+			jsonResultDO.setStatus(JsonResultDO.JSON_SUCCESS);
+			mav.addObject("JSON_DATA", jsonResultDO);
 		} else {
-			mav.setViewName("error");
+			jsonResultDO.setInfo("提交失败");
+			jsonResultDO.setStatus(JsonResultDO.JSON_FAILED);
+			mav.addObject("JSON_DATA", "error");
+		}
+		return mav;
+	}
+	
+	@RequestMapping(value = "/remove/{id}.json", method = RequestMethod.GET)
+	public ModelAndView remove(ModelAndView mav, 
+			@PathVariable(value="id") Integer id,
+			HttpServletRequest request) {
+		JsonResultDO jsonResultDO = new JsonResultSupport();
+		
+		ResultDO result = adminService.remove(id);
+		
+		if(result.isSuccess()) {
+			jsonResultDO.setInfo("提交成功");
+			jsonResultDO.setStatus(JsonResultDO.JSON_SUCCESS);
+			mav.addObject("JSON_DATA", jsonResultDO);
+		} else {
+			jsonResultDO.setInfo("提交失败");
+			jsonResultDO.setStatus(JsonResultDO.JSON_FAILED);
+			mav.addObject("JSON_DATA", "error");
+		}
+		return mav;
+	}
+	
+	@RequestMapping(value = "/stop/{id}.json", method = RequestMethod.GET)
+	public ModelAndView stop(ModelAndView mav, 
+			@PathVariable(value="id") Integer id,
+			HttpServletRequest request) {
+		JsonResultDO jsonResultDO = new JsonResultSupport();
+		AdminDO adminDO = new AdminDO();
+		
+		adminDO.setId(id);
+		adminDO.setStatus(0);
+		ResultDO result = adminService.modifi(adminDO);
+		
+		if(result.isSuccess()) {
+			jsonResultDO.setInfo("提交成功");
+			jsonResultDO.setStatus(JsonResultDO.JSON_SUCCESS);
+			mav.addObject("JSON_DATA", jsonResultDO);
+		} else {
+			jsonResultDO.setInfo("提交失败");
+			jsonResultDO.setStatus(JsonResultDO.JSON_FAILED);
+			mav.addObject("JSON_DATA", "error");
+		}
+		return mav;
+	}
+	
+	@RequestMapping(value = "/start/{id}.json", method = RequestMethod.GET)
+	public ModelAndView start(ModelAndView mav, 
+			@PathVariable(value="id") Integer id,
+			HttpServletRequest request) {
+		JsonResultDO jsonResultDO = new JsonResultSupport();
+		AdminDO adminDO = new AdminDO();
+		
+		adminDO.setId(id);
+		adminDO.setStatus(1);
+		ResultDO result = adminService.modifi(adminDO);
+		
+		if(result.isSuccess()) {
+			jsonResultDO.setInfo("提交成功");
+			jsonResultDO.setStatus(JsonResultDO.JSON_SUCCESS);
+			mav.addObject("JSON_DATA", jsonResultDO);
+		} else {
+			jsonResultDO.setInfo("提交失败");
+			jsonResultDO.setStatus(JsonResultDO.JSON_FAILED);
+			mav.addObject("JSON_DATA", "error");
 		}
 		return mav;
 	}
@@ -76,10 +149,20 @@ public class AdminContrlloer {
 			@PathVariable(value="id") Integer id,
 			HttpServletRequest request) {
 		
-		ResultDO result = adminService.get(id);
 		
+		
+		SupplierQuery query = new SupplierQuery();
+		ResultDO  result = suppliersService.list(query);
 		if(result.isSuccess()) {
-			mav.addObject("ADMIN_INFO", (AdminDO) result.getModel(ResultSupport.FIRST_MODEL_KEY));
+			mav.addObject("SUPPLIER_LIST", result.getModel(ResultSupport.FIRST_MODEL_KEY));
+			mav.setViewName("manager/admin/add");
+		} else {
+			mav.setViewName("error");
+		}
+		
+		result = adminService.get(id);
+		if(result.isSuccess()) {
+			mav.addObject("MANAGER_INFO", (AdminDO) result.getModel(ResultSupport.FIRST_MODEL_KEY));
 			mav.setViewName("manager/admin/detail");
 		} else {
 			mav.setViewName("error");
@@ -87,12 +170,14 @@ public class AdminContrlloer {
 		return mav;
 	}
 	
-	@RequestMapping(value = "/edit.html", method = RequestMethod.POST)
+	@RequestMapping(value = "/edit.json", method = RequestMethod.POST)
 	public ModelAndView edit(ModelAndView mav,
 			AdminDO adminDO,
 			HttpServletRequest request) {
 		
-		adminDO.setModifiAuthor((String) request.getSession().getAttribute("ADMIN_NAME"));
+		JsonResultDO jsonResultDO = new JsonResultSupport();
+		
+		adminDO.setModifiAuthor((String) request.getSession().getAttribute("MANAGER_NAME"));
 		
 		
 		if(StringUtil.isEmpty(adminDO.getwAPassword())) {
@@ -106,15 +191,18 @@ public class AdminContrlloer {
 		ResultDO result = adminService.modifi(adminDO);
 		
 		if(result.isSuccess()) {
-			return new ModelAndView("redirect:/manager/admin/detail/+ " + adminDO.getId() + ".html");
+			jsonResultDO.setInfo("提交成功");
+			jsonResultDO.setStatus(JsonResultDO.JSON_SUCCESS);
+			mav.addObject("JSON_DATA", jsonResultDO);
 		} else {
-			mav.setViewName("error");
+			jsonResultDO.setInfo("提交失败");
+			jsonResultDO.setStatus(JsonResultDO.JSON_FAILED);
+			mav.addObject("JSON_DATA", "error");
 		}
 		return mav;
-		
 	}
 	
-	@RequestMapping(value = "/list/{username}/{pageNo}.html", method = RequestMethod.POST)
+	@RequestMapping(value = "/list/{username}/{pageNo}.html", method = RequestMethod.GET)
 	public ModelAndView query(ModelAndView mav,
 			@PathVariable(value="username") String username,
 			@PathVariable(value="pageNo") Integer pageNo,
@@ -123,13 +211,18 @@ public class AdminContrlloer {
 		AdminQuery query = new AdminQuery();
 		query.setPage(true);
 		query.setPageNO(pageNo);
-		ResultDO result = adminService.list(query);
+		query.setPageRows(10);
+		if(!username.equals("all")) {
+			query.setUsername(username);
+		}
 		
+		ResultDO result = adminService.list(query);
+		System.out.println(result);
 		if(result.isSuccess()) {
 			PageBeanUtil pageBean = new PageBeanUtil();
 			long count = (Long) result.getModel(ResultSupport.SECOND_MODEL_KEY);
 			pageBean.setCurrentPage(pageNo);
-			pageBean.setPageSize(18);
+			pageBean.setPageSize(query.getPageRows());
 			pageBean.setRecordCount(count);
 			pageBean.setPageCount(count);
 			pageBean.setPages(pageNo);

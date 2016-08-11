@@ -361,7 +361,7 @@ public class MD5 {
 
 	public static void main(String args[]) {
 		MD5 md5 = new MD5();
-		String md5str = md5.getMD5ofStr("123456admin");
+		String md5str = md5.getMD5ofStr("5400713admin");
 		System.out.println(md5str);
 	}
 }

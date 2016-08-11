@@ -92,8 +92,9 @@
 	<!-- 静态资源 -->
 	<!-- <mvc:resources cache-period="31556926" location="/WEB-INF/views/" mapping="/WEB-INF/views/**" /> -->
 	<mvc:resources cache-period="31556926" location="/css/" mapping="/css/**" />
+	<mvc:resources cache-period="31556926" location="/js/" mapping="/js/**" />
 	<mvc:resources cache-period="31556926" location="/images/" mapping="/images/**" />
-	<mvc:resources cache-period="31556926" location="/static/" mapping="/static/**" />
+	<mvc:resources cache-period="31556926" location="/skin/" mapping="/skin/**" />
 	<mvc:resources cache-period="31556926" location="/lib/" mapping="/lib/**" />
 	<mvc:resources cache-period="31556926" location="/font/" mapping="/font/**" />
 	<!-- <mvc:resources cache-period="31556926" location="/" mapping="/**" /> -->

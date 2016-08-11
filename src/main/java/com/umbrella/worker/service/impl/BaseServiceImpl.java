@@ -51,7 +51,7 @@ public class BaseServiceImpl {
 	
 	protected  List<AdminDO> getAdminDOList(List<WAdmin> list) {
 		List<AdminDO> resultList = new ArrayList<AdminDO>();
-		if(list != null && list.isEmpty()) {
+		if(list.size() > 0) {
 			for(WAdmin admin : list) {
 				AdminDO adminDO = this.getAdminDO(admin);
 				if(adminDO != null) {
@@ -74,7 +74,7 @@ public class BaseServiceImpl {
 	
 	protected List<CommentDO> getCommentDOList(List<WComment> list) {
 		List<CommentDO> resultList = new ArrayList<CommentDO>();
-		if(list != null && list.isEmpty()) {
+		if(list.size() > 0) {
 			for(WComment comment : list) {
 				CommentDO commentDO = this.getCommentDO(comment);
 				if(commentDO != null) {
@@ -97,7 +97,7 @@ public class BaseServiceImpl {
 	
 	protected List<ContactDO> getContactDOList(List<WContact> list) {
 		List<ContactDO> resultList = new ArrayList<ContactDO>();
-		if(list != null && list.isEmpty()) {
+		if(list.size() > 0) {
 			for(WContact contact : list) {
 				ContactDO contactDO = this.getContactDO(contact);
 				if(contactDO != null) {
@@ -120,7 +120,7 @@ public class BaseServiceImpl {
 	
 	protected List<CouponDO> getCouponDOList(List<WCoupon> list) {
 		List<CouponDO> resultList = new ArrayList<CouponDO>();
-		if(list != null && list.isEmpty()) {
+		if(list.size() > 0) {
 			for(WCoupon coupon : list) {
 				CouponDO couponDO = this.getCouponDO(coupon);
 				if(couponDO != null) {
@@ -149,7 +149,7 @@ public class BaseServiceImpl {
 	
 	protected List<MemberCouponDO> getMemberCouponDOList(List<WMemberCoupon> list) {
 		List<MemberCouponDO> resultList = new ArrayList<MemberCouponDO>();
-		if(list != null && list.isEmpty()) {
+		if(list.size() > 0) {
 			for(WMemberCoupon memberCoupon : list) {
 				MemberCouponDO memberCouponDO = this.getMemberCouponDO(memberCoupon);
 				if(memberCouponDO != null) {
@@ -172,7 +172,7 @@ public class BaseServiceImpl {
 	
 	protected List<MembersDO> getMemberDOList(List<WMembers> list) {
 		List<MembersDO> resultList = new ArrayList<MembersDO>();
-		if(list != null && list.isEmpty()) {
+		if(list.size() > 0) {
 			for(WMembers members : list) {
 				MembersDO memberDO = this.getMemberDO(members);
 				if(memberDO != null) {
@@ -195,7 +195,7 @@ public class BaseServiceImpl {
 	
 	protected List<MenuDO> getMenuDOList(List<WMenu> list) {
 		List<MenuDO> resultList = new ArrayList<MenuDO>();
-		if(list != null && list.isEmpty()) {
+		if(list.size() > 0) {
 			for(WMenu menu : list) {
 				MenuDO menuDO = this.getMenuDO(menu);
 				if(menuDO != null) {
@@ -218,7 +218,7 @@ public class BaseServiceImpl {
 	
 	protected List<OrderDO> getOrderDOList(List<WOrder> list) {
 		List<OrderDO> resultList = new ArrayList<OrderDO>();
-		if(list != null && list.isEmpty()) {
+		if(list.size() > 0) {
 			for(WOrder order : list) {
 				OrderDO OrderDO = this.getOrderDO(order);
 				if(OrderDO != null) {
@@ -247,7 +247,7 @@ public class BaseServiceImpl {
 	
 	protected List<PayrecordDO> getPayrecordDOList(List<WPayrecord> list) {
 		List<PayrecordDO> resultList = new ArrayList<PayrecordDO>();
-		if(list != null && list.isEmpty()) {
+		if(list.size() > 0) {
 			for(WPayrecord payrecord : list) {
 				PayrecordDO payrecordDO = this.getPayrecordDO(payrecord);
 				if(payrecordDO != null) {
@@ -270,7 +270,7 @@ public class BaseServiceImpl {
 	
 	protected List<CertificoreDO> getCertificoreDOList(List<WCertificore> list) {
 		List<CertificoreDO> resultList = new ArrayList<CertificoreDO>();
-		if(list != null && list.isEmpty()) {
+		if(list.size() > 0) {
 			for(WCertificore certificore : list) {
 				CertificoreDO certificoreDO = this.getCertificoreDO(certificore);
 				if(certificoreDO != null) {
@@ -293,7 +293,7 @@ public class BaseServiceImpl {
 	
 	protected List<StaffDO> getStaffDOList(List<WStaff> list) {
 		List<StaffDO> resultList = new ArrayList<StaffDO>();
-		if(list != null && list.isEmpty()) {
+		if(list.size() > 0) {
 			for(WStaff staff : list) {
 				StaffDO staffDO = this.getStaffDO(staff);
 				if(staffDO != null) {
@@ -316,7 +316,7 @@ public class BaseServiceImpl {
 	
 	protected List<SupplierDO> getSupplierDOList(List<WSupplier> list) {
 		List<SupplierDO> resultList = new ArrayList<SupplierDO>();
-		if(list != null && list.isEmpty()) {
+		if(list.size() > 0) {
 			for(WSupplier supplier : list) {
 				SupplierDO supplierDO = this.getSupplierDO(supplier);
 				if(supplierDO != null) {
@@ -339,7 +339,7 @@ public class BaseServiceImpl {
 	
 	protected List<TransactionDO> getTransactionDOList(List<WTransaction> list) {
 		List<TransactionDO> resultList = new ArrayList<TransactionDO>();
-		if(list != null && list.isEmpty()) {
+		if(list.size() > 0) {
 			for(WTransaction transaction : list) {
 				TransactionDO transactionDO = this.getTransactionDO(transaction);
 				if(transactionDO != null) {
@@ -362,7 +362,7 @@ public class BaseServiceImpl {
 	
 	protected List<WorkerTaskDO> getWorkerTaskDOList(List<WWorkerTask> list) {
 		List<WorkerTaskDO> resultList = new ArrayList<WorkerTaskDO>();
-		if(list != null && list.isEmpty()) {
+		if(list.size() > 0) {
 			for(WWorkerTask workerTask : list) {
 				WorkerTaskDO workerTaskDO = this.getWorkerTaskDO(workerTask);
 				if(workerTaskDO != null) {
@@ -385,7 +385,7 @@ public class BaseServiceImpl {
 	
 	protected List<WorkerItemDO> getWorkerItemDOList(List<WWorkerItem> list) {
 		List<WorkerItemDO> resultList = new ArrayList<WorkerItemDO>();
-		if(list != null && list.isEmpty()) {
+		if(list.size() > 0) {
 			for(WWorkerItem workerItem : list) {
 				WorkerItemDO workerItemDO = this.getWorkerItemDO(workerItem);
 				if(workerItemDO != null) {
@@ -408,7 +408,7 @@ public class BaseServiceImpl {
 	
 	protected List<WorkerStaffDO> getWorkerStaffDOList(List<WWorkerStaff> list) {
 		List<WorkerStaffDO> resultList = new ArrayList<WorkerStaffDO>();
-		if(list != null && list.isEmpty()) {
+		if(list.size() > 0) {
 			for(WWorkerStaff workerStaff : list) {
 				WorkerStaffDO workerStaffDO = this.getWorkerStaffDO(workerStaff);
 				if(workerStaffDO != null) {

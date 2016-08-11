@@ -169,7 +169,7 @@ public class MenuServiceImpl  extends BaseServiceImpl implements IMenuService{
 		}
 		
 		if(StringUtil.isGreatOne(menuQuery.getRoleId())) {
-			c.andWMRoleIdEqualTo(menuQuery.getRoleId());
+			c.andWMRoleIdLessThanOrEqualTo(menuQuery.getRoleId());
 		}
 		
 		if(StringUtil.isNotEmpty(menuQuery.getOrderByClause())) {	
@@ -190,9 +190,12 @@ public class MenuServiceImpl  extends BaseServiceImpl implements IMenuService{
 	        return result;
 		}
 		
-		List<MenuDO> menuList = getMenuDOList(list);
+		System.out.println(list.size());
 		
-		if(menuList.size() > 0) {
+		List<MenuDO> menuList = getMenuDOList(list);
+		System.out.println(menuList);
+	
+		if(menuList != null) {
 			result.setModel(ResultSupport.FIRST_MODEL_KEY, menuList);
 		} else {
 			result.setSuccess(false);
