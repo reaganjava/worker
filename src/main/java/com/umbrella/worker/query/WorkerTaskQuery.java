@@ -6,9 +6,19 @@ public class WorkerTaskQuery extends BaseQuery {
 	
 	private Integer taskId;
 	
+	private String name;
+	
 	private Integer taskItemId;
 	
 	private Integer taskStaffId;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public Integer getType() {
 		return type;

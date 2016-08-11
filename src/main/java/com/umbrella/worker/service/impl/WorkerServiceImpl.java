@@ -52,7 +52,7 @@ public class WorkerServiceImpl  extends BaseServiceImpl implements IWorkerServic
 		int recordNum = -1;
 		
 		workerTask.setDatalevel(1);
-		workerTask.setStatus(1);
+		workerTask.setStatus(2);
 		workerTask.setCreateTime(Calendar.getInstance().getTime());
 		workerTask.setModifiTime(Calendar.getInstance().getTime());
 		workerTask.setModifiAuthor(workerTask.getCreateAuthor());
@@ -70,6 +70,20 @@ public class WorkerServiceImpl  extends BaseServiceImpl implements IWorkerServic
 		if(recordNum < 1) {
 			result.setSuccess(false);
 			return result;
+		}
+		
+		if(workerTask.getId() == null) {
+			result.setSuccess(false);
+			try {
+				throw new Exception("task id is null");
+			} catch (Exception e) {
+				result.setSuccess(false);
+				result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+				result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+				logger.error("[obj:service][opt:create][msg:" + e.getMessage()
+				+ "]");
+				return result;
+			}
 		}
 		
 		for(WorkerItemDO workerItemDO : workerTaskDO.getWorkerItems()) {
@@ -149,7 +163,7 @@ public class WorkerServiceImpl  extends BaseServiceImpl implements IWorkerServic
 		workerTask.setModifiTime(Calendar.getInstance().getTime());
 		int recordNum = -1;
 		try {
-			recordNum = workerTaskMapper.updateByPrimaryKey(workerTask);
+			recordNum = workerTaskMapper.updateByPrimaryKeySelective(workerTask);
 		} catch (Exception e) {
 			result.setSuccess(false);
 			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
@@ -174,7 +188,7 @@ public class WorkerServiceImpl  extends BaseServiceImpl implements IWorkerServic
 			}
 			
 			try {
-				recordNum = workerItemMapper.updateByPrimaryKey(workerItem);
+				recordNum = workerItemMapper.updateByPrimaryKeySelective(workerItem);
 			} catch (Exception e) {
 				result.setSuccess(false);
 				result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
@@ -200,7 +214,7 @@ public class WorkerServiceImpl  extends BaseServiceImpl implements IWorkerServic
 			}
 			
 			try {
-				recordNum = workerStaffMapper.updateByPrimaryKey(workerStaff);
+				recordNum = workerStaffMapper.updateByPrimaryKeySelective(workerStaff);
 			} catch (Exception e) {
 				result.setSuccess(false);
 				result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
@@ -439,12 +453,38 @@ public class WorkerServiceImpl  extends BaseServiceImpl implements IWorkerServic
 		WWorkerTaskExample example = new WWorkerTaskExample();
 		WWorkerTaskExample.Criteria c = example.createCriteria();
 		
-		
+		if(StringUtil.isNotEmpty(workerTaskQuery.getName())) {
+			c.andWWNameLike("%" + workerTaskQuery.getName() + "%");
+		}
 		
 		if(StringUtil.isNotEmpty(workerTaskQuery.getOrderByClause())) {	
 			example.setOrderByClause(" " + workerTaskQuery.getOrderByClause() + " " + workerTaskQuery.getSort());
 		} else {
 			example.setOrderByClause(" CREATE_TIME DESC");
+		}
+		
+		c.andDatalevelEqualTo(1);
+		
+		if(workerTaskQuery.isPage()) {
+			long count = 0;
+			try {
+				count = workerTaskMapper.countByExample(example);
+			} catch (Exception e) {
+				result.setSuccess(false);
+		        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+		        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+		        e.printStackTrace();
+		        logger.error("[obj:member][opt:get][msg:"+e.getMessage()+"]");
+		        return result;
+			}
+			result.setModel(ResultSupport.SECOND_MODEL_KEY, count);
+			int pageNO = workerTaskQuery.getPageNO();
+			if(pageNO > 0) {
+				pageNO = pageNO -1;
+			}
+			String pageByClause = " limit " + (pageNO * workerTaskQuery.getPageRows())
+					+ "," + workerTaskQuery.getPageRows();
+			example.setPageByClause(pageByClause);
 		}
 		
 		List<WWorkerTask> list = null;
@@ -461,14 +501,9 @@ public class WorkerServiceImpl  extends BaseServiceImpl implements IWorkerServic
 		
 		List<WorkerTaskDO> workerTaskList = getWorkerTaskDOList(list);
 		
-		if(workerTaskList.size() > 0) {
-			result.setModel(ResultSupport.FIRST_MODEL_KEY, workerTaskList);
-		} else {
-			result.setSuccess(false);
-	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
-	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
-	        return result;
-		}
+		
+		result.setModel(ResultSupport.FIRST_MODEL_KEY, workerTaskList);
+		
 		return result;
 	}
 	

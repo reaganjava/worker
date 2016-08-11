@@ -14,10 +14,10 @@
 <script type="text/javascript" src="lib/respond.min.js"></script>
 <script type="text/javascript" src="lib/PIE_IE678.js"></script>
 <![endif]-->
-<link href="${pageContext.request.contextPath}/css/H-ui.min.css" rel="stylesheet" type="text/css" />
-<link href="${pageContext.request.contextPath}/css/H-ui.login.css" rel="stylesheet" type="text/css" />
-<link href="${pageContext.request.contextPath}/css/style.css" rel="stylesheet" type="text/css" />
-<link href="${pageContext.request.contextPath}/lib/Hui-iconfont/1.0.7/iconfont.css" rel="stylesheet" type="text/css" />
+<link href="${pageContext.request.contextPath}/css/H-ui.min.css?v=0.1" rel="stylesheet" type="text/css" />
+<link href="${pageContext.request.contextPath}/css/H-ui.login.css?v=0.1" rel="stylesheet" type="text/css" />
+<link href="${pageContext.request.contextPath}/css/style.css?v=0.1" rel="stylesheet" type="text/css" />
+<link href="${pageContext.request.contextPath}/lib/Hui-iconfont/1.0.7/iconfont.css?v=0.1" rel="stylesheet" type="text/css" />
 <!--[if IE 6]>
 <script type="text/javascript" src="http://lib.h-ui.net/DD_belatedPNG_0.0.8a-min.js" ></script>
 <script>DD_belatedPNG.fix('*');</script>
@@ -25,11 +25,11 @@
 <title>后台登录 - 新生活商户管理系统</title>
 </head>
 <body>
-<form action="${pageContext.request.contextPath}/manager/login.html" method="post">
+
 <div class="header"></div>
 <div class="loginWraper">
   <div id="loginform" class="loginBox">
-    <form class="form form-horizontal" action="index.html" method="post">
+    <form class="form form-horizontal" action="${pageContext.request.contextPath}/manager/login.html" method="post">
       <div class="row cl">
         <label class="form-label col-3"><i class="Hui-iconfont">&#xe60d;</i></label>
         <div class="formControls col-8">
@@ -45,7 +45,7 @@
       <div class="row cl">
         <div class="formControls col-8 col-offset-3">
           <input class="input-text size-L" type="text" placeholder="验证码" name="vcode" onblur="if(this.value==''){this.value='验证码:'}" onclick="if(this.value=='验证码:'){this.value='';}" value="验证码:" style="width:150px;">
-          <img src="${pageContext.request.contextPath}/ImageCodeMakerServlet"> <a id="kanbuq" href="javascript:;">看不清，换一张</a> </div>
+          <img src="${pageContext.request.contextPath}/ImageCodeMakerServlet" id="codeImg"> <a id="kanbuq" onClick="reImg()">看不清，换一张</a> </div>
       </div>
       
       <div class="row">
@@ -58,11 +58,14 @@
   </div>
 </div>
 <div class="footer">Copyright 你的公司名称 by H-ui.admin.v2.3</div>
-</form>
-<script type="text/javascript" src="${pageContext.request.contextPath}/lib/jquery/1.9.1/jquery.min.js"></script> 
-<script type="text/javascript" src="${pageContext.request.contextPath}/js/H-ui.js"></script> 
-<script>
 
-</script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/lib/jquery/1.9.1/jquery.min.js?v=0.1"></script> 
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/H-ui.js?v=0.1"></script> 
+<script type="text/javascript">  
+        function reImg() {  
+            var codeImg = document.getElementById("codeImg");  
+            codeImg.src = "${pageContext.request.contextPath}/ImageCodeMakerServlet?rnd=" + Math.random();  
+        }  
+</script>  
 </body>
 </html>
