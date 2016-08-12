@@ -10,6 +10,9 @@ public class StaffDO extends BaseDO {
  
 	
     private Integer wSSupplierId;
+    
+    
+    private String supplierName;
 
      
     private Integer wSAttacId;
@@ -116,6 +119,16 @@ public class StaffDO extends BaseDO {
 
 	public void setwSSupplierId(Integer wSSupplierId) {
 		this.wSSupplierId = wSSupplierId;
+	}
+
+
+	public String getSupplierName() {
+		return supplierName;
+	}
+
+
+	public void setSupplierName(String supplierName) {
+		this.supplierName = supplierName;
 	}
 
 

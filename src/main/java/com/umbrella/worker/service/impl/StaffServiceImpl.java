@@ -1,32 +1,40 @@
 package com.umbrella.worker.service.impl;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.umbrella.worker.dao.WCertificoreMapper;
 import com.umbrella.worker.dao.WStaffMapper;
+import com.umbrella.worker.dao.WSupplierMapper;
+import com.umbrella.worker.dto.AdminDO;
 import com.umbrella.worker.dto.CertificoreDO;
 import com.umbrella.worker.dto.StaffDO;
 import com.umbrella.worker.entity.WCertificore;
 import com.umbrella.worker.entity.WCertificoreExample;
 import com.umbrella.worker.entity.WStaff;
 import com.umbrella.worker.entity.WStaffExample;
+import com.umbrella.worker.entity.WSupplier;
 import com.umbrella.worker.query.StaffQuery;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.IStaffService;
 import com.umbrella.worker.util.BeanUtilsExtends;
 import com.umbrella.worker.util.StringUtil;
-
+@Service("staffService")
 public class StaffServiceImpl  extends BaseServiceImpl implements IStaffService {
 	
 	private static Logger logger = Logger.getLogger(StaffServiceImpl.class);
-	
+	@Autowired
 	private WStaffMapper staffMapper;
-	
+	@Autowired
 	private WCertificoreMapper certificoreMapper;
+	@Autowired
+	private WSupplierMapper supplierMapper;
 
 	@Override
 	public ResultDO create(StaffDO staffDO) {
@@ -42,7 +50,7 @@ public class StaffServiceImpl  extends BaseServiceImpl implements IStaffService 
 		int recordNum = -1;
 		
 		staff.setDatalevel(1);
-		staff.setStatus(1);
+		staff.setStatus(2);
 		staff.setCreateTime(Calendar.getInstance().getTime());
 		staff.setModifiTime(Calendar.getInstance().getTime());
 		
@@ -107,7 +115,7 @@ public class StaffServiceImpl  extends BaseServiceImpl implements IStaffService 
 		staff.setModifiTime(Calendar.getInstance().getTime());
 		int recordNum = -1;
 		try {
-			recordNum = staffMapper.updateByPrimaryKey(staff);
+			recordNum = staffMapper.updateByPrimaryKeySelective(staff);
 		} catch (Exception e) {
 			result.setSuccess(false);
 			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
@@ -258,9 +266,6 @@ public class StaffServiceImpl  extends BaseServiceImpl implements IStaffService 
 		
 		if(certificoreList.size() > 0) {
 			staffDO.setCertificores(getCertificoreDOList(certificoreList));
-		} else {
-			result.setSuccess(false);
-			 return result;
 		}
 		
 		return result;
@@ -338,14 +343,18 @@ public class StaffServiceImpl  extends BaseServiceImpl implements IStaffService 
 		
 		List<StaffDO> staffList = getStaffDOList(list);
 		
-		if(staffList.size() > 0) {
-			result.setModel(ResultSupport.FIRST_MODEL_KEY, staffList);
-		} else {
-			result.setSuccess(false);
-	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
-	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
-	        return result;
+		List<StaffDO> staffList2 = new ArrayList<StaffDO>();
+		
+		for(int i = 0; i < staffList.size(); i++) {
+			StaffDO staffDO = staffList.get(i);
+			WSupplier supplier = supplierMapper.selectByPrimaryKey(staffDO.getwSSupplierId());
+			staffDO.setSupplierName(supplier.getwSName());
+			staffList2.add(staffDO);
 		}
+		
+		
+		result.setModel(ResultSupport.FIRST_MODEL_KEY, staffList2);
+		
 		return result;
 	}
 	
