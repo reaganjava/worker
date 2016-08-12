@@ -1,5 +1,6 @@
 package com.umbrella.worker.service.impl;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -7,12 +8,18 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.umbrella.worker.dao.WSupplierMapper;
+import com.umbrella.worker.dao.WSupplierWorkerMapper;
 import com.umbrella.worker.dao.WWorkerItemMapper;
 import com.umbrella.worker.dao.WWorkerStaffMapper;
 import com.umbrella.worker.dao.WWorkerTaskMapper;
+import com.umbrella.worker.dto.SupplierDO;
 import com.umbrella.worker.dto.WorkerItemDO;
 import com.umbrella.worker.dto.WorkerStaffDO;
 import com.umbrella.worker.dto.WorkerTaskDO;
+import com.umbrella.worker.entity.WSupplier;
+import com.umbrella.worker.entity.WSupplierWorker;
+import com.umbrella.worker.entity.WSupplierWorkerExample;
 import com.umbrella.worker.entity.WWorkerItem;
 import com.umbrella.worker.entity.WWorkerItemExample;
 import com.umbrella.worker.entity.WWorkerStaff;
@@ -37,6 +44,10 @@ public class WorkerServiceImpl  extends BaseServiceImpl implements IWorkerServic
 	private WWorkerItemMapper workerItemMapper;
 	@Autowired
 	private WWorkerStaffMapper workerStaffMapper;
+	@Autowired
+	private WSupplierWorkerMapper supplierWorkerMapper;
+	@Autowired
+	private WSupplierMapper supplierMapper;
 
 	@Override
 	public ResultDO create(WorkerTaskDO workerTaskDO) {
@@ -142,12 +153,33 @@ public class WorkerServiceImpl  extends BaseServiceImpl implements IWorkerServic
 			}
 		}
 		
+		
+		for(SupplierDO supplier : workerTaskDO.getSuppliers()) {
+			recordNum = -1;
+			WSupplierWorker supplierWorker = new WSupplierWorker();
+			supplierWorker.setwSupplierId(supplier.getId());
+			supplierWorker.setwWorkerId(workerTask.getId());
+			try {
+				recordNum = supplierWorkerMapper.insert(supplierWorker);
+			} catch (Exception e) {
+				result.setSuccess(false);
+				result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+				result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+				logger.error("[obj:service][opt:create][msg:" + e.getMessage()
+				+ "]");
+				return result;
+			}
+			
+			if(recordNum < 1) {
+				result.setSuccess(false);
+				return result;
+			}
+		}
+		
 		result.setModel(ResultDO.FIRST_MODEL_KEY, workerTask.getId());
 		
 		return result;
 	}
-	
-	
 	
 
 	@Override
@@ -230,7 +262,44 @@ public class WorkerServiceImpl  extends BaseServiceImpl implements IWorkerServic
 			}
 		}
 		
-
+		WSupplierWorkerExample wswex = new WSupplierWorkerExample();
+		wswex.createCriteria().andWWorkerIdEqualTo(workerTaskDO.getId());
+		recordNum = -1;
+		try {
+			recordNum = supplierWorkerMapper.deleteByExample(wswex);
+		} catch (Exception e) {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+	        logger.error("[obj:schedule][opt:remove][msg:"+e.getMessage()+"]");
+		}
+		
+		if(recordNum < 0) {
+			result.setSuccess(false);
+			return result;
+		}
+		
+		for(SupplierDO supplier : workerTaskDO.getSuppliers()) {
+			recordNum = -1;
+			WSupplierWorker supplierWorker = new WSupplierWorker();
+			supplierWorker.setwSupplierId(supplier.getId());
+			supplierWorker.setwWorkerId(workerTask.getId());
+			try {
+				recordNum = supplierWorkerMapper.insert(supplierWorker);
+			} catch (Exception e) {
+				result.setSuccess(false);
+				result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+				result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+				logger.error("[obj:service][opt:create][msg:" + e.getMessage()
+				+ "]");
+				return result;
+			}
+			
+			if(recordNum < 1) {
+				result.setSuccess(false);
+				return result;
+			}
+		}
 		return result;
 	}
 
@@ -291,6 +360,22 @@ public class WorkerServiceImpl  extends BaseServiceImpl implements IWorkerServic
 	        logger.error("[obj:schedule][opt:remove][msg:"+e.getMessage()+"]");
 		}
 		
+		WSupplierWorkerExample wswex = new WSupplierWorkerExample();
+		wswex.createCriteria().andWWorkerIdEqualTo(workerTaskId);
+		recordNum = -1;
+		try {
+			recordNum = supplierWorkerMapper.deleteByExample(wswex);
+		} catch (Exception e) {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+	        logger.error("[obj:schedule][opt:remove][msg:"+e.getMessage()+"]");
+		}
+		
+		if(recordNum < 0) {
+			result.setSuccess(false);
+			return result;
+		}
 		return result;
 	}
 
@@ -350,7 +435,6 @@ public class WorkerServiceImpl  extends BaseServiceImpl implements IWorkerServic
 		wsex.createCriteria().andWWsTaskIdEqualTo(workerTaskId);
 		try {
 			workerStaffList = workerStaffMapper.selectByExample(wsex);
-			
 		} catch (Exception e) {
 			result.setSuccess(false);
 	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
@@ -366,84 +450,28 @@ public class WorkerServiceImpl  extends BaseServiceImpl implements IWorkerServic
 			return result;
 		}
 		
-		result.setModel(ResultSupport.FIRST_MODEL_KEY, workerTaskDO);
-		
-		return result;
-	}
-	
-	@Override
-	public ResultDO get(int	taskId, int itemId, int staffId) {
-		
-		ResultSupport result = new ResultSupport();
-		
-		WWorkerTask workerTask = null;
-		if(!StringUtil.isGreatOne(taskId)) {
-			 result.setSuccess(false);
-			 return result;
-		} 
-		
-		if(!StringUtil.isGreatOne(itemId)) {
-			 result.setSuccess(false);
-			 return result;
-		} 
-		
-		if(!StringUtil.isGreatOne(staffId)) {
-			 result.setSuccess(false);
-			 return result;
-		} 
-		
+		List<WSupplier> supplierList = new ArrayList<WSupplier>();
 		try {
-			workerTask = workerTaskMapper.selectByPrimaryKey(taskId);
+			supplierList = supplierMapper.selectSupplierByWorkerId(workerTaskId);		
 		} catch (Exception e) {
 			result.setSuccess(false);
 	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
 	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
-	        logger.error("[obj:supplier][opt:get][msg:"+e.getMessage()+"]");
-	        return result;
+	        logger.error("[obj:schedule][opt:remove][msg:"+e.getMessage()+"]");
 		}
 		
-		WorkerTaskDO workerTaskDO = getWorkerTaskDO(workerTask);
-		if(workerTaskDO == null) {
+		if(supplierList.size() > 0) {
+			workerTaskDO.setSuppliers(workerTaskDO.getSuppliers());
+		} else {
 			result.setSuccess(false);
-	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
-	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
 			return result;
 		}
-	
-		WWorkerItem workerItem = null;
-		
-		try {
-			workerItem = workerItemMapper.selectByPrimaryKey(itemId);
-		} catch (Exception e) {
-			result.setSuccess(false);
-	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
-	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
-	        logger.error("[obj:supplier][opt:get][msg:"+e.getMessage()+"]");
-	        return result;
-		}
-		
-		WorkerItemDO workerItemDO = getWorkerItemDO(workerItem);
-		
-		WWorkerStaff workerStaff = null;
-		try {
-			workerStaff = workerStaffMapper.selectByPrimaryKey(taskId);
-			
-		} catch (Exception e) {
-			result.setSuccess(false);
-	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
-	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
-	        logger.error("[obj:supplier][opt:get][msg:"+e.getMessage()+"]");
-	        return result;
-		}
-		
-		WorkerStaffDO workerStaffDO = getWorkerStaffDO(workerStaff);
-		workerTaskDO.getWorkerItems().add(workerItemDO);
-		workerTaskDO.getWorkerStaffs().add(workerStaffDO);
-		
 		result.setModel(ResultSupport.FIRST_MODEL_KEY, workerTaskDO);
 		
 		return result;
 	}
+	
+
 
 	@Override
 	public ResultDO list(WorkerTaskQuery workerTaskQuery) {

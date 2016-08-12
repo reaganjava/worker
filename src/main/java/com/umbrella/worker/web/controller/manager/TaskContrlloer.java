@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.umbrella.worker.dto.WorkerTaskDO;
+import com.umbrella.worker.query.SupplierQuery;
 import com.umbrella.worker.query.WorkerTaskQuery;
 import com.umbrella.worker.result.JsonResultDO;
 import com.umbrella.worker.result.JsonResultSupport;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
+import com.umbrella.worker.service.ISuppliersService;
 import com.umbrella.worker.service.IWorkerService;
 import com.umbrella.worker.util.PageBeanUtil;
 
@@ -27,10 +29,22 @@ public class TaskContrlloer {
 	@Autowired
 	public IWorkerService workerService;
 	
+	@Autowired
+	private ISuppliersService suppliersService;
+	
 	@RequestMapping(value = "/add.html", method = RequestMethod.GET)
 	public ModelAndView add(ModelAndView mav, 
 			HttpServletRequest request) {
-		mav.setViewName("manager/task/add");
+		
+		SupplierQuery query = new SupplierQuery();
+		ResultDO result = suppliersService.list(query);
+		if(result.isSuccess()) {
+			mav.addObject("SUPPLIER_LIST", result.getModel(ResultSupport.FIRST_MODEL_KEY));
+			mav.setViewName("manager/task/add");
+		} else {
+			mav.setViewName("error");
+		}
+		
 		return mav; 
 	}
 	

@@ -94,4 +94,7 @@ public interface WSupplierMapper {
      * @mbggenerated Tue Aug 02 16:49:02 CST 2016
      */
     int updateByPrimaryKey(WSupplier record);
+    
+    
+    List<WSupplier> selectSupplierByWorkerId(Integer id);
 }

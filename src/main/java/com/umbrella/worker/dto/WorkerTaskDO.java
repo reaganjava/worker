@@ -31,6 +31,9 @@ public class WorkerTaskDO extends BaseDO {
     
     
     private List<WorkerStaffDO> workerStaffs = new ArrayList<WorkerStaffDO>();
+    
+    
+    private List<SupplierDO> suppliers = new ArrayList<SupplierDO>();
 
 
 	public Integer getId() {
@@ -122,5 +125,14 @@ public class WorkerTaskDO extends BaseDO {
 		this.wWPriceUnit = wWPriceUnit;
 	}
 
+
+	public List<SupplierDO> getSuppliers() {
+		return suppliers;
+	}
+
+
+	public void setSuppliers(List<SupplierDO> suppliers) {
+		this.suppliers = suppliers;
+	}
 
 }

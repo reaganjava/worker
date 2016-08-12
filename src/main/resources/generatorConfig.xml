@@ -13,9 +13,9 @@
      <table schema="worker" tableName="w_contact"></table>  
      <table schema="worker" tableName="w_members" ></table> 
      <table schema="worker" tableName="w_member_detail" ></table>
-     <table schema="worker" tableName="w_sms_code" ></table> -->
-      <table schema="worker" tableName="w_menu" ></table> 
-     <!-- <table schema="worker" tableName="w_sms_template" ></table>
+     <table schema="worker" tableName="w_sms_code" ></table> 
+     <table schema="worker" tableName="w_menu" ></table>
+     <table schema="worker" tableName="w_sms_template" ></table>
      <table schema="worker" tableName="w_member_coupon" ></table> 
      <table schema="worker" tableName="w_coupon" ></table> 
      <table schema="worker" tableName="w_members_login_log" ></table>
@@ -30,5 +30,6 @@
      <table schema="worker" tableName="w_staff" ></table> 
      <table schema="worker" tableName="w_supplier" ></table> 
      <table schema="worker" tableName="w_transaction" ></table>  -->
+     <table schema="worker" tableName="w_supplier_worker" ></table>
   </context>
 </generatorConfiguration>

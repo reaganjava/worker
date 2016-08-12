@@ -83,6 +83,15 @@
       <button id="addStaff" >+</button>
     </div>
     <div class="row cl">
+      <label class="form-label col-3">选择供应商：</label>
+      <div class="formControls col-5">
+        <c:forEach items="${SUPPLIER_LIST}" var="supplier">
+        	<input type="checkbox" value="${supplier.id}" name="supplierIds"><label>:${supplier.wSName}</label><br/>
+        </c:forEach>
+      </div>
+      <div class="col-4"> </div>
+    </div>
+    <div class="row cl">
       <div class="col-9 col-offset-3">
         <input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
       </div>

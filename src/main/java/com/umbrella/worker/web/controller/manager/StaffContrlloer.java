@@ -11,19 +11,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.umbrella.worker.dto.AdminDO;
 import com.umbrella.worker.dto.StaffDO;
-import com.umbrella.worker.dto.WorkerTaskDO;
 import com.umbrella.worker.query.StaffQuery;
 import com.umbrella.worker.query.SupplierQuery;
-import com.umbrella.worker.query.WorkerTaskQuery;
 import com.umbrella.worker.result.JsonResultDO;
 import com.umbrella.worker.result.JsonResultSupport;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.IStaffService;
 import com.umbrella.worker.service.ISuppliersService;
-import com.umbrella.worker.service.IWorkerService;
 import com.umbrella.worker.util.PageBeanUtil;
 
 @Controller

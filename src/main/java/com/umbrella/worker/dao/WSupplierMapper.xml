@@ -494,4 +494,8 @@
       STATUS = #{status,jdbcType=INTEGER}
     where ID = #{id,jdbcType=INTEGER}
   </update>
+  
+   <select id="selectSupplierByWorkerId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  		select * from w_supplier where id in(select w_supplier_id from w_supplier_worker where w_worker_id = #{id,jdbcType=INTEGER})
+    </select>
 </mapper>

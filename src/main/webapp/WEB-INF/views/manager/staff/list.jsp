@@ -21,68 +21,66 @@
 <script type="text/javascript" src="http://lib.h-ui.net/DD_belatedPNG_0.0.8a-min.js" ></script>
 <script>DD_belatedPNG.fix('*');</script>
 <![endif]-->
-<title>临时工管理</title>
+<title>管理员管理</title>
 </head>
 <body>
 <nav class="breadcrumb"> <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 <div class="pd-20">
 	<div class="text-c">
-		<input type="text" class="input-text" style="width:250px" placeholder="临时工名称" id="" name="">
+		<input type="text" class="input-text" style="width:250px" placeholder="输入管理员名称" id="" name="">
 		<button type="submit" class="btn btn-success radius" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 搜管理员</button>
 	</div>
-	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a href="javascript:;" onclick="task_add('添加临时工','/task/add.html','','510')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加临时工</a></span> <span class="r">共有数据：<strong>${PAGE_BEAN.recordCount}</strong> 条</span> </div>
+	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a href="javascript:;" onclick="admin_add('添加管理员','/admin/add.html','','510')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加管理员</a></span> <span class="r">共有数据：<strong>${PAGE_BEAN.recordCount}</strong> 条</span> </div>
 	<div class="mt-20">
 	<table class="table table-border table-bordered table-hover table-bg table-sort">
 		<thead>
 			<tr class="text-c">
 				<th width="25"><input type="checkbox" name=""></th>
 				<th width="80">ID</th>
-				<th width="80">任务名</th>
-				<th width="40">价格</th>
-				<th width="130">服务说明</th>
-				<th width="130">创建时间</th>
+				<th width="40">管理员名</th>
+				<th width="40">电话</th>
+				<th width="90">所属渠道</th>
+				<th width="90">真实姓名</th>
+				<th width="130">注册时间</th>
 				<th width="70">状态</th>
 				<th width="100">操作</th>
 			</tr>
 		</thead>
 		<tbody>
-		  <c:forEach items="${PAGE_BEAN.dataList}" var="workerTask">
+		  <c:forEach items="${PAGE_BEAN.dataList}" var="admin">
 			<tr class="text-c">
-				<td><input type="checkbox" value="${workerTask.id}" name="idArray"></td>
-				<td>${workerTask.id}</td>
-				<td>${workerTask.wWName}</td>
-				<td>${workerTask.wWPrice}</td>
-				<td>${workerTask.wWDesc}</td>
-				<td>${workerTask.formatDate}</td>
+				<td><input type="checkbox" value="${admin.id}" name="idArray"></td>
+				<td>${admin.id}</td>
+				<td>${admin.wAUsername}</td>
+				<td>${admin.wATelephone}</td>
+				<td>${admin.supplierName}</td>
+				<td>${admin.wARealName}</td>
+				<td>${admin.formatDate}</td>
 				
 				<td class="td-status">
-				<c:if test="${workerTask.status == 1}">
+				<c:if test="${admin.status == 1}">
 				<span class="label label-success radius">已启用</span></td>
 				</c:if>
-				<c:if test="${workerTask.status == 0}">
+				<c:if test="${admin.status == 0}">
 				<span class="label label-defaunt radius">已停用</span></td>
 				</c:if>
-				<c:if test="${workerTask.status == 2}">
+				<c:if test="${admin.status == 2}">
 				<span class="label label-defaunt radius">待审核</span></td>
 				</c:if>
 				<td class="td-manage">
-				<c:if test="${workerTask.status != 2}">
-					<c:if test="${workerTask.status == 1}">
-					<a style="text-decoration:none" onClick="task_stop(this,'${workerTask.id}')" href="javascript:;" title="停用">
-					</c:if>
-					<c:if test="${workerTask.status == 0}">
-					<a style="text-decoration:none" onClick="task_start(this,'${workerTask.id}')" href="javascript:;" title="启用">
-					</c:if>
+			
+				<c:if test="${admin.status == 1}">
+				<a style="text-decoration:none" onClick="admin_stop(this,'${admin.id}')" href="javascript:;" title="停用">
+				</c:if>
+				<c:if test="${admin.status == 0}">
+				<a style="text-decoration:none" onClick="admin_start(this,'${admin.id}')" href="javascript:;" title="启用">
 				</c:if>
 				
-				<i class="Hui-iconfont">&#xe631;</i></a> <a title="编辑" href="javascript:;" onclick="task_edit('编辑','/task/detail/${workerTask.id}.html','${workerTask.id}','','510')" class="ml-5" style="text-decoration:none">
+				
+				<i class="Hui-iconfont">&#xe631;</i></a> <a title="编辑" href="javascript:;" onclick="admin_edit('编辑','/admin/detail/${admin.id}.html','${admin.id}','','510')" class="ml-5" style="text-decoration:none">
 				
 				<i class="Hui-iconfont">&#xe6df;</i></a> 
-				<c:if test="${workerTask.status == 2}">
-				<a style="text-decoration:none" onClick="task_check(this,'${workerTask.id}')" href="javascript:;" title="审核">
-				
-				<i class="Hui-iconfont">&#xe63f;</i></a>
-				</c:if> <a title="删除" href="javascript:;" onclick="task_del(this,'${workerTask.id}')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
+				<a title="删除" href="javascript:;" onclick="admin_del(this,'${admin.id}')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
 				
 				
 			</tr>
@@ -124,19 +122,19 @@ $(function(){
 	
 });
 /*渠道-添加*/
-function task_add(title,url,w,h){
+function admin_add(title,url,w,h){
 	layer_show(title,url,w,h);
 }
 
 
 /*用户-停用*/
-function task_stop(obj,id){
+function admin_stop(obj,id){
 	layer.confirm('确认要停用吗？',function(index){
-		$(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="task_start(this,'+ id + ')" href="javascript:;" title="启用"><i class="Hui-iconfont">&#xe6e1;</i></a>');
+		$(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="admin_start(this,'+ id + ')" href="javascript:;" title="启用"><i class="Hui-iconfont">&#xe6e1;</i></a>');
 		$(obj).parents("tr").find(".td-status").html('<span class="label label-defaunt radius">已停用</span>');
 		$(obj).remove();
 		$.ajax(
-				{url:"/task/stop/" + id + ".json",
+				{url:"/admin/stop/" + id + ".json",
 				async:false,
 				success: function(data){
 					if(data.status == 'y') {
@@ -151,13 +149,13 @@ function task_stop(obj,id){
 }
 
 /*渠道-启用*/
-function task_start(obj,id){
+function admin_start(obj,id){
 	layer.confirm('确认要启用吗？',function(index){
-		$(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="task_stop(this,'+id+')" href="javascript:;" title="停用"><i class="Hui-iconfont">&#xe631;</i></a>');
+		$(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="admin_stop(this,'+id+')" href="javascript:;" title="停用"><i class="Hui-iconfont">&#xe631;</i></a>');
 		$(obj).parents("tr").find(".td-status").html('<span class="label label-success radius">已启用</span>');
 		$(obj).remove();
 		$.ajax(
-				{url:"/task/start/" + id + ".json",
+				{url:"/admin/start/" + id + ".json",
 				async:false,
 				success: function(data){
 					if(data.status == 'y') {
@@ -173,15 +171,15 @@ function task_start(obj,id){
 
 
 /*渠道-编辑*/
-function task_edit(title,url,id,w,h){
+function admin_edit(title,url,id,w,h){
 	layer_show(title,url,w,h);
 }
 /*渠道-删除*/
-function task_del(obj,id){
+function admin_del(obj,id){
 	layer.confirm('确认要删除吗？',function(index){
 		$(obj).parents("tr").remove();
 		$.ajax(
-				{url:"/task/remove/" + id + ".json",
+				{url:"/admin/remove/" + id + ".json",
 				async:false,
 				success: function(data){
 					if(data.status == 'y') {
@@ -191,27 +189,6 @@ function task_del(obj,id){
 					}
 				}
 		});
-	});
-}
-
-/*渠道-审核*/
-function task_check(obj,id){
-	layer.confirm('确认要审核通过吗？',function(index){
-		//$(obj).parents("tr").find(".td-manage").prepend('<a style="text-decoration:none" onClick="supplier_check(this,'${supplier.id}')" href="javascript:;" title="审核">');
-		$(obj).parents("tr").find(".td-status").html('<span class="label label-success radius">已启用</span>');
-		$(obj).remove();
-		$.ajax(
-				{url:"/task/start/" + id + ".json",
-				async:false,
-				success: function(data){
-					if(data.status == 'y') {
-						layer.msg('已启用!',{icon: 6,time:1000});
-					} else {
-						layer.msg(data.info,{icon: 6,time:1000});
-					}
-				}
-		});
-		
 	});
 }
 /*渠道-删除*/

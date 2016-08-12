@@ -14,8 +14,6 @@ public interface IWorkerService {
 	
 	public ResultDO get(int workerTaskId);
 	
-	public ResultDO get(int	taskId, int itemId, int staffId);
-	
 	public ResultDO list(WorkerTaskQuery workerTaskQuery);
 
 }
