@@ -85,8 +85,8 @@
     <div class="row cl">
       <label class="form-label col-3">选择供应商：</label>
       <div class="formControls col-5">
-        <c:forEach items="${SUPPLIER_LIST}" var="supplier">
-        	<input type="checkbox" value="${supplier.id}" name="supplierIds"><label>:${supplier.wSName}</label><br/>
+        <c:forEach items="${SUPPLIER_LIST}" var="supplier" varStatus="status">
+        	<input type="checkbox" value="${supplier.id}" name="suppliers[${status.index}].id"><label>:${supplier.wSName}</label><br/>
         </c:forEach>
       </div>
       <div class="col-4"> </div>

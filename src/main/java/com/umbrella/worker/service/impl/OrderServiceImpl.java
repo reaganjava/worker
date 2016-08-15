@@ -10,12 +10,21 @@ import org.springframework.stereotype.Service;
 
 import com.umbrella.worker.dao.WOrderDetailMapper;
 import com.umbrella.worker.dao.WOrderMapper;
+import com.umbrella.worker.dao.WOrderTaskMapper;
+import com.umbrella.worker.dao.WWorkerItemMapper;
+import com.umbrella.worker.dao.WWorkerStaffMapper;
+import com.umbrella.worker.dao.WWorkerTaskMapper;
 import com.umbrella.worker.dto.OrderDO;
 import com.umbrella.worker.dto.OrderDetailDO;
+import com.umbrella.worker.dto.OrderTaskDO;
 import com.umbrella.worker.dto.WorkerTaskDO;
 import com.umbrella.worker.entity.WOrder;
 import com.umbrella.worker.entity.WOrderDetail;
 import com.umbrella.worker.entity.WOrderExample;
+import com.umbrella.worker.entity.WOrderTask;
+import com.umbrella.worker.entity.WWorkerItem;
+import com.umbrella.worker.entity.WWorkerStaff;
+import com.umbrella.worker.entity.WWorkerTask;
 import com.umbrella.worker.query.OrderQuery;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
@@ -31,6 +40,14 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 	private WOrderMapper orderMapper;
 	@Autowired
 	private WOrderDetailMapper orderDetailMapper;
+	@Autowired
+	private WWorkerTaskMapper workerTaskMapper;
+	@Autowired
+	private WWorkerItemMapper workerItemMapper;
+	@Autowired
+	private WWorkerStaffMapper workerStaffMapper;
+	@Autowired
+	private WOrderTaskMapper orderTaskMapper;
 
 	@Override
 	public ResultDO create(OrderDO orderDO) {
@@ -47,13 +64,55 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 		
 		int recordNum = -1;
 		
-		WorkerTaskDO workerTaskDO = orderDO.getOrderDetailDO().getWorkerTaskDO();
+		OrderTaskDO orderTaskDO = orderDO.getOrderDetailDO().getOrderTaskDO();
 		
-		BigDecimal price = workerTaskDO.getwWPrice();
-		int staffCount = workerTaskDO.getWorkerStaffs().get(0).getwWsStaffCount();
-		int hours = workerTaskDO.getWorkerStaffs().get(0).getwWsHours();
+		WWorkerTask workerTask = null;
+		try {
+			workerTask = workerTaskMapper.selectByPrimaryKey(orderTaskDO.getWorkerTaskId());
+		} catch (Exception e) {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+	        logger.error("[obj:supplier][opt:get][msg:"+e.getMessage()+"]");
+	        return result;
+		}
+		BigDecimal price = workerTask.getwWPrice();
+		orderTaskDO.setwOTaskName(workerTask.getwWName());
+		orderTaskDO.setwOTaskPrice(workerTask.getwWPrice());
+	
+		WWorkerItem workerItem = null;
+		try {
+			workerItem = workerItemMapper.selectByPrimaryKey(orderTaskDO.getWorkerItemId());
+		} catch (Exception e) {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+	        logger.error("[obj:supplier][opt:get][msg:"+e.getMessage()+"]");
+	        return result;
+		}
+		
+		orderTaskDO.setwOTaskItem(workerItem.getwWiItem());
+		
+		WWorkerStaff workerStaff = null;
+		try {
+			workerStaff = workerStaffMapper.selectByPrimaryKey(orderTaskDO.getWorkerStaffId());
+		} catch (Exception e) {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+	        logger.error("[obj:supplier][opt:get][msg:"+e.getMessage()+"]");
+	        return result;
+		}
+		int staffCount = workerStaff.getwWsStaffCount();
+		int hours = workerStaff.getwWsHours();
+		orderTaskDO.setwOTaskStaffCount(workerStaff.getwWsStaffCount());
+		orderTaskDO.setwOTaskHours(workerStaff.getwWsHours());
+		
+		
 		int workerHours = staffCount * hours;
-		BigDecimal fee = price.multiply(new BigDecimal(workerHours));
+		BigDecimal priceCount = price.multiply(new BigDecimal(workerHours));
+		
+		orderTaskDO.setwOTaskPriceCount(priceCount);
 		
 		MakeOrderNum makeOrder = new MakeOrderNum();  
         String orderNO = makeOrder.makeOrderNum();
@@ -63,8 +122,8 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
         }
         
         order.setwOOrderNo(orderNO);
-		order.setwOServiceName(workerTaskDO.getwWName());
-		order.setwOFee(fee);
+		order.setwOServiceName(orderTaskDO.getwOTaskName());
+		order.setwOFee(priceCount);
 		order.setDatalevel(1);
 		order.setStatus(1);
 		order.setCreateTime(Calendar.getInstance().getTime());
@@ -89,9 +148,27 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 		result = BeanUtilsExtends.copy(orderDetail, orderDO.getOrderDetailDO());
 		
 		orderDetail.setId(order.getId());
-		
+		recordNum = -1;
 		try {
 			recordNum = orderDetailMapper.insertSelective(orderDetail);
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+			logger.error("[obj:order][opt:create][msg:" + e.getMessage()
+			+ "]");
+			return result;
+		}
+		
+		orderTaskDO.setwOOrderId(order.getId());
+		WOrderTask orderTask = new WOrderTask();
+		result = BeanUtilsExtends.copy(orderTask, orderTaskDO);
+		if(!result.isSuccess()) {
+			return result;
+		}
+		recordNum = -1;
+		try {
+			recordNum = orderTaskMapper.insertSelective(orderTask);
 		} catch (Exception e) {
 			result.setSuccess(false);
 			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
@@ -146,7 +223,6 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 		if (!result.isSuccess()) {
 			return result;
 		}
-		
 		
 		int recordNum = -1;
 		try {

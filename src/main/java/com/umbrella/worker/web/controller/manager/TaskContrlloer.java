@@ -1,5 +1,6 @@
 package com.umbrella.worker.web.controller.manager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.umbrella.worker.dto.SupplierDO;
 import com.umbrella.worker.dto.WorkerTaskDO;
 import com.umbrella.worker.query.SupplierQuery;
 import com.umbrella.worker.query.WorkerTaskQuery;
@@ -56,8 +58,10 @@ public class TaskContrlloer {
 		JsonResultDO jsonResultDO = new JsonResultSupport();
 		
 		workerTaskDO.setCreateAuthor((String) request.getSession().getAttribute("MANAGER_NAME"));
-		workerTaskDO.setwWSupplier((Integer) request.getSession().getAttribute("MANAGER_SUPPLIER_ID"));
 		
+		for(SupplierDO supplier : workerTaskDO.getSuppliers()) {
+			System.out.println(supplier.getId());
+		}
 		ResultDO result = workerService.create(workerTaskDO);
 		
 		if(result.isSuccess()) {
@@ -145,7 +149,15 @@ public class TaskContrlloer {
 			@PathVariable(value="id") Integer id,
 			HttpServletRequest request) {
 		
-		ResultDO result = workerService.get(id);
+		SupplierQuery query = new SupplierQuery();
+		ResultDO result = suppliersService.list(query);
+		if(result.isSuccess()) {
+			mav.addObject("SUPPLIER_LIST", result.getModel(ResultSupport.FIRST_MODEL_KEY));
+		} else {
+			mav.setViewName("error");
+		}
+		
+		result = workerService.get(id);
 		if(result.isSuccess()) {
 			mav.addObject("TASK_INFO",  result.getModel(ResultSupport.FIRST_MODEL_KEY));
 			mav.setViewName("manager/task/detail");
@@ -164,8 +176,12 @@ public class TaskContrlloer {
 		
 		workerTaskDO.setModifiAuthor((String) request.getSession().getAttribute("MANAGER_NAME"));
 		
+		List<Integer> itemRemoveList =  (List<Integer>) request.getSession().getAttribute("ITEM_REMOVE_LIST");
 		
+		workerTaskDO.setRemoveItems(itemRemoveList);
 		ResultDO result = workerService.modifi(workerTaskDO);
+		
+	
 		
 		if(result.isSuccess()) {
 			jsonResultDO.setInfo("提交成功");
@@ -221,7 +237,6 @@ public class TaskContrlloer {
 		}
 		
 		ResultDO result = workerService.list(query);
-		System.out.println(result);
 		if(result.isSuccess()) {
 			PageBeanUtil pageBean = new PageBeanUtil();
 			long count = (Long) result.getModel(ResultSupport.SECOND_MODEL_KEY);
@@ -238,6 +253,32 @@ public class TaskContrlloer {
 		}
 		return mav;
 		
+	}
+	
+	@RequestMapping(value = "/removeItem/{itemId}.html", method = RequestMethod.GET)
+	public ModelAndView ajaxRemoveItem(ModelAndView mav, 
+			@PathVariable(value="itemId") Integer itemId, 
+			HttpServletRequest request) {
+		List<Integer> itemRemoveList =  (List<Integer>) request.getSession().getAttribute("ITEM_REMOVE_LIST");
+		if(itemRemoveList == null) {
+			itemRemoveList = new ArrayList<Integer>();
+		}
+		itemRemoveList.add(itemId);
+		request.getSession().setAttribute("ITEM_REMOVE_LIST", itemRemoveList);
+		return mav;
+	}
+	
+	@RequestMapping(value = "/removeStaff/{staffId}.html", method = RequestMethod.GET)
+	public ModelAndView ajaxRemoveStaff(ModelAndView mav, 
+			@PathVariable(value="staffId") Integer staffId, 
+			HttpServletRequest request) {
+		List<Integer> staffRemoveList =  (List<Integer>) request.getSession().getAttribute("STAFF_REMOVE_LIST");
+		if(staffRemoveList == null) {
+			staffRemoveList = new ArrayList<Integer>();
+		}
+		staffRemoveList.add(staffId);
+		request.getSession().setAttribute("STAFF_REMOVE_LIST", staffRemoveList);
+		return mav;
 	}
 	
 	

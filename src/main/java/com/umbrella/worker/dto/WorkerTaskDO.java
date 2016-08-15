@@ -7,7 +7,13 @@ import java.util.List;
 public class WorkerTaskDO extends BaseDO {
 	
 	private Integer id;
-
+	
+	
+	private Integer itemId;
+	
+	
+	private Integer staffId;
+	
     
     private Integer wWSupplier;
 
@@ -34,6 +40,12 @@ public class WorkerTaskDO extends BaseDO {
     
     
     private List<SupplierDO> suppliers = new ArrayList<SupplierDO>();
+    
+    
+    private List<Integer> removeItems = new ArrayList<Integer>();
+    
+    
+    private List<Integer> removeStaff = new ArrayList<Integer>();
 
 
 	public Integer getId() {
@@ -43,6 +55,26 @@ public class WorkerTaskDO extends BaseDO {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+
+	public Integer getItemId() {
+		return itemId;
+	}
+
+
+	public void setItemId(Integer itemId) {
+		this.itemId = itemId;
+	}
+
+
+	public Integer getStaffId() {
+		return staffId;
+	}
+
+
+	public void setStaffId(Integer staffId) {
+		this.staffId = staffId;
 	}
 
 
@@ -134,5 +166,27 @@ public class WorkerTaskDO extends BaseDO {
 	public void setSuppliers(List<SupplierDO> suppliers) {
 		this.suppliers = suppliers;
 	}
+
+
+	public List<Integer> getRemoveItems() {
+		return removeItems;
+	}
+
+
+	public void setRemoveItems(List<Integer> removeItems) {
+		this.removeItems = removeItems;
+	}
+
+
+	public List<Integer> getRemoveStaff() {
+		return removeStaff;
+	}
+
+
+	public void setRemoveStaff(List<Integer> removeStaff) {
+		this.removeStaff = removeStaff;
+	}
+	
+	
 
 }

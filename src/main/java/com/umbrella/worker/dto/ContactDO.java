@@ -3,6 +3,9 @@ package com.umbrella.worker.dto;
 public class ContactDO extends BaseDO {
     
     private Integer id;
+    
+    
+    private Integer memberId;
 
    
     private MembersDO membersDO;
@@ -33,6 +36,16 @@ public class ContactDO extends BaseDO {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+
+	public Integer getMemberId() {
+		return memberId;
+	}
+
+
+	public void setMemberId(Integer memberId) {
+		this.memberId = memberId;
 	}
 
 

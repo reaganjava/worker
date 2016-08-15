@@ -8,6 +8,9 @@ public class OrderDetailDO extends BaseDO {
 
    
     private Integer wOStiffId;
+    
+    
+    private Integer wOTaskId;
 
    
     private String wOSupplierName;
@@ -37,11 +40,21 @@ public class OrderDetailDO extends BaseDO {
     private Date wOSubscribe;
 
    
-    private WorkerTaskDO workerTaskDO;
+    private OrderTaskDO orderTaskDO;
 
 
 	public Integer getId() {
 		return id;
+	}
+
+
+	public Integer getwOTaskId() {
+		return wOTaskId;
+	}
+
+
+	public void setwOTaskId(Integer wOTaskId) {
+		this.wOTaskId = wOTaskId;
 	}
 
 
@@ -109,14 +122,13 @@ public class OrderDetailDO extends BaseDO {
 		this.wOSupplierName = wOSupplierName;
 	}
 
-
-	public WorkerTaskDO getWorkerTaskDO() {
-		return workerTaskDO;
+	public OrderTaskDO getOrderTaskDO() {
+		return orderTaskDO;
 	}
 
 
-	public void setWorkerTaskDO(WorkerTaskDO workerTaskDO) {
-		this.workerTaskDO = workerTaskDO;
+	public void setOrderTaskDO(OrderTaskDO orderTaskDO) {
+		this.orderTaskDO = orderTaskDO;
 	}
 
 

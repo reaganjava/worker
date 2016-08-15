@@ -2,14 +2,14 @@
 <something-else-entirely>
 	<proxool>
 		<alias>pool</alias>
-		 <driver-url>jdbc:mysql://reaganjava.mysql.rds.aliyuncs.com:3306/hdlm?characterEncoding=UTF-8</driver-url> 
-		<!-- <driver-url>jdbc:mysql://localhost:3306/worker?characterEncoding=UTF-8</driver-url> -->
+		 <!-- <driver-url>jdbc:mysql://reaganjava.mysql.rds.aliyuncs.com:3306/hdlm?characterEncoding=UTF-8</driver-url>  -->
+		<driver-url>jdbc:mysql://localhost:3306/worker?characterEncoding=UTF-8</driver-url>
 		<driver-class>com.mysql.jdbc.Driver</driver-class>
 		<driver-properties>
-			<!-- <property name="user" value="root" />
-			<property name="password" value="1234" />-->
-			<property name="user" value="chrav" />
-			<property name="password" value="chrav0718" />
+			<property name="user" value="root" />
+			<property name="password" value="1234" />
+			<!-- <property name="user" value="chrav" />
+			<property name="password" value="chrav0718" />-->
 		</driver-properties>
 		<!--proxool自动侦察各个连接状态的时间间隔(毫秒),侦察到空闲的连接就马上回收,超时的销毁 默认30秒 -->
 		<house-keeping-sleep-time>90000</house-keeping-sleep-time>

@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.umbrella.worker.dao.WOrderTaskMapper;
 import com.umbrella.worker.dao.WSupplierMapper;
 import com.umbrella.worker.dao.WSupplierWorkerMapper;
 import com.umbrella.worker.dao.WWorkerItemMapper;
@@ -48,6 +49,7 @@ public class WorkerServiceImpl  extends BaseServiceImpl implements IWorkerServic
 	private WSupplierWorkerMapper supplierWorkerMapper;
 	@Autowired
 	private WSupplierMapper supplierMapper;
+
 
 	@Override
 	public ResultDO create(WorkerTaskDO workerTaskDO) {
@@ -220,7 +222,12 @@ public class WorkerServiceImpl  extends BaseServiceImpl implements IWorkerServic
 			}
 			
 			try {
-				recordNum = workerItemMapper.updateByPrimaryKeySelective(workerItem);
+				if(StringUtil.isGreatOne(workerItem.getId())) {
+					workerItem.setwWiTaskId(workerTask.getId());
+					recordNum = workerItemMapper.insertSelective(workerItem);
+				} else {
+					recordNum = workerItemMapper.updateByPrimaryKeySelective(workerItem);
+				}
 			} catch (Exception e) {
 				result.setSuccess(false);
 				result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
@@ -246,7 +253,12 @@ public class WorkerServiceImpl  extends BaseServiceImpl implements IWorkerServic
 			}
 			
 			try {
-				recordNum = workerStaffMapper.updateByPrimaryKeySelective(workerStaff);
+				if(StringUtil.isGreatOne(workerStaff.getId())) {
+					workerStaff.setwWsTaskId(workerTask.getId());
+					recordNum = workerStaffMapper.insertSelective(workerStaff);
+				} else {
+					recordNum = workerStaffMapper.updateByPrimaryKeySelective(workerStaff);
+				}
 			} catch (Exception e) {
 				result.setSuccess(false);
 				result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
@@ -262,24 +274,27 @@ public class WorkerServiceImpl  extends BaseServiceImpl implements IWorkerServic
 			}
 		}
 		
-		WSupplierWorkerExample wswex = new WSupplierWorkerExample();
-		wswex.createCriteria().andWWorkerIdEqualTo(workerTaskDO.getId());
-		recordNum = -1;
-		try {
-			recordNum = supplierWorkerMapper.deleteByExample(wswex);
-		} catch (Exception e) {
-			result.setSuccess(false);
-	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
-	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
-	        logger.error("[obj:schedule][opt:remove][msg:"+e.getMessage()+"]");
-		}
-		
-		if(recordNum < 0) {
-			result.setSuccess(false);
-			return result;
+		if(workerTaskDO.getSuppliers().size() > 0) {
+			WSupplierWorkerExample wswex = new WSupplierWorkerExample();
+			wswex.createCriteria().andWWorkerIdEqualTo(workerTaskDO.getId());
+			recordNum = -1;
+			try {
+				recordNum = supplierWorkerMapper.deleteByExample(wswex);
+			} catch (Exception e) {
+				result.setSuccess(false);
+		        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+		        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+		        logger.error("[obj:schedule][opt:remove][msg:"+e.getMessage()+"]");
+			}
+			
+			if(recordNum < 0) {
+				result.setSuccess(false);
+				return result;
+			}
 		}
 		
 		for(SupplierDO supplier : workerTaskDO.getSuppliers()) {
+			System.out.println(supplier.getId());
 			recordNum = -1;
 			WSupplierWorker supplierWorker = new WSupplierWorker();
 			supplierWorker.setwSupplierId(supplier.getId());
@@ -470,6 +485,8 @@ public class WorkerServiceImpl  extends BaseServiceImpl implements IWorkerServic
 		
 		return result;
 	}
+	
+	
 	
 
 
