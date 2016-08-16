@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -22,11 +23,15 @@
 <script type="text/javascript" src="http://lib.h-ui.net/DD_belatedPNG_0.0.8a-min.js" ></script>
 <script>DD_belatedPNG.fix('*');</script>
 <![endif]-->
+<script type="text/javascript">
+	
+</script>
 <title>编辑临时工</title>
 </head>
-<body>
+<body> 
 <div class="pd-20">
-  <form action="${pageContext.request.contextPath}/task/add.json" method="post" class="form form-horizontal" id="form-task-add">
+  <form action="${pageContext.request.contextPath}/task/edit.json" method="post" class="form form-horizontal" id="form-task-edit">
+    <input type="hidden" name="id" value="${TASK_INFO.id}"/>
     <div class="row cl">
       <label class="form-label col-3"><span class="c-red">*</span>任务名称：</label>
       <div class="formControls col-5">
@@ -52,20 +57,22 @@
     <div class="row cl">
       <label class="form-label col-3"><span class="c-red">*</span>任务选项</label>
       <div class="formControls col-5" id="taskItems">
-      <c:forEach items="${TASK_INFO.workerItems}" var="workerItem">
+      <c:forEach items="${TASK_INFO.workerItems}" var="workerItem" varStatus="status">
+        <input type="hidden" name="id" value="${workerItem.id}"/>
         <span>项目说明[1]</span>
-        <input type="text" class="input-text" placeholder="" value="${workerItem.wWiItem}" name="workerItems[0].wWiItem" id="wWiItem" datatype="*2-20" nullmsg="任务项目不能为空">
+        <input type="text" class="input-text" placeholder="" value="${workerItem.wWiItem}" name="workerItems[0].wWiItem" id="wWiItem${status.index+1}" datatype="*2-20" nullmsg="任务项目不能为空">
       </c:forEach>
       </div>
       <div class="col-4"> </div>
-      <button id="addItem">+</button>
+      <input type="button"  id="addItem" value="+"/>
     </div>
     <div class="row cl">
       <label class="form-label col-3"><span class="c-red">*</span>人员安排与时间</label>
       <div class="formControls col-5" id="taskStaffs">
-      <c:forEach items="${TASK_INFO.workerStaffs}" var="workerStaff">
+      <c:forEach items="${TASK_INFO.workerStaffs}" var="workerStaff" varStatus="status">
+        <input type="hidden" name="id" value="${workerStaff.id}"/>
         <span>人数[1]</span>
-        <select  class="select" size="1" name="workerStaffs[0].wWsStaffCount" datatype="*" nullmsg="请选择人数！" selected="${workerStaff.wWsStaffCount}">
+        <select  class="select" size="1" name="workerStaffs[0].wWsStaffCount" datatype="*" id="staffCount${status.index+1}" nullmsg="请选择人数！" value="${workerStaff.wWsStaffCount}">
           <option value="" selected>请选人数</option>
           <option value="1">1人</option>
           <option value="2">2人</option>
@@ -74,17 +81,27 @@
           <option value="5">5人</option>
         </select>
         <span>时长[1]</span>
-        <select class="select" size="1" name="workerStaffs[0].wWsHours" datatype="*" nullmsg="请选择时长！" selected="${workerStaff.wWsHours}">
+        <select class="select" size="1" name="workerStaffs[0].wWsHours" datatype="*" id="hours${status.index+1}" ullmsg="请选择时长！" value="${workerStaff.wWsHours}">
           <option value="" selected>请选择时长</option>
           <option value="1">1小时</option>
           <option value="2">2小时</option>
           <option value="3">3小时</option>
           <option value="4">4小时</option>
-        </select>
+        </select> <input type="button" "value="-"/>
        </c:forEach>
       </div>
       <div class="col-4"> </div>
-      <button id="addStaff" >+</button>
+      <input type="button"  id="addStaff" value="+"/>
+    </div>
+    <div class="row cl">
+      <label class="form-label col-3">选择供应商：</label>
+      <div class="formControls col-5">
+        <c:forEach items="${SUPPLIER_LIST}" var="supplier" varStatus="status">
+        	<input type="checkbox" value="${supplier.id}" name="suppliers[${status.index}].id" />
+        	<label>:${supplier.wSName}</label><br/>
+        </c:forEach>
+      </div>
+      <div class="col-4"> </div>
     </div>
     <div class="row cl">
       <div class="col-9 col-offset-3">
@@ -102,15 +119,15 @@
 <script type="text/javascript">
 $(function(){
 	
-	var wi = 0;
-	var wj = 0;
+	var wi = ${fn:length(TASK_INFO.workerItems)};
+	var wj = ${fn:length(TASK_INFO.workerItems)};
 	$('.skin-minimal input').iCheck({
 		checkboxClass: 'icheckbox-blue',
 		radioClass: 'iradio-blue',
 		increaseArea: '20%'
 	});
 	
-	$("#form-task-add").Validform({
+	$("#form-task-edit").Validform({
 		tiptype:2,
 		ajaxPost:true,
 		callback:function(data){
@@ -145,7 +162,17 @@ $(function(){
 		        +'</select>');
 	});
 	
+	<c:forEach items="${TASK_INFO.workerStaffs}" var="workerStaff" varStatus="status">
+		var ss = document.getElementById("staffCount${status.index + 1}");
+		ss.value = ${workerStaff.wWsStaffCount};
+		var hs = document.getElementById("hours${status.index + 1}");
+		hs.value = ${workerStaff.wWsHours};
+	</c:forEach>
+	
+	
+	
 });
+
 </script>
 </body>
 </html>

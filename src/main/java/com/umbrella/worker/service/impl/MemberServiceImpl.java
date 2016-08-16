@@ -85,11 +85,12 @@ public class MemberServiceImpl  extends BaseServiceImpl implements IMemberServic
 		
 		WMemberDetail memberDetail = new WMemberDetail();
 		
-		result = BeanUtilsExtends.copy(membersDO.getMemberDetailDO(), memberDetail);
-		
-		if(!result.isSuccess()) {
-			return result;
-		}
+		memberDetail.setId(members.getId());
+		memberDetail.setCreateAuthor(members.getCreateAuthor());
+		memberDetail.setCreateTime(members.getCreateTime());
+		memberDetail.setModifiAuthor(members.getModifiAuthor());
+		memberDetail.setModifiTime(members.getModifiTime());
+		memberDetail.setDatalevel(1);
 		
 		try {
 			recordNum = memberDetailMapper.insertSelective(memberDetail);

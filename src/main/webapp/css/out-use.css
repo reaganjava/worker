@@ -1,0 +1,192 @@
+/****登陆页面*****/
+body{ font-family:"微软雅黑";}
+* {
+    outline: 0;
+    box-sizing: border-box;
+}
+.xsh_icon_cancel:before {color: #f43530;font-size: 22px}
+.xsh_icon_clear:before, .xsh_icon_search:before {color: #b2b2b2;font-size: 14px}
+.xsh_icon_warn.xsh_icon_msg:before {color: #f76260}
+.xsh_btn.xsh_btn_mini {line-height: 1.9;font-size: 14px;padding: 0 .75em;display: inline-block}
+button.xsh_btn, input.xsh_btn {width: 100%;border-width: 0;outline: 0;-webkit-appearance: none}
+button.xsh_btn:focus, input.xsh_btn:focus {outline: 0}
+button.xsh_btn_inline, button.xsh_btn_mini, input.xsh_btn_inline, input.xsh_btn_mini {width: auto}
+.xsh_btn+.xsh_btn {margin-top: 15px}
+.xsh_btn.xsh_btn_inline+.xsh_btn.xsh_btn_inline {margin-top: auto;margin-left: 15px}
+.xsh_btn {position: relative;display: block;margin-left: auto;margin-right: auto;padding-left: 14px;padding-right: 14px;box-sizing: border-box;font-size: 18ptext-align: center;text-decoration: none;color: #fff;line-height: 2.33333333;border-radius: 5px;-webkit-tap-highlight-color: rgba(0,0,0,0);overflow: hidden}
+.xsh_btn:after {content: " ";width: 200%;height: 200%;position: absolute;top: 0;left: 0;border: 1px solid rgba(0,0,0,.2);-webkit-transform: scale(.5);transform: scale(.5);-webkit-transform-origin: 0 0;transform-origin: 0 0;box-sizing: border-box;border-radius: 10px}
+.xsh_cell {position: relative}
+.xsh_cell:before {content: " ";position: absolute;left: 0;top: 0;width: 100%;height: 1px;border-top: 1px solid #d9d9d9;color: #d9d9d9;-webkit-transform-origin: 0 0;transform-origin: 0 0;-webkit-transform: scaleY(.5);transform: scaleY(.5);left: 15px}
+.xsh_cell:first-child:before {display: none}
+.xsh_cells {margin-top: 1.17647059em;background-color: #fff;line-height: 1.41176471;font-size: 17px;overflow: hidden;position: relative}
+.xsh_cells:before {top: 0;border-top: 1px solid #d9d9d9;-webkit-transform-origin: 0 0;transform-origin: 0 0;-webkit-transform: scaleY(.5);transform: scaleY(.5)
+}
+.xsh_cells:after, .xsh_cells:before {content: " ";position: absolute;left: 0;width: 100%;height: 1px;color: #d9d9d9}
+.xsh_cells:after {bottom: 0;border-bottom: 1px solid #d9d9d9;-webkit-transform-origin: 0 100%;transform-origin: 0 100%;-webkit-transform: scaleY(.5);transform: scaleY(.5)}
+.xsh_cells_title+.xsh_cells {margin-top: 0}
+.xsh_cell {padding: 10px 15px;position: relative;display: -webkit-box;display: -ms-flexbox;display: flex;-webkit-box-align: center;-ms-flex-align: center;align-items: center}
+.xsh_cell_ft {text-align: right;color: #888}
+.xsh_cell_primary {-webkit-box-flex: 1;-ms-flex: 1;flex: 1}
+.xsh_input {width: 100%;border: 0;outline: 0;-webkit-appearance: none;background-color: transparent;font-size: inherit;color: inherit;height: 1.41176471em;line-height: 1.41176471}
+.xsh_input::-webkit-inner-spin-button, .xsh_input::-webkit-outer-spin-button {-webkit-appearance:none;margin:0}
+.nosend {color: #00cced;font-size: .27rem;margin-left: .2rem;}
+.mine_photo {width: 100%;height: 200px;background: #00cced;margin-bottom: 25px;overflow: hidden;}
+.mine_photo dl {width: 290px;height: auto;margin: 66px auto;}
+.mine_photo dl dt {width: 68px;height: 68px;margin: 0 auto;}
+.mine_photo dl dt img {width: 100%;height: 100%;}
+.mine_photo dl dd {font-size: 18px;color: #fff;text-align: center; padding-top:10px;}
+/**优惠券*/
+.vouchers-serch {
+    max-width: 640px;
+    width: 100%;
+    height: 3.5rem;
+    background: #fff;
+    top: 2.4rem;
+    padding: .95rem 3%;
+    box-shadow: 0 .1rem .9rem rgba(0,0,0,.2);
+    z-index: 2;
+}
+.vouchers-serch .vouchers-num {
+    border: .06rem solid rgba(0,0,0,.1);
+    width: 70%;
+    height: 1.6rem;
+    float: left;
+    line-height: 1.6rem;
+    border-radius: .2rem;
+    text-indent: .6rem;
+    font-size: .7rem;
+    -webkit-appearance: none;
+}
+.vouchers-btn {
+    display: block;
+    float: right;
+    width: 25%;
+    height: 1.6rem;
+    background: url(../images/translate.png) center no-repeat #00cced;
+    -webkit-background-size: 50% 1.5rem;
+    background-size: 50% 1.5rem;
+    border-radius: .2rem;
+}
+.vouchers-list {
+    width: 96%;
+    margin: 0 auto 1rem;
+    background: #fff;
+    height: 7rem;
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: .1rem .1rem .3rem rgba(0,0,0,.1);
+}
+.vouchers-ty {
+    color: #0091ed;
+	position: absolute;
+    font-size: .8rem;
+    right: .5rem;
+}
+.vouchers-list-t {
+    width: 100%;
+    height: 5rem;
+    padding-top: 1.5rem;
+}
+.vouchers-rmb-icon {
+    font-size: 1.5rem;
+    display: block;
+    height: 1.5rem;
+    line-height: 1.5rem;
+    float: left;
+    margin-left: .5rem;
+	color:#0091ed;
+}
+.vouchers-rmb-num, .vouchers-rmb-num-free {
+    display: block;
+    float: left;
+    height: 3rem;
+    line-height: 3rem;
+    margin-top: -3px;
+	font-size: 3.5rem;
+	color:#0091ed;
+}
+.vouchers-list-b {
+    width: 100%;
+    height: 2rem;
+    background: #0091ed;
+    padding: 0 3%;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+    position: relative;
+	color:#fff;
+}
+.vouchers-list-b span {
+    line-height: 2rem;
+    font-size: .64rem;
+}
+.vouchers-list-b .using {
+    position: absolute;
+    right: 2rem;
+}
+.vouchers-active1 .vouchers-list-b .using-btn {
+    background: url(../images/next-w.png) no-repeat;
+    -webkit-background-size: 94% 94%;
+    background-size: 94% 94%;
+    color: #999;
+}
+.vouchers-active2 .vouchers-list-b .using-btn {
+    background: url(../images/next-w.png) no-repeat;
+    -webkit-background-size: 94% 94%;
+    background-size: 94% 94%;
+    color: #999;
+}
+.vouchers-list-b .using-btn {
+    display: block;
+    width: 1rem;
+    height: 1rem;
+    text-align: center;
+    line-height: 1rem;
+    font-size: .8rem;
+    position: absolute;
+    top: .5rem;
+    right: .4rem;
+    background: url(/img/circle-w.png) no-repeat;
+    -webkit-background-size: 1.08rem 1.08rem;
+    background-size: 1.08rem 1.08rem;
+}
+.vouchers-txt {
+    width: 100%;
+    padding: 0 3%;
+    height: 2.2rem;
+    font-size: .7rem;
+    color: #999;
+    text-shadow: 0 1px #FFF;
+    line-height: 2.2rem;
+	margin: 0 auto;
+    position: relative;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

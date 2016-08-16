@@ -133,6 +133,7 @@ public class SmsServiceImpl  extends BaseServiceImpl implements ISmsService {
 			for (int i = 0; i < 6; i++) {
 				smsCode += random.nextInt(10);
 			}
+			System.out.println(smsCode);
 			WSmsCodeExample exmaple = new WSmsCodeExample();
 		
 			exmaple.createCriteria()
@@ -142,6 +143,7 @@ public class SmsServiceImpl  extends BaseServiceImpl implements ISmsService {
 			try {
 				list = smsCodeMapper.selectByExample(exmaple);
 			} catch (Exception e) {
+				e.printStackTrace();
 	            throw new Exception("random code Exception");
 			}
 		} while(list.size() > 0);

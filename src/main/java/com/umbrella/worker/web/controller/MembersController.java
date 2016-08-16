@@ -51,6 +51,10 @@ public class MembersController {
 		if(!GetHttpMemberInfo.isMobileDevice(request)) {
 			regDevice = "PC";
 		}
+		
+		if(!membersDO.getwMPassword().equals(membersDO.getRePassword())) {
+			
+		}
 		MD5 md5 = new MD5();
 		String md5Pwd = md5.getMD5ofStr(membersDO.getwMPassword() 
 				+ membersDO.getwMMobile());

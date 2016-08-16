@@ -175,13 +175,9 @@ public class TaskContrlloer {
 		JsonResultDO jsonResultDO = new JsonResultSupport();
 		
 		workerTaskDO.setModifiAuthor((String) request.getSession().getAttribute("MANAGER_NAME"));
-		
-		List<Integer> itemRemoveList =  (List<Integer>) request.getSession().getAttribute("ITEM_REMOVE_LIST");
-		
-		workerTaskDO.setRemoveItems(itemRemoveList);
-		ResultDO result = workerService.modifi(workerTaskDO);
-		
 	
+		System.out.println(workerTaskDO);
+		ResultDO result = workerService.modifi(workerTaskDO);
 		
 		if(result.isSuccess()) {
 			jsonResultDO.setInfo("提交成功");
@@ -253,33 +249,6 @@ public class TaskContrlloer {
 		}
 		return mav;
 		
-	}
-	
-	@RequestMapping(value = "/removeItem/{itemId}.html", method = RequestMethod.GET)
-	public ModelAndView ajaxRemoveItem(ModelAndView mav, 
-			@PathVariable(value="itemId") Integer itemId, 
-			HttpServletRequest request) {
-		List<Integer> itemRemoveList =  (List<Integer>) request.getSession().getAttribute("ITEM_REMOVE_LIST");
-		if(itemRemoveList == null) {
-			itemRemoveList = new ArrayList<Integer>();
-		}
-		itemRemoveList.add(itemId);
-		request.getSession().setAttribute("ITEM_REMOVE_LIST", itemRemoveList);
-		return mav;
-	}
-	
-	@RequestMapping(value = "/removeStaff/{staffId}.html", method = RequestMethod.GET)
-	public ModelAndView ajaxRemoveStaff(ModelAndView mav, 
-			@PathVariable(value="staffId") Integer staffId, 
-			HttpServletRequest request) {
-		List<Integer> staffRemoveList =  (List<Integer>) request.getSession().getAttribute("STAFF_REMOVE_LIST");
-		if(staffRemoveList == null) {
-			staffRemoveList = new ArrayList<Integer>();
-		}
-		staffRemoveList.add(staffId);
-		request.getSession().setAttribute("STAFF_REMOVE_LIST", staffRemoveList);
-		return mav;
-	}
-	
+	}	
 	
 }

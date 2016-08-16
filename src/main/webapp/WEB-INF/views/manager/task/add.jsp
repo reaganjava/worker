@@ -22,6 +22,9 @@
 <script type="text/javascript" src="http://lib.h-ui.net/DD_belatedPNG_0.0.8a-min.js" ></script>
 <script>DD_belatedPNG.fix('*');</script>
 <![endif]-->
+<script type="text/javascript">
+
+</script>
 <title>添加临时工</title>
 </head>
 <body>
@@ -49,6 +52,7 @@
       </div>
       <div class="col-4"> </div>
     </div>
+    <div id="items">
     <div class="row cl">
       <label class="form-label col-3"><span class="c-red">*</span>任务选项</label>
       <div class="formControls col-5" id="taskItems">
@@ -56,13 +60,12 @@
         <input type="text" class="input-text" placeholder="" name="workerItems[0].wWiItem" id="wWiItem" datatype="*2-20" nullmsg="任务项目不能为空">
       </div>
       <div class="col-4"> </div>
-      <button id="addItem">+</button>
-    </div>
-    <div class="row cl">
+      <input type="button" id="addItem" value="+" />
+      <div class="row cl">
       <label class="form-label col-3"><span class="c-red">*</span>人员安排与时间</label>
-      <div class="formControls col-5" id="taskStaffs">
+      <div class="formControls col-5" id="taskStaffs1">
         <span>人数[1]</span>
-        <select  class="select" size="1" name="workerStaffs[0].wWsStaffCount" datatype="*" nullmsg="请选择人数！">
+        <select  class="select" size="1" name="workerItems[0].workerStaffs[0].wWsStaffCount" datatype="*" nullmsg="请选择人数！">
           <option value="" selected>请选人数</option>
           <option value="1">1人</option>
           <option value="2">2人</option>
@@ -71,7 +74,7 @@
           <option value="5">5人</option>
         </select>
         <span>时长[1]</span>
-        <select class="select" size="1" name="workerStaffs[0].wWsHours" datatype="*" nullmsg="请选择时长！">
+        <select class="select" size="1" name="workerItems[0].workerStaffs[0].wWsHours" datatype="*" nullmsg="请选择时长！">
           <option value="" selected>请选择时长</option>
           <option value="1">1小时</option>
           <option value="2">2小时</option>
@@ -80,8 +83,11 @@
         </select>
       </div>
       <div class="col-4"> </div>
-      <button id="addStaff" >+</button>
+      <input type="button"  value="+" onClick="addStaff('#taskStaffs1', 1)"/>
     </div>
+    </div>
+    </div>
+    
     <div class="row cl">
       <label class="form-label col-3">选择供应商：</label>
       <div class="formControls col-5">
@@ -105,9 +111,11 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/H-ui.js?v=0.1"></script> 
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/H-ui.admin.js?v=0.1"></script>
 <script type="text/javascript">
+var wj = 0;
+var wi = 0;
 $(function(){
-	var wi = 0;
-	var wj = 0;
+	
+	
 	$('.skin-minimal input').iCheck({
 		checkboxClass: 'icheckbox-blue',
 		radioClass: 'iradio-blue',
@@ -126,30 +134,36 @@ $(function(){
 	});
 	$("#addItem").click(function(){
 		wi++;
-		$("#taskItems").append('<span>项目选项['+ (wi+1) + ']</span><input type="text" class="input-text" placeholder="" name="workerItems[' + wi + '].wWiItem" id="wWiItem" datatype="*2-20" nullmsg="项目选项不能为空">');
-	});
-	$("#addStaff").click(function(){
-		wj++;
-		$("#taskStaffs").append('<span>人数['+ (wj+1) + ']</span>'
-		        +'<select class="select" size="1" name="workerStaffs[' + wj + '].wWsStaffCount" datatype="*" nullmsg="请选择人数！">'
-		        +'<option value="" selected>请选人数</option>'
-		        +'<option value="1">1人</option>'
-		        +'<option value="2">2人</option>'
-		        +'<option value="3">3人</option>'
-		        +'<option value="4">4人</option>'
-		        +'<option value="5">5人</option>'
-		        +'</select>'
-		        +'<span>时长['+ (wj+1) + ']</span>'
-		        +'<select class="select" size="1" name="workerStaffs[' + wj + '].wWsHours" datatype="*" nullmsg="请选择时长！">'
-		        +'<option value="" selected>请选择时长</option>'
-		        +'<option value="1">1小时</option>'
-		        +'<option value="2">2小时</option>'
-		        +'<option value="3">3小时</option>'
-		        +'<option value="4">4小时</option>'
-		        +'</select>');
+		wj = 0;
+		$("#items").append('<div class="row cl"><label class="form-label col-3"><span class="c-red">*</span>任务选项</label><div class="formControls col-5" id="taskItems"><span>项目说明['+ (wi+1) + ']</span><input type="text" class="input-text" placeholder="" name="workerItems[' + wi + '].wWiItem" id="wWiItem" datatype="*2-20" nullmsg="任务项目不能为空"></div><div class="col-4"> </div><div class="row cl"><label class="form-label col-3"><span class="c-red">*</span>人员安排与时间</label><div class="formControls col-5" id="taskStaffs'+ (wi+1) + '"><span>人数[1]</span><select  class="select" size="1" name="workerItems[' + wi + '].workerStaffs[0].wWsStaffCount" datatype="*" nullmsg="请选择人数！"><option value="" selected>请选人数</option><option value="1">1人</option><option value="2">2人</option><option value="3">3人</option><option value="4">4人</option><option value="5">5人</option></select><span>时长[1]</span><select class="select" size="1" name="workerItems[' + wi + '].workerStaffs[0].wWsHours" datatype="*" nullmsg="请选择时长！"><option value="" selected>请选择时长</option><option value="1">1小时</option><option value="2">2小时</option><option value="3">3小时</option><option value="4">4小时</option></select></div><div class="col-4"> </div><input type="button"  value="+" onClick="addStaff(\'#taskStaffs'+ (wi+1) + '\')"/></div></div>');
 	});
 	
 });
+
+
+function addStaff(id) {
+	wj++;
+	$(id).append('<span>人数['+ (wj+1) + ']</span>'
+	        +'<select class="select" size="1" name="workerItems[' + wi + '].workerStaffs[' + wj + '].wWsStaffCount" datatype="*" nullmsg="请选择人数！">'
+	        +'<option value="" selected>请选人数</option>'
+	        +'<option value="1">1人</option>'
+	        +'<option value="2">2人</option>'
+	        +'<option value="3">3人</option>'
+	        +'<option value="4">4人</option>'
+	        +'<option value="5">5人</option>'
+	        +'</select>'
+	        +'<span>时长['+ (wj+1) + ']</span>'
+	        +'<select class="select" size="1" name="workerItems[' + wi + '].workerStaffs[' + wj + '].wWsHours" datatype="*" nullmsg="请选择时长！">'
+	        +'<option value="" selected>请选择时长</option>'
+	        +'<option value="1">1小时</option>'
+	        +'<option value="2">2小时</option>'
+	        +'<option value="3">3小时</option>'
+	        +'<option value="4">4小时</option>'
+	        +'</select>');
+}
 </script>
 </body>
+<script type="text/javascript">
+
+</script>
 </html>

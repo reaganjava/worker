@@ -36,17 +36,8 @@ public class WorkerTaskDO extends BaseDO {
     private List<WorkerItemDO> workerItems = new ArrayList<WorkerItemDO>();
     
     
-    private List<WorkerStaffDO> workerStaffs = new ArrayList<WorkerStaffDO>();
-    
-    
     private List<SupplierDO> suppliers = new ArrayList<SupplierDO>();
     
-    
-    private List<Integer> removeItems = new ArrayList<Integer>();
-    
-    
-    private List<Integer> removeStaff = new ArrayList<Integer>();
-
 
 	public Integer getId() {
 		return id;
@@ -128,16 +119,6 @@ public class WorkerTaskDO extends BaseDO {
 	}
 
 
-	public List<WorkerStaffDO> getWorkerStaffs() {
-		return workerStaffs;
-	}
-
-
-	public void setWorkerStaffs(List<WorkerStaffDO> workerStaffs) {
-		this.workerStaffs = workerStaffs;
-	}
-
-
 	public String getwWName() {
 		return wWName;
 	}
@@ -166,27 +147,5 @@ public class WorkerTaskDO extends BaseDO {
 	public void setSuppliers(List<SupplierDO> suppliers) {
 		this.suppliers = suppliers;
 	}
-
-
-	public List<Integer> getRemoveItems() {
-		return removeItems;
-	}
-
-
-	public void setRemoveItems(List<Integer> removeItems) {
-		this.removeItems = removeItems;
-	}
-
-
-	public List<Integer> getRemoveStaff() {
-		return removeStaff;
-	}
-
-
-	public void setRemoveStaff(List<Integer> removeStaff) {
-		this.removeStaff = removeStaff;
-	}
-	
-	
 
 }

@@ -16,6 +16,7 @@ import com.umbrella.worker.dto.MembersDO;
 import com.umbrella.worker.dto.OrderDO;
 import com.umbrella.worker.dto.OrderDetailDO;
 import com.umbrella.worker.dto.OrderTaskDO;
+import com.umbrella.worker.dto.WorkerStaffDO;
 import com.umbrella.worker.dto.WorkerTaskDO;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
@@ -49,13 +50,32 @@ public class GoodsController {
 		}
 		
 		result = workerService.get(id);
-		
+		System.out.println(result);
 		if(result.isSuccess()) {
 			mav.addObject("TASK_GOODS", result.getModel(ResultSupport.FIRST_MODEL_KEY));
 			mav.setViewName("goods/task");
 		} else {
 			mav.setViewName("error");
 		}
+		return mav;
+	}
+	
+	@RequestMapping(value = "/getStaff/{id}.json", method = RequestMethod.GET)
+	public ModelAndView ajaxStaff(ModelAndView mav, 
+			@PathVariable(value="id") Integer id,
+			HttpServletRequest request) {
+		ResultDO result = workerService.getStaff(id);
+		System.out.println(result);
+		if(!result.isSuccess()) {
+			mav.addObject("JSON_DATA", 0);
+		}
+		List<WorkerStaffDO> workerStaffs = (List<WorkerStaffDO>) result.getModel(ResultSupport.FIRST_MODEL_KEY);
+		String line = "";
+		for(WorkerStaffDO workerStaff : workerStaffs) {
+			System.out.println(line);
+			line += "<li><a><span>"+workerStaff.getwWsStaffCount()+"人"+workerStaff.getwWsHours()+"小时</span></a></li>";
+		}
+		mav.addObject("JSON_DATA", line);
 		return mav;
 	}
 	

@@ -1,5 +1,8 @@
 package com.umbrella.worker.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class WorkerItemDO extends BaseDO {
 	
 	private Integer id;
@@ -9,6 +12,9 @@ public class WorkerItemDO extends BaseDO {
 
 	
     private Integer wWiTaskId;
+    
+    
+    private List<WorkerStaffDO> workerStaffs = new ArrayList<WorkerStaffDO>();
 
 
 	public Integer getId() {
@@ -38,6 +44,16 @@ public class WorkerItemDO extends BaseDO {
 
 	public void setwWiTaskId(Integer wWiTaskId) {
 		this.wWiTaskId = wWiTaskId;
+	}
+
+
+	public List<WorkerStaffDO> getWorkerStaffs() {
+		return workerStaffs;
+	}
+
+
+	public void setWorkerStaffs(List<WorkerStaffDO> workerStaffs) {
+		this.workerStaffs = workerStaffs;
 	}
 
 }

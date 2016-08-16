@@ -33,6 +33,9 @@ public class MembersDO extends BaseDO {
 
    
     private String wMRegIp;
+    
+    
+    private String smsCode;
 
     
     private MemberDetailDO memberDetailDO;
@@ -169,6 +172,16 @@ public class MembersDO extends BaseDO {
 
 	public void setContacts(List<ContactDO> contacts) {
 		this.contacts = contacts;
+	}
+
+
+	public String getSmsCode() {
+		return smsCode;
+	}
+
+
+	public void setSmsCode(String smsCode) {
+		this.smsCode = smsCode;
 	}
    
 }

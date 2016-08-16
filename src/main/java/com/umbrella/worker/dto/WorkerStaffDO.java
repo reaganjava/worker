@@ -6,6 +6,9 @@ public class WorkerStaffDO extends BaseDO {
  
 	    
 	    private Integer wWsTaskId;
+	    
+	    
+	    private Integer wWsItemId;
 
 	     
 	    private Integer wWsStaffCount;
@@ -31,6 +34,16 @@ public class WorkerStaffDO extends BaseDO {
 
 		public void setwWsTaskId(Integer wWsTaskId) {
 			this.wWsTaskId = wWsTaskId;
+		}
+
+
+		public Integer getwWsItemId() {
+			return wWsItemId;
+		}
+
+
+		public void setwWsItemId(Integer wWsItemId) {
+			this.wWsItemId = wWsItemId;
 		}
 
 

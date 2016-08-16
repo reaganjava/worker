@@ -25,6 +25,7 @@ import com.umbrella.worker.entity.WWorkerItem;
 import com.umbrella.worker.entity.WWorkerItemExample;
 import com.umbrella.worker.entity.WWorkerStaff;
 import com.umbrella.worker.entity.WWorkerStaffExample;
+import com.umbrella.worker.entity.WWorkerStaffExample.Criteria;
 import com.umbrella.worker.entity.WWorkerTask;
 import com.umbrella.worker.entity.WWorkerTaskExample;
 import com.umbrella.worker.query.WorkerTaskQuery;
@@ -125,35 +126,38 @@ public class WorkerServiceImpl  extends BaseServiceImpl implements IWorkerServic
 				result.setSuccess(false);
 				return result;
 			}
+			
+			for(WorkerStaffDO workerStaffDO : workerItemDO.getWorkerStaffs()) {
+				recordNum = -1;
+				WWorkerStaff workerStaff = new WWorkerStaff();
+				result = BeanUtilsExtends.copy(workerStaff, workerStaffDO);
+				workerStaff.setDatalevel(1);
+				workerStaff.setStatus(1);
+				workerStaff.setCreateTime(Calendar.getInstance().getTime());
+				workerStaff.setModifiTime(Calendar.getInstance().getTime());
+				workerStaff.setCreateAuthor(workerTask.getCreateAuthor());
+				workerStaff.setModifiAuthor(workerTask.getCreateAuthor());
+				workerStaff.setwWsTaskId(workerTask.getId());
+				workerStaff.setwWsItemId(workerItem.getId());
+				try {
+					recordNum = workerStaffMapper.insertSelective(workerStaff);
+				} catch (Exception e) {
+					result.setSuccess(false);
+					result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+					result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+					logger.error("[obj:service][opt:create][msg:" + e.getMessage()
+					+ "]");
+					return result;
+				}
+				
+				if(recordNum < 1) {
+					result.setSuccess(false);
+					return result;
+				}
+			}
 		}
 		
-		for(WorkerStaffDO workerStaffDO : workerTaskDO.getWorkerStaffs()) {
-			recordNum = -1;
-			WWorkerStaff workerStaff = new WWorkerStaff();
-			result = BeanUtilsExtends.copy(workerStaff, workerStaffDO);
-			workerStaff.setDatalevel(1);
-			workerStaff.setStatus(1);
-			workerStaff.setCreateTime(Calendar.getInstance().getTime());
-			workerStaff.setModifiTime(Calendar.getInstance().getTime());
-			workerStaff.setCreateAuthor(workerTask.getCreateAuthor());
-			workerStaff.setModifiAuthor(workerTask.getCreateAuthor());
-			workerStaff.setwWsTaskId(workerTask.getId());
-			try {
-				recordNum = workerStaffMapper.insertSelective(workerStaff);
-			} catch (Exception e) {
-				result.setSuccess(false);
-				result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
-				result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
-				logger.error("[obj:service][opt:create][msg:" + e.getMessage()
-				+ "]");
-				return result;
-			}
-			
-			if(recordNum < 1) {
-				result.setSuccess(false);
-				return result;
-			}
-		}
+		
 		
 		
 		for(SupplierDO supplier : workerTaskDO.getSuppliers()) {
@@ -220,7 +224,8 @@ public class WorkerServiceImpl  extends BaseServiceImpl implements IWorkerServic
 			if (!result.isSuccess()) {
 				return result;
 			}
-			
+			workerItem.setModifiAuthor(workerTask.getModifiAuthor());
+			workerItem.setModifiTime(workerTask.getModifiTime());
 			try {
 				if(StringUtil.isGreatOne(workerItem.getId())) {
 					workerItem.setwWiTaskId(workerTask.getId());
@@ -237,42 +242,39 @@ public class WorkerServiceImpl  extends BaseServiceImpl implements IWorkerServic
 				return result;
 			}
 			
-			if(recordNum < 1) {
-				result.setSuccess(false);
-				return result;
+			for(WorkerStaffDO workerStaffDO : workerItemDO.getWorkerStaffs()) {
+				WWorkerStaff workerStaff = new WWorkerStaff();
+				recordNum = -1;
+				result = BeanUtilsExtends.copy(workerStaff, workerStaffDO);
+				// 拷贝失败
+				if (!result.isSuccess()) {
+					return result;
+				}
+				
+				workerStaff.setModifiAuthor(workerTask.getModifiAuthor());
+				workerStaff.setModifiTime(workerTask.getModifiTime());
+				try {
+					if(StringUtil.isGreatOne(workerItemDO.getId())) {
+						workerStaff.setwWsTaskId(workerTask.getId());
+						workerStaff.setwWsItemId(workerItemDO.getId());
+						recordNum = workerStaffMapper.insertSelective(workerStaff);
+					} else {
+						recordNum = workerStaffMapper.updateByPrimaryKeySelective(workerStaff);
+					}
+				} catch (Exception e) {
+					result.setSuccess(false);
+					result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+					result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+					logger.error("[obj:schedule][opt:modifi][msg:" + e.getMessage()
+							+ "]");
+					return result;
+				}
+			
 			}
+			
 		}
 		
-		for(WorkerStaffDO workerStaffDO : workerTaskDO.getWorkerStaffs()) {
-			WWorkerStaff workerStaff = new WWorkerStaff();
-			recordNum = -1;
-			result = BeanUtilsExtends.copy(workerStaff, workerStaffDO);
-			// 拷贝失败
-			if (!result.isSuccess()) {
-				return result;
-			}
-			
-			try {
-				if(StringUtil.isGreatOne(workerStaff.getId())) {
-					workerStaff.setwWsTaskId(workerTask.getId());
-					recordNum = workerStaffMapper.insertSelective(workerStaff);
-				} else {
-					recordNum = workerStaffMapper.updateByPrimaryKeySelective(workerStaff);
-				}
-			} catch (Exception e) {
-				result.setSuccess(false);
-				result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
-				result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
-				logger.error("[obj:schedule][opt:modifi][msg:" + e.getMessage()
-						+ "]");
-				return result;
-			}
-			
-			if(recordNum < 1) {
-				result.setSuccess(false);
-				return result;
-			}
-		}
+		
 		
 		if(workerTaskDO.getSuppliers().size() > 0) {
 			WSupplierWorkerExample wswex = new WSupplierWorkerExample();
@@ -310,10 +312,6 @@ public class WorkerServiceImpl  extends BaseServiceImpl implements IWorkerServic
 				return result;
 			}
 			
-			if(recordNum < 1) {
-				result.setSuccess(false);
-				return result;
-			}
 		}
 		return result;
 	}
@@ -437,33 +435,42 @@ public class WorkerServiceImpl  extends BaseServiceImpl implements IWorkerServic
 	        return result;
 		}
 		
+		List<WorkerItemDO> workerItemDOList = null;
 		if(workerItemList.size() > 0) {
-			workerTaskDO.setWorkerItems(getWorkerItemDOList(workerItemList));
+			workerItemDOList = getWorkerItemDOList(workerItemList);
 		} else {
 			result.setSuccess(false);
 			 return result;
 		}
 		
-		List<WWorkerStaff> workerStaffList = null; 
+		for(WorkerItemDO workerItemDO : workerItemDOList) {
 		
-		WWorkerStaffExample wsex = new WWorkerStaffExample();
-		wsex.createCriteria().andWWsTaskIdEqualTo(workerTaskId);
-		try {
-			workerStaffList = workerStaffMapper.selectByExample(wsex);
-		} catch (Exception e) {
-			result.setSuccess(false);
-	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
-	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
-	        logger.error("[obj:supplier][opt:get][msg:"+e.getMessage()+"]");
-	        return result;
-		}
+			List<WWorkerStaff> workerStaffList = null; 
+			
+			WWorkerStaffExample wsex = new WWorkerStaffExample();
+			Criteria c = wsex.createCriteria();
+			c.andWWsTaskIdEqualTo(workerTaskId)
+				.andWWsItemIdEqualTo(workerItemDO.getId());
 		
-		if(workerStaffList.size() > 0) {
-			workerTaskDO.setWorkerStaffs(getWorkerStaffDOList(workerStaffList));
-		} else {
-			result.setSuccess(false);
-			return result;
+			try {
+				workerStaffList = workerStaffMapper.selectByExample(wsex);
+			} catch (Exception e) {
+				result.setSuccess(false);
+		        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+		        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+		        logger.error("[obj:supplier][opt:get][msg:"+e.getMessage()+"]");
+		        return result;
+			}
+			
+			if(workerStaffList.size() > 0) {
+				workerItemDO.setWorkerStaffs(getWorkerStaffDOList(workerStaffList));
+			} else {
+				result.setSuccess(false);
+				return result;
+			}
 		}
+	
+		workerTaskDO.setWorkerItems(workerItemDOList);
 		
 		List<WSupplier> supplierList = new ArrayList<WSupplier>();
 		try {
@@ -485,10 +492,6 @@ public class WorkerServiceImpl  extends BaseServiceImpl implements IWorkerServic
 		
 		return result;
 	}
-	
-	
-	
-
 
 	@Override
 	public ResultDO list(WorkerTaskQuery workerTaskQuery) {
@@ -552,6 +555,27 @@ public class WorkerServiceImpl  extends BaseServiceImpl implements IWorkerServic
 		return result;
 	}
 	
+	public ResultDO getStaff(int workerItemId) {
+		
+		ResultSupport result = new ResultSupport();
+		List<WWorkerStaff> workerStaffList = null; 
+		
+		WWorkerStaffExample wsex = new WWorkerStaffExample();
+		Criteria c = wsex.createCriteria();
+		c.andWWsItemIdEqualTo(workerItemId);
 	
+		try {
+			workerStaffList = workerStaffMapper.selectByExample(wsex);
+		} catch (Exception e) {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+	        logger.error("[obj:supplier][opt:get][msg:"+e.getMessage()+"]");
+	        return result;
+		}
+		List<WorkerStaffDO> workerStaffDOList = this.getWorkerStaffDOList(workerStaffList);
+		result.setModel(ResultSupport.FIRST_MODEL_KEY, workerStaffDOList);
+		return result;
+	}
 
 }
