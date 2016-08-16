@@ -17,9 +17,11 @@
 </head>
 
 <body>
+<form action="${pageContext.request.contextPath}/buyTask.html" method="post" id="buyForm">
 <div class="xsh">
 <div class="page-all">
 <div class="container">
+
 <nav class="navbar">
 <ul>
 <li><a href="首页.html"><img src="${pageContext.request.contextPath}/images/left.png"/></a></li>
@@ -37,12 +39,13 @@
 </c:forEach>
 </ul>
 <input type="hidden" name="itemId" id="itemId"/>
+<input type="hidden" name="staffId" id="staffId"/>
 </section>
 <div class="clean"></div>
 <!-----一人服务----->
 <section class="one-service">
 <p>请选择服务人数及时间</p>
-<ul class="house-area" id="staff">
+<ul class="house-area" id="staff_house">
 </ul>
 </section>
 <p>
@@ -51,16 +54,18 @@
 <span>${TASK_GOODS.wWDesc}</span>
 <div class="clean"></div>
 <div class="choose-next">
-<a class="tab-bar-btn"  data-service="家庭保洁" href="登陆.html" >下一步</a>
+<a class="tab-bar-btn"  data-service="家庭保洁" href="javascript:void" onClick="onSubmit()">下一步</a>
 </div>
 </div>
 </div>
 </div>
+</form>
 </body>
 <script type="text/javascript">
 	$(function(){
 		$('#item0').css("background","#00cded");
 		$('#itemFont0').css("color","#fff");
+		
 	})
 	
 	function setArea(id, itemId) {
@@ -75,14 +80,34 @@
 		}
 		$("#itemId").val=itemId;
 		$.ajax({
-			  url: "/getStaff/" + itemId + ".json",
+			  url: "${pageContext.request.contextPath}/getStaff/" + itemId + ".json",
 			  success:function(data) {
 				  if(data != 0) {
-					$("#staff").children("li").remove();
-				  	$("#staff").append(data);
+					$("#staff_house").children("li").remove();
+				  	$("#staff_house").append(data);
+				  	$('#staff0').css("background","#00cded");
+					$('#staffFont0').css("color","#fff");
 				  }
 			  }
 			});
+	}
+	
+	function setStaff(id, staffsize, itemId) {
+		for(var i = 0; i < staffsize; i++) {
+			if(id == i) {
+				$('#staff' +i).css("background","#00cded");
+				$('#staffFont' +i).css("color","#fff");
+			} else {
+				$('#staff' +i).css("background","#fff");
+				$('#staffFont' +i).css("color","#000");
+			}
+		}
+		$("#itemId").val=itemId;
+	}
+	
+	function onSubmit() {
+		alert("submit");
+		document.getElementById('buyForm').submit();
 	}
 </script>
 </html>

@@ -71,9 +71,11 @@ public class GoodsController {
 		}
 		List<WorkerStaffDO> workerStaffs = (List<WorkerStaffDO>) result.getModel(ResultSupport.FIRST_MODEL_KEY);
 		String line = "";
+		int index = 0;
 		for(WorkerStaffDO workerStaff : workerStaffs) {
 			System.out.println(line);
-			line += "<li><a><span>"+workerStaff.getwWsStaffCount()+"人"+workerStaff.getwWsHours()+"小时</span></a></li>";
+			line += "<li id=\"staff" + index +"\"><a href=\"javascript:void\" onClick=\"setStaff(" + index + ", " + workerStaffs.size() + "," + workerStaff.getId() + ")\"><span id=\"staffFont" + index + "\">"+workerStaff.getwWsStaffCount()+"人"+workerStaff.getwWsHours()+"小时</span></a></li>";
+			index++;
 		}
 		mav.addObject("JSON_DATA", line);
 		return mav;
@@ -82,13 +84,11 @@ public class GoodsController {
 	@RequestMapping(value = "/buyTask.html", method = RequestMethod.POST)
 	public ModelAndView buyTask(ModelAndView mav, WorkerTaskDO workerTaskDO, HttpServletRequest request) {
 		request.getSession().setAttribute("TASK_INFO", workerTaskDO);
-		return new ModelAndView("redirect:/order/contacts.html");
+		return new ModelAndView("redirect:/reserve.html");
 	}
-	
-	
-	
+
 	@RequestMapping(value = "/contacts.html", method = RequestMethod.GET)
-	public ModelAndView serviceContacts(ModelAndView mav, HttpServletRequest request) {
+	public ModelAndView contacts(ModelAndView mav, HttpServletRequest request) {
 		
 		Integer memberId = (Integer) request.getSession().getAttribute("MEMBER_ID");
 		ResultDO resultDO = memberService.get(memberId);
@@ -113,7 +113,7 @@ public class GoodsController {
 	}
 	
 	@RequestMapping(value = "/contacts.html", method = RequestMethod.POST)
-	public ModelAndView serviceContacts(ModelAndView mav, ContactDO contactDO, HttpServletRequest request) {
+	public ModelAndView contacts(ModelAndView mav, ContactDO contactDO, HttpServletRequest request) {
 		
 		if(!StringUtil.isGreatOne(contactDO.getId())) {
 			Integer memberId = (Integer) request.getSession().getAttribute("MEMBER_ID");
