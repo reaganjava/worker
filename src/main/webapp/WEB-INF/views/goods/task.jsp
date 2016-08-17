@@ -32,14 +32,14 @@
 <!---选择建筑面积---->
 <section class="choose-area">
 <p>请选择房屋面积</p>
-<input type="hidden" name="id" value="${TASK_GOODS.id}"/>
+<input type="hidden" name="workerTaskDO.id" value="${TASK_GOODS.id}"/>
 <ul class="house-area">
 <c:forEach items="${TASK_GOODS.workerItems}" var="workerItem" varStatus="status">
 <li  id="item${status.index}"><a href="javascript:void" onClick="setArea(${status.index}, ${workerItem.id})"><span id="itemFont${status.index}">${workerItem.wWiItem}<sup>2</sup></span><i></i></a></li>
 </c:forEach>
 </ul>
-<input type="hidden" name="itemId" id="itemId"/>
-<input type="hidden" name="staffId" id="staffId"/>
+<input type="hidden" name="workerTaskDO.itemId" id="itemId"/>
+<input type="hidden" name="workerTaskDO.staffId" id="staffId"/>
 </section>
 <div class="clean"></div>
 <!-----一人服务----->
@@ -78,7 +78,7 @@
 				$('#itemFont' +i).css("color","#000");
 			}
 		}
-		$("#itemId").val=itemId;
+		$("#itemId").val(itemId);
 		$.ajax({
 			  url: "${pageContext.request.contextPath}/getStaff/" + itemId + ".json",
 			  success:function(data) {
@@ -92,7 +92,7 @@
 			});
 	}
 	
-	function setStaff(id, staffsize, itemId) {
+	function setStaff(id, staffsize, staffId) {
 		for(var i = 0; i < staffsize; i++) {
 			if(id == i) {
 				$('#staff' +i).css("background","#00cded");
@@ -102,11 +102,10 @@
 				$('#staffFont' +i).css("color","#000");
 			}
 		}
-		$("#itemId").val=itemId;
+		$("#staffId").val(staffId);
 	}
 	
 	function onSubmit() {
-		alert("submit");
 		document.getElementById('buyForm').submit();
 	}
 </script>

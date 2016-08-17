@@ -84,7 +84,8 @@ public class GoodsController {
 	@RequestMapping(value = "/buyTask.html", method = RequestMethod.POST)
 	public ModelAndView buyTask(ModelAndView mav, WorkerTaskDO workerTaskDO, HttpServletRequest request) {
 		request.getSession().setAttribute("TASK_INFO", workerTaskDO);
-		return new ModelAndView("redirect:/reserve.html");
+		mav.setViewName("goods/reserver");
+		return mav;
 	}
 
 	@RequestMapping(value = "/contacts.html", method = RequestMethod.GET)
