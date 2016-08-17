@@ -16,6 +16,7 @@ import com.umbrella.worker.dto.MembersDO;
 import com.umbrella.worker.dto.OrderDO;
 import com.umbrella.worker.dto.OrderDetailDO;
 import com.umbrella.worker.dto.OrderTaskDO;
+import com.umbrella.worker.dto.WorkerItemDO;
 import com.umbrella.worker.dto.WorkerStaffDO;
 import com.umbrella.worker.dto.WorkerTaskDO;
 import com.umbrella.worker.result.ResultDO;
@@ -50,9 +51,13 @@ public class GoodsController {
 		}
 		
 		result = workerService.get(id);
-		System.out.println(result);
+		
 		if(result.isSuccess()) {
-			mav.addObject("TASK_GOODS", result.getModel(ResultSupport.FIRST_MODEL_KEY));
+			WorkerTaskDO workerTaskDO = (WorkerTaskDO) result.getModel(ResultSupport.FIRST_MODEL_KEY);
+			mav.addObject("TASK_GOODS", workerTaskDO);
+			WorkerItemDO workerItemDO = workerTaskDO.getWorkerItems().get(0);
+			mav.addObject("WORKER_ITEM_ID", workerItemDO.getId());
+			mav.addObject("WORKER_STAFF_ID", workerItemDO.getWorkerStaffs().get(0).getId());
 			mav.setViewName("goods/task");
 		} else {
 			mav.setViewName("error");
@@ -83,6 +88,7 @@ public class GoodsController {
 	
 	@RequestMapping(value = "/buyTask.html", method = RequestMethod.POST)
 	public ModelAndView buyTask(ModelAndView mav, WorkerTaskDO workerTaskDO, HttpServletRequest request) {
+		System.out.println(workerTaskDO);
 		request.getSession().setAttribute("TASK_INFO", workerTaskDO);
 		mav.setViewName("goods/reserver");
 		return mav;

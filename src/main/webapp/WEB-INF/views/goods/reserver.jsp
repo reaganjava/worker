@@ -19,7 +19,7 @@
 <div class="container">
 <nav class="navbar">
 <ul>
-<li><a href="${pageContext.request.contextPath}/task.html"><img src="${pageContext.request.contextPath}/images/left.png"/></a></li>
+<li><a href="${pageContext.request.contextPath}/task.html"><img src="${pageContext.request.contextPath}//images/left.png"/></a></li>
 <li><span>预定临时保洁</span></li>
 <li></li>
 </ul>
@@ -48,7 +48,7 @@
 <a class="tab-bar-btn"  data-service="家庭保洁" href="确认订单.html" >确定</a>
 </div>
 <!--弹窗 begin-->
-<div class="date-pop-ups" style=" ">
+<div class="date-pop-ups" style="display:none">
 <form name="f-date">
 <input type="radio" name="date" value="d-1">8 月 8日（今天）<br>
 <input type="radio" name="date" value="d-2">8 月 9日（明天）<br>
@@ -59,7 +59,7 @@
 <input type="radio" name="date" value="d-7">8月14日（周日）<br>
 </form>
 </div>
-<div class=" time-pop-ups" style="">
+<div class=" time-pop-ups" style="display:none">
 <form class="f-time">
 <input type="radio" name="time" value="t-1">13:30<br>
 <input type="radio" name="time" value="t-2">14:00<br>

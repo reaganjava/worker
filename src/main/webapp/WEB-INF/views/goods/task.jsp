@@ -65,7 +65,19 @@
 	$(function(){
 		$('#item0').css("background","#00cded");
 		$('#itemFont0').css("color","#fff");
-		
+		$.ajax({
+			  url: "${pageContext.request.contextPath}/getStaff/${WORKER_ITEM_ID}.json",
+			  success:function(data) {
+				  if(data != 0) {
+					$("#staff_house").children("li").remove();
+				  	$("#staff_house").append(data);
+				  	$('#staff0').css("background","#00cded");
+					$('#staffFont0').css("color","#fff");
+				  }
+			  }
+			});
+		$("#itemId").val(${WORKER_ITEM_ID});
+		$("#staffId").val(${WORKER_STAFF_ID});
 	})
 	
 	function setArea(id, itemId) {
