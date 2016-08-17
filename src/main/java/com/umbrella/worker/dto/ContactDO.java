@@ -5,7 +5,7 @@ public class ContactDO extends BaseDO {
     private Integer id;
     
     
-    private Integer memberId;
+    private Integer wCMembersId;
 
    
     private MembersDO membersDO;
@@ -38,14 +38,13 @@ public class ContactDO extends BaseDO {
 		this.id = id;
 	}
 
-
-	public Integer getMemberId() {
-		return memberId;
+	public Integer getwCMembersId() {
+		return wCMembersId;
 	}
 
 
-	public void setMemberId(Integer memberId) {
-		this.memberId = memberId;
+	public void setwCMembersId(Integer wCMembersId) {
+		this.wCMembersId = wCMembersId;
 	}
 
 

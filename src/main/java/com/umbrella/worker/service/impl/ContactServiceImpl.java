@@ -39,6 +39,7 @@ public class ContactServiceImpl  extends BaseServiceImpl implements IContactServ
 		
 		contact.setDatalevel(1);
 		contact.setStatus(1);
+		contact.setModifiAuthor(contact.getCreateAuthor());
 		contact.setCreateTime(Calendar.getInstance().getTime());
 		contact.setModifiTime(Calendar.getInstance().getTime());
 		
@@ -162,7 +163,13 @@ public class ContactServiceImpl  extends BaseServiceImpl implements IContactServ
 		WContactExample example = new WContactExample();
 		WContactExample.Criteria c = example.createCriteria();
 		
+		if(StringUtil.isGreatOne(contactQuery.getMemberId())) {
+			c.andWCMembersIdEqualTo(contactQuery.getMemberId());
+		}
 		
+		if(StringUtil.isGreatOne(contactQuery.getIsDefault())) {
+			c.andWCDefaultEqualTo(contactQuery.getIsDefault());
+		}
 		
 		if(StringUtil.isNotEmpty(contactQuery.getOrderByClause())) {	
 			example.setOrderByClause(" " + contactQuery.getOrderByClause() + " " + contactQuery.getSort());
@@ -184,14 +191,8 @@ public class ContactServiceImpl  extends BaseServiceImpl implements IContactServ
 		
 		List<ContactDO> contactList = getContactDOList(list);
 		
-		if(contactList.size() > 0) {
-			result.setModel(ResultSupport.FIRST_MODEL_KEY, contactList);
-		} else {
-			result.setSuccess(false);
-	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
-	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
-	        return result;
-		}
+		result.setModel(ResultSupport.FIRST_MODEL_KEY, contactList);
+		
 		return result;
 	}
 	

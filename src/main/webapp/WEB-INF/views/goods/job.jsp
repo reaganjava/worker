@@ -17,7 +17,7 @@
 </head>
 
 <body>
-<form action="${pageContext.request.contextPath}/buyTask.html" method="post" id="buyForm">
+<form action="${pageContext.request.contextPath}/goods/buyJob.html" method="post" id="buyForm">
 <div class="xsh">
 <div class="page-all">
 <div class="container">
@@ -66,7 +66,7 @@
 		$('#item0').css("background","#00cded");
 		$('#itemFont0').css("color","#fff");
 		$.ajax({
-			  url: "${pageContext.request.contextPath}/getStaff/${WORKER_ITEM_ID}.json",
+			  url: "${pageContext.request.contextPath}/goods/getStaff/${WORKER_ITEM_ID}.json",
 			  success:function(data) {
 				  if(data != 0) {
 					$("#staff_house").children("li").remove();
@@ -92,7 +92,7 @@
 		}
 		$("#itemId").val(itemId);
 		$.ajax({
-			  url: "${pageContext.request.contextPath}/getStaff/" + itemId + ".json",
+			  url: "${pageContext.request.contextPath}/goods/getStaff/" + itemId + ".json",
 			  success:function(data) {
 				  if(data != 0) {
 					$("#staff_house").children("li").remove();

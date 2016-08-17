@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import com.umbrella.worker.dao.WCertificoreMapper;
 import com.umbrella.worker.dao.WStaffMapper;
 import com.umbrella.worker.dao.WSupplierMapper;
-import com.umbrella.worker.dto.AdminDO;
 import com.umbrella.worker.dto.CertificoreDO;
 import com.umbrella.worker.dto.StaffDO;
 import com.umbrella.worker.entity.WCertificore;

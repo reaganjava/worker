@@ -19,6 +19,7 @@ import com.umbrella.worker.dto.OrderTaskDO;
 import com.umbrella.worker.dto.WorkerItemDO;
 import com.umbrella.worker.dto.WorkerStaffDO;
 import com.umbrella.worker.dto.WorkerTaskDO;
+import com.umbrella.worker.query.ContactQuery;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.IContactService;
@@ -28,10 +29,10 @@ import com.umbrella.worker.service.IWorkerService;
 import com.umbrella.worker.util.StringUtil;
 
 @Controller
+@RequestMapping(value = "/goods")
 public class GoodsController {
 
-	@Autowired
-	private IMemberService memberService;
+	
 	@Autowired
 	IWorkerService workerService;
 	@Autowired
@@ -39,8 +40,9 @@ public class GoodsController {
 	@Autowired
 	private IContactService contactService;
 	
-	@RequestMapping(value = "/getTask/{id}.html", method = RequestMethod.GET)
-	public ModelAndView getTask(ModelAndView mav, 
+	
+	@RequestMapping(value = "/job/{id}.html", method = RequestMethod.GET)
+	public ModelAndView job(ModelAndView mav, 
 			@PathVariable(value="id") Integer id,
 			HttpServletRequest request) {
 		
@@ -58,7 +60,7 @@ public class GoodsController {
 			WorkerItemDO workerItemDO = workerTaskDO.getWorkerItems().get(0);
 			mav.addObject("WORKER_ITEM_ID", workerItemDO.getId());
 			mav.addObject("WORKER_STAFF_ID", workerItemDO.getWorkerStaffs().get(0).getId());
-			mav.setViewName("goods/task");
+			mav.setViewName("goods/job");
 		} else {
 			mav.setViewName("error");
 		}
@@ -86,57 +88,26 @@ public class GoodsController {
 		return mav;
 	}
 	
-	@RequestMapping(value = "/buyTask.html", method = RequestMethod.POST)
-	public ModelAndView buyTask(ModelAndView mav, WorkerTaskDO workerTaskDO, HttpServletRequest request) {
+	@RequestMapping(value = "/buyJob.html", method = RequestMethod.POST)
+	public ModelAndView buyJob(ModelAndView mav, WorkerTaskDO workerTaskDO, HttpServletRequest request) {
 		System.out.println(workerTaskDO);
 		request.getSession().setAttribute("TASK_INFO", workerTaskDO);
-		mav.setViewName("goods/reserver");
-		return mav;
-	}
-
-	@RequestMapping(value = "/contacts.html", method = RequestMethod.GET)
-	public ModelAndView contacts(ModelAndView mav, HttpServletRequest request) {
-		
 		Integer memberId = (Integer) request.getSession().getAttribute("MEMBER_ID");
-		ResultDO resultDO = memberService.get(memberId);
-
-		if(resultDO.isSuccess()) {
-			MembersDO membersDO = (MembersDO) resultDO.getModel(ResultSupport.FIRST_MODEL_KEY);
-			List<ContactDO> contactList = membersDO.getContacts();
-			if(contactList.size() > 0) {
-				for(ContactDO contact : contactList) {
-					if(contact.getwCDefault() == 1) {
-						mav.addObject("CONTACT_INFO", contact);
-						break;
-					}
-				}
- 			}
-			mav.setViewName("contact");
+		ContactQuery query = new ContactQuery();
+		query.setMemberId(memberId);
+		query.setIsDefault(1);
+		ResultDO result = contactService.list(query);
+		if(result.isSuccess()) {
+			List<ContactDO> list = (List<ContactDO>) result.getModel(ResultSupport.FIRST_MODEL_KEY);
+			System.out.println(list.get(0));
+			mav.addObject("CONTACT_DEFAULT", list.get(0));
+			mav.setViewName("goods/reserver");
 		} else {
 			mav.setViewName("error");
-			return mav;
 		}
 		return mav;
 	}
-	
-	@RequestMapping(value = "/contacts.html", method = RequestMethod.POST)
-	public ModelAndView contacts(ModelAndView mav, ContactDO contactDO, HttpServletRequest request) {
-		
-		if(!StringUtil.isGreatOne(contactDO.getId())) {
-			Integer memberId = (Integer) request.getSession().getAttribute("MEMBER_ID");
-			String memberMobile = (String) request.getSession().getAttribute("MEMBER_MOBILE");
-			contactDO.setMemberId(memberId);
-			contactDO.setwCDefault(1);
-			contactDO.setCreateAuthor(memberMobile);
-			ResultDO result = contactService.create(contactDO);
-			if(!result.isSuccess()) {
-				mav.setViewName("error");
-			}
-		}
-		request.getSession().setAttribute("CONTACT_INFO", contactDO);
-		mav.setViewName("getOrder");
-		return mav;
-	}
+
 	
 	@RequestMapping(value = "/getOrder.html", method = RequestMethod.POST)
 	public ModelAndView getOrder(ModelAndView mav, 

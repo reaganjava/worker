@@ -16,7 +16,7 @@
 
 </head>
 <body>
-<form action="/members/register.html" method="post">
+<form action="${pageContext.request.contextPath}/members/register.html" method="post">
 <div class="xsh">
 <div class="page-all">
 <div class="container">

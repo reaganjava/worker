@@ -1,5 +1,7 @@
 package com.umbrella.worker.web.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,18 +11,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.umbrella.worker.dto.ContactDO;
 import com.umbrella.worker.dto.MemberDetailDO;
 import com.umbrella.worker.dto.MembersDO;
 import com.umbrella.worker.dto.SmsCodeDO;
+import com.umbrella.worker.query.ContactQuery;
 import com.umbrella.worker.query.MembersQuery;
 import com.umbrella.worker.query.SmsCodeQuery;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
+import com.umbrella.worker.service.IContactService;
 import com.umbrella.worker.service.IMemberService;
 import com.umbrella.worker.service.ISmsService;
 import com.umbrella.worker.util.Constant;
 import com.umbrella.worker.util.GetHttpMemberInfo;
 import com.umbrella.worker.util.MD5;
+import com.umbrella.worker.util.StringUtil;
 
 @Controller
 @RequestMapping(value = "/members")
@@ -31,6 +37,9 @@ public class MembersController {
 	
 	@Autowired
 	private ISmsService smsService;
+	
+	@Autowired
+	private IContactService contactService;
 
 	@RequestMapping(value = "/register.html", method = RequestMethod.GET)
 	public ModelAndView register(ModelAndView mav, HttpServletRequest request) {
@@ -44,7 +53,7 @@ public class MembersController {
 	public ModelAndView register(ModelAndView mav, 
 			MembersDO membersDO, HttpServletRequest request) {
 		
-		String backPage = (String) request.getSession().getAttribute("BACK_PAGE");
+		//String backPage = (String) request.getSession().getAttribute("BACK_PAGE");
 		
 		String registerIP = GetHttpMemberInfo.getIpAddr(request);
 		String regDevice = "Mobile";
@@ -69,8 +78,7 @@ public class MembersController {
 		ResultDO resultDO = memberService.create(membersDO);
 		
 		if(resultDO.isSuccess()) {
-			request.getSession().setAttribute("MEMBER_ID", resultDO.getModel(ResultSupport.FIRST_MODEL_KEY));
-			mav.setViewName(backPage);
+			return new ModelAndView("redirect:/members/login.html");
 		} else {
 			mav.setViewName("errer");
 		}
@@ -99,12 +107,13 @@ public class MembersController {
 		
 		membersDO.setwMPassword(md5Pwd);
 		membersDO.setwMLoginIp(loginIP);
-		
+		System.out.println(membersDO.getwMMobile() + ":" + membersDO.getwMPassword());
 		ResultDO resultDO = memberService.validate(membersDO);
-		
+		System.out.println(resultDO);
 		if(resultDO.isSuccess()) {
 			membersDO = (MembersDO) resultDO.getModel(ResultSupport.FIRST_MODEL_KEY);
 			request.getSession().setAttribute("MEMBER_ID", membersDO.getId());
+			request.getSession().setAttribute("MEMBER_MOBILE", membersDO.getwMMobile());
 			mav.setViewName(backPage);
 		} else {
 			mav.setViewName("error");
@@ -234,6 +243,63 @@ public class MembersController {
 			mav.addObject("JSON_DATA", 0);
 		}
 		
+		return mav;
+	}
+	
+	@RequestMapping(value = "/contacts.html", method = RequestMethod.GET)
+	public ModelAndView contacts(ModelAndView mav, HttpServletRequest request) {
+		
+		Integer memberId = (Integer) request.getSession().getAttribute("MEMBER_ID");
+		ContactQuery query = new ContactQuery();
+		query.setMemberId(memberId);
+		ResultDO resultDO = contactService.list(query);
+		System.out.println(resultDO);
+		if(resultDO.isSuccess()) {
+			mav.addObject("CONTACT_LIST", resultDO.getModel(ResultSupport.FIRST_MODEL_KEY));
+			mav.setViewName("members/contacts");
+		} else {
+			mav.setViewName("error");
+			return mav;
+		}
+		return mav;
+	}
+	
+	@RequestMapping(value = "/addContact.html", method = RequestMethod.GET)
+	public ModelAndView addContact(ModelAndView mav, HttpServletRequest request) {
+		mav.setViewName("members/addContact");
+		return mav;
+	}
+	
+	@RequestMapping(value = "/addContact.html", method = RequestMethod.POST)
+	public ModelAndView contacts(ModelAndView mav, ContactDO contactDO, HttpServletRequest request) {
+		
+		Integer memberId = (Integer) request.getSession().getAttribute("MEMBER_ID");
+		String memberMobile = (String) request.getSession().getAttribute("MEMBER_MOBILE");
+		contactDO.setwCMembersId(memberId);
+		contactDO.setwCDefault(1);
+		contactDO.setCreateAuthor(memberMobile);
+		ResultDO result = contactService.create(contactDO);
+		if(result.isSuccess()) {
+			request.getSession().setAttribute("CONTACT_INFO", contactDO);
+			return new ModelAndView("redirect:/members/contacts.html");
+		} else {
+			mav.setViewName("error");
+		}
+		
+		return mav;
+	}
+	
+	@RequestMapping(value = "/default/{id}.json", method = RequestMethod.GET)
+	public ModelAndView ajaxContactDefault(ModelAndView mav, 
+			@PathVariable(value="id") Integer id,
+			HttpServletRequest request) {
+		ResultDO result = contactService.get(id);
+		if(result.isSuccess()) {
+			request.getSession().setAttribute("CONTACT_DEFAULT", result.getModel(ResultSupport.FIRST_MODEL_KEY));
+			mav.addObject("JAVA_DATA", 1);
+		} else {
+			mav.addObject("JAVA_DATA", 0);
+		}
 		return mav;
 	}
 }

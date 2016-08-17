@@ -28,31 +28,24 @@
 <div class="choose-add">
 <div class="scroll">
 <div class="address-detail">
+<c:forEach items="${CONTACT_LIST}" var="contact">
 <ul>
 <li>
 <div class="choose-con1">
-<span>5号楼 3-5</span>
-<span>九龙坡区兴胜路特3号 佳新花园</span>
-<span>李玲 13883782909</span>
+<input name="id" value="${contact.id}" type="hidden" />
+<span>${contact.wCAddress}</span>
+<span>${contact.wCContact}</span>
+<span>${contact.wCTelephone}</span>
 </div>
 <div class="choose-con2">重庆</div>
 </li>
 </ul>
-<ul>
-<li class="choose-2">
-<div class="choose-con1">
-<span>9号楼 3-5</span>
-<span>九龙坡区兴胜路15号 保利花半里</span>
-<span>唐经晶 13585785909</span>
-</div>
-<div class="choose-con2">重庆</div>
-</li>
-</ul>
+</c:forEach>
 </div>
 
 <div class="add-ads" style=" width:100%;">
 <div class="a-ads">
-<a href="添加地址.html"><img  src="${pageContext.request.contextPath}/images/add-icon.png"/><span>添加服务地址</span></a>
+<a href="${pageContext.request.contextPath}/members/addContact.html"><img  src="${pageContext.request.contextPath}/images/add-icon.png"/><span>添加服务地址</span></a>
 </div>
 </div>
 </div>

@@ -12,9 +12,10 @@
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/wei-index.css" />
 <link rel="stylesheet" type="text/css"  href="${pageContext.request.contextPath}/css/out-use.css"/>
 <title>登陆</title>
+
 </head>
 <body>
-<from action="/members/login.html" method="POST">
+
 <div class="xsh">
 <div class="page-all">
 <div class="container">
@@ -25,6 +26,7 @@
 <li></li>
 </ul>
 </nav>
+<form id="loginForm" action="${pageContext.request.contextPath}/members/login.html" method="POST">
 <!---导航结束--->
 <div>
 <div class="xsh_cells vux-no-group-title"> 
@@ -48,12 +50,19 @@
 <i class="xsh_icon xsh_icon_success" style="display: none;"></i> 
 <span class="nosend">显示密码</span></div></div> 
 </div></div>
-<div class="dn"><a class="go-register" href="/members/register.html"> 立即注册</a><a href="忘记密码.html">忘记密码？</a></div>
+</form>
+<div class="dn"><a class="go-register" href="${pageContext.request.contextPath}/members/register.html"> 立即注册</a><a href="忘记密码.html">忘记密码？</a></div>
 <!--表单结束-->
-<div class="register-btn"><a  href="临时保洁-预订页面.html"><button class="rg-btn">立即登陆</button></a></div>
+<div class="register-btn"><a  href="javascript:void;" onClick="onLogin()"><button class="rg-btn">立即登陆</button></a></div>
 </div>
 </div>
 </div>
-</from>
+
 </body>
+<script type="text/javascript">
+	function onLogin() {
+		alert("login");
+		document.getElementById("loginForm").submit();
+	}
+</script>
 </html>
