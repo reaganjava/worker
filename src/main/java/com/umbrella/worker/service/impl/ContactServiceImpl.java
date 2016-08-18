@@ -90,6 +90,70 @@ public class ContactServiceImpl  extends BaseServiceImpl implements IContactServ
 
 		return result;
 	}
+	
+	@Override
+	public ResultDO setDefault(int id) {
+		
+		WContact contact = new WContact();
+		ResultSupport result = new ResultSupport();
+		
+		contact.setModifiTime(Calendar.getInstance().getTime());
+		int recordNum = -1;
+		WContactExample example = new WContactExample();
+		example.createCriteria().andWCDefaultEqualTo(1);
+		contact.setwCDefault(0);
+		try {
+			recordNum = contactMapper.updateByExampleSelective(contact, example);
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			logger.error("[obj:contact][setwCDefault(0)][msg:" + e.getMessage()
+					+ "]");
+			return result;
+		}
+		
+		WContact defaultContact = new WContact();
+		defaultContact.setModifiTime(Calendar.getInstance().getTime());
+		defaultContact.setId(id);
+		defaultContact.setwCDefault(1);
+		recordNum = -1;
+		try {
+			recordNum = contactMapper.updateByPrimaryKeySelective(defaultContact);
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			logger.error("[obj:contact][opt:modifi][msg:" + e.getMessage()
+					+ "]");
+			return result;
+		}
+		if (recordNum < 1) {
+			result.setSuccess(false);
+		}
+		
+		try {
+			defaultContact = contactMapper.selectByPrimaryKey(id);
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			logger.error("[obj:contact][opt:modifi][msg:" + e.getMessage()
+					+ "]");
+			return result;
+		}
+		
+		ContactDO contactDO = getContactDO(contact);
+		if(contactDO != null) {
+			result.setModel(ResultSupport.FIRST_MODEL_KEY, contactDO);
+		} else {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			return result;
+		}
+		return result;
+	}
 
 	@Override
 	public ResultDO remove(int contactId) {

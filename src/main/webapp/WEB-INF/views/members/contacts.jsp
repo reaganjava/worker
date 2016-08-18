@@ -11,6 +11,8 @@
 　　<![endif]-->
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/wei-index.css" />
 <link rel="stylesheet" type="text/css"  href="${pageContext.request.contextPath}/css/out-use.css"/>
+<script type="text/javascript" src="${pageContext.request.contextPath}/lib/jquery/1.9.1/jquery.min.js?v=0.1"></script> 
+<script type="text/javascript" src="${pageContext.request.contextPath}/lib/icheck/jquery.icheck.min.js?v=0.1"></script> 
 <title>地址管理</title>
 </head>
 <div class="xsh">
@@ -18,7 +20,7 @@
 <div class="container">
 <nav class="navbar">
 <ul>
-<li><a href="临时保洁-预订页面.html"><img src="${pageContext.request.contextPath}/images/left.png"/></a></li>
+<li><a href="${pageContext.request.contextPath}/goods/buyJob/${TASK_INFO.id}/${TASK_INFO.itemId}/${TASK_INFO.staffId}.html"><img src="${pageContext.request.contextPath}/images/left.png"/></a></li>
 <li><span>服务地址</span></li>
 <li></li>
 </ul>
@@ -30,8 +32,13 @@
 <div class="address-detail">
 <c:forEach items="${CONTACT_LIST}" var="contact">
 <ul>
-<li>
-<div class="choose-con1">
+<c:if test="${contact.wCDefault == 1}">
+<li onClick="onDefault(${contact.id})" id="c${contact.id}">
+</c:if>
+<c:if test="${contact.wCDefault == 0}">
+<li class="choose-2" onClick="onDefault(${contact.id})" id="c${contact.id}">
+</c:if>
+<div class="choose-con1" >
 <input name="id" value="${contact.id}" type="hidden" />
 <span>${contact.wCAddress}</span>
 <span>${contact.wCContact}</span>
@@ -51,10 +58,23 @@
 </div>
 </div>
 </section>
-
 </div>
 </div>
 </div>
 <body>
 </body>
+<script type="text/javascript">
+	function onDefault(id) {
+		$.ajax({
+			  url: "${pageContext.request.contextPath}/members/default/" + id + ".json",
+			  success:function(data) {
+				  if(data != 0) {
+					  
+					 	$('li').addClass('choose-2');
+					 	$('#c' + id).removeClass('choose-2');
+				  }
+			  }
+			});
+	}
+</script>
 </html>

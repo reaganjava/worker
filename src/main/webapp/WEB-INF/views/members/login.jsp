@@ -61,7 +61,6 @@
 </body>
 <script type="text/javascript">
 	function onLogin() {
-		alert("login");
 		document.getElementById("loginForm").submit();
 	}
 </script>

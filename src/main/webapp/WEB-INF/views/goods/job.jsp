@@ -24,7 +24,7 @@
 
 <nav class="navbar">
 <ul>
-<li><a href="首页.html"><img src="${pageContext.request.contextPath}/images/left.png"/></a></li>
+<li><a href="javascript:void;"><img src="${pageContext.request.contextPath}/images/left.png"/></a></li>
 <li><span>选择面积</span></li>
 <li></li>
 </ul>
@@ -32,14 +32,12 @@
 <!---选择建筑面积---->
 <section class="choose-area">
 <p>请选择房屋面积</p>
-<input type="hidden" name="workerTaskDO.id" value="${TASK_GOODS.id}"/>
 <ul class="house-area">
 <c:forEach items="${TASK_GOODS.workerItems}" var="workerItem" varStatus="status">
 <li  id="item${status.index}"><a href="javascript:void" onClick="setArea(${status.index}, ${workerItem.id})"><span id="itemFont${status.index}">${workerItem.wWiItem}<sup>2</sup></span><i></i></a></li>
 </c:forEach>
 </ul>
-<input type="hidden" name="workerTaskDO.itemId" id="itemId"/>
-<input type="hidden" name="workerTaskDO.staffId" id="staffId"/>
+
 </section>
 <div class="clean"></div>
 <!-----一人服务----->
@@ -62,6 +60,9 @@
 </form>
 </body>
 <script type="text/javascript">
+	var taskId = ${TASK_GOODS.id};
+	var itemId = 0;
+	var staffId = 0;
 	$(function(){
 		$('#item0').css("background","#00cded");
 		$('#itemFont0').css("color","#fff");
@@ -76,8 +77,8 @@
 				  }
 			  }
 			});
-		$("#itemId").val(${WORKER_ITEM_ID});
-		$("#staffId").val(${WORKER_STAFF_ID});
+		itemId = ${WORKER_ITEM_ID};
+		staffId = ${WORKER_STAFF_ID};
 	})
 	
 	function setArea(id, itemId) {
@@ -90,7 +91,7 @@
 				$('#itemFont' +i).css("color","#000");
 			}
 		}
-		$("#itemId").val(itemId);
+		itemId = ${WORKER_ITEM_ID};
 		$.ajax({
 			  url: "${pageContext.request.contextPath}/goods/getStaff/" + itemId + ".json",
 			  success:function(data) {
@@ -114,11 +115,11 @@
 				$('#staffFont' +i).css("color","#000");
 			}
 		}
-		$("#staffId").val(staffId);
+		staffId = ${WORKER_STAFF_ID};
 	}
 	
 	function onSubmit() {
-		document.getElementById('buyForm').submit();
+		window.location.href = "${pageContext.request.contextPath}/goods/buyJob/" + taskId +"/" + itemId + "/" + staffId +".html";
 	}
 </script>
 </html>

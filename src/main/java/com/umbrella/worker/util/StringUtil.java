@@ -25,4 +25,11 @@ public class StringUtil {
 		return false;
 	}
 	
+	public static String getReferer(String referer) {
+		referer = referer.replace("http://", "");
+		int start = referer.indexOf("/");
+		referer = referer.substring(start + 1);
+		return referer.replace(".html", "");
+	}
+	
 }

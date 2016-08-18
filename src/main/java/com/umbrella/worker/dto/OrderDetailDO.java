@@ -38,6 +38,12 @@ public class OrderDetailDO extends BaseDO {
 
     
     private Date wOSubscribe;
+    
+    
+    private String subDate;
+    
+    
+    private String subTime;
 
    
     private OrderTaskDO orderTaskDO;
@@ -169,6 +175,26 @@ public class OrderDetailDO extends BaseDO {
 
 	public void setwOSubscribe(Date wOSubscribe) {
 		this.wOSubscribe = wOSubscribe;
+	}
+
+
+	public String getSubDate() {
+		return subDate;
+	}
+
+
+	public void setSubDate(String subDate) {
+		this.subDate = subDate;
+	}
+
+
+	public String getSubTime() {
+		return subTime;
+	}
+
+
+	public void setSubTime(String subTime) {
+		this.subTime = subTime;
 	}
 
 }

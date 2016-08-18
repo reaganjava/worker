@@ -1,5 +1,10 @@
 package com.umbrella.worker.web.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,8 +40,7 @@ public class GoodsController {
 	
 	@Autowired
 	IWorkerService workerService;
-	@Autowired
-	private IOrderService orderService;
+	
 	@Autowired
 	private IContactService contactService;
 	
@@ -88,19 +92,41 @@ public class GoodsController {
 		return mav;
 	}
 	
-	@RequestMapping(value = "/buyJob.html", method = RequestMethod.POST)
-	public ModelAndView buyJob(ModelAndView mav, WorkerTaskDO workerTaskDO, HttpServletRequest request) {
-		System.out.println(workerTaskDO);
+	@RequestMapping(value = "/buyJob/{taskId}/{itemId}/{staffId}.html", method = RequestMethod.GET)
+	public ModelAndView buyJob(ModelAndView mav,
+			@PathVariable(value="taskId") Integer taskId,
+			@PathVariable(value="itemId") Integer itemId,
+			@PathVariable(value="staffId") Integer staffId,
+			HttpServletRequest request) {
+		WorkerTaskDO workerTaskDO = new WorkerTaskDO();
+		workerTaskDO.setId(taskId);
+		workerTaskDO.setItemId(itemId);
+		workerTaskDO.setStaffId(staffId);
 		request.getSession().setAttribute("TASK_INFO", workerTaskDO);
 		Integer memberId = (Integer) request.getSession().getAttribute("MEMBER_ID");
 		ContactQuery query = new ContactQuery();
 		query.setMemberId(memberId);
 		query.setIsDefault(1);
 		ResultDO result = contactService.list(query);
+		
+		long timestamp = Calendar.getInstance().getTimeInMillis();
+		List<String> weekDateList = new ArrayList<String>();
+		Date date = new Date(timestamp);
+		DateFormat dateFormat = new SimpleDateFormat("MM月dd日"); 
+		weekDateList.add(dateFormat.format(date) + "(今天)");
+		for(int day = 1; day < 6; day++) {
+			date = new Date(timestamp);
+			weekDateList.add(dateFormat.format(date));
+			timestamp = timestamp + 86400000;
+		}
+		
 		if(result.isSuccess()) {
 			List<ContactDO> list = (List<ContactDO>) result.getModel(ResultSupport.FIRST_MODEL_KEY);
-			System.out.println(list.get(0));
-			mav.addObject("CONTACT_DEFAULT", list.get(0));
+			if(list != null) {
+				mav.addObject("CONTACT_DEFAULT", list.get(0));
+			}
+			
+			mav.addObject("WEEK_DATE_LIST", weekDateList);
 			mav.setViewName("goods/reserver");
 		} else {
 			mav.setViewName("error");
@@ -109,42 +135,6 @@ public class GoodsController {
 	}
 
 	
-	@RequestMapping(value = "/getOrder.html", method = RequestMethod.POST)
-	public ModelAndView getOrder(ModelAndView mav, 
-			OrderDetailDO orderDetailDO,
-			HttpServletRequest request) {
-		
-		WorkerTaskDO workerTaskDO = (WorkerTaskDO) request.getSession().getAttribute("TASK_INFO");
-		
-		String memberMobile = (String) request.getSession().getAttribute("MEMBER_MOBILE");
-		
-		Integer memberId = (Integer) request.getSession().getAttribute("MEMBER_ID");
-		
-		
 	
-		OrderTaskDO orderTaskDO = new OrderTaskDO();
-		orderTaskDO.setCreateAuthor(memberMobile);
-		orderTaskDO.setWorkerTaskId(workerTaskDO.getId());
-		orderTaskDO.setWorkerItemId(workerTaskDO.getItemId());
-		orderTaskDO.setWorkerStaffId(workerTaskDO.getStaffId());
-		
-		OrderDO orderDO = new OrderDO();
-		
-		orderDetailDO.setOrderTaskDO(orderTaskDO);
-		orderDetailDO.setCreateAuthor(memberMobile);
-		
-		orderDO.setOrderDetailDO(orderDetailDO);
-		orderDO.setMemberId(memberId);
-		
-		ResultDO resultDO = orderService.create(orderDO);
-		
-		if(!resultDO.isSuccess()) {
-			mav.setViewName("error");
-			return mav;
-		}
-		int orderID = (int) resultDO.getModel(ResultSupport.FIRST_MODEL_KEY);
-		
-		return new ModelAndView("redirect:/payOrder/+ " + orderID + ".html");
-	}
 
 }

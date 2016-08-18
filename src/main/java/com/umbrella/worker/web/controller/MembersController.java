@@ -45,6 +45,7 @@ public class MembersController {
 	public ModelAndView register(ModelAndView mav, HttpServletRequest request) {
 		mav.setViewName("members/register");
 		String backPage = request.getHeader("Referer");
+		backPage = StringUtil.getReferer(backPage);
 		request.getSession().setAttribute("BACK_PAGE", backPage);
 		return mav;
 	}
@@ -89,6 +90,7 @@ public class MembersController {
 	public ModelAndView login(ModelAndView mav, HttpServletRequest request) {
 		mav.setViewName("members/login");
 		String backPage = request.getHeader("Referer");
+		backPage = StringUtil.getReferer(backPage);
 		request.getSession().setAttribute("BACK_PAGE", backPage);
 		return mav;
 	}
@@ -98,7 +100,7 @@ public class MembersController {
 			MembersDO membersDO, HttpServletRequest request) {
 		
 		String backPage = (String) request.getSession().getAttribute("BACK_PAGE");
-		
+		System.out.println(backPage);
 		String loginIP = GetHttpMemberInfo.getIpAddr(request);
 		
 		MD5 md5 = new MD5();
@@ -114,7 +116,11 @@ public class MembersController {
 			membersDO = (MembersDO) resultDO.getModel(ResultSupport.FIRST_MODEL_KEY);
 			request.getSession().setAttribute("MEMBER_ID", membersDO.getId());
 			request.getSession().setAttribute("MEMBER_MOBILE", membersDO.getwMMobile());
-			mav.setViewName(backPage);
+			if(backPage.equals("register")) {
+				mav.setViewName("test");
+			} else {
+				mav.setViewName(backPage);
+			}
 		} else {
 			mav.setViewName("error");
 		}
@@ -276,7 +282,6 @@ public class MembersController {
 		Integer memberId = (Integer) request.getSession().getAttribute("MEMBER_ID");
 		String memberMobile = (String) request.getSession().getAttribute("MEMBER_MOBILE");
 		contactDO.setwCMembersId(memberId);
-		contactDO.setwCDefault(1);
 		contactDO.setCreateAuthor(memberMobile);
 		ResultDO result = contactService.create(contactDO);
 		if(result.isSuccess()) {
@@ -293,7 +298,9 @@ public class MembersController {
 	public ModelAndView ajaxContactDefault(ModelAndView mav, 
 			@PathVariable(value="id") Integer id,
 			HttpServletRequest request) {
-		ResultDO result = contactService.get(id);
+		
+		ResultDO result = contactService.setDefault(id);
+		
 		if(result.isSuccess()) {
 			request.getSession().setAttribute("CONTACT_DEFAULT", result.getModel(ResultSupport.FIRST_MODEL_KEY));
 			mav.addObject("JAVA_DATA", 1);

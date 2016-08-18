@@ -22,7 +22,7 @@
 <div class="container">
 <nav class="navbar">
 <ul>
-<li><a href="登陆.html"><img src="${pageContext.request.contextPath}/images/left.png"/></a></li>
+<li><a href="${pageContext.request.contextPath}/members/login.html"><img src="${pageContext.request.contextPath}/images/left.png"/></a></li>
 <li><span>注册</span></li>
 <li></li>
 </ul>
@@ -57,7 +57,7 @@
 <!--表单结束-->
 <div class="register-btn"><button class="rg-btn">立即注册</button></div>
 <div class="agreement">点击-立即注册，即表示您同意<a style=" color:00cced;">《新生活使用协议》</a></div>
-<div class="members-quota"><img src="${pageContext.request.contextPath}/images/fire-hot.png"/>新生活前3万名会员永久享受9.9折，名额仅剩<span>21987</span>名</div>
+<div class="members-quota"><img src="${pageContext.request.contextPath}/images/fire-hot.png"/>新生活前3万名会员永久享受9.9折</div>
 </div>
 </div>
 </div>

@@ -19,7 +19,7 @@
 <div class="container">
 <nav class="navbar">
 <ul>
-<li><a href="${pageContext.request.contextPath}/task.html"><img src="${pageContext.request.contextPath}/images/left.png"/></a></li>
+<li><a href="${pageContext.request.contextPath}/goods/job.html"><img src="${pageContext.request.contextPath}/images/left.png"/></a></li>
 <li><span>预定临时保洁</span></li>
 <li></li>
 </ul>
@@ -57,13 +57,9 @@
 <!--弹窗 begin-->
 <div class="date-pop-ups" style="display:none" id="date">
 <form name="f-date">
-<input type="radio" name="date" value="d-1" onClick="getDate('8-8')">8 月 8日（今天）<br>
-<input type="radio" name="date" value="d-2" onClick="getDate('8-9')">8 月 9日（明天）<br>
-<input type="radio" name="date" value="d-3" onClick="getDate('8-10')">8月10日（周三）<br>
-<input type="radio" name="date" value="d-4" onClick="getDate('8-11')">8月11日（周四）<br>
-<input type="radio" name="date" value="d-5" onClick="getDate('8-12')">8月12日（周五）<br>
-<input type="radio" name="date" value="d-6" onClick="getDate('8-13')">8月13日（周六）<br>
-<input type="radio" name="date" value="d-7" onClick="getDate('8-14')">8月14日（周日）<br>
+<c:forEach items="${WEEK_DATE_LIST}" var="dateValue">
+<input type="radio" name="date" value="d-1" onClick="getDate('${dateValue}')">${dateValue}<br>
+</c:forEach>
 </form>
 </div>
 <div class=" time-pop-ups" style="display:none" id="time">
@@ -84,9 +80,11 @@
 <script type="text/javascript">
 	function selectDate() {
 		document.getElementById('date').style.display="inline"; 
+		document.getElementById('time').style.display="none"; 
 	}
 	
 	function selectTime() {
+		document.getElementById('date').style.display="none"; 
 		document.getElementById('time').style.display="inline"; 
 	}
 	

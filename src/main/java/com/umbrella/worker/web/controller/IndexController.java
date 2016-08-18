@@ -16,4 +16,11 @@ public class IndexController {
 		mav.setViewName("index");
 		return mav;
 	}
+	
+	@RequestMapping(value = "/test.html", method = RequestMethod.GET)
+	public ModelAndView test(ModelAndView mav, 
+			HttpServletRequest request) {
+		mav.setViewName("test");
+		return mav;
+	}
 }

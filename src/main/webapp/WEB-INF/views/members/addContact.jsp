@@ -19,7 +19,7 @@
 <div class="container">
 <nav class="navbar">
 <ul>
-<li><a href="临时保洁-预订页面.html"><img src="${pageContext.request.contextPath}/images/left.png"/></a></li>
+<li><a href="${pageContext.request.contextPath}/members/contacts.html"><img src="${pageContext.request.contextPath}/images/left.png"/></a></li>
 <li><span>添加地址</span></li>
 <li></li>
 </ul>
@@ -40,11 +40,11 @@
 																													<option value="九龙坡">九龙坡</option>
 																												</select> </div></div>
 
-<div class="xsh_cell xsh_cell_warn"> <div class="xsh_cell_hd"></div> <div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" name="wCAddress" pattern="[0-9]*" placeholder="具体地址，如3号楼 4单元 402" type="text"> </div></div>
+<div class="xsh_cell xsh_cell_warn"> <div class="xsh_cell_hd"></div> <div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" name="wCAddress" pattern="*" placeholder="具体地址，如3号楼 4单元 402" type="text"> </div></div>
 
-<div class="xsh_cell xsh_cell_warn"> <div class="xsh_cell_hd"></div> <div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" name="wCContact" pattern="[0-9]*" placeholder="联系人姓名" type="text"> </div></div>
+<div class="xsh_cell xsh_cell_warn"> <div class="xsh_cell_hd"></div> <div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" name="wCContact" pattern="*" placeholder="联系人姓名" type="text"> </div></div>
 
-<div class="xsh_cell xsh_cell_warn"> <div class="xsh_cell_hd"></div> <div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" name="wCTelephone" pattern="[0-9]*" placeholder="联系人手机号" type="text"> </div></div>
+<div class="xsh_cell xsh_cell_warn"> <div class="xsh_cell_hd"></div> <div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" name="wCTelephone" pattern="*" placeholder="联系人手机号" type="text"> </div></div>
 </div> </div>
 <!--表单结束-->
 <div class="register-btn"><button class="rg-btn" onClick="onAdd()">保存</button></div>

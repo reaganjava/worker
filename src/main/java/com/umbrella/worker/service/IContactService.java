@@ -10,6 +10,8 @@ public interface IContactService {
 	
 	public ResultDO modifi(ContactDO contactDO);
 	
+	public ResultDO setDefault(int id);
+	
 	public ResultDO remove(int contactId);
 	
 	public ResultDO get(int contactId);
