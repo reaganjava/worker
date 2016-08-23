@@ -14,6 +14,7 @@
 <title>预订页面</title>
 </head>
 <body>
+<form action="${pageContext.request.contextPath}/order/getOrder.html" method="POST" id="orderForm">
 <div class="xsh">
 <div class="page-all">
 <div class="container">
@@ -44,38 +45,41 @@
 <div class="choose-time">
 <span class="time-words">请选择服务时间</span>
 <div class="time-input">
-<a><input type="text" class="choose-date" value="8月15日（今天）" onClick="selectDate()" id="dateValue"/></a>
-<a><input type="text" class="choose-hour" value="14:00" onClick="selectTime()" id="timeValue"/></a>
+<a><input type="text" class="choose-date" value="选择日期" onClick="selectDate()" id="weekDate"/></a>
+<a><input type="text" class="choose-hour" value="选择时间" onClick="selectTime()" id="viewTime"/></a>
 </div>
 </div>
 </section>
 <!--添加时间结束-->
 <p class="remind">如果阿姨因为各种原因早到或晚到一会儿（15分钟左右）请不用担心她会保证服务时长的~</p>
 <div class="choose-next">
-<a class="tab-bar-btn"  data-service="家庭保洁" href="确认订单.html" >确定</a>
+<a class="tab-bar-btn"  data-service="家庭保洁" href="javascript:void(0)" onClick="getOrder()" >确定</a>
 </div>
 <!--弹窗 begin-->
 <div class="date-pop-ups" style="display:none" id="date">
-<form name="f-date">
-<c:forEach items="${WEEK_DATE_LIST}" var="dateValue">
-<input type="radio" name="date" value="d-1" onClick="getDate('${dateValue}')">${dateValue}<br>
+
+<c:forEach items="${WEEK_DATE_LIST}" var="dateValueDO">
+<input type="radio" onClick="getDate('${dateValueDO.weekDate}', '${dateValueDO.dateValue}')">${dateValueDO.weekDate}<br>
 </c:forEach>
-</form>
+
 </div>
 <div class=" time-pop-ups" style="display:none" id="time">
-<form class="f-time">
-<input type="radio" name="time" value="t-1" onClick="getTime('13:30')">13:30<br>
-<input type="radio" name="time" value="t-2" onClick="getTime('14:00')">14:00<br>
-<input type="radio" name="time" value="t-3" onClick="getTime('14:30')">14:30<br>
-<input type="radio" name="time" value="t-4" onClick="getTime('15:00')">15:00<br>
-<input type="radio" name="time" value="t-5" onClick="getTime('15:30')">15:30<br>
-<input type="radio" name="time" value="t-6" onClick="getTime('16:00')">16:00<br>
-<input type="radio" name="time" value="t-7" onClick="getTime('16:30')">16:30<br>
+
+<input type="radio"  onClick="getTime('13:30')">13:30<br>
+<input type="radio"  onClick="getTime('14:00')">14:00<br>
+<input type="radio"  onClick="getTime('14:30')">14:30<br>
+<input type="radio"  onClick="getTime('15:00')">15:00<br>
+<input type="radio"  onClick="getTime('15:30')">15:30<br>
+<input type="radio"  onClick="getTime('16:00')">16:00<br>
+<input type="radio"  onClick="getTime('16:30')">16:30<br>
+<input name="subDate" type="hidden" id="dateValue"/>
+<input name="subTime" type="hidden" id="timeValue"/>
+
+</div>
+</div>
+</div>
+</div>
 </form>
-</div>
-</div>
-</div>
-</div>
 </body>
 <script type="text/javascript">
 	function selectDate() {
@@ -88,13 +92,19 @@
 		document.getElementById('time').style.display="inline"; 
 	}
 	
-	function getDate(dateValue) {
+	function getDate(weekDate, dateValue) {
 		document.getElementById('date').style.display = "none";
+		document.getElementById('weekDate').value = weekDate;
 		document.getElementById('dateValue').value = dateValue;
 	}
 	function getTime(timeValue) {
 		document.getElementById('time').style.display = "none";
+		document.getElementById('viewTime').value = timeValue;
 		document.getElementById('timeValue').value = timeValue;
+	}
+	
+	function getOrder() {
+		document.getElementById('orderForm').submit();
 	}
 </script>
 </html>

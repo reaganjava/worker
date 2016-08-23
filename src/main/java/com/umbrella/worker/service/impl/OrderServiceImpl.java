@@ -22,6 +22,7 @@ import com.umbrella.worker.entity.WOrder;
 import com.umbrella.worker.entity.WOrderDetail;
 import com.umbrella.worker.entity.WOrderExample;
 import com.umbrella.worker.entity.WOrderTask;
+import com.umbrella.worker.entity.WOrderTaskExample;
 import com.umbrella.worker.entity.WWorkerItem;
 import com.umbrella.worker.entity.WWorkerStaff;
 import com.umbrella.worker.entity.WWorkerTask;
@@ -126,8 +127,12 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 		order.setwOFee(priceCount);
 		order.setDatalevel(1);
 		order.setStatus(1);
+		order.setwOIsEnd(0);
+		order.setwOIsPay(0);
+		order.setwOIsConfim(0);
 		order.setCreateTime(Calendar.getInstance().getTime());
 		order.setModifiTime(Calendar.getInstance().getTime());
+		order.setModifiAuthor(order.getCreateAuthor());
 		
 		try {
 			recordNum = orderMapper.insertSelective(order);
@@ -148,6 +153,11 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 		result = BeanUtilsExtends.copy(orderDetail, orderDO.getOrderDetailDO());
 		
 		orderDetail.setId(order.getId());
+		orderDetail.setCreateTime(order.getCreateTime());
+		orderDetail.setModifiTime(order.getCreateTime());
+		orderDetail.setModifiAuthor(order.getCreateAuthor());
+		orderDetail.setStatus(1);
+		orderDetail.setDatalevel(1);
 		recordNum = -1;
 		try {
 			recordNum = orderDetailMapper.insertSelective(orderDetail);
@@ -167,6 +177,11 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 			return result;
 		}
 		recordNum = -1;
+		orderTask.setCreateAuthor(order.getCreateAuthor());
+		orderTask.setModifiAuthor(order.getCreateAuthor());
+		orderTask.setCreateTime(order.getCreateTime());
+		orderTask.setModifiTime(order.getModifiTime());
+		orderTask.setDatalevel(1);
 		try {
 			recordNum = orderTaskMapper.insertSelective(orderTask);
 		} catch (Exception e) {
@@ -351,7 +366,6 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 		OrderDO orderDO = getOrderDO(order);
 		if(orderDO != null) {
 			orderDO.setOrderDetailDO(orderDetailDO);
-			result.setModel(ResultSupport.FIRST_MODEL_KEY, orderDO);
 		} else {
 			result.setSuccess(false);
 	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
@@ -359,8 +373,23 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 			return result;
 		}
 		
+		WOrderTaskExample otex = new WOrderTaskExample();
+		otex.createCriteria().andWOOrderIdEqualTo(order.getId());
+		List<WOrderTask> list = null;
+		try {
+			list = orderTaskMapper.selectByExample(otex);
+		} catch (Exception e) {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+	        logger.error("[obj:supplier][opt:get][msg:"+e.getMessage()+"]");
+	        return result;
+		}
+		OrderTaskDO orderTaskDO = getOrderTaskDO(list.get(0));
 		
+		orderDO.setOrderTaskDO(orderTaskDO);
 		
+		result.setModel(ResultSupport.FIRST_MODEL_KEY, orderDO);
 		return result;
 	}
 

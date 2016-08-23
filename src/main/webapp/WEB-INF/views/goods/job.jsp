@@ -34,7 +34,7 @@
 <p>请选择房屋面积</p>
 <ul class="house-area">
 <c:forEach items="${TASK_GOODS.workerItems}" var="workerItem" varStatus="status">
-<li  id="item${status.index}"><a href="javascript:void" onClick="setArea(${status.index}, ${workerItem.id})"><span id="itemFont${status.index}">${workerItem.wWiItem}<sup>2</sup></span><i></i></a></li>
+<li  id="item${status.index}"><a href="javascript:void(0)" onClick="setArea(${status.index}, ${workerItem.id})"><span id="itemFont${status.index}">${workerItem.wWiItem}<sup>2</sup></span><i></i></a></li>
 </c:forEach>
 </ul>
 
@@ -52,7 +52,7 @@
 <span>${TASK_GOODS.wWDesc}</span>
 <div class="clean"></div>
 <div class="choose-next">
-<a class="tab-bar-btn"  data-service="家庭保洁" href="javascript:void" onClick="onSubmit()">下一步</a>
+<a class="tab-bar-btn"  data-service="家庭保洁" href="javascript:void(0)" onClick="onSubmit()">下一步</a>
 </div>
 </div>
 </div>
@@ -60,9 +60,9 @@
 </form>
 </body>
 <script type="text/javascript">
-	var taskId = ${TASK_GOODS.id};
-	var itemId = 0;
-	var staffId = 0;
+	var tid = ${TASK_GOODS.id};
+	var iid = 0;
+	var stkd = 0;
 	$(function(){
 		$('#item0').css("background","#00cded");
 		$('#itemFont0').css("color","#fff");
@@ -91,7 +91,7 @@
 				$('#itemFont' +i).css("color","#000");
 			}
 		}
-		itemId = ${WORKER_ITEM_ID};
+		iid = itemId;
 		$.ajax({
 			  url: "${pageContext.request.contextPath}/goods/getStaff/" + itemId + ".json",
 			  success:function(data) {
@@ -115,11 +115,11 @@
 				$('#staffFont' +i).css("color","#000");
 			}
 		}
-		staffId = ${WORKER_STAFF_ID};
+		stkd = staffId
 	}
 	
 	function onSubmit() {
-		window.location.href = "${pageContext.request.contextPath}/goods/buyJob/" + taskId +"/" + itemId + "/" + staffId +".html";
+		window.location.href = "${pageContext.request.contextPath}/goods/buyJob/" + tid +"/" + iid + "/" + stkd +".html";
 	}
 </script>
 </html>

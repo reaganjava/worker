@@ -6,7 +6,7 @@ public class OrderDO extends BaseDO {
    
     private Integer id;
     
-    private Integer memberId;    
+    private Integer wOMembersId;
     
 
     private MembersDO membersDO;
@@ -16,6 +16,9 @@ public class OrderDO extends BaseDO {
     
     
     private OrderDetailDO orderDetailDO;
+    
+    
+    private OrderTaskDO orderTaskDO;
 
    
     private String wOOrderNo;
@@ -49,13 +52,13 @@ public class OrderDO extends BaseDO {
 	}
 
 
-	public Integer getMemberId() {
-		return memberId;
+	public Integer getwOMembersId() {
+		return wOMembersId;
 	}
 
 
-	public void setMemberId(Integer memberId) {
-		this.memberId = memberId;
+	public void setwOMembersId(Integer wOMembersId) {
+		this.wOMembersId = wOMembersId;
 	}
 
 
@@ -96,6 +99,16 @@ public class OrderDO extends BaseDO {
 
 	public void setOrderDetailDO(OrderDetailDO orderDetailDO) {
 		this.orderDetailDO = orderDetailDO;
+	}
+
+
+	public OrderTaskDO getOrderTaskDO() {
+		return orderTaskDO;
+	}
+
+
+	public void setOrderTaskDO(OrderTaskDO orderTaskDO) {
+		this.orderTaskDO = orderTaskDO;
 	}
 
 

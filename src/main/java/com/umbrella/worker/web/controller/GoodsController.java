@@ -25,6 +25,7 @@ import com.umbrella.worker.dto.WorkerItemDO;
 import com.umbrella.worker.dto.WorkerStaffDO;
 import com.umbrella.worker.dto.WorkerTaskDO;
 import com.umbrella.worker.query.ContactQuery;
+import com.umbrella.worker.result.DateValueDO;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.IContactService;
@@ -85,7 +86,7 @@ public class GoodsController {
 		int index = 0;
 		for(WorkerStaffDO workerStaff : workerStaffs) {
 			System.out.println(line);
-			line += "<li id=\"staff" + index +"\"><a href=\"javascript:void\" onClick=\"setStaff(" + index + ", " + workerStaffs.size() + "," + workerStaff.getId() + ")\"><span id=\"staffFont" + index + "\">"+workerStaff.getwWsStaffCount()+"人"+workerStaff.getwWsHours()+"小时</span></a></li>";
+			line += "<li id=\"staff" + index +"\"><a href=\"javascript:void(0)\" onClick=\"setStaff(" + index + ", " + workerStaffs.size() + "," + workerStaff.getId() + ")\"><span id=\"staffFont" + index + "\">"+workerStaff.getwWsStaffCount()+"人"+workerStaff.getwWsHours()+"小时</span></a></li>";
 			index++;
 		}
 		mav.addObject("JSON_DATA", line);
@@ -110,23 +111,32 @@ public class GoodsController {
 		ResultDO result = contactService.list(query);
 		
 		long timestamp = Calendar.getInstance().getTimeInMillis();
-		List<String> weekDateList = new ArrayList<String>();
+		List<DateValueDO> dateValueDOList = new ArrayList<DateValueDO>();
+		
 		Date date = new Date(timestamp);
 		DateFormat dateFormat = new SimpleDateFormat("MM月dd日"); 
-		weekDateList.add(dateFormat.format(date) + "(今天)");
+		DateFormat dateValueFormat = new SimpleDateFormat("yyyy-MM-dd"); 
+		DateValueDO dateValueDO = new DateValueDO();
+		dateValueDO.setWeekDate(dateFormat.format(date) + "(今天)");
+		dateValueDO.setDateValue(dateValueFormat.format(date));
+		
 		for(int day = 1; day < 6; day++) {
 			date = new Date(timestamp);
-			weekDateList.add(dateFormat.format(date));
+			dateValueDO = new DateValueDO();
+			dateValueDO.setWeekDate(dateFormat.format(date));
+			dateValueDO.setDateValue(dateValueFormat.format(date));
+			dateValueDOList.add(dateValueDO);
 			timestamp = timestamp + 86400000;
 		}
 		
 		if(result.isSuccess()) {
 			List<ContactDO> list = (List<ContactDO>) result.getModel(ResultSupport.FIRST_MODEL_KEY);
+			System.out.println(list.get(0).getwCAddress());
 			if(list != null) {
 				mav.addObject("CONTACT_DEFAULT", list.get(0));
+				request.getSession().setAttribute("CONTACT_DEFAULT", list.get(0));
 			}
-			
-			mav.addObject("WEEK_DATE_LIST", weekDateList);
+			mav.addObject("WEEK_DATE_LIST", dateValueDOList);
 			mav.setViewName("goods/reserver");
 		} else {
 			mav.setViewName("error");

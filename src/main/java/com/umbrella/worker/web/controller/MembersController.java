@@ -1,6 +1,5 @@
 package com.umbrella.worker.web.controller;
 
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -76,7 +75,17 @@ public class MembersController {
 		membersDO.setCreateAuthor(membersDO.getwMMobile());
 		membersDO.setModifiAuthor(membersDO.getCreateAuthor());
 		
-		ResultDO resultDO = memberService.create(membersDO);
+		SmsCodeQuery query = new SmsCodeQuery();
+		query.setMobile(membersDO.getwMMobile());
+		query.setCode(membersDO.getSmsCode());
+		
+		ResultDO resultDO = smsService.validate(query);
+		
+		if(resultDO.isSuccess()) {
+			
+		}
+		
+		resultDO = memberService.create(membersDO);
 		
 		if(resultDO.isSuccess()) {
 			return new ModelAndView("redirect:/members/login.html");
@@ -285,7 +294,7 @@ public class MembersController {
 		contactDO.setCreateAuthor(memberMobile);
 		ResultDO result = contactService.create(contactDO);
 		if(result.isSuccess()) {
-			request.getSession().setAttribute("CONTACT_INFO", contactDO);
+			request.getSession().setAttribute("CONTACT_DEFAULT", contactDO);
 			return new ModelAndView("redirect:/members/contacts.html");
 		} else {
 			mav.setViewName("error");
@@ -309,4 +318,43 @@ public class MembersController {
 		}
 		return mav;
 	}
+	
+	@RequestMapping(value = "/restPwd.html", method = RequestMethod.GET)
+	public ModelAndView restPwd(ModelAndView mav, HttpServletRequest request) {
+		mav.setViewName("members/resetPwd");
+		return mav;
+	}
+	
+	@RequestMapping(value = "/restPwd.html", method = RequestMethod.POST)
+	public ModelAndView restPwd(ModelAndView mav, MembersDO membersDO, 
+			HttpServletRequest request) {
+		
+		MD5 md5 = new MD5();
+		String md5Pwd = md5.getMD5ofStr(membersDO.getwMPassword() 
+				+ membersDO.getwMMobile());
+		mav.setViewName("members/resetPwd");
+		membersDO.setModifiAuthor(membersDO.getwMMobile());
+		
+		SmsCodeQuery query = new SmsCodeQuery();
+		query.setMobile(membersDO.getwMMobile());
+		query.setCode(membersDO.getSmsCode());
+		
+		ResultDO resultDO = smsService.validate(query);
+		
+		if(resultDO.isSuccess()) {
+			
+		}
+		
+		
+		resultDO = memberService.modifiPwd(membersDO);
+		membersDO.setwMPassword(md5Pwd);
+		if(resultDO.isSuccess()) {
+			mav.setViewName("members/login");
+		} else {
+			mav.setViewName("error");
+		}
+		return mav;
+	}
+	
+	
 }

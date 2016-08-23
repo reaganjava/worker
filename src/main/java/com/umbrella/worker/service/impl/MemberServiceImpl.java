@@ -200,8 +200,11 @@ public class MemberServiceImpl  extends BaseServiceImpl implements IMemberServic
 		}
 		members.setModifiTime(Calendar.getInstance().getTime());
 		int recordNum = -1;
+		
+		WMembersExample example = new WMembersExample();
+		example.createCriteria().andWMMobileEqualTo(members.getwMMobile());
 		try {
-			recordNum = membersMapper.updateByPrimaryKey(members);
+			recordNum = membersMapper.updateByExampleSelective(members, example);
 		} catch (Exception e) {
 			result.setSuccess(false);
 			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);

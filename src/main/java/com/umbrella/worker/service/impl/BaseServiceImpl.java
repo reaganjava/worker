@@ -14,6 +14,7 @@ import com.umbrella.worker.dto.MembersDO;
 import com.umbrella.worker.dto.MenuDO;
 import com.umbrella.worker.dto.OrderDO;
 import com.umbrella.worker.dto.OrderDetailDO;
+import com.umbrella.worker.dto.OrderTaskDO;
 import com.umbrella.worker.dto.PayrecordDO;
 import com.umbrella.worker.dto.StaffDO;
 import com.umbrella.worker.dto.SupplierDO;
@@ -32,6 +33,7 @@ import com.umbrella.worker.entity.WMembers;
 import com.umbrella.worker.entity.WMenu;
 import com.umbrella.worker.entity.WOrder;
 import com.umbrella.worker.entity.WOrderDetail;
+import com.umbrella.worker.entity.WOrderTask;
 import com.umbrella.worker.entity.WPayrecord;
 import com.umbrella.worker.entity.WStaff;
 import com.umbrella.worker.entity.WSupplier;
@@ -421,6 +423,13 @@ public class BaseServiceImpl {
 			return null;
 		}
 		return resultList;
+	}
+	
+	protected OrderTaskDO getOrderTaskDO(WOrderTask obj) {
+		if(obj == null) return null;
+		System.out.println(obj.getwOTaskName());
+		OrderTaskDO dst = new OrderTaskDO();
+		return BeanUtilsExtends.copyProperties(dst, obj) ? dst : null;
 	}
 
 
