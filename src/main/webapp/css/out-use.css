@@ -36,142 +36,46 @@ button.xsh_btn_inline, button.xsh_btn_mini, input.xsh_btn_inline, input.xsh_btn_
 .mine_photo dl dt img {width: 100%;height: 100%;}
 .mine_photo dl dd {font-size: 18px;color: #fff;text-align: center; padding-top:10px;}
 /**优惠券*/
-.vouchers-serch {
-    max-width: 640px;
-    width: 100%;
-    height: 3.5rem;
-    background: #fff;
-    top: 2.4rem;
-    padding: .95rem 3%;
-    box-shadow: 0 .1rem .9rem rgba(0,0,0,.2);
-    z-index: 2;
-}
-.vouchers-serch .vouchers-num {
-    border: .06rem solid rgba(0,0,0,.1);
-    width: 70%;
-    height: 1.6rem;
-    float: left;
-    line-height: 1.6rem;
-    border-radius: .2rem;
-    text-indent: .6rem;
-    font-size: .7rem;
-    -webkit-appearance: none;
-}
-.vouchers-btn {
-    display: block;
-    float: right;
-    width: 25%;
-    height: 1.6rem;
-    background: url(../images/translate.png) center no-repeat #00cced;
-    -webkit-background-size: 50% 1.5rem;
-    background-size: 50% 1.5rem;
-    border-radius: .2rem;
-}
-.vouchers-list {
-    width: 96%;
-    margin: 0 auto 1rem;
-    background: #fff;
-    height: 7rem;
-    border-radius: 3px;
-    overflow: hidden;
-    position: relative;
-    box-shadow: .1rem .1rem .3rem rgba(0,0,0,.1);
-}
-.vouchers-ty {
-    color: #0091ed;
-	position: absolute;
-    font-size: .8rem;
-    right: .5rem;
-}
-.vouchers-list-t {
-    width: 100%;
-    height: 5rem;
-    padding-top: 1.5rem;
-}
-.vouchers-rmb-icon {
-    font-size: 1.5rem;
-    display: block;
-    height: 1.5rem;
-    line-height: 1.5rem;
-    float: left;
-    margin-left: .5rem;
-	color:#0091ed;
-}
-.vouchers-rmb-num, .vouchers-rmb-num-free {
-    display: block;
-    float: left;
-    height: 3rem;
-    line-height: 3rem;
-    margin-top: -3px;
-	font-size: 3.5rem;
-	color:#0091ed;
-}
-.vouchers-list-b {
-    width: 100%;
-    height: 2rem;
-    background: #0091ed;
-    padding: 0 3%;
-    border-bottom-left-radius: 2px;
-    border-bottom-right-radius: 2px;
-    position: relative;
-	color:#fff;
-}
-.vouchers-list-b span {
-    line-height: 2rem;
-    font-size: .64rem;
-}
-.vouchers-list-b .using {
-    position: absolute;
-    right: 2rem;
-}
-.vouchers-active1 .vouchers-list-b .using-btn {
-    background: url(../images/next-w.png) no-repeat;
-    -webkit-background-size: 94% 94%;
-    background-size: 94% 94%;
-    color: #999;
-}
-.vouchers-active2 .vouchers-list-b .using-btn {
-    background: url(../images/next-w.png) no-repeat;
-    -webkit-background-size: 94% 94%;
-    background-size: 94% 94%;
-    color: #999;
-}
-.vouchers-list-b .using-btn {
-    display: block;
-    width: 1rem;
-    height: 1rem;
-    text-align: center;
-    line-height: 1rem;
-    font-size: .8rem;
-    position: absolute;
-    top: .5rem;
-    right: .4rem;
-    background: url(/img/circle-w.png) no-repeat;
-    -webkit-background-size: 1.08rem 1.08rem;
-    background-size: 1.08rem 1.08rem;
-}
-.vouchers-txt {
-    width: 100%;
-    padding: 0 3%;
-    height: 2.2rem;
-    font-size: .7rem;
-    color: #999;
-    text-shadow: 0 1px #FFF;
-    line-height: 2.2rem;
-	margin: 0 auto;
-    position: relative;
-}
-
-
-
-
-
-
-
-
-
-
-
+.vouchers-serch {max-width: 640px;width: 100%;height: 3.5rem;background: #fff;top: 2.4rem;padding: .95rem 3%;box-shadow: 0 .1rem .9rem rgba(0,0,0,.2);z-index: 2;}
+.vouchers-serch .vouchers-num {border: .06rem solid rgba(0,0,0,.1);width: 70%;height: 1.6rem;float: left;line-height: 1.6rem;border-radius: .2rem;text-indent: .6rem;font-size: .7rem;-webkit-appearance: none;}
+.vouchers-btn {display: block;float: right;width: 25%;height: 1.6rem;background: url(../images/translate.png) center no-repeat #00cced;-webkit-background-size: 50% 1.5rem;background-size: 50% 1.5rem;border-radius: .2rem;}
+.vouchers-list {width: 96%;margin: 0 auto 1rem;background: #fff;height: 7rem;border-radius: 3px;overflow: hidden; position: relative;box-shadow: .1rem .1rem .3rem rgba(0,0,0,.1);}
+.vouchers-ty {color: #0091ed;position: absolute;font-size: .8rem;right: .5rem;}
+.vouchers-list-t {width: 100%;height: 5rem;padding-top: 1.5rem;}
+.vouchers-rmb-icon {font-size: 1.5rem;display: block;height: 1.5rem;line-height: 1.5rem;float: left;margin-left: .5rem;color:#0091ed;}
+.vouchers-rmb-num, .vouchers-rmb-num-free {display: block;float: left;height: 3rem;line-height: 3rem;margin-top: -3px;font-size: 3.5rem;color:#0091ed;}
+.vouchers-list-b {width: 100%;height: 2rem;background: #0091ed;padding: 0 3%;border-bottom-left-radius: 2px;border-bottom-right-radius: 2px;position: relative;color:#fff;}
+.vouchers-list-b span {line-height: 2rem;font-size: .64rem;}
+.vouchers-list-b .using {position: absolute;right: 2rem;}
+.vouchers-active1 .vouchers-list-b .using-btn {background: url(../images/next-w.png) no-repeat;-webkit-background-size: 94% 94%;background-size: 94% 94%;color: #999;}
+.vouchers-active2 .vouchers-list-b .using-btn {background: url(../images/next-w.png) no-repeat;-webkit-background-size: 94% 94%;background-size: 94% 94%;color: #999;}
+.vouchers-list-b .using-btn {display: block;width: 1rem;height: 1rem;text-align: center;line-height: 1rem;font-size: .8rem;position: absolute;top: .5rem;right: .4rem;background: url(/img/circle-w.png) no-repeat; -webkit-background-size: 1.08rem 1.08rem;background-size: 1.08rem 1.08rem;}
+.vouchers-txt {width: 100%;padding: 0 3%;height: 2.2rem;font-size: .7rem;
+color: #999;text-shadow: 0 1px #FFF;line-height: 2.2rem;margin: 0 auto;position: relative;}
+/**定位城市**/
+.cur_wen {font-size: 16px;padding-right: 10px;color: #666;}
+.ding_online {width: 70%;position: relative;top: -7px;left: 75px;}
+.ding_online:before {position: absolute;top: -1px;left: 0;content: '';width: 100%;height: 1px;border-bottom: 1px solid #dadada;}	
+.cur_hotCity, .cur_poCity {border: 1px solid #ccc;border-radius: 4px;background: #fff;}
+.cur_poCity {margin: 13px 16px 0 0;width: 85px; height: 40px;line-height: 40px;text-align: center;font-size: 14px;color: #333;}
+.cur_dingwei {width: 100%;height: auto;margin: 20px 16px 0;}
+.cur_hotCity {width: 90%;margin: 12.5px 13px 0 0;overflow: hidden;}
+.cur_hotCity, .cur_poCity {border: 1px solid #ccc;border-radius: 4px; background: #fff;}
+.cur_hotCity table {width: 100%;}
+.cur_hotCity table tr:nth-child(1) td, .cur_hotCity table tr:nth-child(2) td {border-right: 1px solid #ccc;}
+.cur_hotCity table td {width: 25%;text-align: center;line-height: 40px;font-size: 14px;color: #333;border-bottom: 1px solid #ccc;}
+.tablePin, .tablePin tr {width: 100%;}
+.tablePin td, .tablePin td a {text-align: center;font-size:14px;line-height:39px;color: #00cced;}
+.cur_allCity {width: 90%;margin: 13px 13px 30px 0;background: #fff;border: 1px solid #c0c0c0;border-radius: 4px;overflow: hidden;}
+.tableCity {width: 100%;}
+.tableCity tr {width: 86px;}
+.tableCity tr td:nth-child(1) {border-left: none;}
+.tableCity td {width: 25%;vertical-align: middle;text-align: center;font-size: 14px;color: #333;line-height: 39px;border: 1px solid #c0c0c0;}
+.rowspan {font-size: 20px!important;color: #ccc!important;font-weight: 700;}
+.get-code{ width:100%; height:160px; background:#fff; text-align:center; border-radius:3px;}
+.text-code{ width:180px; height:34px; border:1px solid #00cced; border-radius:2px; margin:40px 0 25px 0;}
+.get-code img{ vertical-align:middle;}
+.cod-btn{ width:100px; height:30px; background:#00cced; border:none; border-radius:4px; color:#fff;}
 
 
 

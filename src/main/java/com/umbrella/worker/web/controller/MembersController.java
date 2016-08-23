@@ -332,7 +332,7 @@ public class MembersController {
 		MD5 md5 = new MD5();
 		String md5Pwd = md5.getMD5ofStr(membersDO.getwMPassword() 
 				+ membersDO.getwMMobile());
-		mav.setViewName("members/resetPwd");
+		membersDO.setwMPassword(md5Pwd);
 		membersDO.setModifiAuthor(membersDO.getwMMobile());
 		
 		SmsCodeQuery query = new SmsCodeQuery();

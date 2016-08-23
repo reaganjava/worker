@@ -40,7 +40,9 @@ public class MembersDO extends BaseDO {
     
     private MemberDetailDO memberDetailDO;
     
+    
     private List<MemberCouponDO> memberCoupons;
+    
     
     private List<ContactDO> contacts;
 

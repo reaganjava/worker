@@ -17,10 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.umbrella.worker.dto.ContactDO;
-import com.umbrella.worker.dto.MembersDO;
-import com.umbrella.worker.dto.OrderDO;
-import com.umbrella.worker.dto.OrderDetailDO;
-import com.umbrella.worker.dto.OrderTaskDO;
 import com.umbrella.worker.dto.WorkerItemDO;
 import com.umbrella.worker.dto.WorkerStaffDO;
 import com.umbrella.worker.dto.WorkerTaskDO;
@@ -29,8 +25,6 @@ import com.umbrella.worker.result.DateValueDO;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.IContactService;
-import com.umbrella.worker.service.IMemberService;
-import com.umbrella.worker.service.IOrderService;
 import com.umbrella.worker.service.IWorkerService;
 import com.umbrella.worker.util.StringUtil;
 

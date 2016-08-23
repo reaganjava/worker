@@ -13,7 +13,53 @@
 <link rel="stylesheet" type="text/css"  href="${pageContext.request.contextPath}/css/out-use.css"/>
 <script type="text/javascript" src="${pageContext.request.contextPath}/lib/jquery/1.9.1/jquery.min.js?v=0.1"></script> 
 <title>注册</title>
-
+<script type="text/javascript">
+$(function(){
+    $('#smsCode').click(function(){
+    	$('#code').show();
+    	var mobile = $("#mobile").val();
+    });
+    
+    $('#getCode').click(function() {
+    	$('#code').hide();
+    	var code = $('#codeValue').val();
+    	if(code != null || code.length < 4){
+    		
+    	}
+   		$.ajax({
+               type: "GET",
+               url: "/members/getCode/" + mobile + "/1234.json",
+               dataType: "json",
+               success: function(data){
+                          alert(data);
+               }
+           });
+    });
+    $("#btn_sub").click(function(){
+ 	    var is = true;
+ 		var mobile = $("#mobile").val();
+ 	   	if(mobile == '' || mobile.length < 10 || isNaN(mobile)) {
+ 	   	    $("#tipM").text('请输入手机号码');
+ 		  	is = false; 
+ 	   	}
+ 	    var password =  $("#password").val();
+ 	    if(password == '' || password.length < 6) {
+ 	    	$("#tipP").text('请输入密码');
+		  	is = false; 
+	   	}
+ 	   	if(is) {
+ 	   		$("#loginForm").submit();
+ 	   	}
+ 	});
+ 	$("#codeImg").click(function() {
+ 		$("#codeImg").attr("src","${pageContext.request.contextPath}/ImageCodeMakerServlet");
+ 	})
+ 	$("input").focus(function(){
+ 		$("#tipM").text('');
+ 		$("#tipP").text('');
+ 	});
+});
+</script>
 </head>
 <body>
 <form action="${pageContext.request.contextPath}/members/register.html" method="post">
@@ -57,25 +103,22 @@
 <!--表单结束-->
 <div class="register-btn"><button class="rg-btn">立即注册</button></div>
 <div class="agreement">点击-立即注册，即表示您同意<a style=" color:00cced;">《新生活使用协议》</a></div>
-<div class="members-quota"><img src="${pageContext.request.contextPath}/images/fire-hot.png"/>新生活前3万名会员永久享受9.9折</div>
+<div class="members-quota"><a href="会员成长规则.html"><img src="${pageContext.request.contextPath}/images/fire-hot.png"/>新生活前3万名会员永久享受最高9.5折!<span>了解详情</span></a></div>
+<!---获取验证码弹框--->
+<div class="get-code" style=" display:none;" id="code">  
+<div class="code-info">
+<input type="text" class="text-code" id="codeValue">
+<img src="${pageContext.request.contextPath}/ImageCodeMakerServlet"/>
+<span>换一张</span>
+</div>
+<div class="code-btn">
+<button class="cod-btn" id="getCode">获取验证码</button>
+</div>
+</div>
+
+
 </div>
 </div>
 </div>
-</form>
 </body>
-<script type="text/javascript">
-$(function(){
-    $('#smsCode').click(function(){
-    	var mobile = $("#mobile").val();
-         $.ajax({
-             type: "GET",
-             url: "/members/getCode/" + mobile + "/1234.json",
-             dataType: "json",
-             success: function(data){
-                        alert(data);
-             }
-         });
-    });
-});
-</script>
 </html>
