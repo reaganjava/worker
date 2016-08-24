@@ -15,7 +15,7 @@
 <title>注册</title>
 <script type="text/javascript">
 $(function(){
-    $('#smsCode').click(function(){
+    $('#sendCode').click(function(){
     	$('#code').show();
     	var mobile = $("#mobile").val();
     });
@@ -51,7 +51,8 @@ $(function(){
  	   	    $("#tipM").text('请输入手机号码');
  		  	is = false; 
  	   	}
- 	   var smsCode =  $("#smsCode").val();
+ 	    var smsCode =  $("#smsCode").val();
+ 	    alert(smsCode);
 	    if(smsCode == '' || smsCode.length < 6) {
 	    	$("#tipS").text('请输入短信验证码');
 		  	is = false; 
@@ -110,7 +111,7 @@ $(function(){
 <i class="xsh_icon xsh_icon_warn" style="display: none;"></i>
 <i class="xsh_icon xsh_icon_warn" style="display: none;"></i>
 <i class="xsh_icon xsh_icon_success" style="display: none;"></i> 
-<input type="button" style="background-color:#00cced" class="xsh_btn xsh_btn_mini" id="smsCode" value="发送验证码"/> </div> </div> 
+<input type="button" style="background-color:#00cced" class="xsh_btn xsh_btn_mini" id="sendCode" value="发送验证码"/> </div> </div> 
 
 <div class="xsh_cell xsh_cell_warn"> 
 <div class="xsh_cell_hd"></div> 

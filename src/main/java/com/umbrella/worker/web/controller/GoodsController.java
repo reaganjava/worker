@@ -129,7 +129,6 @@ public class GoodsController {
 		
 		if(result.isSuccess()) {
 			List<ContactDO> list = (List<ContactDO>) result.getModel(ResultSupport.FIRST_MODEL_KEY);
-			System.out.println(list.get(0).getwCAddress());
 			if(list != null) {
 				mav.addObject("CONTACT_DEFAULT", list.get(0));
 				request.getSession().setAttribute("CONTACT_DEFAULT", list.get(0));

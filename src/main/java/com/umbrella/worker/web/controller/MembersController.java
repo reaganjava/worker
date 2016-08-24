@@ -198,10 +198,8 @@ public class MembersController {
 	public ModelAndView change(ModelAndView mav, 
 			MemberDetailDO memberDetailDO,
 			HttpServletRequest request) {
-		
-		
-		ResultDO resultDO = memberService.modifi(memberDetailDO);
-		
+
+		ResultDO resultDO = memberService.modifi(memberDetailDO);	
 		if(resultDO.isSuccess()) {
 			mav.setViewName("members/accountInfo");
 		} else {
