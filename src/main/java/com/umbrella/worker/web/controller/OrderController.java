@@ -49,6 +49,10 @@ public class OrderController {
 		
 		ContactDO contactDO = (ContactDO) request.getSession().getAttribute("CONTACT_DEFAULT");
 		
+		if(memberId == null && memberMobile == null) {
+			return new ModelAndView("redirect:/members/login.html");
+		}
+		
 		if(contactDO == null) {
 			return new ModelAndView("redirect:/goods/buyJob/" + workerTaskDO.getId() + "/" + workerTaskDO.getItemId() + "/" + workerTaskDO.getStaffId() + ".html");
 		}
