@@ -49,7 +49,9 @@ public class OrderController {
 		
 		ContactDO contactDO = (ContactDO) request.getSession().getAttribute("CONTACT_DEFAULT");
 		
-		
+		if(contactDO == null) {
+			return new ModelAndView("redirect:/goods/buyJob/" + workerTaskDO.getId() + "/" + workerTaskDO.getItemId() + "/" + workerTaskDO.getStaffId() + ".html");
+		}
 		OrderTaskDO orderTaskDO = new OrderTaskDO();
 	
 		orderTaskDO.setCreateAuthor(memberMobile);
@@ -116,6 +118,32 @@ public class OrderController {
 		if(resultDO.isSuccess()) {
 			WorkerTaskDO workerTaskDO = (WorkerTaskDO) resultDO.getModel(ResultSupport.FIRST_MODEL_KEY);
 			System.out.println(workerTaskDO.getwWDesc());
+			mav.addObject("WORKER_TASK_INFO", workerTaskDO.getwWDesc());
+		} else {
+			mav.setViewName("error");
+		}
+		
+		mav.setViewName("order/payOrder");
+		return mav;
+	}
+	
+	@RequestMapping(value = "/orderDetail/{id}.html", method = RequestMethod.GET)
+	public ModelAndView orderDetail(ModelAndView mav, 
+			@PathVariable(value="id") Integer id,
+			HttpServletRequest request) {
+	
+		ResultDO resultDO = orderService.get(id);
+		OrderDO orderOD = null;
+		if(resultDO.isSuccess()) {
+			orderOD = (OrderDO) resultDO.getModel(ResultSupport.FIRST_MODEL_KEY);
+			mav.addObject("ORDER_INFO", orderOD);
+		} else {
+			mav.setViewName("error");
+		}
+		
+		resultDO = workerService.get(orderOD.getOrderDetailDO().getwOTaskId());
+		if(resultDO.isSuccess()) {
+			WorkerTaskDO workerTaskDO = (WorkerTaskDO) resultDO.getModel(ResultSupport.FIRST_MODEL_KEY);
 			mav.addObject("WORKER_TASK_INFO", workerTaskDO.getwWDesc());
 		} else {
 			mav.setViewName("error");
