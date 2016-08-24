@@ -83,6 +83,7 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 	
 		WWorkerItem workerItem = null;
 		try {
+			System.out.println(orderTaskDO.getWorkerItemId());
 			workerItem = workerItemMapper.selectByPrimaryKey(orderTaskDO.getWorkerItemId());
 		} catch (Exception e) {
 			result.setSuccess(false);

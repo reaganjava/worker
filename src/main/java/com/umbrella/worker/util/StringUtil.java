@@ -25,7 +25,9 @@ public class StringUtil {
 		return false;
 	}
 	
-	public static String getReferer(String referer) {
+	public static String getReferer(String referer, String ctxPath) {
+		System.out.println("ctxpath:" + ctxPath);
+		referer = referer.replace(ctxPath, "");
 		referer = referer.replace("http://", "");
 		int start = referer.indexOf("/");
 		referer = referer.substring(start + 1);

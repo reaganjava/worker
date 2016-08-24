@@ -44,7 +44,7 @@ public class MembersController {
 	public ModelAndView register(ModelAndView mav, HttpServletRequest request) {
 		mav.setViewName("members/register");
 		String backPage = request.getHeader("Referer");
-		backPage = StringUtil.getReferer(backPage);
+		backPage = StringUtil.getReferer(backPage, request.getContextPath());
 		request.getSession().setAttribute("BACK_PAGE", backPage);
 		return mav;
 	}
@@ -99,7 +99,7 @@ public class MembersController {
 	public ModelAndView login(ModelAndView mav, HttpServletRequest request) {
 		mav.setViewName("members/login");
 		String backPage = request.getHeader("Referer");
-		backPage = StringUtil.getReferer(backPage);
+		backPage = StringUtil.getReferer(backPage, request.getContextPath());
 		request.getSession().setAttribute("BACK_PAGE", backPage);
 		return mav;
 	}
@@ -128,12 +128,20 @@ public class MembersController {
 			if(backPage.equals("register")) {
 				mav.setViewName("test");
 			} else {
-				mav.setViewName(backPage);
+				return new ModelAndView("redirect:/" + backPage + ".html");
 			}
 		} else {
 			mav.setViewName("error");
 		}
 		return mav;
+	}
+	
+	@RequestMapping(value = "/loginout.html", method = RequestMethod.GET)
+	public ModelAndView loginOut(ModelAndView mav, 
+			HttpServletRequest request) {
+		request.getSession().removeAttribute("MEMBER_ID");
+		request.getSession().removeAttribute("MEMBER_MOBILE");
+		return new ModelAndView("redirect:/");
 	}
 	
 	@RequestMapping(value = "/accountPassword.html", method = RequestMethod.GET)
@@ -171,8 +179,11 @@ public class MembersController {
 	public ModelAndView accountInfo(ModelAndView mav, 
 			HttpServletRequest request) {
 		
-		Integer id = (Integer) request.getSession().getAttribute("MEMBER_ID");
-		ResultDO resultDO = memberService.get(id);
+		Integer memberId = (Integer) request.getSession().getAttribute("MEMBER_ID");
+		if(memberId == null) {
+			return new ModelAndView("redirect:/members/login.html");
+		}
+		ResultDO resultDO = memberService.get(memberId);
 		if(resultDO.isSuccess()) {
 			mav.addObject("MEMBER_INFO", resultDO.getModel(ResultSupport.FIRST_MODEL_KEY));
 			mav.setViewName("members/accountInfo");
@@ -353,6 +364,12 @@ public class MembersController {
 		} else {
 			mav.setViewName("error");
 		}
+		return mav;
+	}
+	
+	@RequestMapping(value = "/rule.html", method = RequestMethod.GET)
+	public ModelAndView rule(ModelAndView mav, HttpServletRequest request) {
+		mav.setViewName("members/rule");
 		return mav;
 	}
 	

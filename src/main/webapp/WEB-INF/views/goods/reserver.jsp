@@ -11,9 +11,7 @@
 　　<![endif]-->
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/wei-index.css?v=0.1" />
 <link rel="stylesheet" type="text/css"  href="${pageContext.request.contextPath}/css/out-use.css?v=0.1"/>
-<script type="text/javascript" src="${pageContext.request.contextPath}/lib/icheck/jquery.icheck.min.js?v=0.1"></script> 
 <script type="text/javascript" src="${pageContext.request.contextPath}/lib/jquery/1.9.1/jquery.min.js?v=0.1"></script> 
-<script type="text/javascript" src="${pageContext.request.contextPath}/lib/Validform/5.3.2/Validform.min.js?v=0.1"></script>
 <title>预订页面</title>
 </head>
 <body>
@@ -48,15 +46,15 @@
 <div class="choose-time">
 <span class="time-words">请选择服务时间</span>
 <div class="time-input">
-<a><input type="text" class="choose-date" value="选择日期" onClick="selectDate()" id="weekDate"/></a>
-<a><input type="text" class="choose-hour" value="选择时间" onClick="selectTime()" id="viewTime"/></a>
+<a><input type="text" class="choose-date" value="选择日期" onClick="selectDate()" id="weekDate" readonly/></a>
+<a><input type="text" class="choose-hour" value="选择时间" onClick="selectTime()" id="viewTime" readonly/></a>
 </div>
 </div>
 </section>
 <!--添加时间结束-->
 <p class="remind">如果阿姨因为各种原因早到或晚到一会儿（15分钟左右）请不用担心她会保证服务时长的~</p>
 <div class="choose-next">
-<a class="tab-bar-btn"  data-service="家庭保洁" href="javascript:void(0)" onClick="getOrder()" >确定</a>
+<a class="tab-bar-btn"  data-service="家庭保洁" href="javascript:void(0)" id="btn_sub" >确定</a>
 </div>
 <!--弹窗 begin-->
 <div class="date-pop-ups" style="display:none" id="date">
@@ -106,8 +104,24 @@
 		document.getElementById('timeValue').value = timeValue;
 	}
 	
-	function getOrder() {
-		document.getElementById('orderForm').submit();
-	}
+	$(document).ready(function(){
+		var isView = false;
+	 	$("#btn_sub").click(function(){
+	 	    var is = true;
+	 		var weekDate = $("#weekDate").val();
+	 	   	if(weekDate == '选择日期') {
+	 	   	  
+	 		  	is = false; 
+	 	   	}
+	 	    var viewTime =  $("#viewTime").val();
+	 	    if(viewTime == '选择时间' ) {
+	 	    	
+			  	is = false; 
+		   	}
+	 	   	if(is) {
+	 	   		$("#orderForm").submit();
+	 	   	}
+	 	});
+	 });
 </script>
 </html>

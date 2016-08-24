@@ -27,14 +27,14 @@
 	
 	<bean id="handlerMapping"  class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>
 	
-	<mvc:interceptors>  
+	<!-- <mvc:interceptors>  
 		<mvc:interceptor>  
 			<mvc:mapping path="/"/>
 			<bean class="com.umbrella.worker.interceptor.AuthenticationInterceptor">
 				<property name="notLoginUrl" value="contest/joined/index.html;project/create.html;project/edit;project/perfect;member/project.html;member/jdemand.html;member/fdemand;member/uc_index.html;member/uc_userInfo.html;member/edit_user_password.html;member/displayImage;member/message" />
 			</bean>
         </mvc:interceptor>
-    </mvc:interceptors>
+    </mvc:interceptors> -->
     
 	<!-- 视图解析器 -->
 	<bean

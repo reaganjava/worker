@@ -36,6 +36,12 @@ public class MembersDO extends BaseDO {
     
     
     private String smsCode;
+    
+    
+    private Integer orderCount;
+    
+    
+    private Integer couponsCount;
 
     
     private MemberDetailDO memberDetailDO;
@@ -184,6 +190,26 @@ public class MembersDO extends BaseDO {
 
 	public void setSmsCode(String smsCode) {
 		this.smsCode = smsCode;
+	}
+
+
+	public Integer getOrderCount() {
+		return orderCount;
+	}
+
+
+	public void setOrderCount(Integer orderCount) {
+		this.orderCount = orderCount;
+	}
+
+
+	public Integer getCouponsCount() {
+		return couponsCount;
+	}
+
+
+	public void setCouponsCount(Integer couponsCount) {
+		this.couponsCount = couponsCount;
 	}
    
 }

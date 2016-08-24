@@ -21,19 +21,28 @@ $(function(){
     });
     
     $('#getCode').click(function() {
-    	$('#code').hide();
+    	var is = true;
+    	var mobile = $("#mobile").val();
+    	if(mobile == '' || mobile.length < 10 || isNaN(mobile)) {
+ 	   	    $("#tipM").text('请输入手机号码');
+ 		  	is = false; 
+ 	   	}
     	var code = $('#codeValue').val();
-    	if(code != null || code.length < 4){
-    		
+    	if(code == '' || code.length < 4){
+    		 $("#tipV").text('输入验证码');
+  		  	 is = false; 
     	}
-   		$.ajax({
-               type: "GET",
-               url: "/members/getCode/" + mobile + "/1234.json",
-               dataType: "json",
-               success: function(data){
-                          alert(data);
-               }
-           });
+    	if(is) {
+    		$('#code').hide();
+	   		$.ajax({
+	               type: "GET",
+	               url: "/members/getCode/" + mobile + "/1234.json",
+	               dataType: "json",
+	               success: function(data){
+	                          alert(data);
+	               }
+	           });
+    	}
     });
     $("#btn_sub").click(function(){
  	    var is = true;
@@ -42,27 +51,43 @@ $(function(){
  	   	    $("#tipM").text('请输入手机号码');
  		  	is = false; 
  	   	}
+ 	   var smsCode =  $("#smsCode").val();
+	    if(smsCode == '' || smsCode.length < 6) {
+	    	$("#tipS").text('请输入短信验证码');
+		  	is = false; 
+	   	}
  	    var password =  $("#password").val();
  	    if(password == '' || password.length < 6) {
  	    	$("#tipP").text('请输入密码');
 		  	is = false; 
 	   	}
+ 	   var repassword =  $("#repassword").val();
+	    if(repassword == '' || repassword.length < 6) {
+	    	$("#tipRP").text('请再次输入密码');
+		  	is = false; 
+	   	}
+	   
  	   	if(is) {
- 	   		$("#loginForm").submit();
+ 	   		$("#regForm").submit();
  	   	}
  	});
- 	$("#codeImg").click(function() {
- 		$("#codeImg").attr("src","${pageContext.request.contextPath}/ImageCodeMakerServlet");
+    
+ 	$("#restCode").click(function() {
+ 		var codeImg = document.getElementById("codeImg");  
+        codeImg.src = "${pageContext.request.contextPath}/ImageCodeMakerServlet?rnd=" + Math.random();  
  	})
+ 	
  	$("input").focus(function(){
  		$("#tipM").text('');
  		$("#tipP").text('');
+ 		$("#tipS").text('');
+ 		$("#tipRP").text('');
  	});
 });
 </script>
 </head>
 <body>
-<form action="${pageContext.request.contextPath}/members/register.html" method="post">
+
 <div class="xsh">
 <div class="page-all">
 <div class="container">
@@ -74,21 +99,22 @@ $(function(){
 </ul>
 </nav>
 <!---导航结束--->
+<form action="${pageContext.request.contextPath}/members/register.html" method="post" id="regForm">
 <div>
 <div class="xsh_cells vux-no-group-title"> 
 <div class="xsh_cell xsh_cell_warn"> 
 <div class="xsh_cell_hd"></div> 
-<div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" id="mobile" pattern="[0-9]*" placeholder="输入手机号码" type="text" name="wMMobile"> </div> 
+<div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" id="mobile"  type="text" name="wMMobile"><span id="tipM" style="color:#FF0000"></span> </div> 
 <div class="xsh_cell_ft">
 <i class="xsh_icon xsh_icon_clear" style="display: none;"></i>
 <i class="xsh_icon xsh_icon_warn" style="display: none;"></i>
 <i class="xsh_icon xsh_icon_warn" style="display: none;"></i>
 <i class="xsh_icon xsh_icon_success" style="display: none;"></i> 
-<input type="button" style="background-color:#00cced" class="xsh_btn xsh_btn_mini" id="smsCode" value="发送验证码"/></div> </div> 
+<input type="button" style="background-color:#00cced" class="xsh_btn xsh_btn_mini" id="smsCode" value="发送验证码"/> </div> </div> 
 
 <div class="xsh_cell xsh_cell_warn"> 
 <div class="xsh_cell_hd"></div> 
-<div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" pattern="[0-9]*" placeholder="验证码" type="text" name="smsCode"></div>
+<div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" id="smsCode" type="text" name="smsCode"><span id="tipS" style="color:#FF0000"></span></div>
 <div class="xsh_cell_ft">
 <i class="xsh_icon xsh_icon_clear" style="display: none;"></i> 
 <i class="xsh_icon xsh_icon_warn" style="display: none;"></i>
@@ -96,20 +122,22 @@ $(function(){
 <i class="xsh_icon xsh_icon_success" style="display: none;"></i> 
 <span class="nosend">没有收到?</span></div></div> 
 
-<div class="xsh_cell xsh_cell_warn"> <div class="xsh_cell_hd"></div> <div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" pattern="[0-9]*" placeholder="请输入密码" name="wMPassword" type="password"> </div></div>
+<div class="xsh_cell xsh_cell_warn"> <div class="xsh_cell_hd"></div> <div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" id="password" name="wMPassword" type="password"> <span id="tipP" style="color:#FF0000"></span></div></div>
 
-<div class="xsh_cell xsh_cell_warn"> <div class="xsh_cell_hd"></div> <div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" pattern="[0-9]*" placeholder="确认密码" name="rePassword" type="password"> </div></div>
+<div class="xsh_cell xsh_cell_warn"> <div class="xsh_cell_hd"></div> <div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" id="repassword" name="rePassword" type="password"><span id="tipRP" style="color:#FF0000"></span> </div></div>
 </div> </div>
+</form>
 <!--表单结束-->
-<div class="register-btn"><button class="rg-btn">立即注册</button></div>
+<div class="register-btn"><a  href="javascript:void();" id="btn_sub" ><button class="rg-btn">立即注册</button></a></div>
 <div class="agreement">点击-立即注册，即表示您同意<a style=" color:00cced;">《新生活使用协议》</a></div>
-<div class="members-quota"><a href="会员成长规则.html"><img src="${pageContext.request.contextPath}/images/fire-hot.png"/>新生活前3万名会员永久享受最高9.5折!<span>了解详情</span></a></div>
+<div class="members-quota"><a href="${pageContext.request.contextPath}/members/rule.html"><img src="${pageContext.request.contextPath}/images/fire-hot.png"/>新生活前3万名会员永久享受最高9.5折!<span>了解详情</span></a></div>
 <!---获取验证码弹框--->
 <div class="get-code" style=" display:none;" id="code">  
 <div class="code-info">
 <input type="text" class="text-code" id="codeValue">
-<img src="${pageContext.request.contextPath}/ImageCodeMakerServlet"/>
-<span>换一张</span>
+<span id="tipV" style="color:#FF0000"></span>
+<img src="${pageContext.request.contextPath}/ImageCodeMakerServlet" id="codeImg"/>
+<a href="javascript:void();" id="restCode"><span>换一张</span></a>
 </div>
 <div class="code-btn">
 <button class="cod-btn" id="getCode">获取验证码</button>

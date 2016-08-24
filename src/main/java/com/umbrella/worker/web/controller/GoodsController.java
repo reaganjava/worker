@@ -99,6 +99,10 @@ public class GoodsController {
 		workerTaskDO.setStaffId(staffId);
 		request.getSession().setAttribute("TASK_INFO", workerTaskDO);
 		Integer memberId = (Integer) request.getSession().getAttribute("MEMBER_ID");
+		
+		if(memberId == null) {
+			return new ModelAndView("redirect:/members/login.html");
+		}
 		ContactQuery query = new ContactQuery();
 		query.setMemberId(memberId);
 		query.setIsDefault(1);

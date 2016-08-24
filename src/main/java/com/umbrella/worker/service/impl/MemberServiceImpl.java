@@ -13,6 +13,8 @@ import com.umbrella.worker.dao.WContactMapper;
 import com.umbrella.worker.dao.WMemberCouponMapper;
 import com.umbrella.worker.dao.WMemberDetailMapper;
 import com.umbrella.worker.dao.WMembersMapper;
+import com.umbrella.worker.dao.WOrderMapper;
+import com.umbrella.worker.dao.WOrderTaskMapper;
 import com.umbrella.worker.dto.ContactDO;
 import com.umbrella.worker.dto.MemberCouponDO;
 import com.umbrella.worker.dto.MemberDetailDO;
@@ -24,6 +26,7 @@ import com.umbrella.worker.entity.WMemberCouponExample;
 import com.umbrella.worker.entity.WMemberDetail;
 import com.umbrella.worker.entity.WMembers;
 import com.umbrella.worker.entity.WMembersExample;
+import com.umbrella.worker.entity.WOrderExample;
 import com.umbrella.worker.query.MembersQuery;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
@@ -45,6 +48,9 @@ public class MemberServiceImpl  extends BaseServiceImpl implements IMemberServic
 	
 	@Autowired
 	private WContactMapper contactMapper;
+	
+	@Autowired
+	private WOrderMapper orderMapper;
 
 	@Override
 	public ResultDO create(MembersDO membersDO) {
@@ -369,8 +375,11 @@ public class MemberServiceImpl  extends BaseServiceImpl implements IMemberServic
 		}
 		
 		if(memberCouponDOList != null) {
+			membersDO.setCouponsCount(memberCouponDOList.size());
 			membersDO.setMemberCoupons(memberCouponDOList);
-		} 
+		} else {
+			membersDO.setCouponsCount(0);
+		}
 		
 		
 		WContactExample wcex = new WContactExample();
@@ -392,6 +401,24 @@ public class MemberServiceImpl  extends BaseServiceImpl implements IMemberServic
 			membersDO.setContacts(contactDOList);
 		} 
 		
+		WOrderExample woex = new WOrderExample();
+		WOrderExample.Criteria c = woex.createCriteria();
+		
+		
+		c.andWOMembersIdEqualTo(memberId);
+		int count;
+		try {
+			count = orderMapper.countByExample(woex);
+		} catch (Exception e) {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+	        e.printStackTrace();
+	        logger.error("[obj:member][opt:get][msg:"+e.getMessage()+"]");
+	        return result;
+		}
+		
+		membersDO.setOrderCount(count);
 		result.setModel(ResultSupport.FIRST_MODEL_KEY, membersDO);
 		
 		return result;

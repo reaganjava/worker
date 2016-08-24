@@ -40,7 +40,7 @@ public class OrderController {
 	public ModelAndView getOrder(ModelAndView mav, 
 			OrderDetailDO orderDetailDO,
 			HttpServletRequest request) {
-		System.out.println("getOrder");
+		
 		WorkerTaskDO workerTaskDO = (WorkerTaskDO) request.getSession().getAttribute("TASK_INFO");
 		
 		String memberMobile = (String) request.getSession().getAttribute("MEMBER_MOBILE");
@@ -49,9 +49,11 @@ public class OrderController {
 		
 		ContactDO contactDO = (ContactDO) request.getSession().getAttribute("CONTACT_DEFAULT");
 		
-		System.out.println(memberId);
+		
 		OrderTaskDO orderTaskDO = new OrderTaskDO();
+	
 		orderTaskDO.setCreateAuthor(memberMobile);
+	
 		orderTaskDO.setWorkerTaskId(workerTaskDO.getId());
 		orderTaskDO.setWorkerItemId(workerTaskDO.getItemId());
 		orderTaskDO.setWorkerStaffId(workerTaskDO.getStaffId());
@@ -68,7 +70,7 @@ public class OrderController {
 		orderDetailDO.setCreateAuthor(memberMobile);
 		
 		String strDate = orderDetailDO.getSubDate() + " " + orderDetailDO.getSubTime();
-		System.out.println(strDate);
+		
 		
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm");
 		
@@ -137,23 +139,26 @@ public class OrderController {
 		return mav;
 	}
 	
-	@RequestMapping(value = "/userOrders/{id}/{pageNo}.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/userOrders/{pageNo}.html", method = RequestMethod.GET)
 	public ModelAndView getUserOrders(ModelAndView mav,
-			@PathVariable(value="id") Integer id,
 			@PathVariable(value="pageNo") Integer pageNo,
 			HttpServletRequest request) {
-		
+		Integer memberId = (Integer) request.getSession().getAttribute("MEMBER_ID");
+	
+		if(memberId == null) {
+			return new ModelAndView("redirect:/members/login.html");
+		}
 		OrderQuery query = new OrderQuery();
-		query.setMemberId(id);
+		query.setMemberId(memberId);
 		query.setPage(true);
 		query.setPageNO(pageNo);
-		
+		query.setPageRows(3);
 		ResultDO result = orderService.list(query);
 		if(result.isSuccess()) {
 			PageBeanUtil pageBean = new PageBeanUtil();
 			long count = (Long) result.getModel(ResultSupport.SECOND_MODEL_KEY);
 			pageBean.setCurrentPage(pageNo);
-			pageBean.setPageSize(18);
+			pageBean.setPageSize(3);
 			pageBean.setRecordCount(count);
 			pageBean.setPageCount(count);
 			pageBean.setPages(pageNo);
