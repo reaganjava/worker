@@ -60,10 +60,7 @@ public class MembersController {
 		if(!GetHttpMemberInfo.isMobileDevice(request)) {
 			regDevice = "PC";
 		}
-		
-		if(!membersDO.getwMPassword().equals(membersDO.getRePassword())) {
-			
-		}
+	
 		MD5 md5 = new MD5();
 		String md5Pwd = md5.getMD5ofStr(membersDO.getwMPassword() 
 				+ membersDO.getwMMobile());
@@ -155,10 +152,6 @@ public class MembersController {
 	public ModelAndView editPwd(ModelAndView mav,  
 			MembersDO membersDO, HttpServletRequest request) {
 		
-		if(!membersDO.getRePassword()
-				.equals(membersDO.getwMPassword())) {
-			mav.setViewName("members/accountPassword");
-		}
 		
 		MD5 md5 = new MD5();
 		String md5Pwd = md5.getMD5ofStr(membersDO.getwMPassword() 
@@ -202,6 +195,38 @@ public class MembersController {
 		ResultDO resultDO = memberService.modifi(memberDetailDO);	
 		if(resultDO.isSuccess()) {
 			mav.setViewName("members/accountInfo");
+		} else {
+			mav.setViewName("error");
+		}
+		
+		return mav; 
+	}
+	
+	@RequestMapping(value = "/modifiPwd.html", method = RequestMethod.GET)
+	public ModelAndView change(ModelAndView mav, 
+			HttpServletRequest request) {
+		mav.setViewName("members/modifiPwd");
+		return mav; 
+	}
+	
+	@RequestMapping(value = "/modifiPwd.html", method = RequestMethod.POST)
+	public ModelAndView change(ModelAndView mav, 
+			MembersDO membersDO,
+			HttpServletRequest request) {
+		Integer memberId = (Integer) request.getSession().getAttribute("MEMBER_ID");
+		String memberMobile = (String) request.getSession().getAttribute("MEMBER_MOBILE");
+		membersDO.setId(memberId);
+		MD5 md5 = new MD5();
+		String md5Pwd = md5.getMD5ofStr(membersDO.getOldPassword() 
+				+ membersDO.getwMMobile());
+		membersDO.setwMPassword(md5Pwd);
+		md5Pwd = md5.getMD5ofStr(membersDO.getwMPassword() 
+				+ membersDO.getwMMobile());
+		membersDO.setwMPassword(md5Pwd);
+		membersDO.setModifiAuthor(memberMobile);
+		ResultDO resultDO = memberService.modifiPwd(membersDO);
+		if(resultDO.isSuccess()) {
+			mav.setViewName("members/login");
 		} else {
 			mav.setViewName("error");
 		}

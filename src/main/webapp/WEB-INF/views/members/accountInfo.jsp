@@ -29,6 +29,7 @@
 <div class="rights">
 <a><span class=" recommend">推荐享优惠</span></a>
 <a href=""javascript:void();"><span class="fankui">意见反馈</span></a>
+<a href="${pageContext.request.contextPath}/members/modifiPwd.html"><span class="fankui">修改密码</span></a>
 <a><span class="kefu-number">客服热线 023-8861-2969</span></a>
 <a style="margin-top:30px; color:#ff055d" href="${pageContext.request.contextPath}/members/loginout.html"><span class="quit">退出</span></a>
 </div>
