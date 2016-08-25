@@ -13,8 +13,7 @@ public class MembersDO extends BaseDO {
     
     private Integer wMFace;
     
-    
-    private String rePassword;
+    private String oldPassword;
 
     
     private String wMPassword;
@@ -82,14 +81,13 @@ public class MembersDO extends BaseDO {
 		this.wMFace = wMFace;
 	}
 
-
-	public String getRePassword() {
-		return rePassword;
+	public String getOldPassword() {
+		return oldPassword;
 	}
 
 
-	public void setRePassword(String rePassword) {
-		this.rePassword = rePassword;
+	public void setOldPassword(String oldPassword) {
+		this.oldPassword = oldPassword;
 	}
 
 

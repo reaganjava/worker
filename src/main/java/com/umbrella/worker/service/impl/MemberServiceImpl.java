@@ -197,6 +197,21 @@ public class MemberServiceImpl  extends BaseServiceImpl implements IMemberServic
 		
 		ResultSupport result = new ResultSupport();
 		
+		WMembersExample example = new WMembersExample();
+		example.createCriteria()
+			.andIdEqualTo(membersDO.getId())
+			.andWMPasswordEqualTo(membersDO.getOldPassword());
+		List<WMembers> list = null;
+		try {
+			list = membersMapper.selectByExample(example);
+		} catch (Exception e) {
+			
+		}
+		
+		if(list.size() < 1) {
+			result.setSuccess(false);
+			return result;
+		}
 		WMembers members = new WMembers();
 		
 		result = BeanUtilsExtends.copy(members, membersDO);
@@ -207,8 +222,6 @@ public class MemberServiceImpl  extends BaseServiceImpl implements IMemberServic
 		members.setModifiTime(Calendar.getInstance().getTime());
 		int recordNum = -1;
 		
-		WMembersExample example = new WMembersExample();
-		example.createCriteria().andWMMobileEqualTo(members.getwMMobile());
 		try {
 			recordNum = membersMapper.updateByExampleSelective(members, example);
 		} catch (Exception e) {
