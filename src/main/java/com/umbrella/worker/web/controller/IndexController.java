@@ -10,7 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class IndexController {
 
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(value = "/index.html", method = RequestMethod.GET)
 	public ModelAndView index(ModelAndView mav, 
 			HttpServletRequest request) {
 		mav.setViewName("index");
