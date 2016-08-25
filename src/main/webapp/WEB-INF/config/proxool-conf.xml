@@ -2,11 +2,11 @@
 <something-else-entirely>
 	<proxool>
 		<alias>pool</alias>
-		<driver-url>jdbc:mysql://reaganjava.mysql.rds.aliyuncs.com:3306/hdlm?characterEncoding=UTF-8</driver-url> -->
-		<!-- <driver-url>jdbc:mysql://localhost:3306/worker?characterEncoding=UTF-8</driver-url>-->
+		<driver-url>jdbc:mysql://reaganjava.mysql.rds.aliyuncs.com:3306/hdlm?characterEncoding=UTF-8</driver-url>
+		<!-- <driver-url>jdbc:mysql://localhost:3306/worker?characterEncoding=UTF-8</driver-url> -->
 		<driver-class>com.mysql.jdbc.Driver</driver-class>
 		<driver-properties>
-			<!-- <property name="user" value="root" />
+			<!--<property name="user" value="root" />
 			<property name="password" value="1234" /> -->
 			<property name="user" value="chrav" />
 			<property name="password" value="chrav0718" />

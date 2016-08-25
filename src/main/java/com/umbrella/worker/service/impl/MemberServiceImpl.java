@@ -174,7 +174,7 @@ public class MemberServiceImpl  extends BaseServiceImpl implements IMemberServic
 			c.andWMMobileEqualTo(membersQuery.getMobile());
 		}
 		
-		int recordNum = 0;
+		int recordNum = -1;
 		try {
 			recordNum = membersMapper.countByExample(example);
 		} catch (Exception e) {
@@ -198,6 +198,7 @@ public class MemberServiceImpl  extends BaseServiceImpl implements IMemberServic
 		ResultSupport result = new ResultSupport();
 		
 		WMembersExample example = new WMembersExample();
+		System.out.println(membersDO.getId() + ":" + membersDO.getOldPassword());
 		example.createCriteria()
 			.andIdEqualTo(membersDO.getId())
 			.andWMPasswordEqualTo(membersDO.getOldPassword());
@@ -205,9 +206,14 @@ public class MemberServiceImpl  extends BaseServiceImpl implements IMemberServic
 		try {
 			list = membersMapper.selectByExample(example);
 		} catch (Exception e) {
-			
+			result.setSuccess(false);
+			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			logger.error("[obj:members][opt:modifi][msg:" + e.getMessage()
+					+ "]");
+			return result;
 		}
-		
+		System.out.println(list.size());
 		if(list.size() < 1) {
 			result.setSuccess(false);
 			return result;
@@ -232,6 +238,7 @@ public class MemberServiceImpl  extends BaseServiceImpl implements IMemberServic
 					+ "]");
 			return result;
 		}
+		System.out.println(recordNum);
 		if (recordNum < 1) {
 			result.setSuccess(false);
 		}

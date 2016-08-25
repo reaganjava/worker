@@ -10,8 +10,8 @@
 <!--[if lt IE 9]>
 　　　　<script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
 　　<![endif]-->
-<link rel="stylesheet" type="text/css" href=""${pageContext.request.contextPath}/css/wei-index.css" />
-<link rel="stylesheet" type="text/css"  href=""${pageContext.request.contextPath}/css/out-use.css"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/wei-index.css" />
+<link rel="stylesheet" type="text/css"  href="${pageContext.request.contextPath}/css/out-use.css"/>
 <script type="text/javascript" src="${pageContext.request.contextPath}/lib/jquery/1.9.1/jquery.min.js?v=0.1"></script> 
 <title>修改密码</title>
 <script type="text/javascript">
@@ -33,15 +33,20 @@ $(document).ready(function(){
 	    if(repassword == '' || repassword.length < 6) {
 	    	$("#tipRP").text('请再次输入密码');
 		  	is = false; 
+		  	if(repassword != password) {
+		  		$("#tipRP").text('两次密码输入不相同');
+		  		is = false;
+		  	}
 	   	}
  	   	if(is) {
- 	   		$("#loginForm").submit();
+ 	   		$("#mdPwdForm").submit();
  	   	}
  	});
  	
  	$("input").focus(function(){
- 		$("#tipM").text('');
+ 		$("#tipOP").text('');
  		$("#tipP").text('');
+ 		$("#tipRP").text('');
  	});
  	
  	
@@ -54,22 +59,24 @@ $(document).ready(function(){
 <div class="container">
 <nav class="navbar">
 <ul>
-<li><a><img src=""${pageContext.request.contextPath}/images/left.png"/></a></li>
+<li><a href="${pageContext.request.contextPath}/members/accountInfo.html"><img src="${pageContext.request.contextPath}/images/left.png"/></a></li>
 <li><span>修改密码</span></li>
 <li></li>
 </ul>
 </nav>
 <!---导航结束--->
 <div>
+<form action="${pageContext.request.contextPath}/members/accountPassword.html" method="post" id="mdPwdForm">
 <div class="xsh_cells vux-no-group-title"> 
-<div class="xsh_cell xsh_cell_warn"> <div class="xsh_cell_hd"></div> <div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" id="oldPassword" type="oldPassword"><span id="tipOP" style="color:#FF0000"></span></div></div>
+<div class="xsh_cell xsh_cell_warn"> <div class="xsh_cell_hd"></div> <div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" id="oldPassword" name="oldPassword" type="password"><span id="tipOP" style="color:#FF0000"></span></div></div>
 
-<div class="xsh_cell xsh_cell_warn"> <div class="xsh_cell_hd"></div> <div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" id="password" type="password"><span id="tipP" style="color:#FF0000"></span></div></div>
+<div class="xsh_cell xsh_cell_warn"> <div class="xsh_cell_hd"></div> <div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" id="password" name="wMPassword" type="password"><span id="tipP" style="color:#FF0000"></span></div></div>
 
 <div class="xsh_cell xsh_cell_warn"> <div class="xsh_cell_hd"></div> <div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" id="rePassword" type="password"><span id="tipRP" style="color:#FF0000"></span></div></div>
 </div> </div>
+</form>
 <!--表单结束-->
-<div class="register-btn"><button class="rg-btn">确认修改</button></div>
+<div class="register-btn"><button class="rg-btn" id="btn_sub">确认修改</button></div>
 </div>
 </div>
 </div>

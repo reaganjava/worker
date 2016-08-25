@@ -29,20 +29,41 @@ public class ContactServiceImpl  extends BaseServiceImpl implements IContactServ
 		
 		WContact contact = new WContact();
 		
-		ResultSupport result = BeanUtilsExtends.copy(contact,contactDO);
+		ResultSupport result = new ResultSupport();
+		int recordNum = -1;
+		
+		WContactExample example = new WContactExample();
+		example.createCriteria().andWCDefaultEqualTo(1);
+		contact.setwCDefault(0);
+		try{
+			recordNum = contactMapper.updateByExampleSelective(contact, example);
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+			logger.error("[obj:contact][opt:create][msg:" + e.getMessage()
+			+ "]");
+			return result;
+		}
+		
+		if(recordNum < 0) {
+			result.setSuccess(false);
+			return result;
+		}
+		
+		result = BeanUtilsExtends.copy(contact,contactDO);
 		
 		if(!result.isSuccess()) {
 			return result;
 		}
 		
-		int recordNum = -1;
+		
 		
 		contact.setDatalevel(1);
 		contact.setStatus(1);
 		contact.setModifiAuthor(contact.getCreateAuthor());
 		contact.setCreateTime(Calendar.getInstance().getTime());
 		contact.setModifiTime(Calendar.getInstance().getTime());
-		
 		try {
 			recordNum = contactMapper.insertSelective(contact);
 		} catch (Exception e) {

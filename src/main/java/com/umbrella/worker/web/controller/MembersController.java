@@ -152,20 +152,30 @@ public class MembersController {
 	public ModelAndView editPwd(ModelAndView mav,  
 			MembersDO membersDO, HttpServletRequest request) {
 		
-		
+		Integer memberId = (Integer) request.getSession().getAttribute("MEMBER_ID");
+		String memberMobile = (String) request.getSession().getAttribute("MEMBER_MOBILE");
+		membersDO.setId(memberId);
 		MD5 md5 = new MD5();
-		String md5Pwd = md5.getMD5ofStr(membersDO.getwMPassword() 
-				+ membersDO.getwMMobile());
-		membersDO.setwMPassword(md5Pwd);
-		ResultDO resultDO = memberService.modifiPwd(membersDO);
 		
+		String md5Pwd = md5.getMD5ofStr(membersDO.getOldPassword() 
+				+ memberMobile);
+		membersDO.setOldPassword(md5Pwd);
+		System.out.println(membersDO.getId() + ":" + membersDO.getOldPassword());
+		
+		md5Pwd = md5.getMD5ofStr(membersDO.getwMPassword() 
+				+ memberMobile);
+		membersDO.setwMPassword(md5Pwd);
+		membersDO.setModifiAuthor(memberMobile);
+		System.out.println(membersDO.getId() + ":" + membersDO.getwMPassword());
+		ResultDO resultDO = memberService.modifiPwd(membersDO);
 		if(resultDO.isSuccess()) {
-			mav.setViewName("members/login");
+			return new ModelAndView("redirect:/members/accountInfo.html");
 		} else {
 			mav.setViewName("error");
 		}
 		
 		return mav; 
+	
 	}
 	
 	@RequestMapping(value = "/accountInfo.html", method = RequestMethod.GET)
@@ -202,37 +212,7 @@ public class MembersController {
 		return mav; 
 	}
 	
-	@RequestMapping(value = "/modifiPwd.html", method = RequestMethod.GET)
-	public ModelAndView change(ModelAndView mav, 
-			HttpServletRequest request) {
-		mav.setViewName("members/modifiPwd");
-		return mav; 
-	}
 	
-	@RequestMapping(value = "/modifiPwd.html", method = RequestMethod.POST)
-	public ModelAndView change(ModelAndView mav, 
-			MembersDO membersDO,
-			HttpServletRequest request) {
-		Integer memberId = (Integer) request.getSession().getAttribute("MEMBER_ID");
-		String memberMobile = (String) request.getSession().getAttribute("MEMBER_MOBILE");
-		membersDO.setId(memberId);
-		MD5 md5 = new MD5();
-		String md5Pwd = md5.getMD5ofStr(membersDO.getOldPassword() 
-				+ membersDO.getwMMobile());
-		membersDO.setwMPassword(md5Pwd);
-		md5Pwd = md5.getMD5ofStr(membersDO.getwMPassword() 
-				+ membersDO.getwMMobile());
-		membersDO.setwMPassword(md5Pwd);
-		membersDO.setModifiAuthor(memberMobile);
-		ResultDO resultDO = memberService.modifiPwd(membersDO);
-		if(resultDO.isSuccess()) {
-			mav.setViewName("members/login");
-		} else {
-			mav.setViewName("error");
-		}
-		
-		return mav; 
-	}
 	
 	@RequestMapping(value = "/getCode/{mobile}/{vcode}.json", method = RequestMethod.GET)
 	public ModelAndView ajaxGetCode(ModelAndView mav,
@@ -326,6 +306,7 @@ public class MembersController {
 		String memberMobile = (String) request.getSession().getAttribute("MEMBER_MOBILE");
 		contactDO.setwCMembersId(memberId);
 		contactDO.setCreateAuthor(memberMobile);
+		contactDO.setwCDefault(1);
 		ResultDO result = contactService.create(contactDO);
 		if(result.isSuccess()) {
 			request.getSession().setAttribute("CONTACT_DEFAULT", contactDO);

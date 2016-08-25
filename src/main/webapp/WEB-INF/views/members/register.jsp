@@ -15,11 +15,29 @@
 <title>注册</title>
 <script type="text/javascript">
 $(function(){
+	var isReg = false;
+	$("#tipM").text('');
+	$("#tipP").text('');
+	$("#tipS").text('');
+	$("#tipRP").text('');
     $('#sendCode').click(function(){
     	$('#code').show();
     	var mobile = $("#mobile").val();
     });
-    
+    $('#password').change(function(){
+    	var mobile = $("#mobile").val();
+    	$.ajax({
+            type: "GET",
+            url: "/members/checkMobile/" + mobile + ".json",
+            dataType: "json",
+            success: function(data){
+                 if(data == 0) {
+                	 isReg = true;
+                	 $("#tipM").text('手机号码已经注册过');
+                 }     
+            }
+        });
+    });
     $('#getCode').click(function() {
     	var is = true;
     	var mobile = $("#mobile").val();
@@ -32,6 +50,8 @@ $(function(){
     		 $("#tipV").text('输入验证码');
   		  	 is = false; 
     	}
+    	var mobile = $("#mobile").val();
+    	
     	if(is) {
     		$('#code').hide();
 	   		$.ajax({
@@ -66,8 +86,15 @@ $(function(){
 	    if(repassword == '' || repassword.length < 6) {
 	    	$("#tipRP").text('请再次输入密码');
 		  	is = false; 
+		  	if(repassword != password) {
+		  		$("#tipRP").text('两次密码输入不相同');
+		  		is = false;
+		  	}
 	   	}
-	   
+	    if(isReg) {
+	    	$("#tipM").text('手机号码已经注册过');
+	    	is = false;
+	    }
  	   	if(is) {
  	   		$("#regForm").submit();
  	   	}
