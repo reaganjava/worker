@@ -34,4 +34,8 @@ public class StringUtil {
 		return referer.replace(".html", "");
 	}
 	
+	public static void main(String[] args) {
+		System.out.println(StringUtil.getReferer("http://wx.xsh1314.com:20080/worker/members/accountInfo.html",  "/worker"));
+	}
+	
 }
