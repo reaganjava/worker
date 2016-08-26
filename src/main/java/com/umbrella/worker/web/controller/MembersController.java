@@ -122,8 +122,8 @@ public class MembersController {
 			membersDO = (MembersDO) resultDO.getModel(ResultSupport.FIRST_MODEL_KEY);
 			request.getSession().setAttribute("MEMBER_ID", membersDO.getId());
 			request.getSession().setAttribute("MEMBER_MOBILE", membersDO.getwMMobile());
-			if(backPage.equals("register")) {
-				mav.setViewName("test");
+			if(backPage.indexOf("register") != -1) {
+				return new ModelAndView("redirect:/");
 			} else {
 				return new ModelAndView("redirect:/" + backPage + ".html");
 			}
