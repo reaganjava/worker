@@ -24,13 +24,14 @@
      <table schema="worker" tableName="w_payrecord" ></table> 
      <table schema="worker" tableName="w_ratin" ></table> 
      <table schema="worker" tableName="w_worker_item" ></table>
-      <table schema="worker" tableName="w_order_detail" ></table> 
      <table schema="worker" tableName="w_staff" ></table> 
      <table schema="worker" tableName="w_supplier" ></table> 
      <table schema="worker" tableName="w_transaction" ></table> 
      <table schema="worker" tableName="w_supplier_worker" ></table>
      <table schema="worker" tableName="w_order_task" ></table>
-     <table schema="worker" tableName="w_worker_task" ></table> -->
+     <table schema="worker" tableName="w_worker_task" ></table> 
      <table schema="worker" tableName="w_worker_staff" ></table>
+     <table schema="worker" tableName="w_order_detail" ></table>-->
+     <table schema="worker" tableName="w_attachment" ></table> 
   </context>
 </generatorConfiguration>

@@ -17,6 +17,9 @@ public class OrderDetailDO extends BaseDO {
 
   
     private String wOContact;
+    
+    
+    private String wOMessage;
 
    
     private String wOCity;
@@ -96,6 +99,16 @@ public class OrderDetailDO extends BaseDO {
 
 	public void setwODistrict(String wODistrict) {
 		this.wODistrict = wODistrict;
+	}
+
+
+	public String getwOMessage() {
+		return wOMessage;
+	}
+
+
+	public void setwOMessage(String wOMessage) {
+		this.wOMessage = wOMessage;
 	}
 
 

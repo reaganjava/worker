@@ -22,7 +22,7 @@ img{ border:0; padding:0; margin:0;}
 .footer-icon{width:100%; margin:0 auto; padding-top:10px;}
 .footer-icon li{ width: 25%; float:left;text-align:center;}
 .footer-icon li a span{ display:block;}
-.footer-icon li a img{width:40px; height:32px;}
+.footer-icon li a img{width:33px; height:32px;}
 .footerbar{ background-color:#fff; height:70px; position:absolute; bottom:0; left:0; right:0; max-width:640px; margin:0 auto;}
 /******2016-08-02 选择面积*********/
 .house-area{ width:96%; margin:0 auto;}
