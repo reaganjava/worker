@@ -289,6 +289,63 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 	}
 	
 	@Override
+	public ResultDO rush(OrderDO orderDO) {
+	
+		WOrder order = new WOrder();
+
+		ResultSupport result = BeanUtilsExtends.copy(orderDO, order);
+		// 拷贝失败
+		if (!result.isSuccess()) {
+			return result;
+		}
+		
+		order.setModifiTime(Calendar.getInstance().getTime());
+		
+		int recordNum = -1;
+	
+		try {
+			recordNum = orderMapper.updateByPrimaryKeySelective(order);
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			logger.error("[obj:order][opt:modifi][msg:" + e.getMessage()
+					+ "]");
+			return result;
+		}
+		
+		if (recordNum < 1) {
+			result.setSuccess(false);
+		}
+		
+		recordNum = -1;
+		WOrderDetail orderDetail = new WOrderDetail();
+		result = BeanUtilsExtends.copy(orderDO.getOrderDetailDO(), orderDetail);
+		// 拷贝失败
+		if (!result.isSuccess()) {
+			return result;
+		}
+		
+		try {
+			recordNum = orderDetailMapper.updateByPrimaryKeySelective(orderDetail);
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			logger.error("[obj:order][opt:modifi][msg:" + e.getMessage()
+					+ "]");
+			return result;
+		}
+		
+		if (recordNum < 1) {
+			result.setSuccess(false);
+		}
+		
+		return result;
+		
+	}
+	
+	@Override
 	public ResultDO confirm(int orderId) {
 		
 		ResultSupport result = new ResultSupport();

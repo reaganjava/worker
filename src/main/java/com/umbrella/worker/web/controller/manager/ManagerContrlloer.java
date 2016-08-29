@@ -63,6 +63,7 @@ public class ManagerContrlloer {
 			request.getSession().setAttribute("MANAGER_NAME", adminDO.getwAUsername());
 			request.getSession().setAttribute("MANAGER_ROLE_ID", adminDO.getwARoleId());
 			request.getSession().setAttribute("MANAGER_SUPPLIER_ID", adminDO.getwASupplierId());
+			request.getSession().setAttribute("MANAGER_SUPPLIER_NAME", adminDO.getSupplierName());
 			return new ModelAndView("redirect:/manager/index.html");
 		} else {
 			mav.setViewName("manager/login");

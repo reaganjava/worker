@@ -20,4 +20,6 @@ public interface IOrderService {
 	public ResultDO get(int orderId);
 	
 	public ResultDO modifiDetail(OrderDetailDO orderDetailDO);
+
+	public ResultDO rush(OrderDO orderDO);
 }

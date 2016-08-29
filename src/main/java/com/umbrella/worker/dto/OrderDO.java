@@ -15,6 +15,9 @@ public class OrderDO extends BaseDO {
     private SupplierDO supplierDO;
     
     
+    private Integer wOSupplierId;
+    
+    
     private OrderDetailDO orderDetailDO;
     
     
@@ -89,6 +92,16 @@ public class OrderDO extends BaseDO {
 
 	public void setSupplierDO(SupplierDO supplierDO) {
 		this.supplierDO = supplierDO;
+	}
+
+
+	public Integer getwOSupplierId() {
+		return wOSupplierId;
+	}
+
+
+	public void setwOSupplierId(Integer wOSupplierId) {
+		this.wOSupplierId = wOSupplierId;
 	}
 
 

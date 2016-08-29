@@ -129,9 +129,22 @@ public class AdminServiceImpl extends BaseServiceImpl implements IAdminService {
 			result.setSuccess(false);
 			return result;
 		}
+		
+		WSupplier supplier = null;
+		
+		try {
+			supplier = supplierMapper.selectByPrimaryKey(admin.getwASupplierId());
+		} catch (Exception e) {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+	        logger.error("[obj:supplier][opt:get][msg:"+e.getMessage()+"]");
+	        return result;
+		}
 
 		adminDO = getAdminDO(admin);
 		if(adminDO != null) {
+			adminDO.setSupplierName(supplier.getwSName());
 			adminDO.setMenus(menuDOList);
 			result.setModel(ResultSupport.FIRST_MODEL_KEY, adminDO);
 		} else {
@@ -140,6 +153,7 @@ public class AdminServiceImpl extends BaseServiceImpl implements IAdminService {
             result.setErrorMsg(ResultDO.MEMBER_LOGIN_FAILED_MSG);
 			return result;
 		}
+		
 		
 		admin.setwALastLogTime(Calendar.getInstance().getTime());
 		
