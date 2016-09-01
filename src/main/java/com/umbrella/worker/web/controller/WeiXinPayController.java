@@ -1,15 +1,30 @@
 package com.umbrella.worker.web.controller;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.SimpleHttpConnectionManager;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.params.HttpClientParams;
 import org.apache.log4j.Logger;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+
 
 import com.umbrella.worker.tenpay.AccessTokenRequestHandler;
 import com.umbrella.worker.tenpay.ClientRequestHandler;
@@ -18,6 +33,10 @@ import com.umbrella.worker.tenpay.PrepayIdRequestHandler;
 import com.umbrella.worker.tenpay.util.ConstantUtil;
 import com.umbrella.worker.tenpay.util.TenpayUtil;
 import com.umbrella.worker.tenpay.util.WXUtil;
+import com.umbrella.worker.util.CommonUtil;
+import com.umbrella.worker.util.GetWeixinOAuth;
+import com.umbrella.worker.util.SignUtil;
+import com.umbrella.worker.util.Xml2JsonUtil;
 
 /**
  * 微信支付服务端简单示例
@@ -29,14 +48,49 @@ import com.umbrella.worker.tenpay.util.WXUtil;
 @RequestMapping("/pay/")
 public class WeiXinPayController {
 
-	private Logger log = Logger.getLogger(WeiXinPayController.class);
+	private Logger logger = Logger.getLogger(WeiXinPayController.class);
+	
+	
+	
+	@RequestMapping(value = "oauth.html")
+	public ModelAndView wexinOAuth(ModelAndView mav, HttpServletRequest request, HttpServletResponse response) {
+		String code = request.getParameter("code");
+		System.out.println("==============" + code + "======================");
+        String appid = "wxc419a6155fcf608b";
+        String secret = "b21159d0e4dab3eac23de2a78e15d31a";
+        String requestUrl = "https://api.weixin.qq.com/sns/oauth2/access_token?appid="+appid+"&secret="+secret+"&code="+code+"&grant_type=authorization_code";
+        //第一次请求 获取access_token 和 openid
+        String oppid = null;
+		try {
+			oppid = new GetWeixinOAuth().doGet(requestUrl);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        JSONObject oppidObj =JSONObject.fromObject(oppid);
+        String access_token = (String) oppidObj.get("access_token");
+        String openid = (String) oppidObj.get("openid");
+        String requestUrl2 = "https://api.weixin.qq.com/sns/userinfo?access_token="+access_token+"&openid="+openid+"&lang=zh_CN";
+        String userInfoStr = null;
+		try {
+			userInfoStr = new GetWeixinOAuth().doGet(requestUrl2);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        JSONObject wxUserInfo =JSONObject.fromObject(userInfoStr);
+        System.out.println("==============" + wxUserInfo.toString());
+        mav.addObject("OPENID", openid);
+        mav.setViewName("test");
+		return mav; 
+	}
 
-	@RequestMapping("weixin.html")
-	public ModelAndView doWeinXinRequest(ModelAndView mav, HttpServletRequest request, HttpServletResponse response)
+	@RequestMapping(value = "/getPay.html", method = RequestMethod.POST)
+	public ModelAndView doWeinXinRequest(ModelAndView mav, String openid ,HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		Map<String, Object> payInfo = new HashMap<String, Object>();
+		
 		// 接收财付通通知的URL
-		String notify_url = "http://127.0.0.1:8080/tenpay_api_b2c/payNotifyUrl.jsp";
+		String notify_url = "http://wx.xsh1314.com/pay/payInfo.html";
 
 		// ---------------生成订单号 开始------------------------
 		// 当前时间 yyyyMMddHHmmss
@@ -49,101 +103,106 @@ public class WeiXinPayController {
 		String strReq = strTime + strRandom;
 		// 订单号，此处用时间加随机数生成，商户根据自己情况调整，只要保持全局唯一就行
 		String out_trade_no = strReq;
-		// ---------------生成订单号 结束------------------------
-
-		PackageRequestHandler packageReqHandler = new PackageRequestHandler(request, response);// 生成package的请求类
-		PrepayIdRequestHandler prepayReqHandler = new PrepayIdRequestHandler(request, response);// 获取prepayid的请求类
-		ClientRequestHandler clientHandler = new ClientRequestHandler(request, response);// 返回客户端支付参数的请求类
-		packageReqHandler.setKey(ConstantUtil.PARTNER_KEY);
-
-		// 获取token值
-
-		String token = AccessTokenRequestHandler.getAccessToken();
-
-		log.info("获取token------值 " + token);
-
-		if (!"".equals(token)) {
-			// 设置package订单参数
-			packageReqHandler.setParameter("bank_type", "WX");// 银行渠道
-			packageReqHandler.setParameter("body", "测试"); // 商品描述
-			packageReqHandler.setParameter("notify_url", notify_url); // 接收财付通通知的URL
-			packageReqHandler.setParameter("partner", ConstantUtil.PARTNER); // 商户号
-			packageReqHandler.setParameter("out_trade_no", out_trade_no); // 商家订单号
-			packageReqHandler.setParameter("total_fee", "1"); // 商品金额,以分为单位
-			packageReqHandler.setParameter("spbill_create_ip", request.getRemoteAddr()); // 订单生成的机器IP，指用户浏览器端IP
-			packageReqHandler.setParameter("fee_type", "1"); // 币种，1人民币 66
-			packageReqHandler.setParameter("input_charset", "GBK"); // 字符编码
-
-			// 获取package包
-			String packageValue = packageReqHandler.getRequestURL();
-
-			log.info("获取package------值 " + packageValue);
-
-			String noncestr = WXUtil.getNonceStr();
-			String timestamp = WXUtil.getTimeStamp();
-			String traceid = "";
-			// 设置获取prepayid支付参数
-			prepayReqHandler.setParameter("appid", ConstantUtil.APP_ID);
-			prepayReqHandler.setParameter("appkey", ConstantUtil.APP_KEY);
-			prepayReqHandler.setParameter("noncestr", noncestr);
-			prepayReqHandler.setParameter("package", packageValue);
-			prepayReqHandler.setParameter("timestamp", timestamp);
-			prepayReqHandler.setParameter("traceid", traceid);
-
-			// 生成获取预支付签名
-			String sign = prepayReqHandler.createSHA1Sign();
-			// 增加非参与签名的额外参数
-			prepayReqHandler.setParameter("app_signature", sign);
-			prepayReqHandler.setParameter("sign_method", ConstantUtil.SIGN_METHOD);
-			String gateUrl = ConstantUtil.GATEURL + token;
-			prepayReqHandler.setGateUrl(gateUrl);
-
-			// 获取prepayId
-			String prepayid = prepayReqHandler.sendPrepay();
-
-			log.info("获取prepayid------值 " + prepayid);
-
-			// 吐回给客户端的参数
-			if (null != prepayid && !"".equals(prepayid)) {
-				// 输出参数列表
-				clientHandler.setParameter("appid", ConstantUtil.APP_ID);
-				clientHandler.setParameter("appkey", ConstantUtil.APP_KEY);
-				clientHandler.setParameter("noncestr", noncestr);
-				// clientHandler.setParameter("package", "Sign=" +
-				// packageValue);
-				clientHandler.setParameter("package", "Sign=WXPay");
-				clientHandler.setParameter("partnerid", ConstantUtil.PARTNER);
-				clientHandler.setParameter("prepayid", prepayid);
-				clientHandler.setParameter("timestamp", timestamp);
-				// 生成签名
-				sign = clientHandler.createSHA1Sign();
-				clientHandler.setParameter("sign", sign);
-
-				payInfo.put("appid", ConstantUtil.APP_ID);
-				payInfo.put("appkey", ConstantUtil.APP_KEY);
-				payInfo.put("noncestr", noncestr);
-				System.out.println("prepayid" + prepayid);
-				payInfo.put("packageValue", "prepay_id=" + prepayid);
-				payInfo.put("timestamp", timestamp);
-				payInfo.put("signType", "MD5");
-				sign = clientHandler.createSHA1Sign();
-				payInfo.put("sign", sign);
-
-				mav.addObject("RESULT", 1);
-				mav.addObject("PAYINFO", payInfo);
-				mav.setViewName("pay");
-			} else {
-				mav.addObject("RESULT", 0);
-				mav.addObject("MSG", "获取perpayid失败");
-				mav.setViewName("pay");
-			}
-		} else {
-			mav.addObject("RESULT", 0);
-			mav.addObject("MSG", "获取令牌失败");
-			mav.setViewName("pay");
-		}
-
+		 logger.info("************openid***********为："+openid);
+	        //获取prepayid
+	        Map<String ,String > map=new HashMap<String,String>();
+	       
+	         String nonceStr=UUID.randomUUID().toString().substring(0, 32);
+	         
+	     
+	     
+	        long timestamp = System.currentTimeMillis() / 1000;
+	        map.put("appid", ConstantUtil.APP_ID);
+	        map.put("mch_id", ConstantUtil.MCH_ID);
+	        map.put("nonce_str",nonceStr);
+	        map.put("body",  "test");
+	        map.put("out_trade_no", out_trade_no);
+	        map.put("total_fee", "1");
+	        map.put("spbill_create_ip","127.0.0.1");
+	        map.put("notify_url", notify_url);
+	        map.put("trade_type", "JSAPI");
+	        map.put("openid", openid);
+	        String paySign=SignUtil.getPayCustomSign(map,ConstantUtil.APP_KEY);
+	        map.put("sign",paySign);
+	        String xml=    CommonUtil.ArrayToXml(map);
+	        String prepayid=  getPrepayid(xml);
+	        logger.info("prepareid*****************************="+prepayid);
+	       //封装h5页面调用参数
+	        Map<String ,String > signMap=new HashMap<String ,String >();
+	        signMap.put("appId", ConstantUtil.APP_ID);
+	        logger.info("appId="+ConstantUtil.APP_ID);
+	        signMap.put("timeStamp", timestamp+"");
+	        logger.info("timeStamp="+timestamp);
+	        signMap.put("package", "prepay_id="+prepayid);
+	        logger.info("package="+"prepay_id="+prepayid);
+	        signMap.put("signType", "MD5");
+	        logger.info("singType="+"MD5");
+	        signMap.put("nonceStr", nonceStr);
+	        logger.info("nonceStr="+nonceStr);
+	        mav.addObject("appId", ConstantUtil.APP_ID);
+	        mav.addObject("paytimestamp", timestamp);
+	        mav.addObject("paypackage", "prepay_id="+prepayid);
+	        mav.addObject("paynonceStr", nonceStr);
+	        mav.addObject("paysignType", "MD5");
+	        String paySign2=SignUtil.getPayCustomSign(signMap,ConstantUtil.APP_KEY);
+	        mav.addObject("paySign",paySign2);
+	        logger.info("paySign="+paySign2);
+            mav.setViewName("pay/confirm");
 		return mav;
 	}
+	
+	@RequestMapping(value = "/payInfo.html")
+	public ModelAndView doWeinXinRequest(ModelAndView mav, HttpServletRequest request, HttpServletResponse response) {
+		return mav;
+	}
+	
+	
+    @SuppressWarnings("deprecation")
+    public  JSONObject getPrepayJson(String xml){
+    	String URL="https://api.mch.weixin.qq.com/pay/unifiedorder";
+        HttpClient httpClient = new HttpClient(new HttpClientParams(),new SimpleHttpConnectionManager(true) ); 
+        InputStream is = null;
+         PostMethod method=null;
+        try {
+            String url =URL;
+             method = new PostMethod(url);
+             method.setRequestBody(xml);
+            httpClient.executeMethod(method);
+            //读取响应
+             is = method.getResponseBodyAsStream();
+            JSONObject o =Xml2JsonUtil.xml2JSON(is);
+            System.out.println(o.toString());
+            return o;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally{
+            if(method!=null){
+                method.releaseConnection();
+            }
+            if(is!=null){
+                try {
+                    is.close();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
+    
+    public  String getPrepayid(String xml){
+        try {
+        	System.out.println(xml);
+            JSONObject jo=getPrepayJson(xml);
+            JSONObject element=jo.getJSONObject("xml");
+            String prepayid= ((JSONArray)element.get("prepay_id")).get(0).toString();
+            return prepayid;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    
 
 }

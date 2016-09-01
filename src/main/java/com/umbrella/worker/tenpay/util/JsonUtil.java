@@ -1,6 +1,7 @@
 package com.umbrella.worker.tenpay.util;
 
-import org.json.JSONObject;
+import net.sf.json.JSONObject;
+
 
 public class JsonUtil {
 
@@ -8,7 +9,7 @@ public class JsonUtil {
 		JSONObject jsonObject;
 		String v = null;
 		try {
-			jsonObject = new JSONObject(rescontent);
+			jsonObject = new JSONObject();
 			v = jsonObject.getString(key);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block

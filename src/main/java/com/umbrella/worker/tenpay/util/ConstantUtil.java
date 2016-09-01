@@ -10,7 +10,7 @@ public class ConstantUtil {
 	public static String APP_SECRET = "b21159d0e4dab3eac23de2a78e15d31a";//应用对应的凭证
 	//应用对应的密钥
 	public static String APP_KEY = "XINshengHUO1314liuPEIsong2016086";
-	public static String PARTNER = "137588602";//财付通商户号
+	public static String MCH_ID = "1375882602";//财付通商户号
 	public static String PARTNER_KEY = "8934e7d15453e97507ef794cf7b0519d";//商户号对应的密钥
 	public static String TOKENURL = "https://api.weixin.qq.com/cgi-bin/token";//获取access_token对应的url
 	public static String GRANT_TYPE = "client_credential";//常量固定值 

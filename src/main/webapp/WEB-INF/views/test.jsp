@@ -1,5 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -7,11 +8,11 @@
 <title>Insert title here</title>
 </head>
 <body>
-<p>用户登录</p>
-<a href="${pageContext.request.contextPath}/members/login.html">用户登录</a></p>
-<p>用户注册</p>
-<a href="${pageContext.request.contextPath}/members/register.html">用户注册</a></p>
-<p>购买临时保洁</p>
-<a href="${pageContext.request.contextPath}/goods/job/13.html">临时保洁</a></p>
+<!-- <a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxc419a6155fcf608b&redirect_uri=http://www.xsh1314.com/pay/oauth.json&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect"><H1>getUserCode</H1></a> -->
+<form action="${pageContext.request.contextPath}/pay/getPay.html" method="POST">
+<input type="hidden" value="${OPENID}" name="openid"/> 
+<input type="submit" value="ok"/>
+</form>
+</body>
 </body>
 </html>
