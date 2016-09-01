@@ -30,7 +30,7 @@ import com.umbrella.worker.util.SignUtil;
  * @dateTime 2014-11-29
  */
 @Controller
-@RequestMapping("/pay/")
+@RequestMapping("/pay")
 public class PayController {
 
 	private Logger logger = Logger.getLogger(PayController.class);
