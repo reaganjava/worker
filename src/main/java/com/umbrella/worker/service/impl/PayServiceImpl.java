@@ -1,9 +1,20 @@
 package com.umbrella.worker.service.impl;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.SimpleHttpConnectionManager;
+import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.params.HttpClientParams;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.umbrella.worker.dao.WPayrecordMapper;
 import com.umbrella.worker.dto.PayrecordDO;
@@ -14,12 +25,20 @@ import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.IPayService;
 import com.umbrella.worker.util.BeanUtilsExtends;
+import com.umbrella.worker.util.CommonUtil;
+import com.umbrella.worker.util.Constant;
+import com.umbrella.worker.util.SignUtil;
 import com.umbrella.worker.util.StringUtil;
+import com.umbrella.worker.util.Xml2JsonUtil;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
+@Service("payService")
 public class PayServiceImpl  extends BaseServiceImpl implements IPayService {
 	
 	private static Logger logger = Logger.getLogger(PayServiceImpl.class);
-	
+	@Autowired
 	private WPayrecordMapper payrecordMapper;
 
 	@Override
@@ -215,6 +234,81 @@ public class PayServiceImpl  extends BaseServiceImpl implements IPayService {
 		return result;
 	}
 	
+	public ResultDO getPrepayId(String orderNo, String openid, String memberIP, String nonceStr) {
+		ResultSupport result = new ResultSupport();
+		logger.info("************openid***********：" + openid);
+		// 获取prepayid
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("appid", Constant.APP_ID);
+		map.put("mch_id", Constant.MCH_ID);
+		map.put("nonce_str", nonceStr);
+		map.put("body", "test");
+		map.put("out_trade_no", orderNo);
+		map.put("total_fee", "1");
+		map.put("spbill_create_ip", memberIP);
+		map.put("notify_url", Constant.NOTIFY_URL);
+		map.put("trade_type", "JSAPI");
+		map.put("openid", openid);
+		String paySign = null;
+		try {
+			paySign = SignUtil.getPayCustomSign(map, Constant.APP_KEY);
+		} catch (Exception e) {
+			result.setSuccess(false);
+		}
+		map.put("sign", paySign);
+		String xml = CommonUtil.ArrayToXml(map);
+		String prepayid = getPrepayid(xml);
+		if(prepayid != null) {
+			result.setModel(ResultSupport.FIRST_MODEL_KEY, prepayid);
+		} else {
+			result.setSuccess(false);
+		}
+		return result;
+	}
 	
+	@SuppressWarnings("deprecation")
+	private JSONObject getPrepayJson(String xml) {
+		String URL = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+		HttpClient httpClient = new HttpClient(new HttpClientParams(), new SimpleHttpConnectionManager(true));
+		InputStream is = null;
+		PostMethod method = null;
+		try {
+			String url = URL;
+			method = new PostMethod(url);
+			method.setRequestBody(xml);
+			httpClient.executeMethod(method);
+			// 读取响应
+			is = method.getResponseBodyAsStream();
+			JSONObject o = Xml2JsonUtil.xml2JSON(is);
+			return o;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (method != null) {
+				method.releaseConnection();
+			}
+			if (is != null) {
+				try {
+					is.close();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		}
+		return null;
+	}
+
+	private String getPrepayid(String xml) {
+		try {
+			System.out.println(xml);
+			JSONObject jo = getPrepayJson(xml);
+			JSONObject element = jo.getJSONObject("xml");
+			String prepayid = ((JSONArray) element.get("prepay_id")).get(0).toString();
+			return prepayid;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 }

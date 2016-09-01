@@ -1,4 +1,5 @@
-package com.umbrella.worker.tenpay.util;
+package com.umbrella.worker.util;
+
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

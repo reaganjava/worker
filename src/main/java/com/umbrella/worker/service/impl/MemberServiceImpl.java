@@ -8,13 +8,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.umbrella.worker.util.BeanUtilsExtends;
+import com.umbrella.worker.util.Constant;
+import com.umbrella.worker.util.GetWeixinOAuth;
 import com.umbrella.worker.util.StringUtil;
+
+
+
 import com.umbrella.worker.dao.WContactMapper;
 import com.umbrella.worker.dao.WMemberCouponMapper;
 import com.umbrella.worker.dao.WMemberDetailMapper;
 import com.umbrella.worker.dao.WMembersMapper;
 import com.umbrella.worker.dao.WOrderMapper;
-import com.umbrella.worker.dao.WOrderTaskMapper;
+
 import com.umbrella.worker.dto.ContactDO;
 import com.umbrella.worker.dto.MemberCouponDO;
 import com.umbrella.worker.dto.MemberDetailDO;
@@ -513,7 +518,41 @@ public class MemberServiceImpl  extends BaseServiceImpl implements IMemberServic
 		return result;
 	}
 	
-	
+	public ResultDO userOAuth(String userCode) {
+		ResultSupport result = new ResultSupport();
+		
+		String oauth2_url = Constant.WEIXIN_OAUTH2_URL;
+		oauth2_url = oauth2_url.replace("{APPID}", Constant.APP_ID)
+				  .replace("{SECRET}", Constant.APP_SECRET)
+				  .replace("{CODE}", userCode);
+		//第一次请求 获取access_token 和 openid
+		String oppid = null;
+		try {
+			oppid = new GetWeixinOAuth().doGet(oauth2_url);
+		} catch (Exception e) {
+			result.setSuccess(false);
+		}
+		/*JSONObject oppidObj = JSONObject.fromObject(oppid);
+		String access_token = (String) oppidObj.get("access_token");
+		String openid = (String) oppidObj.get("openid");
+		String requestUrl2 = "https://api.weixin.qq.com/sns/userinfo?access_token=" 
+				+ access_token + "&openid=" + openid + "&lang=zh_CN";
+		String userInfoStr = null;
+		try {
+			userInfoStr = new GetWeixinOAuth().doGet(requestUrl2);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		JSONObject wxUserInfo = JSONObject.fromObject(userInfoStr);
+		*/
+		if(oppid != null) {
+			result.setModel(ResultSupport.FIRST_MODEL_KEY, oppid);
+		} else {
+			result.setSuccess(false);
+		}
+		return result;
+	}
 	
 	
 
