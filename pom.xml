@@ -224,7 +224,7 @@
   <build>
 		<finalName>worker</finalName>
 		<plugins>
-		<!-- <plugin>
+		<!--  <plugin>
 				<groupId>org.mybatis.generator</groupId>
 				<artifactId>mybatis-generator-maven-plugin</artifactId>
 				<version>${mybatis-generator.version}</version>

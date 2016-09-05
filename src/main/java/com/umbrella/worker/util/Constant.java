@@ -4,6 +4,9 @@ public class Constant {
 
 	public static final String SMS_MOBILE_VAIDATE_KEY = "sms_mobile_vaidate";
 	
+	
+	public static final String[] PAY_CHANNELS = {"微信支付", ""};
+	
 	//初始化
 	public static String APP_ID = "wxc419a6155fcf608b";//微信开发平台应用id
 	public static String APP_SECRET = "b21159d0e4dab3eac23de2a78e15d31a";//应用对应的凭证

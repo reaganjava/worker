@@ -19,9 +19,6 @@ public class OrderDO extends BaseDO {
     
     
     private OrderDetailDO orderDetailDO;
-    
-    
-    private OrderTaskDO orderTaskDO;
 
    
     private String wOOrderNo;
@@ -112,16 +109,6 @@ public class OrderDO extends BaseDO {
 
 	public void setOrderDetailDO(OrderDetailDO orderDetailDO) {
 		this.orderDetailDO = orderDetailDO;
-	}
-
-
-	public OrderTaskDO getOrderTaskDO() {
-		return orderTaskDO;
-	}
-
-
-	public void setOrderTaskDO(OrderTaskDO orderTaskDO) {
-		this.orderTaskDO = orderTaskDO;
 	}
 
 

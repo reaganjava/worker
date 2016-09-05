@@ -14,14 +14,10 @@ import com.umbrella.worker.dto.MembersDO;
 import com.umbrella.worker.dto.MenuDO;
 import com.umbrella.worker.dto.OrderDO;
 import com.umbrella.worker.dto.OrderDetailDO;
-import com.umbrella.worker.dto.OrderTaskDO;
 import com.umbrella.worker.dto.PayrecordDO;
 import com.umbrella.worker.dto.StaffDO;
 import com.umbrella.worker.dto.SupplierDO;
 import com.umbrella.worker.dto.TransactionDO;
-import com.umbrella.worker.dto.WorkerItemDO;
-import com.umbrella.worker.dto.WorkerStaffDO;
-import com.umbrella.worker.dto.WorkerTaskDO;
 import com.umbrella.worker.entity.WAdmin;
 import com.umbrella.worker.entity.WCertificore;
 import com.umbrella.worker.entity.WComment;
@@ -33,14 +29,10 @@ import com.umbrella.worker.entity.WMembers;
 import com.umbrella.worker.entity.WMenu;
 import com.umbrella.worker.entity.WOrder;
 import com.umbrella.worker.entity.WOrderDetail;
-import com.umbrella.worker.entity.WOrderTask;
 import com.umbrella.worker.entity.WPayrecord;
 import com.umbrella.worker.entity.WStaff;
 import com.umbrella.worker.entity.WSupplier;
 import com.umbrella.worker.entity.WTransaction;
-import com.umbrella.worker.entity.WWorkerItem;
-import com.umbrella.worker.entity.WWorkerStaff;
-import com.umbrella.worker.entity.WWorkerTask;
 import com.umbrella.worker.util.BeanUtilsExtends;
 
 public class BaseServiceImpl {
@@ -356,82 +348,5 @@ public class BaseServiceImpl {
 		return resultList;
 	}
 	
-	protected WorkerTaskDO getWorkerTaskDO(WWorkerTask obj) {
-		if(obj == null) return null;
-		WorkerTaskDO dst = new WorkerTaskDO();
-		return BeanUtilsExtends.copyProperties(dst, obj) ? dst : null;
-	}
 	
-	protected List<WorkerTaskDO> getWorkerTaskDOList(List<WWorkerTask> list) {
-		List<WorkerTaskDO> resultList = new ArrayList<WorkerTaskDO>();
-		if(list.size() > 0) {
-			for(WWorkerTask workerTask : list) {
-				WorkerTaskDO workerTaskDO = this.getWorkerTaskDO(workerTask);
-				if(workerTaskDO != null) {
-					resultList.add(workerTaskDO);
-				} else {
-					return null;
-				}
-			}
-		} else {
-			return null;
-		}
-		return resultList;
-	}
-	
-	protected WorkerItemDO getWorkerItemDO(WWorkerItem obj) {
-		if(obj == null) return null;
-		WorkerItemDO dst = new WorkerItemDO();
-		return BeanUtilsExtends.copyProperties(dst, obj) ? dst : null;
-	}
-	
-	protected List<WorkerItemDO> getWorkerItemDOList(List<WWorkerItem> list) {
-		List<WorkerItemDO> resultList = new ArrayList<WorkerItemDO>();
-		if(list.size() > 0) {
-			for(WWorkerItem workerItem : list) {
-				WorkerItemDO workerItemDO = this.getWorkerItemDO(workerItem);
-				if(workerItemDO != null) {
-					resultList.add(workerItemDO);
-				} else {
-					return null;
-				}
-			}
-		} else {
-			return null;
-		}
-		return resultList;
-	}
-	
-	protected WorkerStaffDO getWorkerStaffDO(WWorkerStaff obj) {
-		if(obj == null) return null;
-		WorkerStaffDO dst = new WorkerStaffDO();
-		return BeanUtilsExtends.copyProperties(dst, obj) ? dst : null;
-	}
-	
-	protected List<WorkerStaffDO> getWorkerStaffDOList(List<WWorkerStaff> list) {
-		List<WorkerStaffDO> resultList = new ArrayList<WorkerStaffDO>();
-		if(list.size() > 0) {
-			for(WWorkerStaff workerStaff : list) {
-				WorkerStaffDO workerStaffDO = this.getWorkerStaffDO(workerStaff);
-				if(workerStaffDO != null) {
-					resultList.add(workerStaffDO);
-				} else {
-					return null;
-				}
-			}
-		} else {
-			return null;
-		}
-		return resultList;
-	}
-	
-	protected OrderTaskDO getOrderTaskDO(WOrderTask obj) {
-		if(obj == null) return null;
-		System.out.println(obj.getwOTaskName());
-		OrderTaskDO dst = new OrderTaskDO();
-		return BeanUtilsExtends.copyProperties(dst, obj) ? dst : null;
-	}
-
-
-
 }

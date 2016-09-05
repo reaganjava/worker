@@ -14,16 +14,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.umbrella.worker.util.PageBeanUtil;
+import com.umbrella.worker.dto.CleanDO;
 import com.umbrella.worker.dto.ContactDO;
 import com.umbrella.worker.dto.OrderDO;
 import com.umbrella.worker.dto.OrderDetailDO;
-import com.umbrella.worker.dto.OrderTaskDO;
-import com.umbrella.worker.dto.WorkerTaskDO;
+
 import com.umbrella.worker.query.OrderQuery;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.IOrderService;
-import com.umbrella.worker.service.IWorkerService;
+
 
 
 @Controller
@@ -32,16 +32,14 @@ public class OrderController {
 	
 	@Autowired
 	private IOrderService orderService;
-	
-	@Autowired
-	IWorkerService workerService;
+
 	
 	@RequestMapping(value = "/getOrder.html", method = RequestMethod.POST)
 	public ModelAndView getOrder(ModelAndView mav, 
 			OrderDetailDO orderDetailDO,
 			HttpServletRequest request) {
 		
-		WorkerTaskDO workerTaskDO = (WorkerTaskDO) request.getSession().getAttribute("TASK_INFO");
+		CleanDO cleanDO = (CleanDO) request.getSession().getAttribute("CLEAN_INFO");
 		
 		String memberMobile = (String) request.getSession().getAttribute("MEMBER_MOBILE");
 		
@@ -54,25 +52,22 @@ public class OrderController {
 		}
 		
 		if(contactDO == null) {
-			return new ModelAndView("redirect:/goods/buyJob/" + workerTaskDO.getId() + "/" + workerTaskDO.getItemId() + "/" + workerTaskDO.getStaffId() + ".html");
+			return new ModelAndView("redirect:/goods/buyJob.html");
 		}
-		OrderTaskDO orderTaskDO = new OrderTaskDO();
-	
-		orderTaskDO.setCreateAuthor(memberMobile);
-	
-		orderTaskDO.setWorkerTaskId(workerTaskDO.getId());
-		orderTaskDO.setWorkerItemId(workerTaskDO.getItemId());
-		orderTaskDO.setWorkerStaffId(workerTaskDO.getStaffId());
+		
 		
 		OrderDO orderDO = new OrderDO();
 		orderDetailDO.setwOCity("重庆");
-		orderDetailDO.setwOTaskId(workerTaskDO.getId());
 		orderDetailDO.setwOAddress(contactDO.getwCAddress());
 		orderDetailDO.setwOContact(contactDO.getwCContact());
 		orderDetailDO.setwOTelephone(contactDO.getwCTelephone());
 		orderDetailDO.setwODistrict(contactDO.getwCDistrict());
+		orderDetailDO.setwOServerName(cleanDO.getServiceName());
+		orderDetailDO.setwOServerTime(cleanDO.getHours());
+		orderDetailDO.setwOStaffCount(cleanDO.getStaffCount());
+		orderDetailDO.setwOPrice(cleanDO.getPrice());
 		
-		orderDetailDO.setOrderTaskDO(orderTaskDO);
+	
 		orderDetailDO.setCreateAuthor(memberMobile);
 		
 		String strDate = orderDetailDO.getSubDate() + " " + orderDetailDO.getSubTime();
@@ -117,12 +112,9 @@ public class OrderController {
 			mav.setViewName("error");
 		}
 		
-		resultDO = workerService.get(orderOD.getOrderDetailDO().getwOTaskId());
 		System.out.println(resultDO);
 		if(resultDO.isSuccess()) {
-			WorkerTaskDO workerTaskDO = (WorkerTaskDO) resultDO.getModel(ResultSupport.FIRST_MODEL_KEY);
-			System.out.println(workerTaskDO.getwWDesc());
-			mav.addObject("WORKER_TASK_INFO", workerTaskDO.getwWDesc());
+		
 		} else {
 			mav.setViewName("error");
 		}
@@ -144,11 +136,9 @@ public class OrderController {
 		} else {
 			mav.setViewName("error");
 		}
-		
-		resultDO = workerService.get(orderOD.getOrderDetailDO().getwOTaskId());
+	
 		if(resultDO.isSuccess()) {
-			WorkerTaskDO workerTaskDO = (WorkerTaskDO) resultDO.getModel(ResultSupport.FIRST_MODEL_KEY);
-			mav.addObject("WORKER_TASK_INFO", workerTaskDO.getwWDesc());
+		
 		} else {
 			mav.setViewName("error");
 		}

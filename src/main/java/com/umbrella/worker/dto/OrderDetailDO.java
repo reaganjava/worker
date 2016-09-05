@@ -1,5 +1,6 @@
 package com.umbrella.worker.dto;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class OrderDetailDO extends BaseDO {
@@ -7,27 +8,45 @@ public class OrderDetailDO extends BaseDO {
 	private Integer id;
 
    
-    private Integer wOStiffId;
-    
+	private Integer wOStiffId;
+
     
     private Integer wOTaskId;
 
-   
+    
     private String wOSupplierName;
 
-  
-    private String wOContact;
     
-    
-    private String wOMessage;
+    private String wOServerName;
 
    
+    private Integer wOServerTime;
+
+    
+    private Date createTime;
+
+    
+    private Integer wOStaffCount;
+
+    
+    private Date wOStartTime;
+
+    
+    private BigDecimal wOPrice;
+
+    
+    private Date wOEndTime;
+
+    
+    private String wOContact;
+
+    
     private String wOCity;
 
     
     private String wODistrict;
 
-   
+    
     private String wOTelephone;
 
     
@@ -39,8 +58,11 @@ public class OrderDetailDO extends BaseDO {
     
     private String wOAddress;
 
-    
+   
     private Date wOSubscribe;
+    
+    
+    private String wOMessage;
     
     
     private String subDate;
@@ -48,8 +70,6 @@ public class OrderDetailDO extends BaseDO {
     
     private String subTime;
 
-   
-    private OrderTaskDO orderTaskDO;
 
 
 	public Integer getId() {
@@ -102,16 +122,6 @@ public class OrderDetailDO extends BaseDO {
 	}
 
 
-	public String getwOMessage() {
-		return wOMessage;
-	}
-
-
-	public void setwOMessage(String wOMessage) {
-		this.wOMessage = wOMessage;
-	}
-
-
 	public String getwOTelephone() {
 		return wOTelephone;
 	}
@@ -140,16 +150,6 @@ public class OrderDetailDO extends BaseDO {
 	public void setwOSupplierName(String wOSupplierName) {
 		this.wOSupplierName = wOSupplierName;
 	}
-
-	public OrderTaskDO getOrderTaskDO() {
-		return orderTaskDO;
-	}
-
-
-	public void setOrderTaskDO(OrderTaskDO orderTaskDO) {
-		this.orderTaskDO = orderTaskDO;
-	}
-
 
 	public Integer getwOStiffId() {
 		return wOStiffId;
@@ -188,6 +188,86 @@ public class OrderDetailDO extends BaseDO {
 
 	public void setwOSubscribe(Date wOSubscribe) {
 		this.wOSubscribe = wOSubscribe;
+	}
+
+
+	public String getwOServerName() {
+		return wOServerName;
+	}
+
+
+	public void setwOServerName(String wOServerName) {
+		this.wOServerName = wOServerName;
+	}
+
+
+	public Integer getwOServerTime() {
+		return wOServerTime;
+	}
+
+
+	public void setwOServerTime(Integer wOServerTime) {
+		this.wOServerTime = wOServerTime;
+	}
+
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+
+	public Integer getwOStaffCount() {
+		return wOStaffCount;
+	}
+
+
+	public void setwOStaffCount(Integer wOStaffCount) {
+		this.wOStaffCount = wOStaffCount;
+	}
+
+
+	public Date getwOStartTime() {
+		return wOStartTime;
+	}
+
+
+	public void setwOStartTime(Date wOStartTime) {
+		this.wOStartTime = wOStartTime;
+	}
+
+
+	public BigDecimal getwOPrice() {
+		return wOPrice;
+	}
+
+
+	public void setwOPrice(BigDecimal wOPrice) {
+		this.wOPrice = wOPrice;
+	}
+
+
+	public Date getwOEndTime() {
+		return wOEndTime;
+	}
+
+
+	public void setwOEndTime(Date wOEndTime) {
+		this.wOEndTime = wOEndTime;
+	}
+
+
+	public String getwOMessage() {
+		return wOMessage;
+	}
+
+
+	public void setwOMessage(String wOMessage) {
+		this.wOMessage = wOMessage;
 	}
 
 

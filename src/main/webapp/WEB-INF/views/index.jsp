@@ -24,7 +24,7 @@
 <!---banner-end-->
 <div class="home-service-box">
 <ul class="home-service">
-<li><a href="${pageContext.request.contextPath}/goods/job/13.html"><img src="${pageContext.request.contextPath}/images/house-clean.png"/><span>临时保洁</span></a></li>
+<li><a href="${pageContext.request.contextPath}/goods/clean.html"><img src="${pageContext.request.contextPath}/images/house-clean.png"/><span>临时保洁</span></a></li>
 <li><a><img src="${pageContext.request.contextPath}/images/hour-worker.png"/><span>长期钟点工</span></a></li>
 <li><a><img src="${pageContext.request.contextPath}/images/bao-mu.png"/><span>住家保姆</span></a></li>
 <li><a><img src="${pageContext.request.contextPath}/images/yuer-sao.png"/><span>育儿嫂</span></a></li>

@@ -25,11 +25,11 @@
 <div class="ding">
 <h4>预订信息</h4>
 <ul>
-<li>服务类型：<span>${ORDER_INFO.orderTaskDO.wOTaskName}</span></li>
+<li>服务类型：<span>${ORDER_INFO.orderDetailDO.wOServerName}</span></li>
 <li>服务地址：<span>${ORDER_INFO.orderDetailDO.wODistrict}${ORDER_INFO.orderDetailDO.wOAddress} <i>${ORDER_INFO.orderDetailDO.wOContact}  电话:${ORDER_INFO.orderDetailDO.wOTelephone}</i></span></li>
-<li>服务时长：<span>${ORDER_INFO.orderTaskDO.wOTaskHours}小时</span></li>
+<li>服务时长：<span>${ORDER_INFO.orderDetailDO.wOServerTime}小时</span></li>
 <li>服务时间：<span>${ORDER_INFO.orderDetailDO.wOSubscribe}上门</span></li>
-<li>费用明细：<span>${ORDER_INFO.orderTaskDO.wOTaskPrice}元 X ${ORDER_INFO.orderTaskDO.wOTaskHours}小时</span></li>
+<li>费用明细：<span>${ORDER_INFO.orderDetailDO.wOPrice}元 X ${ORDER_INFO.orderDetailDO.wOServerTime}小时</span></li>
 </ul>
 <p class="tui">服务前<i>2小时</i>取消订单，将扣除您50%的服务费用</p>
 <hr>
@@ -42,7 +42,7 @@
 <!--预订信息 end-->
 <section class="service-cont">
 <div class="service-co">
-${WORKER_TASK_INFO}
+
 </div>
 </section>
 <!--服务内容 end-->
@@ -62,7 +62,7 @@ ${WORKER_TASK_INFO}
 <!---优惠结束--->
 <div class="pay-now">
 <ul>
-<li style=" text-align:right"><button class="money-btn">立即支付</button></li>
+<li style=" text-align:right"><button class="money-btn" onClick="getUserCode()">立即支付</button></li>
 <li style="text-align:center"><span>￥${ORDER_INFO.wOFee}</span></li>
 </ul>
 </div>
@@ -70,4 +70,9 @@ ${WORKER_TASK_INFO}
 </div>
 </div>
 </body>
+<script type="text/javascript">
+	function getUserCode() {
+		window.location ="${pageContext.request.contextPath}/pay/getCode/${ORDER_INFO.wOOrderNo}.html";
+	}
+</script>
 </html>

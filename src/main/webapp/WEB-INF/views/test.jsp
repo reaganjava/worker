@@ -11,6 +11,7 @@
 <!-- <a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxc419a6155fcf608b&redirect_uri=http://www.xsh1314.com/pay/oauth.json&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect"><H1>getUserCode</H1></a> -->
 <form action="${pageContext.request.contextPath}/pay/getPay.html" method="POST">
 <input type="hidden" value="${OPENID}" name="openid"/> 
+<input type="hidden" value="${ORDERNO}" name="orderNo"/> 
 <input type="submit" value="ok"/>
 </form>
 </body>

@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -21,6 +22,7 @@ import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.IMemberService;
 import com.umbrella.worker.service.IPayService;
 import com.umbrella.worker.util.Constant;
+import com.umbrella.worker.util.GetWeiXinOAuthUrl;
 import com.umbrella.worker.util.SignUtil;
 
 /**
@@ -40,16 +42,27 @@ public class PayController {
 	
 	@Autowired
 	private IPayService payService;
+	
+	
+	@RequestMapping(value = "/getCode/{orderNo}.html", method = RequestMethod.GET)
+	public ModelAndView getUserCode(ModelAndView mav, 
+			@PathVariable(value="orderNo") String orderNo,
+			HttpServletRequest request, HttpServletResponse response) {
+		String url = GetWeiXinOAuthUrl.getCodeRequest(orderNo);
+		
+		System.out.println(url);
+		return new ModelAndView("redirect:" + url);
+	}
 
-	@RequestMapping(value = "info.html")
+	@RequestMapping(value = "oauth.html")
 	public ModelAndView oauth(ModelAndView mav, HttpServletRequest request, HttpServletResponse response) {
 		String code = request.getParameter("code");
-		String orderNO = request.getParameter("orderNO");
+		String orderNo = request.getParameter("orderNo");
 		ResultDO result = memberService.userOAuth(code);
 		if(result.isSuccess()) {
 			mav.addObject("OPENID", result.getModel(ResultSupport.FIRST_MODEL_KEY));
-			mav.addObject("ORDERNO", orderNO);
-			mav.setViewName("info");
+			mav.addObject("ORDERNO", orderNo);
+			mav.setViewName("test");
 		} else {
 			mav.setViewName("error");
 		}

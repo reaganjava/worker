@@ -6,7 +6,10 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
+
+
+
+
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.SimpleHttpConnectionManager;
@@ -16,8 +19,11 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.umbrella.worker.dao.WOrderMapper;
 import com.umbrella.worker.dao.WPayrecordMapper;
 import com.umbrella.worker.dto.PayrecordDO;
+import com.umbrella.worker.entity.WOrder;
+import com.umbrella.worker.entity.WOrderExample;
 import com.umbrella.worker.entity.WPayrecord;
 import com.umbrella.worker.entity.WPayrecordExample;
 import com.umbrella.worker.query.PayrecordQuery;
@@ -38,6 +44,7 @@ import net.sf.json.JSONObject;
 public class PayServiceImpl  extends BaseServiceImpl implements IPayService {
 	
 	private static Logger logger = Logger.getLogger(PayServiceImpl.class);
+
 	@Autowired
 	private WPayrecordMapper payrecordMapper;
 
@@ -237,14 +244,21 @@ public class PayServiceImpl  extends BaseServiceImpl implements IPayService {
 	public ResultDO getPrepayId(String orderNo, String openid, String memberIP, String nonceStr) {
 		ResultSupport result = new ResultSupport();
 		logger.info("************openid***********：" + openid);
+		
+		WPayrecordExample example = new WPayrecordExample();
+		example.createCriteria().andWPrOrderNoEqualTo(orderNo)
+		.andDatalevelEqualTo(1);
+		List<WPayrecord> payList = payrecordMapper.selectByExample(example);
+		int fee = (int) (payList.get(0).getwPrFee().doubleValue() * 100);
+		
 		// 获取prepayid
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("appid", Constant.APP_ID);
 		map.put("mch_id", Constant.MCH_ID);
 		map.put("nonce_str", nonceStr);
-		map.put("body", "test");
+		map.put("body", "新生活家庭服务平台服务费用");
 		map.put("out_trade_no", orderNo);
-		map.put("total_fee", "1");
+		map.put("total_fee", fee + "");
 		map.put("spbill_create_ip", memberIP);
 		map.put("notify_url", Constant.NOTIFY_URL);
 		map.put("trade_type", "JSAPI");
@@ -309,6 +323,10 @@ public class PayServiceImpl  extends BaseServiceImpl implements IPayService {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public static void main(String[] args) {
+		System.out.println(new PayServiceImpl().getPrepayJson(""));
 	}
 
 }
