@@ -3,6 +3,7 @@ body{ font-family:"微软雅黑";}
 * {
     outline: 0;
     box-sizing: border-box;
+	
 }
 .xsh_icon_cancel:before {color: #f43530;font-size: 22px}
 .xsh_icon_clear:before, .xsh_icon_search:before {color: #b2b2b2;font-size: 14px}
@@ -29,7 +30,7 @@ button.xsh_btn_inline, button.xsh_btn_mini, input.xsh_btn_inline, input.xsh_btn_
 .xsh_cell_primary {-webkit-box-flex: 1;-ms-flex: 1;flex: 1}
 .xsh_input {width: 100%;border: 0;outline: 0;-webkit-appearance: none;background-color: transparent;font-size: inherit;color: inherit;height: 1.41176471em;line-height: 1.41176471}
 .xsh_input::-webkit-inner-spin-button, .xsh_input::-webkit-outer-spin-button {-webkit-appearance:none;margin:0}
-.nosend {color: #00cced;font-size: .27rem;margin-left: .2rem;}
+.nosend {color: #00cced;font-size:14px;margin-left: .2rem;}
 .mine_photo {width: 100%;height: 200px;background: #00cced;margin-bottom: 25px;overflow: hidden;}
 .mine_photo dl {width: 290px;height: auto;margin: 66px auto;}
 .mine_photo dl dt {width: 68px;height: 68px;margin: 0 auto;}

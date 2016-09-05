@@ -132,7 +132,7 @@ $(function(){
 <div class="xsh_cells vux-no-group-title"> 
 <div class="xsh_cell xsh_cell_warn"> 
 <div class="xsh_cell_hd"></div> 
-<div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" id="mobile"  type="text" name="wMMobile"><span id="tipM" style="color:#FF0000"></span> </div> 
+<div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" id="mobile"  type="text" name="wMMobile" placeholder="输入手机号码"/><span id="tipM" style="color:#FF0000"></span> </div> 
 <div class="xsh_cell_ft">
 <i class="xsh_icon xsh_icon_clear" style="display: none;"></i>
 <i class="xsh_icon xsh_icon_warn" style="display: none;"></i>
@@ -142,7 +142,7 @@ $(function(){
 
 <div class="xsh_cell xsh_cell_warn"> 
 <div class="xsh_cell_hd"></div> 
-<div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" id="smsCode" type="text" name="smsCode"><span id="tipS" style="color:#FF0000"></span></div>
+<div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" id="smsCode" type="text" name="smsCode" placeholder="验证码" /><span id="tipS" style="color:#FF0000"></span></div>
 <div class="xsh_cell_ft">
 <i class="xsh_icon xsh_icon_clear" style="display: none;"></i> 
 <i class="xsh_icon xsh_icon_warn" style="display: none;"></i>
@@ -150,9 +150,9 @@ $(function(){
 <i class="xsh_icon xsh_icon_success" style="display: none;"></i> 
 <span class="nosend">没有收到?</span></div></div> 
 
-<div class="xsh_cell xsh_cell_warn"> <div class="xsh_cell_hd"></div> <div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" id="password" name="wMPassword" type="password"> <span id="tipP" style="color:#FF0000"></span></div></div>
+<div class="xsh_cell xsh_cell_warn"> <div class="xsh_cell_hd"></div> <div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" id="password" name="wMPassword" type="password" placeholder="密码"> <span id="tipP" style="color:#FF0000"></span></div></div>
 
-<div class="xsh_cell xsh_cell_warn"> <div class="xsh_cell_hd"></div> <div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" id="repassword" name="rePassword" type="password"><span id="tipRP" style="color:#FF0000"></span> </div></div>
+<div class="xsh_cell xsh_cell_warn"> <div class="xsh_cell_hd"></div> <div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" id="repassword" name="rePassword" type="password" placeholder="重复密码"><span id="tipRP" style="color:#FF0000"></span> </div></div>
 </div> </div>
 </form>
 <!--表单结束-->

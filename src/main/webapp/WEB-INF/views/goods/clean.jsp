@@ -14,7 +14,7 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/lib/jquery/1.9.1/jquery.min.js?v=0.1"></script> 
 <title>临时保洁选择面积</title>
 </head>
-
+</head>
 <body>
 <div class="xsh">
 <div class="page-all">
@@ -53,7 +53,7 @@
 </section>
 <!---两人服务---->
 <div class="clean"></div>
-<section class="two-service">
+<section class="two-service" style=" height:120px;">
 <p>为节省您的时间，特推出2人服务</p>
 <ul class="house-area">
 <li id="f7"><div id="staff7" onClick="selectStaff(7,2,3);"><span>2人3小时</span></div></li>
@@ -61,17 +61,22 @@
 <li id="f9"><div id="staff9" onClick="selectStaff(9,2,5);"><span>2人5小时</span></div></li>
 </ul>
 </section>
+<section class="lin-intro">
+<div class="intro-di">
+<span>服务项目：临时保洁</span>
+<span>新生活平台为您提供临时保洁服务。服务涵盖卫生间、卧室、厨房、客厅、阳台等区域的保洁服务</span>
+</div>
+</section>
 <div class="clean"></div>
+</div>
+</div>
+</div>
 <div class="choose-next">
 <form action="${pageContext.request.contextPath}/goods/buyJob.html" method="post" id="cleanForm">
 <input name="hours" id="h" type="hidden">
 <input name="staffCount" id="sc" type="hidden">
 <a class="tab-bar-btn"  data-service="家庭保洁" href="javascript:void;" id="btn_sub">下一步</a>
 </form>
-
-</div>
-</div>
-</div>
 </div>
 </body>
 <script type="text/javascript">

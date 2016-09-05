@@ -49,8 +49,25 @@
 <div class="choose-time">
 <span class="time-words">请选择服务时间</span>
 <div class="time-input">
-<a><input type="text" class="choose-date" value="选择日期" onClick="selectDate()" id="weekDate" readonly/></a>
-<a><input type="text" class="choose-hour" value="选择时间" onClick="selectTime()" id="viewTime" readonly/></a>
+<select name="date" style="width:130px;">
+<c:forEach items="${WEEK_DATE_LIST}" var="dateValueDO">
+<option value="'${dateValueDO.dateValue}')">${dateValueDO.weekDate}<br>
+</c:forEach>
+</select>
+
+
+<select name="time" style=" width:80px;">
+<option value="9zhe">8:00</option>
+<option value="30">8:30</option>
+<option value="20">9:00</option>
+<option value="10">9:30</option>
+<option value="10">10:00</option>
+<option value="10">10:30</option>
+<option value="10">11:00</option>
+<option value="10">11:30</option>
+</select>
+<input name="subDate" type="hidden" id="dateValue"/>
+<input name="subTime" type="hidden" id="timeValue"/>
 </div>
 </div>
 </section>
@@ -59,26 +76,6 @@
 <div class="choose-next">
 <a class="tab-bar-btn"  data-service="家庭保洁" href="javascript:void(0)" id="btn_sub" >确定</a>
 </div>
-<!--弹窗 begin-->
-<div class="date-pop-ups" style="display:none" id="date">
-
-<c:forEach items="${WEEK_DATE_LIST}" var="dateValueDO">
-<input type="radio" onClick="getDate('${dateValueDO.weekDate}', '${dateValueDO.dateValue}')">${dateValueDO.weekDate}<br>
-</c:forEach>
-
-</div>
-<div class=" time-pop-ups" style="display:none" id="time">
-
-<input type="radio"  onClick="getTime('13:30')">13:30<br>
-<input type="radio"  onClick="getTime('14:00')">14:00<br>
-<input type="radio"  onClick="getTime('14:30')">14:30<br>
-<input type="radio"  onClick="getTime('15:00')">15:00<br>
-<input type="radio"  onClick="getTime('15:30')">15:30<br>
-<input type="radio"  onClick="getTime('16:00')">16:00<br>
-<input type="radio"  onClick="getTime('16:30')">16:30<br>
-<input name="subDate" type="hidden" id="dateValue"/>
-<input name="subTime" type="hidden" id="timeValue"/>
-
 </div>
 </div>
 </div>

@@ -19,9 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.umbrella.worker.dto.OrderDO;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.IMemberService;
+import com.umbrella.worker.service.IOrderService;
 import com.umbrella.worker.service.IPayService;
 import com.umbrella.worker.util.Constant;
 import com.umbrella.worker.util.GetWeiXinOAuthUrl;
@@ -41,6 +43,9 @@ public class PayController {
 	
 	@Autowired
 	private IMemberService memberService;
+	
+	@Autowired
+	private IOrderService orderService;
 	
 	@Autowired
 	private IPayService payService;
@@ -101,8 +106,22 @@ public class PayController {
 			mav.addObject("paysignType", "MD5");
 			String paySign = SignUtil.getPayCustomSign(signMap, Constant.APP_KEY);
 			mav.addObject("paySign", paySign);
+			mav.addObject("ORDERNO", orderNo);
 			logger.info("paySign=" + paySign);
 			mav.setViewName("pay/confirm");
+		} else {
+			mav.setViewName("error");
+		}
+		return mav;
+	}
+	
+	@RequestMapping(value = "/paySuccess.html", method = RequestMethod.GET)
+	public ModelAndView paySuccess(ModelAndView mav, String orderNo, HttpServletRequest request) {
+		OrderDO orderDO = new OrderDO();
+		orderDO.setwOOrderNo(orderNo);
+		ResultDO result = orderService.updatePayStatus(orderDO);
+		if(result.isSuccess()) {
+			mav.setViewName("paySuccess");
 		} else {
 			mav.setViewName("error");
 		}

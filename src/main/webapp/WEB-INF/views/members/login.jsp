@@ -78,7 +78,7 @@ $(document).ready(function(){
 <div class="xsh_cells vux-no-group-title"> 
 <div class="xsh_cell xsh_cell_warn"> 
 <div class="xsh_cell_hd"></div> 
-<div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" name="wMMobile" id="mobile" /><span id="tipM" style="color:#FF0000"></span> </div> 
+<div class="xsh_cell_bd xsh_cell_primary"><input class="xsh_input" name="wMMobile" id="mobile" placeholder="输入手机号码" type="tel" ><span id="tipM" style="color:#FF0000"></span> </div> 
 <div class="xsh_cell_ft">
 <i class="xsh_icon xsh_icon_clear" style="display: none;"></i>
 <i class="xsh_icon xsh_icon_warn" style="display: none;"></i>
@@ -88,7 +88,7 @@ $(document).ready(function(){
 
 <div class="xsh_cell xsh_cell_warn"> 
 <div class="xsh_cell_hd"></div> 
-<div class="xsh_cell_bd xsh_cell_primary" id="pwd"> <input class="xsh_input" name="wMPassword" type="password"  maxlength="15" id="password"/><span id="tipP" style="color:#FF0000"></span> </div>
+<div class="xsh_cell_bd xsh_cell_primary" id="pwd"> <input class="xsh_input" name="wMPassword" type="password" id="password"  placeholder="密码"/><span id="tipP" style="color:#FF0000"></span> </div>
 <div class="xsh_cell_ft">
 <i class="xsh_icon xsh_icon_clear" style="display: none;"></i> 
 <i class="xsh_icon xsh_icon_warn" style="display: none;"></i>

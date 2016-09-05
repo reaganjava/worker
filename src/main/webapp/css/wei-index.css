@@ -1,9 +1,9 @@
 @charset "utf-8";
 /* CSS Document */
-body{ background:#eae9e9; margin:0; padding:0; font-family:"微软雅黑"; font-size:14px;}
+body{ background:#eae9e9; margin:0; padding:0; font-family:"微软雅黑"; font-size:14px; }
 ul,li,a,p,dd{ list-style:none; margin:0; padding:0; text-decoration:none; color:#464646;}
 .clean{ clear:both;}
-.xsh{overflow: hidden;left: 0;width: 100%;height: 100%;right: 0;bottom: 0;background-color:#eae9e9;}
+.xsh{left: 0;width: 100%;height: 100%;right: 0;bottom: 0;background-color:#eae9e9; margin-bottom:60px;}
 .container{max-width: 640px; margin: 0 auto;}
 .nav-box a {color: #fff;padding-left: .6rem;}
 img{ border:0; padding:0; margin:0;}
@@ -14,24 +14,24 @@ img{ border:0; padding:0; margin:0;}
 .nav-box {position: absolute;top: 0;left: 0;right: 0;height: 2.4rem;line-height: 2.4rem;margin: 0 auto; max-width:640px;}
 .banner-img img { width:100%; height:auto}
 .slider{background: #fff;opacity: 1;width: 6px;height: 6px;}
-.home-service-box {position: relative;margin: .6rem 0;border-radius:.1rem;background-color: #FFF; height:230px;}
+.home-service-box {position: relative;margin: .6rem 0;border-radius:.1rem;background-color:#FFF; height:230px;}
 .home-service{ width:100%; margin:0 auto;}
 .home-service li{ width: 25%; float:left;text-align:center; margin-top:20px;}
-.home-service li a span{ display:block; margin-top:10px;}
+.home-service li a span{ display:block; margin-top:5px;}
 .home-service li a img{ width:56px; height:56px;}
 .footer-icon{width:100%; margin:0 auto; padding-top:10px;}
 .footer-icon li{ width: 25%; float:left;text-align:center;}
 .footer-icon li a span{ display:block;}
-.footer-icon li a img{width:33px; height:32px;}
-.footerbar{ background-color:#fff; height:70px; position:absolute; bottom:0; left:0; right:0; max-width:640px; margin:0 auto;}
+.footer-icon li a img{width:25px; height:25px;}
+.footerbar{ background-color:#fff; height:60px; position:fixed; bottom:0; left:0; right:0; max-width:640px; margin:0 auto;}
 /******2016-08-02 选择面积*********/
 .house-area{ width:96%; margin:0 auto;}
 .house-area li { width:29%; border:1px solid #c0c0c0;  height:36px; line-height:36px; float:left; text-align:center; margin:5px;}
 .house-area li span{color:#464646; font-size:12px;}
 .house-area li span sup{ font-size:12px;}
-.one-service,.choose-area,.two-service{ background:#fff; height:180px; margin:0 auto; width:96%;}
-.choose-area p,.two-service p,.one-service p{ padding-top:30px; padding-left:13px; font-weight:800;}
-.tab-bar-btn {position: absolute;height: 2.5rem;line-height: 2.5rem;bottom: 1.4rem;left: .5rem;right: .5rem;font-size: 1.2rem;text-align: center;border-radius: .2rem;background-color: #ff3057; color:#fff; max-width:640px; margin:0 auto;}
+.one-service,.choose-area,.two-service{ background:#fff; height:150px; margin:0 auto; width:96%;}
+.choose-area p,.two-service p,.one-service p{ padding-top:10px; padding-left:13px; font-weight:800;}
+.tab-bar-btn {position: fixed;height: 2.5rem;line-height: 2.5rem;bottom: 0.4rem;left: .5rem;right: .5rem;font-size: 1.2rem;text-align: center;border-radius: .2rem;background-color: #ff3057; color:#fff; max-width:640px; margin:0 auto;}
 .no-service{ background:url(../images/no-choose.png) #f5f5f5 right bottom no-repeat;}
 .navbar{ background:#00cced;  height:44px; line-height:44px;}
 .navbar ul{ width:100%}
@@ -47,6 +47,7 @@ img{ border:0; padding:0; margin:0;}
 .dn{ width:90%; margin:0 auto; padding:10px 0 10px 0;}
 .dn a{font-size:14px; float:right;}
 .go-register{ color:#fc4e02;}
+.intro-di{ width:80%; margin:0 auto;}
 /*****临时保洁预定页面****/
 .add-address p,.add-ads{ width:80%; margin:0 auto; margin-top:15px;}
 .add-ads{ height:80px; background:#FFF; width:96%; line-height:80px; border:1px solid #dadada; margin:0 auto; margin-top:20px;}
@@ -56,12 +57,16 @@ img{ border:0; padding:0; margin:0;}
 .add-time{ background:#FFF; width:96%; margin:0 auto;  border:1px solid #dadada; margin-top:20px;}
 .choose-date{ width:120px; height:30px;border:1px solid #dadada;}
 .choose-hour{ width:60px; height:30px; border:1px solid #dadada; margin-left:5px;}
-.time-words{ display:block; padding:20px 0; font-size:18px;}
-.choose-time{ width:80%; margin:0 auto;}
+.time-words{padding:20px 0; font-size:18px;}
+.choose-time{ width:80%; margin:0 auto; height: 140px;line-height: 60px;}
 .time-input,.time-words{ width:100%; margin:0 auto;}
 .time-input{ padding-bottom:20px;}
+.time-input a{ float:left; padding-right:10px;}
+.time-input select{ height:28px; font-family:"微软雅黑";}
 .a-ads{ width:80%; margin:0 auto;}
-.remind{width:76%; margin:0 auto; margin-top:15px;}
+.lin-intro span{ display:block;}
+.lin-intro{ width:96%; margin:0 auto; background:#fff; margin-top:15px; height:80px; line-height:20px;}
+.remind{width:76%; margin:0 auto; margin-top:15px; clear:both;}
 .time-pop-ups form,.date-pop-ups form{ text-align:center; font-size:16px; background:#FFF; line-height:28px; width:100%}
 .time-pop-ups,.date-pop-ups{ /***用js写屏幕完全居中***/}
 /***地址管理***/
@@ -70,6 +75,7 @@ img{ border:0; padding:0; margin:0;}
 .address-detail ul:before {position: absolute;top: -1px;left: 0;content: '';width: 100%;height: 1px;border-bottom: 1px #dadada solid;}
 .address-detail ul li .choose-con1{padding:20px 0;width: 75%;}
 .choose-con1 span{ display:block;}
+.more-icon{position: absolute;top: 50%;right: 30px;margin-top: -8px;padding-left: 20px;}
 .address-detail ul li>div.choose-con2 {width: 56px;height: 20px;line-height:20px;background: url(../images/city_dingwei_885bbf9.png) no-repeat left center;background-size: 15px 20px;position: absolute;top: 50%;right: 0px;margin-top:-8px; padding-left:20px;color: #999;font-size: 12px;}
 .address-detail ul .choose-2{ background:url(../images/hui_gou_c2daf4f.png) left center no-repeat;  background-size:20px 20px;}
 /***添加地址页面***/
@@ -94,7 +100,7 @@ img{ border:0; padding:0; margin:0;}
 .order-details,.service-cont,.sale-info{ background:#FFF; margin:5px 0 5px 0; padding:10px 0 10px 0;}
 .ding,.service-co,.sale-in{ width:90%; margin:0 auto;}
 .money-btn{ background-color: #ff055d; border: none;color: white;padding: 12px 32px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px;cursor: pointer; font-weight:800;}
-.pay-now{ position:absolute; left:0; right:0; bottom:20px; max-width:640px; margin:0 auto;}
+.pay-now{ position:fixed; left:0; right:0; bottom:0; max-width:640px; margin:0 auto;}
 .pay-now ul{ width:100%; background:#FFF; height:50px;}
 .pay-now ul li{ width:50%; float:right;  height:50px; line-height:50px;}
 .pay-now ul li span{ display:inline-block; font-size:28px; color:#ff055d;}
@@ -133,7 +139,7 @@ img{ border:0; padding:0; margin:0;}
 .order-status ul li{ width:14%;float:left; padding:8px;}
 .order-status ul i{ font-style:normal; font-size:12px; padding-top:8px;}
 .order-status ul .already span{ color:#00cced;}
-.order-st{ width:100%; text-align:center; background:#00cced; height:38px; line-height:38px; color:#fff; margin:50px 0;}
+.order-st{ width:100%; text-align:center; background:#00cced; height:38px; line-height:38px; color:#fff; max-width: 640px;margin: 0 auto;position: fixed;left: 0;right: 0;bottom: 10px;}
 .order-st img { vertical-align:middle; padding:0 10px;}
 /**2016-08-10城市选择**/
 .cur_city {width: 100%;height:72px;background: #fff;position: relative;}
@@ -150,8 +156,10 @@ img{ border:0; padding:0; margin:0;}
 .table-vip td {width: 33%;vertical-align: middle;text-align: center;font-size: 14px;color: #333;line-height: 39px;border: 1px solid #c0c0c0;}
 .v-p{ margin:0; padding:0; font-size:16px; padding:10px 0 0 20px; margin:15px 0 15px 0; font-weight:800; color:#00cced;}
 .t-v1{ background:#00cced;}.t-v2{ background:#33c6ae;}.t-v3{ background:#00cced;}.t-v4{ background:#33c6ae;}.t-v5{ background:#00cced;}
-
-
+.not-found img,.bulid-now img { width:100%; height:auto; padding-top:60px;}
+.not-found span{ display:block; text-align:center;}
+.not-found span button{ width:218px; height:36px; border:none; border-radius:4px; background:#fff; margin:5px 0; font-family:"微软雅黑";}
+.bulid-now span{ display:block; text-align:center; font-size:18px;}
 
 
 

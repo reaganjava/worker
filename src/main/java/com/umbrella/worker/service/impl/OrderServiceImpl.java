@@ -170,6 +170,34 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 	}
 	
 	@Override
+	public ResultDO updatePayStatus(OrderDO orderDO) {
+		
+		WOrderExample example = new WOrderExample();
+		ResultSupport result = new ResultSupport();
+		example.createCriteria().andWOOrderNoEqualTo(orderDO.getwOOrderNo());
+		WOrder order = new WOrder();
+		order.setwOIsPay(1);
+		order.setModifiTime(Calendar.getInstance().getTime());
+		
+		int recordNum = -1;
+		try {
+			recordNum = orderMapper.updateByExampleSelective(order, example);
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			logger.error("[obj:order][opt:modifi][msg:" + e.getMessage()
+					+ "]");
+			return result;
+		}
+		if (recordNum < 1) {
+			result.setSuccess(false);
+		}
+
+		return result;
+	}
+	
+	@Override
 	public ResultDO modifiDetail(OrderDetailDO orderDetailDO) {
 		
 		WOrderDetail orderDetail = new WOrderDetail();
