@@ -1,5 +1,7 @@
 package com.umbrella.worker.web.controller;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -108,10 +110,32 @@ public class PayController {
 	}
 
 	@RequestMapping(value = "/payRes.html")
-	public ModelAndView payRes(ModelAndView mav, HttpServletRequest request, HttpServletResponse response) {
-		return mav;
+	public String payRes( HttpServletRequest request, HttpServletResponse response) {
+		String wexinRes = this.getPostString(request);
+		return "";
 	}
+	
 
+    private String getPostString(HttpServletRequest request) {
+    	String values = null;
+    	InputStream in = null;
+    	try {
+    		in = request.getInputStream();
+			int bufferSize = in.available();
+			byte[] buffers = new byte[bufferSize];
+			in.read(buffers);
+			values = new String(buffers);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				in.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+    	return values;
+    }
 	
 
 }
