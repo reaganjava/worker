@@ -25,7 +25,7 @@
 <div class="container">
 <nav class="navbar">
 <ul>
-<li><a href="${pageContext.request.contextPath}/goods/buyJob/${TASK_INFO.id}/${TASK_INFO.itemId}/${TASK_INFO.staffId}.html"><img src="${pageContext.request.contextPath}/images/left.png"/></a></li>
+<li><a href="javascript:void();" onclick="window.history.go(-1);"><img src="${pageContext.request.contextPath}/images/left.png"/></a></li>
 <li><span>服务地址</span></li>
 <li></li>
 </ul>
@@ -74,7 +74,6 @@
 			  url: "${pageContext.request.contextPath}/members/default/" + id + ".json",
 			  success:function(data) {
 				  if(data != 0) {
-					  
 					 	$('li').addClass('choose-2');
 					 	$('#c' + id).removeClass('choose-2');
 				  }

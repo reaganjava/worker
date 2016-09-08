@@ -49,25 +49,24 @@
 <div class="choose-time">
 <span class="time-words">请选择服务时间</span>
 <div class="time-input">
-<select name="date" style="width:130px;">
+<select name="subDate" style="width:130px;">
 <c:forEach items="${WEEK_DATE_LIST}" var="dateValueDO">
-<option value="'${dateValueDO.dateValue}')">${dateValueDO.weekDate}<br>
+<option value="${dateValueDO.dateValue}">${dateValueDO.weekDate}<br>
 </c:forEach>
 </select>
 
 
-<select name="time" style=" width:80px;">
-<option value="9zhe">8:00</option>
-<option value="30">8:30</option>
-<option value="20">9:00</option>
-<option value="10">9:30</option>
-<option value="10">10:00</option>
-<option value="10">10:30</option>
-<option value="10">11:00</option>
-<option value="10">11:30</option>
+<select name="subTime" style=" width:80px;">
+<option value="8:00">8:00</option>
+<option value="8:30">8:30</option>
+<option value="9:00">9:00</option>
+<option value="9:30">9:30</option>
+<option value="10:00">10:00</option>
+<option value="10:30">10:30</option>
+<option value="11:00">11:00</option>
+<option value="11:30">11:30</option>
 </select>
-<input name="subDate" type="hidden" id="dateValue"/>
-<input name="subTime" type="hidden" id="timeValue"/>
+
 </div>
 </div>
 </section>
@@ -83,41 +82,12 @@
 </form>
 </body>
 <script type="text/javascript">
-	function selectDate() {
-		document.getElementById('date').style.display="inline"; 
-		document.getElementById('time').style.display="none"; 
-	}
-	
-	function selectTime() {
-		document.getElementById('date').style.display="none"; 
-		document.getElementById('time').style.display="inline"; 
-	}
-	
-	function getDate(weekDate, dateValue) {
-		document.getElementById('date').style.display = "none";
-		document.getElementById('weekDate').value = weekDate;
-		document.getElementById('dateValue').value = dateValue;
-	}
-	function getTime(timeValue) {
-		document.getElementById('time').style.display = "none";
-		document.getElementById('viewTime').value = timeValue;
-		document.getElementById('timeValue').value = timeValue;
-	}
 	
 	$(document).ready(function(){
 		var isView = false;
 	 	$("#btn_sub").click(function(){
 	 	    var is = true;
-	 		var weekDate = $("#weekDate").val();
-	 	   	if(weekDate == '选择日期') {
-	 	   	  
-	 		  	is = false; 
-	 	   	}
-	 	    var viewTime =  $("#viewTime").val();
-	 	    if(viewTime == '选择时间' ) {
-	 	    	
-			  	is = false; 
-		   	}
+	 	
 	 	   	if(is) {
 	 	   		$("#orderForm").submit();
 	 	   	}

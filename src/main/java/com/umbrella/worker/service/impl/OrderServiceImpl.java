@@ -33,7 +33,7 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 	private WOrderMapper orderMapper;
 	@Autowired
 	private WOrderDetailMapper orderDetailMapper;
-	
+	@Autowired
 	private IPayService payService;
 
 
@@ -99,6 +99,10 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 		
 		result = BeanUtilsExtends.copy(orderDetail, orderDO.getOrderDetailDO());
 		
+		if(!result.isSuccess()) {
+			return result;
+		}
+		
 		orderDetail.setId(order.getId());
 		orderDetail.setCreateTime(order.getCreateTime());
 		orderDetail.setCreateAuthor(order.getCreateAuthor());
@@ -120,17 +124,28 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 		
 		PayrecordDO payrecordDO = new PayrecordDO();
 		
-		payrecordDO.setwPrTradeNo(orderNO);
+		payrecordDO.setwPrOrderNo(orderNO);
 		payrecordDO.setwPrFee(priceCount);
 		payrecordDO.setwPrIsCoupon(0);
 		payrecordDO.setwPrPayChannel(Constant.PAY_CHANNELS[0]);
+		payrecordDO.setwPrTimestamp((int) System.currentTimeMillis());
 		payrecordDO.setStatus(1);
 		payrecordDO.setCreateAuthor(orderDetail.getCreateAuthor());
-		payrecordDO.setCreateTime(orderDetail.getCreateTime());
 		payrecordDO.setModifiAuthor(orderDetail.getCreateAuthor());
-		payrecordDO.setModifiTime(orderDetail.getModifiTime());
 		payrecordDO.setDatalevel(1);
-		ResultDO resultDO = payService.create(payrecordDO);
+		ResultDO resultDO = null;
+		try {
+			resultDO = payService.create(payrecordDO);
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.setSuccess(false);
+			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+			logger.error("[obj:order][opt:create][msg:" + e.getMessage()
+			+ "]");
+			return result;
+		}
+		
 		if(resultDO.isSuccess()) {
 			result.setModel(ResultDO.FIRST_MODEL_KEY, order.getId());
 		} else {

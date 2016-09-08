@@ -17,7 +17,7 @@
 <div class="page-all">
 <div class="container">
 <div class="banner">
-<div class="nav-box"><a><span class="city-btn-bg">重庆</span><span class="expand-city"></span></a></div>
+
 <div class="banner-img"><a><img src="${pageContext.request.contextPath}/images/banner.jpg"/></a></div>
 <div class="banner-slider"><span class="slider"></span></div>
 </div>

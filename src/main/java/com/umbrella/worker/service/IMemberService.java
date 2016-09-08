@@ -23,6 +23,4 @@ public interface IMemberService {
 
 	public ResultDO isMobileReg(MembersQuery membersQuery);
 	
-	public ResultDO userOAuth(String userCode);
-	
 }

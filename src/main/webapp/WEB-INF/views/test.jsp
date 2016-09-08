@@ -12,7 +12,7 @@
 <form action="${pageContext.request.contextPath}/pay/getPay.html" method="POST">
 <input type="hidden" value="${OPENID}" name="openid"/> 
 <input type="hidden" value="${ORDERNO}" name="orderNo"/> 
-<input type="submit" value="ok"/>
+<input type="submit" value="ok" style="width:400px; height:100px;"/>
 </form>
 </body>
 </body>

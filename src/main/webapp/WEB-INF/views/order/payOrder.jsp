@@ -28,7 +28,7 @@
 <li>服务类型：<span>${ORDER_INFO.orderDetailDO.wOServerName}</span></li>
 <li>服务地址：<span>${ORDER_INFO.orderDetailDO.wODistrict}${ORDER_INFO.orderDetailDO.wOAddress} <i>${ORDER_INFO.orderDetailDO.wOContact}  电话:${ORDER_INFO.orderDetailDO.wOTelephone}</i></span></li>
 <li>服务时长：<span>${ORDER_INFO.orderDetailDO.wOServerTime}小时</span></li>
-<li>服务时间：<span>${ORDER_INFO.orderDetailDO.wOSubscribe}上门</span></li>
+<li>服务时间：<span><fmt:formatDate value="${ORDER_INFO.orderDetailDO.wOSubscribe}"  type="BOTH" dateStyle="full"/>上门</span></li>
 <li>费用明细：<span>${ORDER_INFO.orderDetailDO.wOPrice}元 X ${ORDER_INFO.orderDetailDO.wOServerTime}小时</span></li>
 </ul>
 <p class="tui">服务前<i>2小时</i>取消订单，将扣除您50%的服务费用</p>
@@ -42,7 +42,14 @@
 <!--预订信息 end-->
 <section class="service-cont">
 <div class="service-co">
-
+<h4>服务内容</h4>
+<ul class="c-content">
+<li><span>厨房大扫除<i>（不包括抽油烟机拆洗）</i></span></li>
+<li><span>客厅大扫除<i>（不包括天花板及灯具拆洗，地毯清洗）</i></span></li>
+<li><span>卧室大扫除<i>（不包括天花板及灯具拆洗）</i></span></li>
+<li><span>阳台大扫除<i>（不包括2楼以上玻璃）</i></span></li>
+<li><span>卫生间大扫除<i>（不包括2楼以上玻璃）</i></span></li>
+</ul>
 </div>
 </section>
 <!--服务内容 end-->

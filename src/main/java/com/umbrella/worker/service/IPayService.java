@@ -16,5 +16,4 @@ public interface IPayService {
 	
 	public ResultDO list(PayrecordQuery payrecordQuery);
 	
-	public ResultDO getPrepayId(String orderNo, String openid, String memberIP, String nonceStr);
 }

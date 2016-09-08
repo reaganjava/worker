@@ -3,15 +3,13 @@ package com.umbrella.worker.service.impl;
 import java.util.Calendar;
 import java.util.List;
 
-import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.umbrella.worker.util.BeanUtilsExtends;
-import com.umbrella.worker.util.Constant;
-import com.umbrella.worker.util.GetWeixinOAuth;
+
 import com.umbrella.worker.util.StringUtil;
 
 
@@ -519,43 +517,7 @@ public class MemberServiceImpl  extends BaseServiceImpl implements IMemberServic
 		return result;
 	}
 	
-	public ResultDO userOAuth(String userCode) {
-		ResultSupport result = new ResultSupport();
-		
-		String oauth2_url = Constant.WEIXIN_OAUTH2_URL;
-		oauth2_url = oauth2_url.replace("{APPID}", Constant.APP_ID)
-				  .replace("{SECRET}", Constant.APP_SECRET)
-				  .replace("{CODE}", userCode);
-		System.out.println(oauth2_url);
-		//第一次请求 获取access_token 和 openid
-		String oppid = null;
-		try {
-			oppid = new GetWeixinOAuth().doGet(oauth2_url);
-		} catch (Exception e) {
-			result.setSuccess(false);
-		}
-		JSONObject oppidObj = JSONObject.fromObject(oppid);
-		String access_token = (String) oppidObj.get("access_token");
-		String openid = (String) oppidObj.get("openid");
-		String requestUrl2 = "https://api.weixin.qq.com/sns/userinfo?access_token=" 
-				+ access_token + "&openid=" + openid + "&lang=zh_CN";
-		String userInfoStr = null;
-		try {
-			userInfoStr = new GetWeixinOAuth().doGet(requestUrl2);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		JSONObject wxUserInfo = JSONObject.fromObject(userInfoStr);
-		
-		System.out.println("====================" + openid);
-		if(oppid != null) {
-			result.setModel(ResultSupport.FIRST_MODEL_KEY, openid);
-		} else {
-			result.setSuccess(false);
-		}
-		return result;
-	}
+	
 	
 	
 
