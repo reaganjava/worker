@@ -160,9 +160,15 @@ img{ border:0; padding:0; margin:0;}
 .not-found span{ display:block; text-align:center;}
 .not-found span button{ width:218px; height:36px; border:none; border-radius:4px; background:#fff; margin:5px 0; font-family:"微软雅黑";}
 .bulid-now span{ display:block; text-align:center; font-size:18px;}
-
-
-
+.pay-info{ clear:both; background:#fff; height:68px; font-size:16px;}
+.pay-info p{ padding:10px 0 0 25px;}
+.pay-info .pay-price{ color:#ff055d; font-size:18px;}
+.pays{ height:100px; background:#fff; margin-top:10px; padding-left:25px; line-height:32px; font-size:16px;}
+.payby a img{ vertical-align:middle;}
+.payby .choosed{ width:60px; float:right;}
+.payby .choosed img{ width:20px; height:20px;}
+.payby .we-icon span{ padding-left:20px;}
+.sure-pay{ width:92%; margin:0 auto; height:38px; background:#ff055d; display:block; text-align:center; color:#fff; line-height:38px; border-radius:4px; font-size:18px; margin-top:30px; font-weight:800;}
 
 
 

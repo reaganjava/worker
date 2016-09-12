@@ -10,6 +10,8 @@ public interface IPayService {
 	
 	public ResultDO modifi(PayrecordDO payrecordDO);
 	
+	public ResultDO updateStatus(PayrecordDO payrecordDO);
+	
 	public ResultDO remove(int payrecordId);
 	
 	public ResultDO get(int payrecordId);

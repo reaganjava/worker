@@ -11,7 +11,7 @@ public interface IOrderService {
 	
 	public ResultDO modifi(OrderDO orderDO);
 	
-	public ResultDO updatePayStatus(OrderDO orderDO);
+	public ResultDO updateStatus(OrderDO orderDO);
 	
 	public ResultDO remove(int orderId);
 	

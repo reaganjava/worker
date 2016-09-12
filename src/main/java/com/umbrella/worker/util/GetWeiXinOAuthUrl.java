@@ -12,6 +12,7 @@ public class GetWeiXinOAuthUrl {
         result = GetCodeRequest;
         return result;
     }
+    
     public static String urlEnodeUTF8(String str){
         String result = str;
         try {
@@ -21,6 +22,7 @@ public class GetWeiXinOAuthUrl {
         }
         return result;
     }
+    
     public static void main(String[] args) {
        
     }

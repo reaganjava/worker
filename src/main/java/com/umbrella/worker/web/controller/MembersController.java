@@ -96,8 +96,10 @@ public class MembersController {
 	public ModelAndView login(ModelAndView mav, HttpServletRequest request) {
 		mav.setViewName("members/login");
 		String backPage = request.getHeader("Referer");
-		backPage = StringUtil.getReferer(backPage, request.getContextPath());
-		request.getSession().setAttribute("BACK_PAGE", backPage);
+		if(backPage != null) {
+			backPage = StringUtil.getReferer(backPage, request.getContextPath());
+			request.getSession().setAttribute("BACK_PAGE", backPage);
+		}
 		return mav;
 	}
 	
@@ -122,6 +124,9 @@ public class MembersController {
 			membersDO = (MembersDO) resultDO.getModel(ResultSupport.FIRST_MODEL_KEY);
 			request.getSession().setAttribute("MEMBER_ID", membersDO.getId());
 			request.getSession().setAttribute("MEMBER_MOBILE", membersDO.getwMMobile());
+			if(backPage == null) {
+				return new ModelAndView("redirect:/");
+			}
 			if(backPage.indexOf("register") != -1) {
 				return new ModelAndView("redirect:/");
 			} else {

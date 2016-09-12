@@ -62,7 +62,7 @@ public class OrderController {
 		orderDetailDO.setwOContact(contactDO.getwCContact());
 		orderDetailDO.setwOTelephone(contactDO.getwCTelephone());
 		orderDetailDO.setwODistrict(contactDO.getwCDistrict());
-		orderDetailDO.setwOServerName(cleanDO.getServiceName());
+		orderDO.setwOServiceName(cleanDO.getServiceName());
 		orderDetailDO.setwOServerTime(cleanDO.getHours());
 		orderDetailDO.setwOStaffCount(cleanDO.getStaffCount());
 		orderDetailDO.setwOPrice(cleanDO.getPrice());
@@ -123,8 +123,8 @@ public class OrderController {
 		return mav;
 	}
 	
-	@RequestMapping(value = "/orderDetail/{id}.html", method = RequestMethod.GET)
-	public ModelAndView orderDetail(ModelAndView mav, 
+	@RequestMapping(value = "/payOrderDetail/{id}.html", method = RequestMethod.GET)
+	public ModelAndView payOrderDetail(ModelAndView mav, 
 			@PathVariable(value="id") Integer id,
 			HttpServletRequest request) {
 	
@@ -147,6 +147,30 @@ public class OrderController {
 		return mav;
 	}
 	
+	@RequestMapping(value = "/orderDetail/{id}.html", method = RequestMethod.GET)
+	public ModelAndView orderDetail(ModelAndView mav, 
+			@PathVariable(value="id") Integer id,
+			HttpServletRequest request) {
+	
+		ResultDO resultDO = orderService.get(id);
+		OrderDO orderOD = null;
+		if(resultDO.isSuccess()) {
+			orderOD = (OrderDO) resultDO.getModel(ResultSupport.FIRST_MODEL_KEY);
+			mav.addObject("ORDER_INFO", orderOD);
+		} else {
+			mav.setViewName("error");
+		}
+	
+		if(resultDO.isSuccess()) {
+		
+		} else {
+			mav.setViewName("error");
+		}
+		
+		mav.setViewName("order/detail");
+		return mav;
+	}
+	
 	@RequestMapping(value = "/confirmOrder/{id}.html", method = RequestMethod.GET)
 	public ModelAndView confirmOrder(ModelAndView mav, 
 			@PathVariable(value="id") Integer id,
@@ -161,8 +185,11 @@ public class OrderController {
 		return mav;
 	}
 	
-	@RequestMapping(value = "/userOrders/{pageNo}.html", method = RequestMethod.GET)
+	
+	
+	@RequestMapping(value = "/userOrders/{status}/{pageNo}.html", method = RequestMethod.GET)
 	public ModelAndView getUserOrders(ModelAndView mav,
+			@PathVariable(value="status") Integer status,
 			@PathVariable(value="pageNo") Integer pageNo,
 			HttpServletRequest request) {
 		Integer memberId = (Integer) request.getSession().getAttribute("MEMBER_ID");
@@ -171,20 +198,22 @@ public class OrderController {
 			return new ModelAndView("redirect:/members/login.html");
 		}
 		OrderQuery query = new OrderQuery();
+		query.setStatus(status);
 		query.setMemberId(memberId);
 		query.setPage(true);
 		query.setPageNO(pageNo);
-		query.setPageRows(3);
+		query.setPageRows(100);
 		ResultDO result = orderService.list(query);
 		if(result.isSuccess()) {
 			PageBeanUtil pageBean = new PageBeanUtil();
 			long count = (Long) result.getModel(ResultSupport.SECOND_MODEL_KEY);
 			pageBean.setCurrentPage(pageNo);
-			pageBean.setPageSize(3);
+			pageBean.setPageSize(100);
 			pageBean.setRecordCount(count);
 			pageBean.setPageCount(count);
 			pageBean.setPages(pageNo);
 			pageBean.setDataList((List<Object>) result.getModel(ResultSupport.FIRST_MODEL_KEY));
+			mav.addObject("status", status);
 			mav.addObject("PAGE_BEAN", pageBean);
 			mav.setViewName("order/userOrders");
 		} else {

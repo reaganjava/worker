@@ -5,8 +5,9 @@ public class PayrecordQuery extends BaseQuery {
     
     private String tradeNo;
 
-   
     private String orderNo;
+    
+    private Integer payStatus;
 
 
 	public String getTradeNo() {
@@ -26,6 +27,16 @@ public class PayrecordQuery extends BaseQuery {
 
 	public void setOrderNo(String orderNo) {
 		this.orderNo = orderNo;
+	}
+
+
+	public Integer getPayStatus() {
+		return payStatus;
+	}
+
+
+	public void setPayStatus(Integer payStatus) {
+		this.payStatus = payStatus;
 	}
   
 }

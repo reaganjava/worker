@@ -31,7 +31,7 @@ public class ManagerOrderController {
 	public ModelAndView waitOrderList(ModelAndView mav,
 			HttpServletRequest request) {
 		OrderQuery query = new OrderQuery();
-		//0.无效 1.待商家确认 2.已发货
+		//0.无效 1.待付款 2.待商家确认 3.已发货
 		query.setStatus(1);
 		ResultDO resultDO = orderService.list(query);
 		if(resultDO.isSuccess()) {

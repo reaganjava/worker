@@ -4,14 +4,17 @@ import java.util.Calendar;
 import java.util.List;
 
 
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+
 import com.umbrella.worker.dao.WPayrecordMapper;
 import com.umbrella.worker.dto.PayrecordDO;
-
+import com.umbrella.worker.entity.WOrder;
+import com.umbrella.worker.entity.WOrderExample;
 import com.umbrella.worker.entity.WPayrecord;
 import com.umbrella.worker.entity.WPayrecordExample;
 import com.umbrella.worker.query.PayrecordQuery;
@@ -19,7 +22,6 @@ import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.IPayService;
 import com.umbrella.worker.util.BeanUtilsExtends;
-
 import com.umbrella.worker.util.StringUtil;
 
 
@@ -81,7 +83,7 @@ public class PayServiceImpl  extends BaseServiceImpl implements IPayService {
 		payrecord.setModifiTime(Calendar.getInstance().getTime());
 		int recordNum = -1;
 		try {
-			recordNum = payrecordMapper.updateByPrimaryKey(payrecord);
+			recordNum = payrecordMapper.updateByPrimaryKeySelective(payrecord);
 		} catch (Exception e) {
 			result.setSuccess(false);
 			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
@@ -124,6 +126,34 @@ public class PayServiceImpl  extends BaseServiceImpl implements IPayService {
 		if (recordNum != 1) {
 			result.setSuccess(false);
 		}
+		return result;
+	}
+	
+	
+	public ResultDO updateStatus(PayrecordDO payrecordDO) {
+		WPayrecordExample example = new WPayrecordExample();
+		ResultSupport result = new ResultSupport();
+		example.createCriteria().andWPrOrderNoEqualTo(payrecordDO.getwPrOrderNo());
+		WPayrecord payrecord = new WPayrecord();
+		payrecord.setwPrStatus(1);
+		payrecord.setModifiAuthor("system");
+		payrecord.setModifiTime(Calendar.getInstance().getTime());
+		
+		int recordNum = -1;
+		try {
+			recordNum = payrecordMapper.updateByExampleSelective(payrecord, example);
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			logger.error("[obj:order][opt:modifi][msg:" + e.getMessage()
+					+ "]");
+			return result;
+		}
+		if (recordNum < 1) {
+			result.setSuccess(false);
+		}
+
 		return result;
 	}
 

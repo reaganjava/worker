@@ -25,7 +25,7 @@
 <div class="container">
 <nav class="navbar">
 <ul>
-<li><a href="javascript:void();" onclick="window.history.go(-1);"><img src="${pageContext.request.contextPath}/images/left.png"/></a></li>
+<li><a href="javascript:void();" onclick="window.history.back(-1);"><img src="${pageContext.request.contextPath}/images/left.png"/></a></li>
 <li><span>服务地址</span></li>
 <li></li>
 </ul>

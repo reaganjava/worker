@@ -25,7 +25,7 @@
 <div class="ding">
 <h4>预订信息</h4>
 <ul>
-<li>服务类型：<span>${ORDER_INFO.orderDetailDO.wOServerName}</span></li>
+<li>服务类型：<span>${ORDER_INFO.wOServiceName}</span></li>
 <li>服务地址：<span>${ORDER_INFO.orderDetailDO.wODistrict}${ORDER_INFO.orderDetailDO.wOAddress} <i>${ORDER_INFO.orderDetailDO.wOContact}  电话:${ORDER_INFO.orderDetailDO.wOTelephone}</i></span></li>
 <li>服务时长：<span>${ORDER_INFO.orderDetailDO.wOServerTime}小时</span></li>
 <li>服务时间：<span><fmt:formatDate value="${ORDER_INFO.orderDetailDO.wOSubscribe}"  type="BOTH" dateStyle="full"/>上门</span></li>
@@ -69,7 +69,7 @@
 <!---优惠结束--->
 <div class="pay-now">
 <ul>
-<li style=" text-align:right"><button class="money-btn" onClick="getUserCode()">立即支付</button></li>
+<li style=" text-align:right"><button class="money-btn" onClick="payInfo()">支付详情</button></li>
 <li style="text-align:center"><span>￥${ORDER_INFO.wOFee}</span></li>
 </ul>
 </div>
@@ -78,8 +78,8 @@
 </div>
 </body>
 <script type="text/javascript">
-	function getUserCode() {
-		window.location ="${pageContext.request.contextPath}/pay/getCode/${ORDER_INFO.wOOrderNo}.html";
+	function payInfo() {
+		window.location ="${pageContext.request.contextPath}/pay/payInfo/${ORDER_INFO.wOOrderNo}.html";
 	}
 </script>
 </html>

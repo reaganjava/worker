@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -66,13 +67,43 @@ public class PayController {
 	private IPayService payService;
 	
 	
-	@RequestMapping(value = "/getCode/{orderNo}.html", method = RequestMethod.GET)
-	public ModelAndView getUserCode(ModelAndView mav, 
+	@RequestMapping(value = "/payInfo/{orderNo}.html", method = RequestMethod.GET)
+	public ModelAndView payInfo(ModelAndView mav, 
 			@PathVariable(value="orderNo") String orderNo,
 			HttpServletRequest request, HttpServletResponse response) {
-		String url = GetWeiXinOAuthUrl.getCodeRequest(orderNo);
-		System.out.println(url);
-		return new ModelAndView("redirect:" + url);
+		PayrecordQuery query = new PayrecordQuery();
+		query.setOrderNo(orderNo);
+		query.setPayStatus(0);
+		ResultDO result = payService.list(query);
+		if(result.isSuccess()) {
+			List<PayrecordDO> payList = (List<PayrecordDO>) result.getModel(ResultSupport.FIRST_MODEL_KEY);
+			mav.addObject("PAY_INFO", payList.get(0));
+			mav.setViewName("pay/info");
+		} else {
+			mav.setViewName("error");
+		}
+		return mav;
+	}
+	
+	@RequestMapping(value = "/confirm.html", method = RequestMethod.POST)
+	public ModelAndView getUserCode(ModelAndView mav, 
+			PayrecordDO payrecordDO,
+			HttpServletRequest request, HttpServletResponse response) {
+		String url = null;
+		if(payrecordDO.getPayChannelValue() == 0) {
+			url = GetWeiXinOAuthUrl.getCodeRequest(payrecordDO.getwPrOrderNo());
+			System.out.println(url);
+		}
+		
+		payrecordDO.setModifiAuthor((String) request.getSession().getAttribute("MEMBER_MOBILE"));
+		ResultDO result = payService.modifi(payrecordDO);
+		if(result.isSuccess()) {
+			return new ModelAndView("redirect:" + url);
+		} else {
+			mav.setViewName("error");
+			return mav;
+		}
+		
 	}
 
 	@RequestMapping(value = "oauth.html")
@@ -81,18 +112,22 @@ public class PayController {
 		String orderNo = request.getParameter("orderNo");
 		String openid = userOAuth(code);
 		if(openid != null) {
-			mav.addObject("OPENID", openid);
-			mav.addObject("ORDERNO", orderNo);
-			mav.setViewName("test");
+			System.out.println(openid);
+			request.getSession().setAttribute("openid", openid);
+			request.getSession().setAttribute("orderNo", orderNo);
+			return new ModelAndView("redirect:/pay/invoke.html");
 		} else {
 			mav.setViewName("error");
 		}
 		return mav;
 	}
 
-	@RequestMapping(value = "/getPay.html", method = RequestMethod.POST)
-	public ModelAndView getPay(ModelAndView mav, String openid, String orderNo, HttpServletRequest request,
+	@RequestMapping(value = "/invoke.html", method = RequestMethod.GET)
+	public ModelAndView getPay(ModelAndView mav, 
+			HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
+		String openid = (String) request.getSession().getAttribute("openid");
+		String orderNo = (String) request.getSession().getAttribute("orderNo");
 		String nonceStr = UUID.randomUUID().toString().substring(0, 32);
 
 		long timestamp = System.currentTimeMillis() / 1000;
@@ -125,20 +160,26 @@ public class PayController {
 			mav.addObject("paySign", paySign);
 			mav.addObject("ORDERNO", orderNo);
 			logger.info("paySign=" + paySign);
-			mav.setViewName("pay/confirm");
+			mav.setViewName("pay/invoke");
 		} else {
 			mav.setViewName("error");
 		}
 		return mav;
 	}
 	
-	@RequestMapping(value = "/paySuccess.html", method = RequestMethod.GET)
-	public ModelAndView paySuccess(ModelAndView mav, String orderNo, HttpServletRequest request) {
+	@RequestMapping(value = "/status/{orderNo}/{status}.html", method = RequestMethod.GET)
+	public ModelAndView paySuccess(ModelAndView mav, 
+			@PathVariable(value="orderNo") String orderNo, 
+			@PathVariable(value="status") Integer status,
+			HttpServletRequest request) {
 		OrderDO orderDO = new OrderDO();
 		orderDO.setwOOrderNo(orderNo);
-		ResultDO result = orderService.updatePayStatus(orderDO);
-		if(result.isSuccess()) {
-			mav.setViewName("paySuccess");
+		if(status == 1) {
+			orderDO.setStatus(2);
+		}
+		ResultDO result = orderService.updateStatus(orderDO);
+		if(!result.isSuccess()) {
+			mav.setViewName("member/accountInfo");
 		} else {
 			mav.setViewName("error");
 		}

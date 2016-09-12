@@ -61,7 +61,7 @@ $(document).ready(function(){
 <div class="container">
 <nav class="navbar">
 <ul>
-<li><a href="${pageContext.request.contextPath}/members/accountInfo.html"><img src="${pageContext.request.contextPath}/images/left.png"/></a></li>
+<li><a href="javascript:void();" onclick="window.history.back(-1);"><img src="${pageContext.request.contextPath}/images/left.png"/></a></li>
 <li><span>修改密码</span></li>
 <li></li>
 </ul>

@@ -10,16 +10,10 @@ public class OrderDetailDO extends BaseDO {
    
 	private Integer wOStiffId;
 
-    
-    private Integer wOTaskId;
-
-    
+	
     private String wOSupplierName;
 
-    
-    private String wOServerName;
-
-   
+ 
     private Integer wOServerTime;
 
     
@@ -76,17 +70,7 @@ public class OrderDetailDO extends BaseDO {
 		return id;
 	}
 
-
-	public Integer getwOTaskId() {
-		return wOTaskId;
-	}
-
-
-	public void setwOTaskId(Integer wOTaskId) {
-		this.wOTaskId = wOTaskId;
-	}
-
-
+	
 	public void setId(Integer id) {
 		this.id = id;
 	}
@@ -189,17 +173,6 @@ public class OrderDetailDO extends BaseDO {
 	public void setwOSubscribe(Date wOSubscribe) {
 		this.wOSubscribe = wOSubscribe;
 	}
-
-
-	public String getwOServerName() {
-		return wOServerName;
-	}
-
-
-	public void setwOServerName(String wOServerName) {
-		this.wOServerName = wOServerName;
-	}
-
 
 	public Integer getwOServerTime() {
 		return wOServerTime;

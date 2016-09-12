@@ -70,7 +70,6 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
         }
         
         order.setwOOrderNo(orderNO);
-		order.setwOServiceName(orderDO.getOrderDetailDO().getwOServerName());
 		order.setwOFee(priceCount);
 		order.setDatalevel(1);
 		order.setStatus(1);
@@ -127,24 +126,18 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 		payrecordDO.setwPrOrderNo(orderNO);
 		payrecordDO.setwPrFee(priceCount);
 		payrecordDO.setwPrIsCoupon(0);
-		payrecordDO.setwPrPayChannel(Constant.PAY_CHANNELS[0]);
+		//payrecordDO.setwPrPayChannel(Constant.PAY_CHANNELS[0]);
 		payrecordDO.setwPrTimestamp((int) System.currentTimeMillis());
+		//0未支付 1已支付 2支付失败
+		payrecordDO.setwPrStatus(0);
 		payrecordDO.setStatus(1);
 		payrecordDO.setCreateAuthor(orderDetail.getCreateAuthor());
 		payrecordDO.setModifiAuthor(orderDetail.getCreateAuthor());
 		payrecordDO.setDatalevel(1);
 		ResultDO resultDO = null;
-		try {
-			resultDO = payService.create(payrecordDO);
-		} catch (Exception e) {
-			e.printStackTrace();
-			result.setSuccess(false);
-			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
-			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
-			logger.error("[obj:order][opt:create][msg:" + e.getMessage()
-			+ "]");
-			return result;
-		}
+		
+		resultDO = payService.create(payrecordDO);
+		
 		
 		if(resultDO.isSuccess()) {
 			result.setModel(ResultDO.FIRST_MODEL_KEY, order.getId());
@@ -185,13 +178,14 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 	}
 	
 	@Override
-	public ResultDO updatePayStatus(OrderDO orderDO) {
+	public ResultDO updateStatus(OrderDO orderDO) {
 		
 		WOrderExample example = new WOrderExample();
 		ResultSupport result = new ResultSupport();
 		example.createCriteria().andWOOrderNoEqualTo(orderDO.getwOOrderNo());
 		WOrder order = new WOrder();
 		order.setwOIsPay(1);
+		order.setModifiAuthor("system");
 		order.setModifiTime(Calendar.getInstance().getTime());
 		
 		int recordNum = -1;
@@ -208,7 +202,15 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 		if (recordNum < 1) {
 			result.setSuccess(false);
 		}
-
+		
+		PayrecordDO payrecordDO = new PayrecordDO();
+		payrecordDO.setwPrOrderNo(orderDO.getwOOrderNo());
+		ResultDO resultDO = null;
+		resultDO = payService.updateStatus(payrecordDO);
+		
+		if(!resultDO.isSuccess()) {
+			result.setSuccess(false);
+		}
 		return result;
 	}
 	
@@ -438,6 +440,10 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 			c.andWOSupplierIdEqualTo(orderQuery.getSupplierId());
 		}
 		
+		if(StringUtil.isGreatOne(orderQuery.getStatus())) {
+			c.andStatusEqualTo(orderQuery.getStatus());
+		}
+		
 		if(StringUtil.isNotEmpty(orderQuery.getOrderByClause())) {	
 			example.setOrderByClause(" " + orderQuery.getOrderByClause() + " " + orderQuery.getSort());
 		} else {
@@ -484,14 +490,9 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 		
 		List<OrderDO> orderList = getOrderDOList(list);
 		
-		if(orderList.size() > 0) {
-			result.setModel(ResultSupport.FIRST_MODEL_KEY, orderList);
-		} else {
-			result.setSuccess(false);
-	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
-	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
-	        return result;
-		}
+		
+		result.setModel(ResultSupport.FIRST_MODEL_KEY, orderList);
+		
 		return result;
 	}
 	

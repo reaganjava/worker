@@ -23,7 +23,7 @@
 <div class="mine_photo"> <dl id="login_in"> <dt id="people_photo"><img src="${pageContext.request.contextPath}/images/mine-photo.png"/> </dt><dd>${MEMBER_INFO.wMMobile}</dd></dl></div>
 <section class=" member-right">
 <div class="my-right">
-<a href="${pageContext.request.contextPath}/userOrders/1.html"><span class="stuff-title">${MEMBER_INFO.orderCount}</span><span class="stuff-service">订单</span></a>
+<a href="${pageContext.request.contextPath}/order/userOrders/1/1.html"><span class="stuff-title">${MEMBER_INFO.orderCount}</span><span class="stuff-service">订单</span></a>
 <a href="javascript:void();"><span class="stuff-title">${MEMBER_INFO.couponsCount}</span><span class="stuff-service">优惠券</span></a>
 <a href="javascript:void();"><span class="stuff-title">0</span><span class="stuff-service">特权</span></a>
 </div>
@@ -41,9 +41,9 @@
 <div class="footerbar">
 <ul class="footer-icon">
 <li><a href="${pageContext.request.contextPath}/index.html"><img src="${pageContext.request.contextPath}/images/index-icon.png"/><span>首页</span></a></li>
-<li><a href="${pageContext.request.contextPath}/order/userOrders/1.html"><img src="${pageContext.request.contextPath}/images/order-icon.png"/><span>订单</span></a></li>
+<li><a href="${pageContext.request.contextPath}/order/userOrders/1/1.html"><img src="${pageContext.request.contextPath}/images/order-icon.png"/><span>订单</span></a></li>
 <li><a href="javascript:void();"><img src="${pageContext.request.contextPath}/images/sale-icon.png"/><span>优惠券</span></a></li>
-<li><img src="${pageContext.request.contextPath}/images/mine-icon-now.png"/><span>我的</span></li>
+<li><a href="javascript:void();"><img src="${pageContext.request.contextPath}/images/mine-icon-now.png"/><span>我的</span></a></li>
 </ul>
 </div>
 </div>
