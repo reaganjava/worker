@@ -159,9 +159,7 @@ public class CommentServiceImpl extends BaseServiceImpl implements ICommentServi
 		
 		WCommentExample example = new WCommentExample();
 		WCommentExample.Criteria c = example.createCriteria();
-		
-		
-		
+
 		if(StringUtil.isNotEmpty(commentQuery.getOrderByClause())) {	
 			example.setOrderByClause(" " + commentQuery.getOrderByClause() + " " + commentQuery.getSort());
 		} else {
