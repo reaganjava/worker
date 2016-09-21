@@ -21,8 +21,8 @@ import cn.emay.sdk.client.api.StatusReport;
  * </p>
  * */
 
-public class EMYGateway {
-	private static final String SMS_PREX = "【新生活家庭式预订平台】"; // 星耀创投
+public class EMYGateway implements Gateway {
+	public static final String SMS_PREX = "【新生活】"; // 星耀创投
 	private static final String SMS_CONFIG_GUID = "sms_emy_guid";
 	private Client client = null;
 	
@@ -31,7 +31,7 @@ public class EMYGateway {
 	public void init() throws Exception {
 		
 		String spCode = "9SDK-EMY-0999-RIXQS";
-		String userName = "df311175c5040abf3f6d79d5203afeda";
+		//String userName = "df311175c5040abf3f6d79d5203afeda";
 		String pwd = "874972";
 		
 
@@ -46,8 +46,8 @@ public class EMYGateway {
 		}
 	}
 
-	public boolean sendDetail(String mobile, String content, long seq) {
-		int i = client.sendSMSEx(new String[] { mobile }, content, "", "GBK",
+	public boolean sendDetail(String[] mobile, String content, long seq) {
+		int i = client.sendSMSEx(mobile, content, "", "GBK",
 				3, seq);// 带扩展
 		if (i != 0) {
 			logger.error("#EMYGateway.sendDetail fail,sendResult=" + i
@@ -60,7 +60,8 @@ public class EMYGateway {
 		EMYGateway gateway = new EMYGateway();
 		try {
 			gateway.init();
-			gateway.sendDetail("13983272841", "hello" + EMYGateway.SMS_PREX, 123456);
+			boolean sendStatus = gateway.sendDetail(new String[]{"13883987777"}, EMYGateway.SMS_PREX + "欢迎注册您的短信验证码是{code},请即时验证5分钟内有效。" , 123456);
+			System.out.println(sendStatus);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

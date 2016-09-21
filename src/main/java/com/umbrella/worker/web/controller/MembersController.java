@@ -219,10 +219,9 @@ public class MembersController {
 	
 	
 	
-	@RequestMapping(value = "/getCode/{mobile}/{vcode}.json", method = RequestMethod.GET)
+	@RequestMapping(value = "/getCode/{mobile}.json", method = RequestMethod.GET)
 	public ModelAndView ajaxGetCode(ModelAndView mav,
 			@PathVariable(value="mobile") String mobile,
-			@PathVariable(value="vcode") String vcode,
 			HttpServletRequest request) {
 		
 		SmsCodeDO smsCodeDO = new SmsCodeDO();

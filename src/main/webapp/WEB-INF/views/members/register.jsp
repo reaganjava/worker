@@ -38,28 +38,23 @@ $(function(){
             }
         });
     });
-    $('#getCode').click(function() {
+    $('#sendCode').click(function() {
     	var is = true;
     	var mobile = $("#mobile").val();
     	if(mobile == '' || mobile.length < 10 || isNaN(mobile)) {
  	   	    $("#tipM").text('请输入手机号码');
  		  	is = false; 
  	   	}
-    	var code = $('#codeValue').val();
-    	if(code == '' || code.length < 4){
-    		 $("#tipV").text('输入验证码');
-  		  	 is = false; 
-    	}
+    	
     	var mobile = $("#mobile").val();
     	
     	if(is) {
-    		$('#code').hide();
 	   		$.ajax({
 	               type: "GET",
-	               url: "/members/getCode/" + mobile + "/1234.json",
+	               url: "/members/getCode/" + mobile + ".json",
 	               dataType: "json",
 	               success: function(data){
-	                          alert(data);
+	                        
 	               }
 	           });
     	}
@@ -138,7 +133,7 @@ $(function(){
 <i class="xsh_icon xsh_icon_warn" style="display: none;"></i>
 <i class="xsh_icon xsh_icon_warn" style="display: none;"></i>
 <i class="xsh_icon xsh_icon_success" style="display: none;"></i> 
-<input type="button" style="background-color:#00cced" class="xsh_btn xsh_btn_mini" id="sendCode" value="发送验证码"/> </div> </div> 
+<input type="button" style="background-color:#00cced" class="xsh_btn xsh_btn_mini" id="sendCode" value="获取验证码"/> </div> </div> 
 
 <div class="xsh_cell xsh_cell_warn"> 
 <div class="xsh_cell_hd"></div> 
@@ -159,22 +154,26 @@ $(function(){
 <div class="register-btn"><a  href="javascript:void();" id="btn_sub" ><button class="rg-btn">立即注册</button></a></div>
 <div class="agreement">点击-立即注册，即表示您同意<a style=" color:00cced;">《新生活使用协议》</a></div>
 <div class="members-quota"><a href="${pageContext.request.contextPath}/members/rule.html"><img src="${pageContext.request.contextPath}/images/fire-hot.png"/>新生活前3万名会员永久享受最高9.5折!<span>了解详情</span></a></div>
-<!---获取验证码弹框--->
-<div class="get-code" style=" display:none;" id="code">  
-<div class="code-info">
-<input type="text" class="text-code" id="codeValue">
-<span id="tipV" style="color:#FF0000"></span>
-<img src="${pageContext.request.contextPath}/ImageCodeMakerServlet" id="codeImg"/>
-<a href="javascript:void();" id="restCode"><span>换一张</span></a>
-</div>
-<div class="code-btn">
-<button class="cod-btn" id="getCode">获取验证码</button>
-</div>
-</div>
-
-
 </div>
 </div>
 </div>
 </body>
+<script type="text/javascript">
+        $(function () {
+            $('#sendCode').click(function () {
+                var count = 60;
+                var countdown = setInterval(CountDown, 1000);
+                function CountDown() {
+                    $("#sendCode").attr("disabled", true);
+                    $("#sendCode").val("请等待" + count + "秒!");
+                    if (count == 0) {
+                        $("#sendCode").val("获取验证码").removeAttr("disabled");
+                        clearInterval(countdown);
+                    }
+                    count--;
+                }
+            })
+
+        });
+   </script>
 </html>
