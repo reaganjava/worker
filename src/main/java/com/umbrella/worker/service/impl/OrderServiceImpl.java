@@ -22,7 +22,6 @@ import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.IOrderService;
 import com.umbrella.worker.service.IPayService;
 import com.umbrella.worker.util.BeanUtilsExtends;
-import com.umbrella.worker.util.Constant;
 import com.umbrella.worker.util.MakeOrderNum;
 import com.umbrella.worker.util.StringUtil;
 @Service("orderService")

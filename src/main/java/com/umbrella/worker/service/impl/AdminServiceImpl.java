@@ -13,7 +13,6 @@ import com.umbrella.worker.dao.WMenuMapper;
 import com.umbrella.worker.dao.WSupplierMapper;
 import com.umbrella.worker.dto.AdminDO;
 import com.umbrella.worker.dto.MenuDO;
-import com.umbrella.worker.dto.SupplierDO;
 import com.umbrella.worker.entity.WAdmin;
 import com.umbrella.worker.entity.WAdminExample;
 import com.umbrella.worker.entity.WMenu;
@@ -23,9 +22,10 @@ import com.umbrella.worker.query.AdminQuery;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.IAdminService;
-import com.umbrella.worker.service.ISuppliersService;
 import com.umbrella.worker.util.BeanUtilsExtends;
 import com.umbrella.worker.util.StringUtil;
+
+
 @Service("adminService")
 public class AdminServiceImpl extends BaseServiceImpl implements IAdminService {
 	

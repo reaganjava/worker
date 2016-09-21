@@ -43,7 +43,7 @@
 <i class="xsh_icon xsh_icon_warn" style="display: none;"></i>
 <i class="xsh_icon xsh_icon_warn" style="display: none;"></i>
 <i class="xsh_icon xsh_icon_success" style="display: none;"></i> 
-<button style="background-color:#00cced" class="xsh_btn xsh_btn_mini"> <span>发送验证码</span>  </button></div> </div> 
+<button style="background-color:#00cced" class="xsh_btn xsh_btn_mini" id="smsCode" > <span>发送验证码</span>  </button></div> </div> 
 
 <div class="xsh_cell xsh_cell_warn"> 
 <div class="xsh_cell_hd"></div> 
@@ -77,13 +77,30 @@
 	    	var mobile = $("#mobile").val();
 	         $.ajax({
 	             type: "GET",
-	             url: "/members/getCode/" + mobile + "/1234.json",
+	             url: "/members/restPwd/" + mobile + ".json",
 	             dataType: "json",
 	             success: function(data){
-	                        alert(data);
+	                    
 	             }
 	         });
 	    });
 	});
+	
+	  $(function () {
+	         $('#smsCode').click(function () {
+	             var count = 60;
+	             var countdown = setInterval(CountDown, 1000);
+	             function CountDown() {
+	                 $("#smsCode").attr("disabled", true);
+	                 $("#smsCode").val("请等待" + count + "秒!");
+	                 if (count == 0) {
+	                     $("#smsCode").val("获取验证码").removeAttr("disabled");
+	                     clearInterval(countdown);
+	                 }
+	                 count--;
+	             }
+	         })
+	
+	     });
 </script>
 </html>

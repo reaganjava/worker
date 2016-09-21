@@ -13,8 +13,6 @@ import org.springframework.stereotype.Service;
 
 import com.umbrella.worker.dao.WPayrecordMapper;
 import com.umbrella.worker.dto.PayrecordDO;
-import com.umbrella.worker.entity.WOrder;
-import com.umbrella.worker.entity.WOrderExample;
 import com.umbrella.worker.entity.WPayrecord;
 import com.umbrella.worker.entity.WPayrecordExample;
 import com.umbrella.worker.query.PayrecordQuery;
