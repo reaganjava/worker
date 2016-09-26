@@ -1,5 +1,7 @@
 package com.umbrella.worker.web.controller.manager;
 
+
+
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.umbrella.worker.dto.OrderDO;
+import com.umbrella.worker.dto.OrderDetailDO;
 import com.umbrella.worker.query.OrderQuery;
 import com.umbrella.worker.result.JsonResultDO;
 import com.umbrella.worker.result.JsonResultSupport;
@@ -21,7 +24,7 @@ import com.umbrella.worker.service.IOrderService;
 import com.umbrella.worker.util.PageBeanUtil;
 
 @Controller
-@RequestMapping(value = "/order")
+@RequestMapping(value = "/morder")
 public class ManagerOrderController {
 
 	@Autowired
@@ -30,32 +33,48 @@ public class ManagerOrderController {
 	@RequestMapping(value = "/waitOrderList.html", method = RequestMethod.GET)
 	public ModelAndView waitOrderList(ModelAndView mav,
 			HttpServletRequest request) {
-		OrderQuery query = new OrderQuery();
-		//0.无效 1.待付款 2.待商家确认 3.已发货
-		query.setStatus(1);
-		ResultDO resultDO = orderService.list(query);
+		mav.setViewName("manager/order/waitOrderList");
+		return mav;
+	}
+	
+	@RequestMapping(value = "/waitOrderList.json", method = RequestMethod.GET)
+	public ModelAndView ajaxWaitOrderList(ModelAndView mav,
+			HttpServletRequest request) {
+		
+		ResultDO resultDO = orderService.watiList();
 		if(resultDO.isSuccess()) {
-			mav.addObject("WAIT_ORDER_LIST", resultDO.getModel(ResultSupport.FIRST_MODEL_KEY));
-			mav.setViewName("order/waitOrderList");
+			List<OrderDO> list = (List<OrderDO>) resultDO.getModel(ResultSupport.FIRST_MODEL_KEY);
+			String waitOrderContent = "";
+			for(OrderDO orderDO : list) {
+				waitOrderContent += "<tr class=\"text-c\"><td>" + orderDO.getwOOrderNo() + "</td><td>￥" + orderDO.getwOFee() + "元</td><td>" + orderDO.getOrderDetailDO().getwOAddress()+ "</td><td class=\"td-status\"><button onClick=\"rushOrder(" + orderDO.getId() + ")\">快速抢单</button></td></tr>";
+			}
+			//System.out.println(waitOrderContent);
+			mav.addObject("JSON_DATA", waitOrderContent);
 		} else {
-			mav.setViewName("error");
+			mav.addObject("JSON_DATA", 0);
 		}
 		return mav;
 	}
 	
-	@RequestMapping(value = "/rushOrder.json", method = RequestMethod.POST)
+	@RequestMapping(value = "/rushOrder/{id}.json", method = RequestMethod.GET)
 	public ModelAndView rushOrder(ModelAndView mav,
-			OrderDO orderDO,
+			@PathVariable(value="id") Integer id,
 			HttpServletRequest request) {
 		JsonResultDO jsonResultDO = new JsonResultSupport();
 		String adminName = (String) request.getSession().getAttribute("MANAGER_NAME");
-		int supplierId = (int)  request.getSession().getAttribute("MANAGER_SUPPLIER_ID");
+		Integer supplierId = (Integer)  request.getSession().getAttribute("MANAGER_SUPPLIER_ID");
 		String supplierName = (String) request.getSession().getAttribute("MANAGER_SUPPLIER_NAME");
-	
+		OrderDO orderDO = new OrderDO();
+		orderDO.setId(id);
+		System.out.println(supplierId);
 		orderDO.setwOSupplierId(supplierId);
 		orderDO.setModifiAuthor(adminName);
-		orderDO.getOrderDetailDO().setwOSupplierName(supplierName);
-		
+		OrderDetailDO orderDetailDO = new OrderDetailDO();
+		orderDetailDO.setId(id);
+		orderDetailDO.setwOSupplierName(supplierName);
+		orderDetailDO.setModifiAuthor(adminName);
+		orderDO.setOrderDetailDO(orderDetailDO);
+		orderDO.setStatus(3);
 		ResultDO result = orderService.rush(orderDO);
 		if(result.isSuccess()) {
 			jsonResultDO.setInfo("抢单成功");

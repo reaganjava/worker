@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.umbrella.worker.util.PageBeanUtil;
-import com.umbrella.worker.dto.CleanDO;
+import com.umbrella.worker.dto.TaskDO;
 import com.umbrella.worker.dto.ContactDO;
 import com.umbrella.worker.dto.OrderDO;
 import com.umbrella.worker.dto.OrderDetailDO;
@@ -39,7 +39,7 @@ public class OrderController {
 			OrderDetailDO orderDetailDO,
 			HttpServletRequest request) {
 		
-		CleanDO cleanDO = (CleanDO) request.getSession().getAttribute("CLEAN_INFO");
+		TaskDO taskDO = (TaskDO) request.getSession().getAttribute("TASK_INFO");
 		
 		String memberMobile = (String) request.getSession().getAttribute("MEMBER_MOBILE");
 		
@@ -62,10 +62,35 @@ public class OrderController {
 		orderDetailDO.setwOContact(contactDO.getwCContact());
 		orderDetailDO.setwOTelephone(contactDO.getwCTelephone());
 		orderDetailDO.setwODistrict(contactDO.getwCDistrict());
-		orderDO.setwOServiceName(cleanDO.getServiceName());
-		orderDetailDO.setwOServerTime(cleanDO.getHours());
-		orderDetailDO.setwOStaffCount(cleanDO.getStaffCount());
-		orderDetailDO.setwOPrice(cleanDO.getPrice());
+		switch(taskDO.getServiceType()) {
+		case 0: {
+			orderDO.setwOServiceName(taskDO.getServiceName());
+			orderDO.setServiceType(taskDO.getServiceType());
+			orderDetailDO.setwOServerTime(taskDO.getHours());
+			orderDetailDO.setwOStaffCount(taskDO.getStaffCount());
+			orderDetailDO.setwOPrice(taskDO.getPrice());
+			break;
+		}
+		case 1: {
+			orderDO.setwOServiceName(taskDO.getServiceName());
+			orderDO.setServiceType(taskDO.getServiceType());
+			orderDetailDO.setwOServerTime(taskDO.getHours());
+			orderDetailDO.setwOLockType(taskDO.getLockType());
+			orderDetailDO.setwOPrice(taskDO.getPrice());
+			break;
+		}
+		case 2: {
+			orderDO.setwOServiceName(taskDO.getServiceName());
+			orderDO.setServiceType(taskDO.getServiceType());
+			orderDetailDO.setwOServerTime(taskDO.getHours());
+			orderDetailDO.setwOPipType(taskDO.getPipType());
+			if(taskDO.getPipType() == 2) {
+				orderDetailDO.setwOToiletType(taskDO.getToiletType());
+			}
+			orderDetailDO.setwOPrice(taskDO.getPrice());
+			break;
+		}
+		}
 		
 	
 		orderDetailDO.setCreateAuthor(memberMobile);
@@ -181,6 +206,33 @@ public class OrderController {
 			mav.setViewName("order/grade");
 		} else {
 			mav.setViewName("error");
+		}
+		return mav;
+	}
+	
+	@RequestMapping(value = "/cancel/{id}/{infoId}.json", method = RequestMethod.GET)
+	public ModelAndView orderCancel(ModelAndView mav, 
+			@PathVariable(value="id") Integer id,
+			@PathVariable(value="infoId") Integer infoId,
+			HttpServletRequest request) {
+		
+		String[] caneclInfo = {"时间定错了", "位置定错了", "不需要了", "其他原因"};
+		OrderDO orderDO = new OrderDO();
+		orderDO.setId(id);
+		orderDO.setStatus(4);
+		OrderDetailDO orderDetailDO = new OrderDetailDO();
+		orderDetailDO.setwCaneclInfo(caneclInfo[infoId]);
+		String memberMobile = (String) request.getSession().getAttribute("MEMBER_MOBILE");
+		orderDO.setModifiAuthor(memberMobile);
+		ResultDO resultDO = orderService.modifi(orderDO);
+		if(!resultDO.isSuccess()) {
+			mav.addObject("JSON_DATA", 0);
+		}
+		resultDO = orderService.modifiDetail(orderDetailDO);
+		if(resultDO.isSuccess()) {
+			mav.addObject("JSON_DATA", 1);
+		} else {
+			mav.addObject("JSON_DATA", 0);
 		}
 		return mav;
 	}

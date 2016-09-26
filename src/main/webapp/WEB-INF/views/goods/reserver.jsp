@@ -8,7 +8,7 @@
 <meta http-equiv="cache-control" content="no-cache">
 <meta http-equiv="expires" content="0">   
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />  
 <!--[if lt IE 9]>
 　　　　<script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
 　　<![endif]-->
@@ -29,15 +29,12 @@
 <li></li>
 </ul>
 </nav>
+
 <section class="add-address">
-<c:if test="${CONTACT_DEFAULT == null}">
-<p>您还没有服务地址哟，请点击添加服务地址</p>
-</c:if>
-<c:if test="${CONTACT_DEFAULT != null}">
-<p>服务地址：${CONTACT_DEFAULT.wCAddress}</p>
-<p>联系人：${CONTACT_DEFAULT.wCContact}</p>
-<p>联系电话：${CONTACT_DEFAULT.wCTelephone}</p>
-</c:if>
+<br/>
+<br/>
+<div id="default">
+</div>
 <div class="add-ads">
 <div class="a-ads">
 <a href="${pageContext.request.contextPath}/members/contacts.html"><img  src="${pageContext.request.contextPath}/images/add-icon.png"/><span>添加服务地址</span></a>
@@ -84,6 +81,20 @@
 <script type="text/javascript">
 	
 	$(document).ready(function(){
+		$.ajax({
+            type: "GET",
+            url: "/members/getDefault.json",
+            dataType: "json",
+            success: function(data){
+                 if(data == 0) {
+                	 $("#default").append("<p>您还没有服务地址哟，请点击添加服务地址</p>");
+                 } else {
+                	 $("#default").append("");
+                	 $("#default").append(data);
+                 }
+            }
+        });
+		
 		var isView = false;
 	 	$("#btn_sub").click(function(){
 	 	    var is = true;

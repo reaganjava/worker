@@ -8,7 +8,7 @@
 <meta http-equiv="cache-control" content="no-cache">
 <meta http-equiv="expires" content="0">   
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" >  
 <!--[if lt IE 9]>
 　　　　<script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
 　　<![endif]-->
@@ -23,36 +23,29 @@ $(document).ready(function(){
  	    var is = true;
  		var mobile = $("#mobile").val();
  	   	if(mobile == '' || mobile.length < 10 || isNaN(mobile)) {
- 	   	    $("#tipM").text('请输入手机号码');
+ 	   	    alert('请输入手机号码');
  		  	is = false; 
  	   	}
  	    var password =  $("#password").val();
  	    if(password == '' || password.length < 6) {
- 	    	$("#tipP").text('请输入密码');
+ 	    	alert('请输入密码');
 		  	is = false; 
 	   	}
  	   	if(is) {
  	   		$("#loginForm").submit();
  	   	}
  	});
- 	
- 	$("input").focus(function(){
- 		$("#tipM").text('');
- 		$("#tipP").text('');
- 	});
- 	
+ 
  	$("#viewPwd").click(function() {
  		var password =  $("#password").val();
  		if(!isView) {
  			$("#password").remove();
- 			$("#tipP").remove();
- 			$("#pwd").append('<input class="xsh_input" name="wMPassword" type="text"  maxlength="15" id="password"/> <span id="tipP" style="color:#FF0000"></span> ');
+ 			$("#pwd").append('<input class="xsh_input" name="wMPassword" type="text"  maxlength="15" id="password"/>');
  			$("#password").val(password);
  			isView = true;
  		} else {
  			$("#password").remove();
- 			$("#tipP").remove();
- 			$("#pwd").append('<input class="xsh_input" name="wMPassword" type="password"  maxlength="15" id="password"/> <span id="tipP" style="color:#FF0000"></span> ');
+ 			$("#pwd").append('<input class="xsh_input" name="wMPassword" type="password"  maxlength="15" id="password"/> ');
  			$("#password").val(password);
  			isView = false;
  		}
@@ -78,7 +71,7 @@ $(document).ready(function(){
 <div class="xsh_cells vux-no-group-title"> 
 <div class="xsh_cell xsh_cell_warn"> 
 <div class="xsh_cell_hd"></div> 
-<div class="xsh_cell_bd xsh_cell_primary"><input class="xsh_input" name="wMMobile" id="mobile" placeholder="输入手机号码" type="tel" ><span id="tipM" style="color:#FF0000"></span> </div> 
+<div class="xsh_cell_bd xsh_cell_primary"><input class="xsh_input" name="wMMobile" id="mobile" placeholder="输入手机号码" type="tel" ></div> 
 <div class="xsh_cell_ft">
 <i class="xsh_icon xsh_icon_clear" style="display: none;"></i>
 <i class="xsh_icon xsh_icon_warn" style="display: none;"></i>
@@ -88,7 +81,7 @@ $(document).ready(function(){
 
 <div class="xsh_cell xsh_cell_warn"> 
 <div class="xsh_cell_hd"></div> 
-<div class="xsh_cell_bd xsh_cell_primary" id="pwd"> <input class="xsh_input" name="wMPassword" type="password" id="password"  placeholder="密码"/><span id="tipP" style="color:#FF0000"></span> </div>
+<div class="xsh_cell_bd xsh_cell_primary" id="pwd"> <input class="xsh_input" name="wMPassword" type="password" id="password"  placeholder="密码"/></div>
 <div class="xsh_cell_ft">
 <i class="xsh_icon xsh_icon_clear" style="display: none;"></i> 
 <i class="xsh_icon xsh_icon_warn" style="display: none;"></i>

@@ -8,7 +8,7 @@
 <meta http-equiv="cache-control" content="no-cache">
 <meta http-equiv="expires" content="0">   
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" >  
 <!--[if lt IE 9]>
 　　　　<script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
 　　<![endif]-->
@@ -42,14 +42,6 @@
 <!--预订信息 end-->
 <section class="service-cont">
 <div class="service-co">
-<h4>服务内容</h4>
-<ul class="c-content">
-<li><span>厨房大扫除<i>（不包括抽油烟机拆洗）</i></span></li>
-<li><span>客厅大扫除<i>（不包括天花板及灯具拆洗，地毯清洗）</i></span></li>
-<li><span>卧室大扫除<i>（不包括天花板及灯具拆洗）</i></span></li>
-<li><span>阳台大扫除<i>（不包括2楼以上玻璃）</i></span></li>
-<li><span>卫生间大扫除<i>（不包括2楼以上玻璃）</i></span></li>
-</ul>
 </div>
 </section>
 <!--服务内容 end-->

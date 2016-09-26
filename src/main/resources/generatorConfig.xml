@@ -27,9 +27,10 @@
      <table schema="worker" tableName="w_transaction" ></table> 
      <table schema="worker" tableName="w_supplier_worker" ></table>
      <table schema="worker" tableName="w_attachment" ></table>
-     <table schema="worker" tableName="w_order_detail" ></table>
-     <table schema="worker" tableName="w_payrecord" ></table>  -->
+    
+     <table schema="worker" tableName="w_payrecord" ></table> 
      <table schema="worker" tableName="w_supplier_account" ></table>
-     <table schema="worker" tableName="w_supplier_payrecord" ></table>
+     <table schema="worker" tableName="w_supplier_payrecord" ></table> -->
+       <table schema="worker" tableName="w_order_detail" ></table>
   </context>
 </generatorConfiguration>

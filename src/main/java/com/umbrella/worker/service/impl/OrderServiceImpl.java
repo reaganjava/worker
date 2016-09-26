@@ -52,13 +52,16 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 		int recordNum = -1;
 
 		BigDecimal price = orderDO.getOrderDetailDO().getwOPrice();
+		BigDecimal priceCount = null;
+		if(orderDO.getServiceType() == 0) {
 		
-		
-		
-		int staffCount = orderDO.getOrderDetailDO().getwOStaffCount();
-		int hours = orderDO.getOrderDetailDO().getwOServerTime();
-		int countHours = staffCount * hours;
-		BigDecimal priceCount = price.multiply(new BigDecimal(countHours));
+			int staffCount = orderDO.getOrderDetailDO().getwOStaffCount();
+			int hours = orderDO.getOrderDetailDO().getwOServerTime();
+			int countHours = staffCount * hours;
+			priceCount = price.multiply(new BigDecimal(countHours));
+		} else {
+			priceCount = price;
+		}
 		
 		
 		MakeOrderNum makeOrder = new MakeOrderNum();  
@@ -210,6 +213,24 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 		if(!resultDO.isSuccess()) {
 			result.setSuccess(false);
 		}
+		
+		example.createCriteria().andWOOrderNoEqualTo(orderDO.getwOOrderNo());
+		List<WOrder> list = null;
+		try {
+			list = orderMapper.selectByExample(example);
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			logger.error("[obj:order][opt:modifi][msg:" + e.getMessage()
+					+ "]");
+			return result;
+		}
+		if(list.size() == 0) {
+			result.setSuccess(false);
+		} else {
+			result.setModel(ResultSupport.FIRST_MODEL_KEY, list.get(0).getId());
+		}
 		return result;
 	}
 	
@@ -277,7 +298,7 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 	
 		WOrder order = new WOrder();
 
-		ResultSupport result = BeanUtilsExtends.copy(orderDO, order);
+		ResultSupport result = BeanUtilsExtends.copy(order, orderDO);
 		// 拷贝失败
 		if (!result.isSuccess()) {
 			return result;
@@ -298,17 +319,20 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 			return result;
 		}
 		
+		System.out.println(recordNum);
 		if (recordNum < 1) {
 			result.setSuccess(false);
 		}
 		
 		recordNum = -1;
 		WOrderDetail orderDetail = new WOrderDetail();
-		result = BeanUtilsExtends.copy(orderDO.getOrderDetailDO(), orderDetail);
+		result = BeanUtilsExtends.copy(orderDetail, orderDO.getOrderDetailDO());
 		// 拷贝失败
 		if (!result.isSuccess()) {
 			return result;
 		}
+		
+		orderDetail.setModifiTime(order.getModifiTime());
 		
 		try {
 			recordNum = orderDetailMapper.updateByPrimaryKeySelective(orderDetail);
@@ -320,7 +344,7 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 					+ "]");
 			return result;
 		}
-		
+		System.out.println(recordNum);
 		if (recordNum < 1) {
 			result.setSuccess(false);
 		}
@@ -495,6 +519,54 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 		return result;
 	}
 	
+	
+	@Override
+	public ResultDO watiList() {
+		
+		ResultSupport result = new ResultSupport();
+		
+		WOrderExample example = new WOrderExample();
+		WOrderExample.Criteria c = example.createCriteria();
+		
+	
+		c.andStatusEqualTo(2);
+	
+		example.setOrderByClause(" CREATE_TIME DESC");
+		
+		c.andDatalevelEqualTo(1);
+		
+		List<WOrder> list = null;
+		
+		try {
+			list = orderMapper.selectByExample(example);
+		} catch (Exception e) {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+	        logger.error("[obj:order][opt:get][msg:"+e.getMessage()+"]");
+	        return result;
+		}
+		
+		List<OrderDO> orderList = getOrderDOList(list);
+		
+		for(int i = 0; i < orderList.size(); i++) {
+			OrderDO orderDO = orderList.get(i);
+			WOrderDetail orderDetail = null;
+			try {
+				orderDetail = orderDetailMapper.selectByPrimaryKey(orderDO.getId());
+			} catch (Exception e) {
+				result.setSuccess(false);
+		        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+		        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+		        logger.error("[obj:order][opt:get][msg:"+e.getMessage()+"]");
+		        return result;
+			}
+			orderDO.setOrderDetailDO(getOrderDetailDO(orderDetail));
+		}
+		result.setModel(ResultSupport.FIRST_MODEL_KEY, orderList);
+		
+		return result;
+	}
 	
 
 }

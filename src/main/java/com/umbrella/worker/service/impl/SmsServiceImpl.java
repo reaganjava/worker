@@ -4,25 +4,20 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.umbrella.worker.dao.WSmsCodeMapper;
-import com.umbrella.worker.dao.WSmsTemplateMapper;
 import com.umbrella.worker.dto.SmsCodeDO;
 import com.umbrella.worker.entity.WSmsCode;
 import com.umbrella.worker.entity.WSmsCodeExample;
-import com.umbrella.worker.entity.WSmsTemplate;
 import com.umbrella.worker.query.SmsCodeQuery;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
+import com.umbrella.worker.service.ISMSGatewayService;
 import com.umbrella.worker.service.ISmsService;
 import com.umbrella.worker.util.BeanUtilsExtends;
-import com.umbrella.worker.util.EMYGateway;
-import com.umbrella.worker.util.Gateway;
 
 @Service("smsService")
 public class SmsServiceImpl  extends BaseServiceImpl implements ISmsService {
@@ -31,19 +26,9 @@ public class SmsServiceImpl  extends BaseServiceImpl implements ISmsService {
 
 	@Autowired
 	private WSmsCodeMapper smsCodeMapper;
-
+	
 	@Autowired
-	private WSmsTemplateMapper smsTemplateMapper;
-	
-	private Gateway gateway;
-	
-	
-	@PostConstruct  
-    public void initSMS() throws Exception {  
-        logger.info("==================initMethod 被执行================");  
-        gateway = new EMYGateway();
-        gateway.init();
-    }  
+	private ISMSGatewayService smsGatewayService;
 
 	public ResultDO create(SmsCodeDO smsCodeDO) {
 
@@ -81,25 +66,12 @@ public class SmsServiceImpl  extends BaseServiceImpl implements ISmsService {
 			logger.error("[obj:transaction][opt:create][msg:" + e.getMessage() + "]");
 			return result;
 		}
-		WSmsTemplate template = null;
-		try {
-			template = smsTemplateMapper.selectByPrimaryKey(smsCode.getwSmTempKey());
-		} catch (Exception e) {
-			result.setSuccess(false);
-			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
-			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
-			logger.error("[obj:transaction][opt:create][msg:" + e.getMessage() + "]");
-			return result;
-		}
 		
-		if(template != null) {
-			String content = EMYGateway.SMS_PREX + template.getwSmContent().replace("{code}", smsCode.getwSmCode());
-			long seq = System.currentTimeMillis() - java.util.UUID.randomUUID().hashCode();
-			gateway.sendDetail(new String[] {smsCode.getwSmMobile()}, content, seq);
-		}
-		
-		if (recordNum == 1) {
-			result.setModel(ResultDO.FIRST_MODEL_KEY, smsCode.getwSmCode());
+		if(recordNum > 0) {
+			ResultDO resultDO = smsGatewayService.send(smsCode.getwSmMobile(), smsCodeDO.getwSmTempKey(), smsCode.getwSmCode(), 1);
+			if(!resultDO.isSuccess()) {
+				result.setSuccess(false);
+			}
 		} else {
 			result.setSuccess(false);
 		}

@@ -24,6 +24,24 @@ public class OrderDetailDO extends BaseDO {
 
     
     private Date wOStartTime;
+    
+    
+    private Integer wOLockType;
+    
+
+    private Integer wOIsLock;
+    
+
+    private Integer wOCarType;
+
+  
+    private Integer wOPipType;
+
+    
+    private Integer wOToiletType;
+    
+    
+    private String wCaneclInfo;
 
     
     private BigDecimal wOPrice;
@@ -165,6 +183,56 @@ public class OrderDetailDO extends BaseDO {
 	}
 
 
+	public Integer getwOLockType() {
+		return wOLockType;
+	}
+
+
+	public void setwOLockType(Integer wOLockType) {
+		this.wOLockType = wOLockType;
+	}
+
+
+	public Integer getwOIsLock() {
+		return wOIsLock;
+	}
+
+
+	public void setwOIsLock(Integer wOIsLock) {
+		this.wOIsLock = wOIsLock;
+	}
+
+
+	public Integer getwOCarType() {
+		return wOCarType;
+	}
+
+
+	public void setwOCarType(Integer wOCarType) {
+		this.wOCarType = wOCarType;
+	}
+
+
+	public Integer getwOPipType() {
+		return wOPipType;
+	}
+
+
+	public void setwOPipType(Integer wOPipType) {
+		this.wOPipType = wOPipType;
+	}
+
+
+	public Integer getwOToiletType() {
+		return wOToiletType;
+	}
+
+
+	public void setwOToiletType(Integer wOToiletType) {
+		this.wOToiletType = wOToiletType;
+	}
+
+
 	public Date getwOSubscribe() {
 		return wOSubscribe;
 	}
@@ -261,6 +329,16 @@ public class OrderDetailDO extends BaseDO {
 
 	public void setSubTime(String subTime) {
 		this.subTime = subTime;
+	}
+
+
+	public String getwCaneclInfo() {
+		return wCaneclInfo;
+	}
+
+
+	public void setwCaneclInfo(String wCaneclInfo) {
+		this.wCaneclInfo = wCaneclInfo;
 	}
 
 }

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.umbrella.worker.dto.CleanDO;
+import com.umbrella.worker.dto.TaskDO;
 import com.umbrella.worker.dto.ContactDO;
 
 import com.umbrella.worker.query.ContactQuery;
@@ -42,21 +42,51 @@ public class GoodsController {
 		return mav;
 	}
 	
+	@RequestMapping(value = "/pip.html", method = RequestMethod.GET)
+	public ModelAndView lock(ModelAndView mav, 
+			HttpServletRequest request) {
+		mav.setViewName("goods/pip");
+		return mav;
+	}
+	
+	@RequestMapping(value = "/toilet.html", method = RequestMethod.GET)
+	public ModelAndView toilet(ModelAndView mav, 
+			HttpServletRequest request) {
+		mav.setViewName("goods/toilet");
+		return mav;
+	}
+	
 	
 	
 	@RequestMapping(value = "/buyJob.html", method = RequestMethod.POST)
 	public ModelAndView buyJob(ModelAndView mav,
-			CleanDO cleanDO,
+			TaskDO taskDO,
 			HttpServletRequest request) {
 		
-		cleanDO.setServiceName("保洁服务");
-		cleanDO.setPrice(new BigDecimal(34.00));
+		switch(taskDO.getServiceType()) {
+		case 0: {
+			taskDO.setServiceName("保洁服务");
+			taskDO.setPrice(new BigDecimal(34.00));
+			break;
+		}
+		case 1: {
+			taskDO.setServiceName("开锁服务");
+			taskDO.setPrice(new BigDecimal(100.00));
+			break;
+		}
+		case 2:{
+			taskDO.setServiceName("管道疏通");
+			taskDO.setPrice(new BigDecimal(100.00));
+			break;
+		}
+		};
+		
 		Integer memberId = (Integer) request.getSession().getAttribute("MEMBER_ID");
 		
 		if(memberId == null) {
 			return new ModelAndView("redirect:/members/login.html");
 		}
-		request.getSession().setAttribute("CLEAN_INFO", cleanDO);
+		request.getSession().setAttribute("TASK_INFO", taskDO);
 		ContactQuery query = new ContactQuery();
 		query.setMemberId(memberId);
 		query.setIsDefault(1);

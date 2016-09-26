@@ -24,4 +24,6 @@ public interface IOrderService {
 	public ResultDO modifiDetail(OrderDetailDO orderDetailDO);
 
 	public ResultDO rush(OrderDO orderDO);
+	
+	public ResultDO watiList();
 }

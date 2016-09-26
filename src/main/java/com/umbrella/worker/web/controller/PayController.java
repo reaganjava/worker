@@ -176,10 +176,14 @@ public class PayController {
 		orderDO.setwOOrderNo(orderNo);
 		if(status == 1) {
 			orderDO.setStatus(2);
+		} else {
+			mav.setViewName("error");
 		}
+		System.out.println(orderNo + "===========================" + status);
 		ResultDO result = orderService.updateStatus(orderDO);
-		if(!result.isSuccess()) {
-			mav.setViewName("member/accountInfo");
+		if(result.isSuccess()) {
+			Integer id = (Integer) result.getModel(ResultSupport.FIRST_MODEL_KEY);
+			return new ModelAndView("redirect:/order/orderDetail/" +id + ".html");
 		} else {
 			mav.setViewName("error");
 		}
@@ -260,13 +264,10 @@ public class PayController {
 		map.put("appid", Constant.APP_ID);
 		map.put("mch_id", Constant.MCH_ID);
 		map.put("nonce_str", nonceStr);
-		try {
-			map.put("body", URLEncoder.encode("新生活家庭服务平台服务费用", "GBK"));
-		} catch (UnsupportedEncodingException e1) {
-			e1.printStackTrace();
-		}
+		map.put("body", "新生活家庭服务平台服务费用");
 		map.put("out_trade_no", payrecordDO.getwPrOrderNo());
-		map.put("total_fee", fee + "");
+		//map.put("total_fee", fee + "");
+		map.put("total_fee", "1");
 		map.put("spbill_create_ip", memberIP);
 		map.put("notify_url", Constant.NOTIFY_URL);
 		map.put("trade_type", "JSAPI");

@@ -5,21 +5,20 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" >  
 <!--[if lt IE 9]>
 　　　　<script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
 　　<![endif]-->
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/wei-index.css" />
 <link rel="stylesheet" type="text/css"  href="${pageContext.request.contextPath}/css/out-use.css"/>
+
 <script type="text/javascript" src="${pageContext.request.contextPath}/lib/jquery/1.9.1/jquery.min.js?v=0.1"></script> 
+
 <title>注册</title>
 <script type="text/javascript">
 $(function(){
 	var isReg = false;
-	$("#tipM").text('');
-	$("#tipP").text('');
-	$("#tipS").text('');
-	$("#tipRP").text('');
+	
     $('#sendCode').click(function(){
     	$('#code').show();
     	var mobile = $("#mobile").val();
@@ -33,7 +32,7 @@ $(function(){
             success: function(data){
                  if(data == 0) {
                 	 isReg = true;
-                	 $("#tipM").text('手机号码已经注册过');
+                	 alert('手机号码已经注册过');
                  }     
             }
         });
@@ -42,7 +41,7 @@ $(function(){
     	var is = true;
     	var mobile = $("#mobile").val();
     	if(mobile == '' || mobile.length < 10 || isNaN(mobile)) {
- 	   	    $("#tipM").text('请输入手机号码');
+    		alert('请输入手机号码');
  		  	is = false; 
  	   	}
     	
@@ -54,7 +53,9 @@ $(function(){
 	               url: "/members/getCode/" + mobile + ".json",
 	               dataType: "json",
 	               success: function(data){
-	                        
+	            	   if(data == 1) {
+                       	alert("短信已经发送请注意查收！");
+                       } 
 	               }
 	           });
     	}
@@ -63,31 +64,31 @@ $(function(){
  	    var is = true;
  		var mobile = $("#mobile").val();
  	   	if(mobile == '' || mobile.length < 10 || isNaN(mobile)) {
- 	   	    $("#tipM").text('请输入手机号码');
+ 	   		alert('请输入手机号码');
  		  	is = false; 
  	   	}
  	    var smsCode =  $("#smsCode").val();
  	    alert(smsCode);
 	    if(smsCode == '' || smsCode.length < 6) {
-	    	$("#tipS").text('请输入短信验证码');
+	    	alert('请输入短信验证码');
 		  	is = false; 
 	   	}
  	    var password =  $("#password").val();
  	    if(password == '' || password.length < 6) {
- 	    	$("#tipP").text('请输入密码');
+ 	    	alert('请输入密码');
 		  	is = false; 
 	   	}
  	   var repassword =  $("#repassword").val();
 	    if(repassword == '' || repassword.length < 6) {
-	    	$("#tipRP").text('请再次输入密码');
+	    	alert('请再次输入密码');
 		  	is = false; 
 		  	if(repassword != password) {
-		  		$("#tipRP").text('两次密码输入不相同');
+		  		alert('两次密码输入不相同');
 		  		is = false;
 		  	}
 	   	}
 	    if(isReg) {
-	    	$("#tipM").text('手机号码已经注册过');
+	    	alert('手机号码已经注册过');
 	    	is = false;
 	    }
  	   	if(is) {
@@ -99,13 +100,24 @@ $(function(){
  		var codeImg = document.getElementById("codeImg");  
         codeImg.src = "${pageContext.request.contextPath}/ImageCodeMakerServlet?rnd=" + Math.random();  
  	})
- 	
- 	$("input").focus(function(){
- 		$("#tipM").text('');
- 		$("#tipP").text('');
- 		$("#tipS").text('');
- 		$("#tipRP").text('');
- 	});
+ 
+ 	 $('#smsCode').change(function() {
+     	var mobile = $("#mobile").val();
+     	var v = $('#smsCode').val();
+     	if(v != "") {
+     		$.ajax({
+	               type: "GET",
+	               url: "/members/vaidateMobile/" + mobile + "/" + v +".json",
+	               dataType: "json",
+	               success: function(data){
+	                        if(data == 0) {
+	                        	alert("验证码错误或者已经过期！", "警告对话框");
+	                        } 
+	               }
+	           });
+     	}
+     })
+
 });
 </script>
 </head>
@@ -127,7 +139,7 @@ $(function(){
 <div class="xsh_cells vux-no-group-title"> 
 <div class="xsh_cell xsh_cell_warn"> 
 <div class="xsh_cell_hd"></div> 
-<div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" id="mobile"  type="text" name="wMMobile" placeholder="输入手机号码"/><span id="tipM" style="color:#FF0000"></span> </div> 
+<div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" id="mobile"  type="text" name="wMMobile" placeholder="输入手机号码"/></div> 
 <div class="xsh_cell_ft">
 <i class="xsh_icon xsh_icon_clear" style="display: none;"></i>
 <i class="xsh_icon xsh_icon_warn" style="display: none;"></i>
@@ -137,7 +149,7 @@ $(function(){
 
 <div class="xsh_cell xsh_cell_warn"> 
 <div class="xsh_cell_hd"></div> 
-<div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" id="smsCode" type="text" name="smsCode" placeholder="验证码" /><span id="tipS" style="color:#FF0000"></span></div>
+<div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" id="smsCode" type="text" name="smsCode" placeholder="验证码" /></div>
 <div class="xsh_cell_ft">
 <i class="xsh_icon xsh_icon_clear" style="display: none;"></i> 
 <i class="xsh_icon xsh_icon_warn" style="display: none;"></i>
@@ -145,9 +157,9 @@ $(function(){
 <i class="xsh_icon xsh_icon_success" style="display: none;"></i> 
 <span class="nosend">没有收到?</span></div></div> 
 
-<div class="xsh_cell xsh_cell_warn"> <div class="xsh_cell_hd"></div> <div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" id="password" name="wMPassword" type="password" placeholder="密码"> <span id="tipP" style="color:#FF0000"></span></div></div>
+<div class="xsh_cell xsh_cell_warn"> <div class="xsh_cell_hd"></div> <div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" id="password" name="wMPassword" type="password" placeholder="密码"> </div></div>
 
-<div class="xsh_cell xsh_cell_warn"> <div class="xsh_cell_hd"></div> <div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" id="repassword" name="rePassword" type="password" placeholder="重复密码"><span id="tipRP" style="color:#FF0000"></span> </div></div>
+<div class="xsh_cell xsh_cell_warn"> <div class="xsh_cell_hd"></div> <div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" id="repassword" name="rePassword" type="password" placeholder="重复密码"></div></div>
 </div> </div>
 </form>
 <!--表单结束-->
@@ -173,7 +185,8 @@ $(function(){
                     count--;
                 }
             })
-
+            
+           
         });
    </script>
 </html>

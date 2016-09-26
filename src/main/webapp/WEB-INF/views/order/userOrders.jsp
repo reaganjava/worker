@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" >  
 <!--[if lt IE 9]>
 　　　　<script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
 　　<![endif]-->
@@ -47,7 +47,17 @@
 <li>订单号：<span>${order.wOOrderNo}</span></li>
 <li>服务类型：<span>${order.wOServiceName}</span></li>
 </ul>
-<div class="cancle-btn"><button>取消订单</button></div>
+<div class="cancle-btn">
+<c:if test="${status == 1}">
+<a href="${pageContext.request.contextPath}/order/payOrder/${order.id}.html">立即支付</a>
+</c:if>
+<c:if test="${status == 2}">
+<a href="${pageContext.request.contextPath}/order/cancel/${order.id}.html">取消订单</a>
+</c:if>
+<c:if test="${status == 3}">
+<button>确认订单</button>
+</c:if>
+</div>
 </div>
 </section>
 </c:forEach>
@@ -61,10 +71,10 @@
 <!---弹窗开始---->
 <div class=" time-pop-ups" style=" display:none">
 <form class="f-time">
-<input type="radio" name="time" value="t-1">时间定错了<br>
-<input type="radio" name="time" value="t-2">位置定错了<br>
-<input type="radio" name="time" value="t-3">不需要了<br>
-<input type="radio" name="time" value="t-4">其他原因<br>
+<input type="radio" name="time" value="1">时间定错了<br>
+<input type="radio" name="time" value="2">位置定错了<br>
+<input type="radio" name="time" value="3">不需要了<br>
+<input type="radio" name="time" value="4">其他原因<br>
 </form>
 </div>
 </div>
@@ -74,7 +84,7 @@
 <div class="footerbar">
 <ul class="footer-icon">
 <li><a href="${pageContext.request.contextPath}/index.html"><img src="${pageContext.request.contextPath}/images/index-icon.png"/><span>首页</span></a></li>
-<li><a href="${pageContext.request.contextPath}/order/userOrders/1/1.html"><img src="${pageContext.request.contextPath}/images/order-icon-now.png"/><span>订单</span></a></li>
+<li><a href="${pageContext.request.contextPath}/order/userOrders/1/1.html"><img src="${pageContext.request.contextPath}/images/order-icon-now.png"/><span class="be-now">订单</span></a></li>
 <li><a href="javascript:void();"><img src="${pageContext.request.contextPath}/images/sale-icon.png"/><span>优惠券</span></a></li>
 <li><a href="${pageContext.request.contextPath}/members/accountInfo.html"><img src="${pageContext.request.contextPath}/images/mine.png"/><span>我的</span></li>
 </ul>

@@ -1,6 +1,8 @@
 package com.umbrella.worker.web.controller;
 
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,8 @@ import com.umbrella.worker.dto.SmsCodeDO;
 import com.umbrella.worker.query.ContactQuery;
 import com.umbrella.worker.query.MembersQuery;
 import com.umbrella.worker.query.SmsCodeQuery;
+import com.umbrella.worker.result.JsonResultDO;
+import com.umbrella.worker.result.JsonResultSupport;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.IContactService;
@@ -72,17 +76,8 @@ public class MembersController {
 		membersDO.setCreateAuthor(membersDO.getwMMobile());
 		membersDO.setModifiAuthor(membersDO.getCreateAuthor());
 		
-		SmsCodeQuery query = new SmsCodeQuery();
-		query.setMobile(membersDO.getwMMobile());
-		query.setCode(membersDO.getSmsCode());
 		
-		ResultDO resultDO = smsService.validate(query);
-		
-		if(resultDO.isSuccess()) {
-			
-		}
-		
-		resultDO = memberService.create(membersDO);
+		ResultDO resultDO = memberService.create(membersDO);
 		
 		if(resultDO.isSuccess()) {
 			return new ModelAndView("redirect:/members/login.html");
@@ -331,9 +326,31 @@ public class MembersController {
 		
 		if(result.isSuccess()) {
 			request.getSession().setAttribute("CONTACT_DEFAULT", result.getModel(ResultSupport.FIRST_MODEL_KEY));
-			mav.addObject("JAVA_DATA", 1);
+			mav.addObject("JSON_DATA", 1);
 		} else {
-			mav.addObject("JAVA_DATA", 0);
+			mav.addObject("JSON_DATA", 0);
+		}
+		return mav;
+	}
+	
+	@RequestMapping(value = "/getDefault.json", method = RequestMethod.GET)
+	public ModelAndView ajaxDefault(ModelAndView mav, 
+			HttpServletRequest request) {
+		JsonResultDO jsonResultDO = new JsonResultSupport();
+		ContactQuery query = new ContactQuery();
+		query.setIsDefault(1);
+		ResultDO result = contactService.list(query);
+		
+		if(result.isSuccess()) {
+			List<ContactDO> list = (List<ContactDO>) result.getModel(ResultSupport.FIRST_MODEL_KEY);
+			System.out.println(list.size());
+			String html = "<p>服务地址：" + list.get(0).getwCAddress() + "</p><p>联系人："+ list.get(0).getwCContact() +"</p><p>联系电话："+ list.get(0).getwCTelephone() + "</p>";
+			
+			mav.addObject("JSON_DATA", html);
+		} else {
+			
+			
+			mav.addObject("JSON_DATA", 0);
 		}
 		return mav;
 	}
@@ -353,19 +370,8 @@ public class MembersController {
 				+ membersDO.getwMMobile());
 		membersDO.setwMPassword(md5Pwd);
 		membersDO.setModifiAuthor(membersDO.getwMMobile());
-		
-		SmsCodeQuery query = new SmsCodeQuery();
-		query.setMobile(membersDO.getwMMobile());
-		query.setCode(membersDO.getSmsCode());
-		
-		ResultDO resultDO = smsService.validate(query);
-		
-		if(resultDO.isSuccess()) {
-			
-		}
-		
-		
-		resultDO = memberService.modifiPwd(membersDO);
+	
+		ResultDO resultDO = memberService.modifiPwd(membersDO);
 		membersDO.setwMPassword(md5Pwd);
 		if(resultDO.isSuccess()) {
 			mav.setViewName("members/login");

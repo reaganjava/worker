@@ -4,12 +4,12 @@ import java.util.Calendar;
 import java.util.List;
 
 
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.umbrella.worker.util.BeanUtilsExtends;
-
 import com.umbrella.worker.util.StringUtil;
 
 
@@ -30,6 +30,7 @@ import com.umbrella.worker.entity.WMemberCouponExample;
 import com.umbrella.worker.entity.WMemberDetail;
 import com.umbrella.worker.entity.WMembers;
 import com.umbrella.worker.entity.WMembersExample;
+import com.umbrella.worker.entity.WMembersExample.Criteria;
 import com.umbrella.worker.entity.WOrderExample;
 import com.umbrella.worker.query.MembersQuery;
 import com.umbrella.worker.result.ResultDO;
@@ -203,9 +204,17 @@ public class MemberServiceImpl  extends BaseServiceImpl implements IMemberServic
 		
 		WMembersExample example = new WMembersExample();
 		System.out.println(membersDO.getId() + ":" + membersDO.getOldPassword());
-		example.createCriteria()
-			.andIdEqualTo(membersDO.getId())
-			.andWMPasswordEqualTo(membersDO.getOldPassword());
+		Criteria c = example.createCriteria();
+		
+		if(StringUtil.isGreatOne(membersDO.getId())) {
+			c.andIdEqualTo(membersDO.getId());
+			c.andWMPasswordEqualTo(membersDO.getOldPassword());
+		}
+		
+		if(StringUtil.isNotEmpty(membersDO.getwMMobile())) {
+			c.andWMMobileEqualTo(membersDO.getwMMobile());
+		}
+	
 		List<WMembers> list = null;
 		try {
 			list = membersMapper.selectByExample(example);

@@ -4,11 +4,11 @@
 <!doctype html>
 <html>
 
-<body>
+<body onload="callpay()">
 
 </body>
 <script type="text/javascript">
-function onBridgeReady(){
+function jsApiCall(){
 	   WeixinJSBridge.invoke(
 	       'getBrandWCPayRequest', {
 	           "appId":"${appId}",     //公众号名称，由商户传入     
@@ -19,28 +19,34 @@ function onBridgeReady(){
 	           "paySign":"${paySign}" //微信签名 
 	       },
 	       function(res){     
-	    	  
-	           if(res.err_msg == "get_brand_wcpay_request：ok" ) {
-	        	  location.href = "/${pageContext.request.contextPath}/pay/status/1.html"
-	           } else if(res.err_msg == "get_brand_wcpay_request：fail" ) {
-	        	  location.href = "/${pageContext.request.contextPath}/pay/status/2.html"
-	           } else if(res.err_msg == "get_brand_wcpay_request：cancel" )  {
-	        	  location.href = "/${pageContext.request.contextPath}/pay/status/2.html" 
+	    	   alert("http://wx.xsh1314.com/pay/status/${ORDERNO}/1.html");
+	    	   alert(res.err_msg);
+	           if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+	        	   
+	        	   window.location.href = "http://wx.xsh1314.com/pay/status/${ORDERNO}/1.html"
+	           } else if(res.err_msg == "get_brand_wcpay_request:fail" ) {
+	        	  lwindow.location.href = "http://wx.xsh1314.com/pay/status/${ORDERNO}/2.html"
+	           } else if(res.err_msg == "get_brand_wcpay_request:cancel" )  {
+	        	   window.location.href  = "http://wx.xsh1314.com/pay/status/${ORDERNO}/2.html" 
 	           }  
 	           
 	           // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。 
 	       }
 	   ); 
 	}
+function callpay()
+{
 	if (typeof WeixinJSBridge == "undefined"){
 	   if( document.addEventListener ){
-	       document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+	       document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
 	   }else if (document.attachEvent){
-	       document.attachEvent('WeixinJSBridgeReady', onBridgeReady); 
-	       document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+	       document.attachEvent('WeixinJSBridgeReady', jsApiCall); 
+	       document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
 	   }
 	}else{
-	   onBridgeReady();
-	} 
+		jsApiCall();
+	}
+}
+jsApiCall();
 </script>
 </html>
