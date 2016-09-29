@@ -26,10 +26,14 @@ public class SMSGatewayServiceImpl implements ISMSGatewayService {
 	private Gateway gateway;
 
 	@PostConstruct  
-    public void initSMS() throws Exception {  
+    public void initSMS() {  
         logger.info("==================initMethod 被执行================");  
         gateway = new EMYGateway();
-        gateway.init();
+        try {
+			gateway.init();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
     }  
 	
 	

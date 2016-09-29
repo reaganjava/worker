@@ -15,10 +15,8 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/lib/jquery/1.9.1/jquery.min.js?v=0.1"></script> 
 <script type="text/javascript">
 $(document).ready(function(){
-	$("#btn_sub").click(function(){
-	 	   
- 	   	$("#pipForm").submit();
- 	   
+	$("#btn_sub").click(function(){ 
+ 	   	$("#toiletForm").submit();
  	});
 });
 
@@ -26,15 +24,15 @@ function selectToitle(t) {
 	switch(t){
 		case 1: {
 			$("#toitle-type").empty();
-			$("#toitle-type").append('<a style=" border:1px solid #00cced;" href="javascript:void();" onclick="selectToitle(1)"><span style="width:100px; height:50px; background:url(${pageContext.request.contextPath}/images/squat-selected.png) center center no-repeat; background-size:50px; display:block; margin-top:10px;"></span><span class="squat-title" style="color:#00cced;">便池疏通</span></a>');
-			$("#toitle-type").append('<a href="javascript:void();" onclick="selectToitle(2)"><span style="width:100px; height:50px; background:url(${pageContext.request.contextPath}/images/matong.png) center center no-repeat; background-size:50px; display:block;  margin-top:10px;"></span><span class="sit-title">马桶疏通</span></a>');
+			$("#toitle-type").append('<li class="be-selected"><a style=" color:#00cced; border:1.5px solid #00cced; background:url(${pageContext.request.contextPath}/images/choosed.png) right bottom no-repeat #fff; background-size:25px;">马桶漏水</a></li>');
+			$("#toitle-type").append('<li><a href="javascript:void();" onclick="selectToitle(2);">无法冲水</a></li>');
 			$("#tt").val(1);
 			break;
 		}
 		case 2: {
 			$("#toitle-type").empty();
-			$("#toitle-type").append('<a href="javascript:void();"  href="javascript:void();" onclick="selectToitle(1)"><span style="width:100px; height:50px; background:url(${pageContext.request.contextPath}/images/squat.png) center center no-repeat; background-size:50px; display:block; margin-top:10px;"></span><span class="squat-title">便池疏通</span></a>');
-			$("#toitle-type").append('<a style=" border:1px solid #00cced;"  href="javascript:void();" onclick="selectToitle(2)"><span style="width:100px; height:50px; background:url(${pageContext.request.contextPath}/images/matong-selected.png) center center no-repeat; background-size:50px; display:block;  margin-top:10px;"></span><span class="sit-title" style="color:#00cced;">马桶疏通</span></a>');
+			$("#toitle-type").append('<li><a href="javascript:void();" onclick="selectToitle(1);">马桶漏水</a></li>');
+			$("#toitle-type").append('<li  class="be-selected"><a style=" color:#00cced; border:1.5px solid #00cced; background:url(${pageContext.request.contextPath}/images/choosed.png) right bottom no-repeat #fff; background-size:25px;" href="javascript:void();" onclick="selectToitle(2);">无法冲水</a></li>');
 			$("#tt").val(2);
 			break;
 		}
@@ -43,7 +41,7 @@ function selectToitle(t) {
 	
 }
 </script>
-<title>管道疏通</title>
+<title>马桶维修</title>
 </head>
 <body>
 <div class="xsh">
@@ -51,51 +49,39 @@ function selectToitle(t) {
 <div class="container">
 <div class="lock-type"><span>请选择服务类型</span></div>
 <div class="lock-choose">
-<a href="${pageContext.request.contextPath}/goods/pip.html"">
-<span class="open-img" style=" background:url(${pageContext.request.contextPath}/images/kitchen.png) center center no-repeat; background-size:50px; "></span>
-<span class="change-title">厨房管道疏通</span>
-</a>
-<a  href="javascript:void();">
-<span class="change-img" style=" background:url(${pageContext.request.contextPath}/images/toilet-selected.png) center center no-repeat; background-size:50px; "></span>
-<span class="open-title">卫生间管道疏通</span>
+<a>
+<span class="open-img" style=" background:url(${pageContext.request.contextPath}/images/totile-selected.png) center center no-repeat; background-size:50px; "></span>
+<span class="open-title">马桶维修</span>
 </a>
 </div>
 <!---选择服务类型结束-->
-<section class="toilet-type">
-<div class="toilet-type-title"><span>请选择卫生间类型</span></div>
-<div class="choose-toilet" id="toitle-type">
-<a style=" border:1px solid #00cced;" href="javascript:void();" onclick="selectToitle(1)">
-<span style="width:100px; height:50px; background:url(${pageContext.request.contextPath}/images/squat-selected.png) center center no-repeat; background-size:50px; display:block; margin-top:10px;"></span>
-<span class="squat-title" style="color:#00cced;">便池疏通</span>
-</a>
-<a href="javascript:void();" onclick="selectToitle(2)">
-<span style="width:100px; height:50px; background:url(${pageContext.request.contextPath}/images/matong.png) center center no-repeat; background-size:50px; display:block;  margin-top:10px;"></span>
-<span class="sit-title">马桶疏通</span>
-</a>
+<div class="door-type-choose" style=" height:74px; background:#fff; margin-top:15px;">
+<ul id="toitle-type">
+<li class="be-selected"><a href="javascript:void();" onclick="selectToitle(1);" style=" color:#00cced; border:1.5px solid #00cced; background:url(${pageContext.request.contextPath}/images/choosed.png) right bottom no-repeat #fff; background-size:25px;">马桶漏水</a></li>
+<li><a href="javascript:void();" onclick="selectToitle(2);">无法冲水</a></li>
+</ul>
 </div>
-</section>
-<!---卫生间类型选择结束--->
-<form action="${pageContext.request.contextPath}/goods/buyJob.html" method="post" id="pipForm">
-<input name="serviceType" value="2" type="hidden"/>
-<input name="pipType" value="2" type="hidden"/>
-<input name="toiletType" id="tt" type="hidden"/>
+<form action="${pageContext.request.contextPath}/goods/buyJob.html" method="post" id="toiletForm">
+<input name="serviceType" value="3" type="hidden"/>
+<input name="damageType" id="tt" type="hidden"/>
+<!---选项结束---->
 <div class="message">
-<input type="text" class="take-message" placeholder="如有特殊需求，请留言">
+<input type="text" class="take-message" name="message" placeholder="如有特殊需求，请留言">
 </div>
 </form>
 <!---留言结束--->
 <div class="recomend">
 <p>温馨提示：</p>
-<span>1、目前仅提供家庭式管道疏通，即疏通长度5米之内。<br>
-2、服务人员上门后，因客户原因无法维修或更换，取消订单将收取30
+<span>1、本服务包含材料费。<br>
+2.服务人员上门后，因客户原因无法维修或更换，取消订单将收取30
 元上门费，请谨慎下单。<br>
-3、如上门检查后，因技师原因无法疏通，则退回全部相关费用。<br>
+3、如上门检查后，因技师原因无法修理，则退回全部相关费用。<br>
 4、维修过程当中，请保持水电畅通。</span>
 </div>
 <div class="pay-now">
 <ul>
 <li style=" text-align:right"><button class="money-btn" id="btn_sub">下一步</button></li>
-<li style="text-align:center">总额：<span>￥100</span></li>
+<li style="text-align:center">总额：<span>￥150</span></li>
 </ul>
 </div>
 </div>
@@ -103,3 +89,4 @@ function selectToitle(t) {
 </div>
 </body>
 </html>
+

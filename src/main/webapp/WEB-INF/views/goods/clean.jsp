@@ -21,7 +21,7 @@
 <div class="container">
 <nav class="navbar">
 <ul>
-<li><a href="首页.html"><img src="${pageContext.request.contextPath}/images/left.png"/></a></li>
+<li><a href="/"><img src="${pageContext.request.contextPath}/images/left.png"/></a></li>
 <li><span>选择面积</span></li>
 <li></li>
 </ul>

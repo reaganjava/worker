@@ -19,9 +19,7 @@ function jsApiCall(){
 	           "paySign":"${paySign}" //微信签名 
 	       },
 	       function(res){     
-	    	   alert("http://wx.xsh1314.com/pay/status/${ORDERNO}/1.html");
-	    	   alert(res.err_msg);
-	           if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+	    	  if(res.err_msg == "get_brand_wcpay_request:ok" ) {
 	        	   
 	        	   window.location.href = "http://wx.xsh1314.com/pay/status/${ORDERNO}/1.html"
 	           } else if(res.err_msg == "get_brand_wcpay_request:fail" ) {

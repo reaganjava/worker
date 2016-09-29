@@ -68,7 +68,7 @@ $(function(){
  		  	is = false; 
  	   	}
  	    var smsCode =  $("#smsCode").val();
- 	    alert(smsCode);
+ 	   
 	    if(smsCode == '' || smsCode.length < 6) {
 	    	alert('请输入短信验证码');
 		  	is = false; 

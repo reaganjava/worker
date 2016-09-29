@@ -80,7 +80,7 @@ public class PayController {
 			mav.addObject("PAY_INFO", payList.get(0));
 			mav.setViewName("pay/info");
 		} else {
-			mav.setViewName("error");
+			mav.setViewName("pay/fail");
 		}
 		return mav;
 	}
@@ -117,7 +117,7 @@ public class PayController {
 			request.getSession().setAttribute("orderNo", orderNo);
 			return new ModelAndView("redirect:/pay/invoke.html");
 		} else {
-			mav.setViewName("error");
+			mav.setViewName("pay/fail");
 		}
 		return mav;
 	}
@@ -162,7 +162,7 @@ public class PayController {
 			logger.info("paySign=" + paySign);
 			mav.setViewName("pay/invoke");
 		} else {
-			mav.setViewName("error");
+			mav.setViewName("pay/fail");
 		}
 		return mav;
 	}
@@ -177,7 +177,7 @@ public class PayController {
 		if(status == 1) {
 			orderDO.setStatus(2);
 		} else {
-			mav.setViewName("error");
+			mav.setViewName("pay/fail");
 		}
 		System.out.println(orderNo + "===========================" + status);
 		ResultDO result = orderService.updateStatus(orderDO);
@@ -185,7 +185,7 @@ public class PayController {
 			Integer id = (Integer) result.getModel(ResultSupport.FIRST_MODEL_KEY);
 			return new ModelAndView("redirect:/order/orderDetail/" +id + ".html");
 		} else {
-			mav.setViewName("error");
+			mav.setViewName("pay/fail");
 		}
 		return mav;
 	}

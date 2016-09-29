@@ -41,6 +41,9 @@ public class OrderDetailDO extends BaseDO {
     private Integer wOToiletType;
     
     
+    private Integer wODamageType;
+    
+    
     private String wCaneclInfo;
 
     
@@ -339,6 +342,16 @@ public class OrderDetailDO extends BaseDO {
 
 	public void setwCaneclInfo(String wCaneclInfo) {
 		this.wCaneclInfo = wCaneclInfo;
+	}
+
+
+	public Integer getwODamageType() {
+		return wODamageType;
+	}
+
+
+	public void setwODamageType(Integer wODamageType) {
+		this.wODamageType = wODamageType;
 	}
 
 }

@@ -22,6 +22,8 @@ public class TaskDO {
 
 	private Integer toiletType;
 	
+	private Integer damageType;
+	
 	private String message;
 
 	private BigDecimal price;
@@ -104,6 +106,22 @@ public class TaskDO {
 
 	public void setPrice(BigDecimal price) {
 		this.price = price;
+	}
+
+	public Integer getDamageType() {
+		return damageType;
+	}
+
+	public void setDamageType(Integer damageType) {
+		this.damageType = damageType;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 }

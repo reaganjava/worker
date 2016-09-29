@@ -336,14 +336,21 @@ public class MembersController {
 	@RequestMapping(value = "/getDefault.json", method = RequestMethod.GET)
 	public ModelAndView ajaxDefault(ModelAndView mav, 
 			HttpServletRequest request) {
-		JsonResultDO jsonResultDO = new JsonResultSupport();
+		
 		ContactQuery query = new ContactQuery();
-		query.setIsDefault(1);
+		Integer memberId = (Integer) request.getSession().getAttribute("MEMBER_ID");
+		
+		if(memberId == null) {
+			return new ModelAndView("redirect:/members/login.html");
+		}
+		query.setMemberId(memberId);
+		//query.setIsDefault(1);
 		ResultDO result = contactService.list(query);
+		
 		
 		if(result.isSuccess()) {
 			List<ContactDO> list = (List<ContactDO>) result.getModel(ResultSupport.FIRST_MODEL_KEY);
-			System.out.println(list.size());
+			for()
 			String html = "<p>服务地址：" + list.get(0).getwCAddress() + "</p><p>联系人："+ list.get(0).getwCContact() +"</p><p>联系电话："+ list.get(0).getwCTelephone() + "</p>";
 			
 			mav.addObject("JSON_DATA", html);

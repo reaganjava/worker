@@ -20,18 +20,19 @@
 
 <title>地址管理</title>
 </head>
+<body>
 <div class="xsh">
 <div class="page-all">
 <div class="container">
 <nav class="navbar">
 <ul>
-<li><a href="javascript:void();" onclick="window.history.back(-1);"><img src="${pageContext.request.contextPath}/images/left.png"/></a></li>
-<li><span>服务地址</span></li>
+<li><a <a href="javascript:void();" onclick="window.history.back(-1);"><img src="${pageContext.request.contextPath}/images/left.png"/></a></li>
+<li><span class="navber-word">服务地址</span></li>
 <li></li>
 </ul>
 </nav>
 <!---导航结束--->
-<section>
+<section class="add-list">
 <div class="choose-add">
 <div class="scroll">
 <div class="address-detail">
@@ -39,11 +40,13 @@
 <ul>
 <c:if test="${contact.wCDefault == 1}">
 <li onClick="onDefault(${contact.id})" id="c${contact.id}">
+<div class="choose-con1">
 </c:if>
 <c:if test="${contact.wCDefault == 0}">
 <li class="choose-2" onClick="onDefault(${contact.id})" id="c${contact.id}">
+<div class="choose-con1">
 </c:if>
-<div class="choose-con1" >
+
 <input name="id" value="${contact.id}" type="hidden" />
 <span>${contact.wCAddress}</span>
 <span>${contact.wCContact}</span>
@@ -63,10 +66,12 @@
 </div>
 </div>
 </section>
+<div class="choose-next">
+<a class="tab-bar-btn"   href="javascript:void();" onclick="window.history.back(-1);">确定</a>
 </div>
 </div>
 </div>
-<body>
+</div>
 </body>
 <script type="text/javascript">
 	function onDefault(id) {

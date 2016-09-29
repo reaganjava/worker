@@ -25,7 +25,7 @@
 <div class="container">
 <nav class="navbar">
 <ul>
-<li><a href="${pageContext.request.contextPath}/members/contacts.html"><img src="${pageContext.request.contextPath}/images/left.png"/></a></li>
+<li><a href="javascript:void();" onclick="window.history.back(-2);"><img src="${pageContext.request.contextPath}/images/left.png"/></a></li>
 <li><span>添加地址</span></li>
 <li></li>
 </ul>

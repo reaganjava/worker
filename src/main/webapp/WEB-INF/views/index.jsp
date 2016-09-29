@@ -30,27 +30,27 @@
 <span class="house-clean-img"></span>
 <span class="house-clean-title">临时保洁</span>
 </a>
-<a class="service-a" href="尽请期待.html">
+<a class="service-a" href="waiting.html">
 <span class="house-worker-img"></span>
 <span class="house-worker-title">长期钟点工</span>
 </a>
-<a class="service-a" href="尽请期待.html">
+<a class="service-a" href="waiting.html">
 <span class="baomu-img"></span>
 <span class="baomu-title">住家保姆</span>
 </a>
-<a class="service-a" href="尽请期待.html">
+<a class="service-a" href="waiting.html">
 <span class="old-img"></span>
 <span class="old-title">看护老人</span>
 </a>
-<a class="service-a" href="尽请期待.html">
+<a class="service-a" href="waiting.html">
 <span class="baby-img"></span>
 <span class="baby-title">育儿嫂</span>
 </a>
-<a class="service-a" href="尽请期待.html">
+<a class="service-a" href="waiting.html">
 <span class="child-img"></span>
 <span class="child-title">月嫂</span>
 </a>
-<a class="service-a" href="尽请期待.html">
+<a class="service-a" href="waiting.html">
 <span class="hospital-img"></span>
 <span class="hospital-title">医院护工</span>
 </a>

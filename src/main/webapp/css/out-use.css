@@ -19,7 +19,7 @@ button.xsh_btn_inline, button.xsh_btn_mini, input.xsh_btn_inline, input.xsh_btn_
 .xsh_cell {position: relative}
 .xsh_cell:before {content: " ";position: absolute;left: 0;top: 0;width: 100%;height: 1px;border-top: 1px solid #d9d9d9;color: #d9d9d9;-webkit-transform-origin: 0 0;transform-origin: 0 0;-webkit-transform: scaleY(.5);transform: scaleY(.5);left: 15px}
 .xsh_cell:first-child:before {display: none}
-.xsh_cells {margin-top: 1.17647059em;background-color: #fff;line-height: 1.41176471;font-size: 17px;overflow: hidden;position: relative}
+.xsh_cells {margin-top: 1.17647059em;background-color: #fff;line-height: 1.41176471;font-size: 17px;overflow: hidden;position: relative;  margin-top:45px;}
 .xsh_cells:before {top: 0;border-top: 1px solid #d9d9d9;-webkit-transform-origin: 0 0;transform-origin: 0 0;-webkit-transform: scaleY(.5);transform: scaleY(.5)
 }
 .xsh_cells:after, .xsh_cells:before {content: " ";position: absolute;left: 0;width: 100%;height: 1px;color: #d9d9d9}

@@ -17,10 +17,10 @@ public class IndexController {
 		return mav;
 	}
 	
-	@RequestMapping(value = "/test.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/waiting.html", method = RequestMethod.GET)
 	public ModelAndView test(ModelAndView mav, 
 			HttpServletRequest request) {
-		mav.setViewName("test");
+		mav.setViewName("waiting");
 		return mav;
 	}
 }

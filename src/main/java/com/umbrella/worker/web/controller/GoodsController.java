@@ -42,8 +42,15 @@ public class GoodsController {
 		return mav;
 	}
 	
-	@RequestMapping(value = "/pip.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/lock.html", method = RequestMethod.GET)
 	public ModelAndView lock(ModelAndView mav, 
+			HttpServletRequest request) {
+		mav.setViewName("goods/lock");
+		return mav;
+	}
+	
+	@RequestMapping(value = "/pip.html", method = RequestMethod.GET)
+	public ModelAndView pip(ModelAndView mav, 
 			HttpServletRequest request) {
 		mav.setViewName("goods/pip");
 		return mav;
@@ -71,12 +78,16 @@ public class GoodsController {
 		}
 		case 1: {
 			taskDO.setServiceName("开锁服务");
-			taskDO.setPrice(new BigDecimal(100.00));
 			break;
 		}
 		case 2:{
 			taskDO.setServiceName("管道疏通");
 			taskDO.setPrice(new BigDecimal(100.00));
+			break;
+		}
+		case 3:{
+			taskDO.setServiceName("马桶维修");
+			taskDO.setPrice(new BigDecimal(150.00));
 			break;
 		}
 		};

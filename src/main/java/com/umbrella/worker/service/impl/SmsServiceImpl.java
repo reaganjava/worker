@@ -68,6 +68,7 @@ public class SmsServiceImpl  extends BaseServiceImpl implements ISmsService {
 		}
 		
 		if(recordNum > 0) {
+			smsGatewayService.initSMS();
 			ResultDO resultDO = smsGatewayService.send(smsCode.getwSmMobile(), smsCodeDO.getwSmTempKey(), smsCode.getwSmCode(), 1);
 			if(!resultDO.isSuccess()) {
 				result.setSuccess(false);
