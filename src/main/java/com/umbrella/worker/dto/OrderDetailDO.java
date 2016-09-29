@@ -6,6 +6,8 @@ import java.util.Date;
 public class OrderDetailDO extends BaseDO {
     
 	private Integer id;
+	
+	private Integer contactId;
 
    
 	private Integer wOStiffId;
@@ -352,6 +354,16 @@ public class OrderDetailDO extends BaseDO {
 
 	public void setwODamageType(Integer wODamageType) {
 		this.wODamageType = wODamageType;
+	}
+
+
+	public Integer getContactId() {
+		return contactId;
+	}
+
+
+	public void setContactId(Integer contactId) {
+		this.contactId = contactId;
 	}
 
 }

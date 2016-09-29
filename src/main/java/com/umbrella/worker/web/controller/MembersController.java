@@ -299,7 +299,7 @@ public class MembersController {
 	}
 	
 	@RequestMapping(value = "/addContact.html", method = RequestMethod.POST)
-	public ModelAndView contacts(ModelAndView mav, ContactDO contactDO, HttpServletRequest request) {
+	public ModelAndView addContact(ModelAndView mav, ContactDO contactDO, HttpServletRequest request) {
 		
 		Integer memberId = (Integer) request.getSession().getAttribute("MEMBER_ID");
 		String memberMobile = (String) request.getSession().getAttribute("MEMBER_MOBILE");
@@ -308,8 +308,7 @@ public class MembersController {
 		contactDO.setwCDefault(1);
 		ResultDO result = contactService.create(contactDO);
 		if(result.isSuccess()) {
-			request.getSession().setAttribute("CONTACT_DEFAULT", contactDO);
-			return new ModelAndView("redirect:/members/contacts.html");
+			return new ModelAndView("redirect:/goods/buyJob.html");
 		} else {
 			mav.setViewName("error");
 		}
@@ -325,7 +324,6 @@ public class MembersController {
 		ResultDO result = contactService.setDefault(id);
 		
 		if(result.isSuccess()) {
-			request.getSession().setAttribute("CONTACT_DEFAULT", result.getModel(ResultSupport.FIRST_MODEL_KEY));
 			mav.addObject("JSON_DATA", 1);
 		} else {
 			mav.addObject("JSON_DATA", 0);
@@ -333,34 +331,7 @@ public class MembersController {
 		return mav;
 	}
 	
-	@RequestMapping(value = "/getDefault.json", method = RequestMethod.GET)
-	public ModelAndView ajaxDefault(ModelAndView mav, 
-			HttpServletRequest request) {
-		
-		ContactQuery query = new ContactQuery();
-		Integer memberId = (Integer) request.getSession().getAttribute("MEMBER_ID");
-		
-		if(memberId == null) {
-			return new ModelAndView("redirect:/members/login.html");
-		}
-		query.setMemberId(memberId);
-		//query.setIsDefault(1);
-		ResultDO result = contactService.list(query);
-		
-		
-		if(result.isSuccess()) {
-			List<ContactDO> list = (List<ContactDO>) result.getModel(ResultSupport.FIRST_MODEL_KEY);
-			for()
-			String html = "<p>服务地址：" + list.get(0).getwCAddress() + "</p><p>联系人："+ list.get(0).getwCContact() +"</p><p>联系电话："+ list.get(0).getwCTelephone() + "</p>";
-			
-			mav.addObject("JSON_DATA", html);
-		} else {
-			
-			
-			mav.addObject("JSON_DATA", 0);
-		}
-		return mav;
-	}
+	
 	
 	@RequestMapping(value = "/restPwd.html", method = RequestMethod.GET)
 	public ModelAndView restPwd(ModelAndView mav, HttpServletRequest request) {

@@ -65,11 +65,13 @@ public class GoodsController {
 	
 	
 	
-	@RequestMapping(value = "/buyJob.html", method = RequestMethod.POST)
+	@RequestMapping(value = "/buyJob.html")
 	public ModelAndView buyJob(ModelAndView mav,
 			TaskDO taskDO,
 			HttpServletRequest request) {
-		
+		if(request.getSession().getAttribute("TASK_INFO") != null) {
+			taskDO = (TaskDO) request.getSession().getAttribute("TASK_INFO");
+		}
 		switch(taskDO.getServiceType()) {
 		case 0: {
 			taskDO.setServiceName("保洁服务");
@@ -100,7 +102,7 @@ public class GoodsController {
 		request.getSession().setAttribute("TASK_INFO", taskDO);
 		ContactQuery query = new ContactQuery();
 		query.setMemberId(memberId);
-		query.setIsDefault(1);
+		
 		ResultDO result = contactService.list(query);
 		
 		long timestamp = Calendar.getInstance().getTimeInMillis();
@@ -125,8 +127,7 @@ public class GoodsController {
 		if(result.isSuccess()) {
 			List<ContactDO> list = (List<ContactDO>) result.getModel(ResultSupport.FIRST_MODEL_KEY);
 			if(list != null) {
-				mav.addObject("CONTACT_DEFAULT", list.get(0));
-				request.getSession().setAttribute("CONTACT_DEFAULT", list.get(0));
+				mav.addObject("MEMBER_CONTACT_LIST", list);
 			}
 			mav.addObject("WEEK_DATE_LIST", dateValueDOList);
 			mav.setViewName("goods/reserver");

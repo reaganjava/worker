@@ -18,10 +18,10 @@ import com.umbrella.worker.dto.TaskDO;
 import com.umbrella.worker.dto.ContactDO;
 import com.umbrella.worker.dto.OrderDO;
 import com.umbrella.worker.dto.OrderDetailDO;
-
 import com.umbrella.worker.query.OrderQuery;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
+import com.umbrella.worker.service.IContactService;
 import com.umbrella.worker.service.IOrderService;
 
 
@@ -32,6 +32,9 @@ public class OrderController {
 	
 	@Autowired
 	private IOrderService orderService;
+	
+	@Autowired
+	private IContactService contactService;
 
 	
 	@RequestMapping(value = "/getOrder.html", method = RequestMethod.POST)
@@ -45,16 +48,21 @@ public class OrderController {
 		
 		Integer memberId = (Integer) request.getSession().getAttribute("MEMBER_ID");
 		
-		ContactDO contactDO = (ContactDO) request.getSession().getAttribute("CONTACT_DEFAULT");
+		
 		
 		if(memberId == null && memberMobile == null) {
 			return new ModelAndView("redirect:/members/login.html");
 		}
 		
-		if(contactDO == null) {
-			return new ModelAndView("redirect:/goods/buyJob.html");
-		}
 		
+		
+		ResultDO result = contactService.get(orderDetailDO.getContactId());
+		ContactDO contactDO = null; 
+		if(result.isSuccess()) {
+			contactDO = (ContactDO) result.getModel(ResultSupport.FIRST_MODEL_KEY);
+		} else {
+			mav.setViewName("error");
+		}
 		
 		OrderDO orderDO = new OrderDO();
 		orderDetailDO.setwOCity("重庆");
@@ -112,14 +120,14 @@ public class OrderController {
 		orderDO.setwOMembersId(memberId);
 		orderDO.setCreateAuthor(memberMobile);
 		
-		ResultDO resultDO = orderService.create(orderDO);
+		result = orderService.create(orderDO);
 		
-		if(!resultDO.isSuccess()) {
+		if(!result.isSuccess()) {
 			mav.setViewName("error");
 			return mav;
 		}
-		int orderID = (int) resultDO.getModel(ResultSupport.FIRST_MODEL_KEY);
-		
+		int orderID = (int) result.getModel(ResultSupport.FIRST_MODEL_KEY);
+		request.getSession().removeAttribute("TASK_INFO");
 		return new ModelAndView("redirect:/order/payOrder/" + orderID + ".html");
 	}
 	

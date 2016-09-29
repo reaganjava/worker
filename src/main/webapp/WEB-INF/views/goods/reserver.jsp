@@ -29,19 +29,35 @@
 <li></li>
 </ul>
 </nav>
+<div class="address-detail" style=" width:96%; margin:0 auto; margin-top:45px;">
+<c:forEach items="${MEMBER_CONTACT_LIST}" var="contact">
+<ul>
+<c:if test="${contact.wCDefault == 1}">
+<li onClick="onDefault(${contact.id})" id="c${contact.id}">
+<div class="choose-con1">
+</c:if>
+<c:if test="${contact.wCDefault == 0}">
+<li class="choose-2" onClick="onDefault(${contact.id})" id="c${contact.id}">
+<div class="choose-con1">
+</c:if>
 
-<section class="add-address">
-<br/>
-<br/>
-<div id="default">
+
+<span>${contact.wCAddress}</span>
+<span>${contact.wCContact}</span>
+<span>${contact.wCTelephone}</span>
 </div>
+<div class="choose-con2">重庆</div>
+</li>
+</ul>
+</c:forEach>
+</div>
+<section class="add-address">
 <div class="add-ads">
 <div class="a-ads">
-<a href="${pageContext.request.contextPath}/members/contacts.html"><img  src="${pageContext.request.contextPath}/images/add-icon.png"/><span>添加服务地址</span></a>
+<a href="${pageContext.request.contextPath}/members/addContact.html"><img  src="${pageContext.request.contextPath}/images/add-icon.png"/><span>添加服务地址</span></a>
 </div>
 </div>
 </section>
-<!--添加地址结束-->
 <section class="add-time">
 <div class="choose-time">
 <span class="time-words">请选择服务时间</span>
@@ -63,7 +79,6 @@
 <option value="11:00">11:00</option>
 <option value="11:30">11:30</option>
 </select>
-
 </div>
 </div>
 </section>
@@ -76,25 +91,25 @@
 </div>
 </div>
 </div>
+<input type="hidden" name="contactId" id="cid" />
 </form>
 </body>
 <script type="text/javascript">
 	
-	$(document).ready(function(){
-		$.ajax({
-            type: "GET",
-            url: "/members/getDefault.json",
-            dataType: "json",
-            success: function(data){
-                 if(data == 0) {
-                	 $("#default").append("<p>您还没有服务地址哟，请点击添加服务地址</p>");
-                 } else {
-                	 $("#default").append("");
-                	 $("#default").append(data);
-                 }
-            }
-        });
-		
+function onDefault(id) {
+	$.ajax({
+		  url: "${pageContext.request.contextPath}/members/default/" + id + ".json",
+		  success:function(data) {
+			
+			  if(data != 0) {
+				 	$('li').addClass('choose-2');
+				 	$('#c' + id).removeClass('choose-2');
+				 	$('#cid').val(id);
+			  }
+		  }
+		});
+}
+$(function(){		
 		var isView = false;
 	 	$("#btn_sub").click(function(){
 	 	    var is = true;
