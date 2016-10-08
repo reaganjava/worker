@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.umbrella.worker.dto.AdminDO;
+import com.umbrella.worker.dto.AttachmentDO;
 import com.umbrella.worker.dto.CertificoreDO;
 import com.umbrella.worker.dto.CommentDO;
 import com.umbrella.worker.dto.ContactDO;
@@ -19,6 +20,7 @@ import com.umbrella.worker.dto.StaffDO;
 import com.umbrella.worker.dto.SupplierDO;
 import com.umbrella.worker.dto.TransactionDO;
 import com.umbrella.worker.entity.WAdmin;
+import com.umbrella.worker.entity.WAttachment;
 import com.umbrella.worker.entity.WCertificore;
 import com.umbrella.worker.entity.WComment;
 import com.umbrella.worker.entity.WContact;
@@ -346,6 +348,12 @@ public class BaseServiceImpl {
 			return null;
 		}
 		return resultList;
+	}
+	
+	protected AttachmentDO getAttachmentDO(WAttachment obj) {
+		if(obj == null) return null;
+		AttachmentDO dst = new AttachmentDO();
+		return BeanUtilsExtends.copyProperties(dst, obj) ? dst : null;
 	}
 	
 	

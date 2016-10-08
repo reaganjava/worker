@@ -154,7 +154,7 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 		
 		WOrder order = new WOrder();
 
-		ResultSupport result = BeanUtilsExtends.copy(orderDO, order);
+		ResultSupport result = BeanUtilsExtends.copy(order, orderDO);
 		// 拷贝失败
 		if (!result.isSuccess()) {
 			return result;
@@ -163,7 +163,33 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 		
 		int recordNum = -1;
 		try {
-			recordNum = orderMapper.updateByPrimaryKey(order);
+			recordNum = orderMapper.updateByPrimaryKeySelective(order);
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			logger.error("[obj:order][opt:modifi][msg:" + e.getMessage()
+					+ "]");
+			return result;
+		}
+		if (recordNum < 1) {
+			result.setSuccess(false);
+		}
+		
+		if(!StringUtil.isGreatOne(orderDO.getOrderDetailDO().getId())) {
+			return result;
+		}
+		WOrderDetail orderDetail = new WOrderDetail();
+
+		result = BeanUtilsExtends.copy(orderDetail, orderDO.getOrderDetailDO());
+		// 拷贝失败
+		if (!result.isSuccess()) {
+			return result;
+		}
+		
+		recordNum = -1;
+		try {
+			recordNum = orderDetailMapper.updateByPrimaryKeySelective(orderDetail);
 		} catch (Exception e) {
 			result.setSuccess(false);
 			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
@@ -239,7 +265,7 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 		
 		WOrderDetail orderDetail = new WOrderDetail();
 
-		ResultSupport result = BeanUtilsExtends.copy(orderDetailDO, orderDetail);
+		ResultSupport result = BeanUtilsExtends.copy(orderDetail, orderDetailDO);
 		// 拷贝失败
 		if (!result.isSuccess()) {
 			return result;
@@ -247,7 +273,7 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 		
 		int recordNum = -1;
 		try {
-			recordNum = orderDetailMapper.updateByPrimaryKey(orderDetail);
+			recordNum = orderDetailMapper.updateByPrimaryKeySelective(orderDetail);
 		} catch (Exception e) {
 			result.setSuccess(false);
 			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);

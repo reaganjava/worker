@@ -73,7 +73,7 @@ public class AdminContrlloer {
 		} else {
 			jsonResultDO.setInfo("提交失败");
 			jsonResultDO.setStatus(JsonResultDO.JSON_FAILED);
-			mav.addObject("JSON_DATA", "error");
+			mav.addObject("JSON_DATA", jsonResultDO);
 		}
 		return mav;
 	}
@@ -93,7 +93,7 @@ public class AdminContrlloer {
 		} else {
 			jsonResultDO.setInfo("提交失败");
 			jsonResultDO.setStatus(JsonResultDO.JSON_FAILED);
-			mav.addObject("JSON_DATA", "error");
+			mav.addObject("JSON_DATA", jsonResultDO);
 		}
 		return mav;
 	}
@@ -116,7 +116,7 @@ public class AdminContrlloer {
 		} else {
 			jsonResultDO.setInfo("提交失败");
 			jsonResultDO.setStatus(JsonResultDO.JSON_FAILED);
-			mav.addObject("JSON_DATA", "error");
+			mav.addObject("JSON_DATA", jsonResultDO);
 		}
 		return mav;
 	}
@@ -139,7 +139,7 @@ public class AdminContrlloer {
 		} else {
 			jsonResultDO.setInfo("提交失败");
 			jsonResultDO.setStatus(JsonResultDO.JSON_FAILED);
-			mav.addObject("JSON_DATA", "error");
+			mav.addObject("JSON_DATA", jsonResultDO);
 		}
 		return mav;
 	}
@@ -197,7 +197,7 @@ public class AdminContrlloer {
 		} else {
 			jsonResultDO.setInfo("提交失败");
 			jsonResultDO.setStatus(JsonResultDO.JSON_FAILED);
-			mav.addObject("JSON_DATA", "error");
+			mav.addObject("JSON_DATA", jsonResultDO);
 		}
 		return mav;
 	}

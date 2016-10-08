@@ -44,7 +44,7 @@ public class OrderDO extends BaseDO {
    
     private Integer wOIsPay;
     
-     //0.无效 1.待付款 2.待商家确认 3.已发货  4.申请取消 5.取消确认
+     //0.无效 1.待付款 2.待商家确认 3.已发货  4.申请取消 5.取消确认 6.用户已确认
 
 	public Integer getId() {
 		return id;

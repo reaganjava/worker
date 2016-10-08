@@ -88,9 +88,42 @@ public class ManagerOrderController {
 		return mav;
 	}
 	
-	@RequestMapping(value = "/list/{orderNo}/{pageNo}.html", method = RequestMethod.GET)
-	public ModelAndView query(ModelAndView mav,
-			@PathVariable(value="orderNo") String orderNo,
+	@RequestMapping(value = "/assigned/{id}.html", method = RequestMethod.GET)
+	public ModelAndView assigned(ModelAndView mav,
+			@PathVariable(value="id") Integer id,
+			HttpServletRequest request) {
+		ResultDO result = orderService.get(id);
+		if(result.isSuccess()) {
+			mav.addObject("ORDER_INFO", result.getModel(ResultSupport.FIRST_MODEL_KEY));
+			mav.setViewName("manager/order/assigned");
+		} else {
+			mav.setViewName("error");
+		}
+		return mav;
+	}
+	
+	@RequestMapping(value = "/assigned.json", method = RequestMethod.POST)
+	public ModelAndView assigned(ModelAndView mav,
+			OrderDO orderDO,
+			HttpServletRequest request) {
+		JsonResultDO jsonResultDO = new JsonResultSupport();
+		orderDO.setStatus(3);
+		orderDO.getOrderDetailDO().setId(orderDO.getId());
+		ResultDO resultDO = orderService.modifi(orderDO);
+		if(resultDO.isSuccess()) {
+			jsonResultDO.setInfo("提交成功");
+			jsonResultDO.setStatus(JsonResultDO.JSON_SUCCESS);
+			mav.addObject("JSON_DATA", jsonResultDO);
+		} else {
+			jsonResultDO.setInfo("提交失败");
+			jsonResultDO.setStatus(JsonResultDO.JSON_FAILED);
+			mav.addObject("JSON_DATA", jsonResultDO);
+		}
+		return mav;
+	}
+	
+	@RequestMapping(value = "/assignedList/{pageNo}.html", method = RequestMethod.GET)
+	public ModelAndView assignedList(ModelAndView mav,
 			@PathVariable(value="pageNo") Integer pageNo,
 			HttpServletRequest request) {
 		
@@ -100,9 +133,7 @@ public class ManagerOrderController {
 		query.setSupplierId(supplierId);
 		query.setPageNO(pageNo);
 		query.setPageRows(10);
-		if(!orderNo.equals("all")) {
-			query.setOrderNo(orderNo);
-		}
+		query.setStatus(3);
 		
 		ResultDO result = orderService.list(query);
 		if(result.isSuccess()) {
@@ -115,7 +146,7 @@ public class ManagerOrderController {
 			pageBean.setPages(pageNo);
 			pageBean.setDataList((List<Object>) result.getModel(ResultSupport.FIRST_MODEL_KEY));
 			mav.addObject("PAGE_BEAN", pageBean);
-			mav.setViewName("manager/task/list");
+			mav.setViewName("manager/order/assignedList");
 		} else {
 			mav.setViewName("error");
 		}

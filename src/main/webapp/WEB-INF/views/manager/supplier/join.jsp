@@ -122,6 +122,7 @@ $(function(){
 		}
 		
 	});
+	
 });
 </script>
 </body>
