@@ -38,7 +38,7 @@
 <li>服务时长：<span>${ORDER_INFO.orderDetailDO.wOServerTime}小时</span></li>
 <li>服务人数：<span>${ORDER_INFO.orderDetailDO.wOStaffCount}人</span></li>
 <li>服务时间：<span><fmt:formatDate value="${ORDER_INFO.orderDetailDO.wOSubscribe}"  type="BOTH" dateStyle="full"/></span></li>
-<li>实际付款：<span>${ORDER_INFO.orderDetailDO.wOPrice}</span></li>
+<li>实际付款：<span>${ORDER_INFO.wOFee}</span></li>
 </ul>
 </div>
 </div>

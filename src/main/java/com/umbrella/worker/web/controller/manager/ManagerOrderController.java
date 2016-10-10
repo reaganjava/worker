@@ -152,4 +152,108 @@ public class ManagerOrderController {
 		}
 		return mav;
 	}
+	
+	@RequestMapping(value = "/detail/{id}.html", method = RequestMethod.GET)
+	public ModelAndView orderDetail(ModelAndView mav,
+			@PathVariable(value="id") Integer id,
+			HttpServletRequest request) {
+		
+		ResultDO result = orderService.get(id);
+		if(result.isSuccess()) {
+			mav.addObject("ORDER_INFO", result.getModel(ResultSupport.FIRST_MODEL_KEY));
+			mav.setViewName("manager/order/detail");
+		} else {
+			mav.setViewName("error");
+		}
+		return mav;
+	}
+	
+	@RequestMapping(value = "/confirmCanecl/{id}.json", method = RequestMethod.GET)
+	public ModelAndView confirmCanecl(ModelAndView mav,
+			@PathVariable(value="id") Integer id,
+			HttpServletRequest request) {
+		JsonResultDO jsonResultDO = new JsonResultSupport();
+		OrderDO orderDO = new OrderDO();
+		orderDO.setId(id);
+		orderDO.setStatus(5);
+		ResultDO result = orderService.modifi(orderDO);
+		if(result.isSuccess()) {
+			jsonResultDO.setInfo("提交成功");
+			jsonResultDO.setStatus(JsonResultDO.JSON_SUCCESS);
+			mav.addObject("JSON_DATA", jsonResultDO);
+		} else {
+			jsonResultDO.setInfo("提交失败");
+			jsonResultDO.setStatus(JsonResultDO.JSON_FAILED);
+			mav.addObject("JSON_DATA", jsonResultDO);
+		}
+		return mav;
+	}
+	
+	@RequestMapping(value = "/cancelList/{pageNo}.html", method = RequestMethod.GET)
+	public ModelAndView list(ModelAndView mav,
+			@PathVariable(value="pageNo") Integer pageNo,
+			HttpServletRequest request) {
+
+		OrderQuery query = new OrderQuery();
+		query.setPage(true);
+		query.setStatus(4);
+		query.setPageNO(pageNo);
+		query.setPageRows(10);
+		
+		ResultDO result = orderService.list(query);
+		if(result.isSuccess()) {
+			PageBeanUtil pageBean = new PageBeanUtil();
+			long count = (Long) result.getModel(ResultSupport.SECOND_MODEL_KEY);
+			pageBean.setCurrentPage(pageNo);
+			pageBean.setPageSize(query.getPageRows());
+			pageBean.setRecordCount(count);
+			pageBean.setPageCount(count);
+			pageBean.setPages(pageNo);
+			pageBean.setDataList((List<Object>) result.getModel(ResultSupport.FIRST_MODEL_KEY));
+			mav.addObject("PAGE_BEAN", pageBean);
+			mav.setViewName("manager/order/cancelList");
+		} else {
+			mav.setViewName("error");
+		}
+		return mav;
+	}
+	
+	@RequestMapping(value = "/list/{orderNo}/{status}/{pageNo}.html", method = RequestMethod.GET)
+	public ModelAndView list(ModelAndView mav,
+			@PathVariable(value="orderNo") String orderNo,
+			@PathVariable(value="status") Integer status,
+			@PathVariable(value="pageNo") Integer pageNo,
+			HttpServletRequest request) {
+		
+		int supplierId = (int) request.getSession().getAttribute("MANAGER_SUPPLIER_ID");
+		OrderQuery query = new OrderQuery();
+		query.setPage(true);
+		if(supplierId != 1) { 
+			query.setSupplierId(supplierId);
+		}
+		if(!orderNo.equals("all")) {
+			query.setOrderNo(orderNo);
+		}
+		query.setStatus(status);
+		query.setPageNO(pageNo);
+		query.setPageRows(10);
+		
+		ResultDO result = orderService.list(query);
+		if(result.isSuccess()) {
+			PageBeanUtil pageBean = new PageBeanUtil();
+			long count = (Long) result.getModel(ResultSupport.SECOND_MODEL_KEY);
+			pageBean.setCurrentPage(pageNo);
+			pageBean.setPageSize(query.getPageRows());
+			pageBean.setRecordCount(count);
+			pageBean.setPageCount(count);
+			pageBean.setPages(pageNo);
+			pageBean.setDataList((List<Object>) result.getModel(ResultSupport.FIRST_MODEL_KEY));
+			mav.addObject("PAGE_BEAN", pageBean);
+			mav.addObject("INCOME", result.getModel(ResultSupport.THIRD_MODEL_KEY));
+			mav.setViewName("manager/order/list");
+		} else {
+			mav.setViewName("error");
+		}
+		return mav;
+	}
 }

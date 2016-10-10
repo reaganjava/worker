@@ -213,6 +213,7 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 		example.createCriteria().andWOOrderNoEqualTo(orderDO.getwOOrderNo());
 		WOrder order = new WOrder();
 		order.setwOIsPay(1);
+		order.setStatus(2);
 		order.setModifiAuthor("system");
 		order.setModifiTime(Calendar.getInstance().getTime());
 		
@@ -539,7 +540,15 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 		
 		List<OrderDO> orderList = getOrderDOList(list);
 		
-		
+		if(orderList != null) {
+			BigDecimal income = new BigDecimal(0.00);
+			for(OrderDO orderDO : orderList) {
+				if(orderDO.getStatus() == 6) {
+					income = income.add(orderDO.getwOFee());
+				}
+			}
+			result.setModel(ResultSupport.THIRD_MODEL_KEY, income);
+		}
 		result.setModel(ResultSupport.FIRST_MODEL_KEY, orderList);
 		
 		return result;
@@ -594,5 +603,4 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 		return result;
 	}
 	
-
 }

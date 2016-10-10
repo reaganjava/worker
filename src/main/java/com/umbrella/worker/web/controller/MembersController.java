@@ -1,9 +1,8 @@
 package com.umbrella.worker.web.controller;
 
-
-import java.util.List;
-
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,8 +18,6 @@ import com.umbrella.worker.dto.SmsCodeDO;
 import com.umbrella.worker.query.ContactQuery;
 import com.umbrella.worker.query.MembersQuery;
 import com.umbrella.worker.query.SmsCodeQuery;
-import com.umbrella.worker.result.JsonResultDO;
-import com.umbrella.worker.result.JsonResultSupport;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.IContactService;
@@ -33,7 +30,7 @@ import com.umbrella.worker.util.StringUtil;
 
 @Controller
 @RequestMapping(value = "/members")
-public class MembersController {
+public class MembersController extends BaseController {
 	
 	@Autowired
 	private IMemberService memberService;
@@ -100,7 +97,9 @@ public class MembersController {
 	
 	@RequestMapping(value = "/login.html", method = RequestMethod.POST)
 	public ModelAndView login(ModelAndView mav,  
-			MembersDO membersDO, HttpServletRequest request) {
+			MembersDO membersDO, 
+			HttpServletRequest request,
+			HttpServletResponse response) {
 		
 		String backPage = (String) request.getSession().getAttribute("BACK_PAGE");
 		System.out.println(backPage);
@@ -117,8 +116,10 @@ public class MembersController {
 		System.out.println(resultDO);
 		if(resultDO.isSuccess()) {
 			membersDO = (MembersDO) resultDO.getModel(ResultSupport.FIRST_MODEL_KEY);
-			request.getSession().setAttribute("MEMBER_ID", membersDO.getId());
-			request.getSession().setAttribute("MEMBER_MOBILE", membersDO.getwMMobile());
+			//request.getSession().setAttribute("MEMBER_ID", membersDO.getId());
+			//request.getSession().setAttribute("MEMBER_MOBILE", membersDO.getwMMobile());
+			addCookie(response, "MEMBER_ID", membersDO.getId() + "", 2592000);
+			addCookie(response, "MEMBER_MOBILE", membersDO.getwMMobile() + "", 2592000);
 			if(backPage == null) {
 				return new ModelAndView("redirect:/");
 			}
@@ -135,9 +136,10 @@ public class MembersController {
 	
 	@RequestMapping(value = "/loginout.html", method = RequestMethod.GET)
 	public ModelAndView loginOut(ModelAndView mav, 
-			HttpServletRequest request) {
-		request.getSession().removeAttribute("MEMBER_ID");
-		request.getSession().removeAttribute("MEMBER_MOBILE");
+			HttpServletRequest request,
+			HttpServletResponse response) {
+		removeCookie(response, "MEMBER_ID");
+		removeCookie(response, "MEMBER_MOBILE");
 		return new ModelAndView("redirect:/");
 	}
 	
@@ -151,9 +153,10 @@ public class MembersController {
 	@RequestMapping(value = "/accountPassword.html", method = RequestMethod.POST)
 	public ModelAndView editPwd(ModelAndView mav,  
 			MembersDO membersDO, HttpServletRequest request) {
-		
-		Integer memberId = (Integer) request.getSession().getAttribute("MEMBER_ID");
-		String memberMobile = (String) request.getSession().getAttribute("MEMBER_MOBILE");
+		Cookie cookie = getCookieByName(request, "MEMBER_ID");
+		Integer memberId = Integer.parseInt(cookie.getValue());
+		cookie = getCookieByName(request, "MEMBER_MOBILE");
+		String memberMobile = cookie.getValue();
 		membersDO.setId(memberId);
 		MD5 md5 = new MD5();
 		
@@ -181,11 +184,12 @@ public class MembersController {
 	@RequestMapping(value = "/accountInfo.html", method = RequestMethod.GET)
 	public ModelAndView accountInfo(ModelAndView mav, 
 			HttpServletRequest request) {
+		Cookie cookie = getCookieByName(request, "MEMBER_ID");
 		
-		Integer memberId = (Integer) request.getSession().getAttribute("MEMBER_ID");
-		if(memberId == null) {
+		if(cookie == null) {
 			return new ModelAndView("redirect:/members/login.html");
-		}
+		} 
+		Integer memberId = Integer.parseInt(cookie.getValue());
 		ResultDO resultDO = memberService.get(memberId);
 		if(resultDO.isSuccess()) {
 			mav.addObject("MEMBER_INFO", resultDO.getModel(ResultSupport.FIRST_MODEL_KEY));
@@ -277,7 +281,8 @@ public class MembersController {
 	@RequestMapping(value = "/contacts.html", method = RequestMethod.GET)
 	public ModelAndView contacts(ModelAndView mav, HttpServletRequest request) {
 		
-		Integer memberId = (Integer) request.getSession().getAttribute("MEMBER_ID");
+		Cookie cookie = getCookieByName(request, "MEMBER_ID");
+		Integer memberId = Integer.parseInt(cookie.getValue());
 		ContactQuery query = new ContactQuery();
 		query.setMemberId(memberId);
 		ResultDO resultDO = contactService.list(query);
@@ -301,8 +306,10 @@ public class MembersController {
 	@RequestMapping(value = "/addContact.html", method = RequestMethod.POST)
 	public ModelAndView addContact(ModelAndView mav, ContactDO contactDO, HttpServletRequest request) {
 		
-		Integer memberId = (Integer) request.getSession().getAttribute("MEMBER_ID");
-		String memberMobile = (String) request.getSession().getAttribute("MEMBER_MOBILE");
+		Cookie cookie = getCookieByName(request, "MEMBER_ID");
+		Integer memberId = Integer.parseInt(cookie.getValue());
+		cookie = getCookieByName(request, "MEMBER_MOBILE");
+		String memberMobile = cookie.getValue();
 		contactDO.setwCMembersId(memberId);
 		contactDO.setCreateAuthor(memberMobile);
 		contactDO.setwCDefault(1);

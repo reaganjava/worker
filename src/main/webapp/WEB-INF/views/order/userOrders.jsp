@@ -11,6 +11,7 @@
 　　<![endif]-->
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/wei-index.css"/>
 <link rel="stylesheet" type="text/css"  href="${pageContext.request.contextPath}/css/out-use.css"/>
+<script type="text/javascript" src="${pageContext.request.contextPath}/lib/jquery/1.9.1/jquery.min.js?v=0.1"></script> 
 <title>我的订单</title>
 </head>
 
@@ -24,16 +25,25 @@
 <li class="not-service"><a style="color:#f30;">待付款</a></li>
 <li><a href="${pageContext.request.contextPath}/order/userOrders/2/1.html" >待服务</a></li>
 <li><a href="${pageContext.request.contextPath}/order/userOrders/3/1.html">待验收</a></li>
+<li><a href="${pageContext.request.contextPath}/order/userOrders/4/1.html">待取消</a></li>
 </c:if>
 <c:if test="${status == 2}">
-<li><a href="${pageContext.request.contextPath}/order/userOrders/1/1.html" >待服务</a></li>
+<li><a href="${pageContext.request.contextPath}/order/userOrders/1/1.html" >待付款</a></li>
 <li class="not-service"><a style="color:#f30;" >待服务</a></li>
 <li><a href="${pageContext.request.contextPath}/order/userOrders/3/1.html">待验收</a></li>
+<li><a href="${pageContext.request.contextPath}/order/userOrders/4/1.html">待取消</a></li>
 </c:if>
 <c:if test="${status == 3}">
-<li><a href="${pageContext.request.contextPath}/order/userOrders/1/1.html" >待服务</a></li>
+<li><a href="${pageContext.request.contextPath}/order/userOrders/1/1.html" >待付款</a></li>
 <li><a href="${pageContext.request.contextPath}/order/userOrders/2/1.html" >待服务</a></li>
-<li class="not-service"><a style="color:#f30;">待验收</a></li>
+<li><a href="${pageContext.request.contextPath}/order/userOrders/3/1.html">待验收</a></li>
+<li><a href="${pageContext.request.contextPath}/order/userOrders/4/1.html">待取消</a></li>
+</c:if>
+<c:if test="${status == 4}">
+<li><a href="${pageContext.request.contextPath}/order/userOrders/1/1.html" >待付款</a></li>
+<li><a href="${pageContext.request.contextPath}/order/userOrders/2/1.html" >待服务</a></li>
+<li><a href="${pageContext.request.contextPath}/order/userOrders/3/1.html">待验收</a></li>
+<li class="not-service"><a style="color:#f30;" >待取消</a></li>
 </c:if>
 </ul>
 </div>
@@ -52,10 +62,10 @@
 <a href="${pageContext.request.contextPath}/order/payOrder/${order.id}.html">立即支付</a>
 </c:if>
 <c:if test="${status == 2}">
-<a href="${pageContext.request.contextPath}/order/cancel/${order.id}.html">取消订单</a>
+<a href="javascript:;" onclick="cancelShow(${order.id})">取消订单</a>
 </c:if>
 <c:if test="${status == 3}">
-<button>确认订单</button>
+<button onclick="confirmOrder(${order.id})">确认订单</button>
 </c:if>
 </div>
 </div>
@@ -69,12 +79,12 @@
 <li><a><button>返回</button></a></li></ul></div>
 </div>
 <!---弹窗开始---->
-<div class=" time-pop-ups" style=" display:none">
+<div class=" time-pop-ups" style=" display:none" id="cancelInfo">
 <form class="f-time">
-<input type="radio" name="time" value="1">时间定错了<br>
-<input type="radio" name="time" value="2">位置定错了<br>
-<input type="radio" name="time" value="3">不需要了<br>
-<input type="radio" name="time" value="4">其他原因<br>
+<input type="radio" name="time" value="1" onclick="cancel(1)">时间定错了<br>
+<input type="radio" name="time" value="2" onclick="cancel(2)">位置定错了<br>
+<input type="radio" name="time" value="3" onclick="cancel(3)">不需要了<br>
+<input type="radio" name="time" value="4" onclick="cancel(4)">其他原因<br>
 </form>
 </div>
 </div>
@@ -91,4 +101,22 @@
 </div>
 <!---内容结束-->
 </body>
+<script type="text/javascript">
+	var id = 0;
+	function cancelShow(v) {
+		id = v;
+		$("#cancelInfo").show();
+	}
+	function cancel(index) {
+		alert(id + ":" + index);
+		$.ajax({
+			  url: "${pageContext.request.contextPath}/order/cancel/" + id + "/" + index + ".json",
+			  success:function(data) {
+				  if(data != 0) {
+					 alert('已经提交取消申请等待管理员确认！');
+				  }
+			  }
+			});
+	}
+</script>
 </html>

@@ -53,7 +53,7 @@ import com.umbrella.worker.util.Xml2JsonUtil;
  */
 @Controller
 @RequestMapping("/pay")
-public class PayController {
+public class PayController extends BaseController{
 
 	private Logger logger = Logger.getLogger(PayController.class);
 	
@@ -174,13 +174,13 @@ public class PayController {
 			HttpServletRequest request) {
 		OrderDO orderDO = new OrderDO();
 		orderDO.setwOOrderNo(orderNo);
+		ResultDO result = null;
 		if(status == 1) {
-			orderDO.setStatus(2);
+			result = orderService.updateStatus(orderDO);
 		} else {
 			mav.setViewName("pay/fail");
 		}
-		System.out.println(orderNo + "===========================" + status);
-		ResultDO result = orderService.updateStatus(orderDO);
+		
 		if(result.isSuccess()) {
 			Integer id = (Integer) result.getModel(ResultSupport.FIRST_MODEL_KEY);
 			return new ModelAndView("redirect:/order/orderDetail/" +id + ".html");
@@ -264,7 +264,7 @@ public class PayController {
 		map.put("appid", Constant.APP_ID);
 		map.put("mch_id", Constant.MCH_ID);
 		map.put("nonce_str", nonceStr);
-		map.put("body", "新生活家庭服务平台服务费用");
+		map.put("body", "服务费用");
 		map.put("out_trade_no", payrecordDO.getwPrOrderNo());
 		//map.put("total_fee", fee + "");
 		map.put("total_fee", "1");

@@ -10,7 +10,7 @@
 　　　　<script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
 　　<![endif]-->
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/wei-index.css" />
-<title>新生活</title>
+<title>嘿管家</title>
 </head>
 <body style=" background:#fff;">
 <div class="xsh" style=" background:#fff;">

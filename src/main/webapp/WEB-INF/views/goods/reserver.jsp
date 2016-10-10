@@ -91,7 +91,7 @@
 </div>
 </div>
 </div>
-<input type="hidden" name="contactId" id="cid" />
+<input type="hidden" name="contactId" id="cid" value="${CONTACT_ID}"/>
 </form>
 </body>
 <script type="text/javascript">

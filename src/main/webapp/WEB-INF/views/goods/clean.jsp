@@ -64,7 +64,7 @@
 <section class="lin-intro">
 <div class="intro-di">
 <span>服务项目：临时保洁</span>
-<span>新生活平台为您提供临时保洁服务。服务涵盖卫生间、卧室、厨房、客厅、阳台等区域的保洁服务</span>
+<span>嘿管家为您提供临时保洁服务。服务涵盖卫生间、卧室、厨房、客厅、阳台等区域的保洁服务</span>
 </div>
 </section>
 <div class="clean"></div>

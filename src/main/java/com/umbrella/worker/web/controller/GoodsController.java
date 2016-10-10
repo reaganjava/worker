@@ -8,18 +8,17 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.umbrella.worker.dto.TaskDO;
 import com.umbrella.worker.dto.ContactDO;
-
 import com.umbrella.worker.query.ContactQuery;
 import com.umbrella.worker.result.DateValueDO;
 import com.umbrella.worker.result.ResultDO;
@@ -29,7 +28,7 @@ import com.umbrella.worker.service.IContactService;
 
 @Controller
 @RequestMapping(value = "/goods")
-public class GoodsController {
+public class GoodsController extends BaseController {
 	
 	@Autowired
 	private IContactService contactService;
@@ -94,11 +93,12 @@ public class GoodsController {
 		}
 		};
 		
-		Integer memberId = (Integer) request.getSession().getAttribute("MEMBER_ID");
+		Cookie cookie = getCookieByName(request, "MEMBER_ID");
 		
-		if(memberId == null) {
+		if(cookie == null) {
 			return new ModelAndView("redirect:/members/login.html");
-		}
+		} 
+		Integer memberId = Integer.parseInt(cookie.getValue());
 		request.getSession().setAttribute("TASK_INFO", taskDO);
 		ContactQuery query = new ContactQuery();
 		query.setMemberId(memberId);
@@ -128,6 +128,12 @@ public class GoodsController {
 			List<ContactDO> list = (List<ContactDO>) result.getModel(ResultSupport.FIRST_MODEL_KEY);
 			if(list != null) {
 				mav.addObject("MEMBER_CONTACT_LIST", list);
+				for(ContactDO contactDO : list) {
+					if(contactDO.getwCDefault() == 1) {
+						mav.addObject("CONTACT_ID", contactDO.getId());
+						break;
+					}
+				}
 			}
 			mav.addObject("WEEK_DATE_LIST", dateValueDOList);
 			mav.setViewName("goods/reserver");

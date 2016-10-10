@@ -30,7 +30,7 @@
 		<input type="text" class="input-text" style="width:250px" placeholder="输入订单号" id="" name="">
 		<button type="submit" class="btn btn-success radius" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 搜管订单</button>
 	</div>
-	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="r">共有数据：<strong>${PAGE_BEAN.recordCount}</strong> 条</span> </div>
+	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><span class="r">总共金额：<strong>${INCOME}</strong> 元</span> </div>
 	<div class="mt-20">
 	<table class="table table-border table-bordered table-hover table-bg table-sort">
 		<thead>
@@ -39,8 +39,10 @@
 				<th width="80">ID</th>
 				<th width="40">订单号</th>
 				<th width="40">服务名称</th>
+				<th width="40">是否支付</th>
 				<th width="90">费用</th>
 				<th width="70">创建时间</th>
+				<th width="40">订单状态</th>
 				<th width="100">操作</th>
 			</tr>
 		</thead>
@@ -51,11 +53,29 @@
 				<td>${order.id}</td>
 				<td>${order.wOOrderNo}</td>
 				<td>${order.wOServiceName}</td>
+				<td>
+				<c:if test="${order.wOIsPay == 0}">
+				<span class="label label-success radius">已支付</span></td>
+				</c:if>
+				<c:if test="${order.wOIsPay == 1}">
+				<span class="label label-defaunt radius">未支付</span></td>
+				</c:if>
+				</td>
 				<td>￥${order.wOFee}元</td>
 				<td>${order.formatDate}</td>
+				<td>
+				<c:if test="${order.status == 3}">
+				<span class="label label-success radius">已分配</span></td>
+				</c:if>
+				<c:if test="${order.status == 5}">
+				<span class="label label-defaunt radius">已取消</span></td>
+				</c:if>
+				<c:if test="${order.status == 6}">
+				<span class="label label-defaunt radius">已完成</span></td>
+				</c:if></td>
 				<td class="td-manage">
 			
-				<i class="Hui-iconfont">&#xe631;</i></a> <a title="商家确认" href="javascript:;" onclick="order_assigned('商家确认','/morder/assigned/${order.id}.html','${order.id}','','510')" class="ml-5" style="text-decoration:none">
+				<i class="Hui-iconfont">&#xe631;</i></a> <a title="订单详情" href="javascript:;" onclick="order_detail('订单详情','/morder/detail/${order.id}.html','${order.id}','','510')" class="ml-5" style="text-decoration:none">
 				
 				<i class="Hui-iconfont">&#xe6df;</i></a> 
 				
@@ -97,12 +117,9 @@ $(function(){
 	
 	
 });
-
-/*渠道-编辑*/
-function order_assigned(title,url,id,w,h){
+function order_detail(title,url,id,w,h){
 	layer_show(title,url,w,h);
 }
-
 </script> 
 </body>
 </html>

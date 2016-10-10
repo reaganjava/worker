@@ -22,7 +22,7 @@
 <script type="text/javascript" src="http://lib.h-ui.net/DD_belatedPNG_0.0.8a-min.js" ></script>
 <script>DD_belatedPNG.fix('*');</script>
 <![endif]-->
-<title>后台登录 - 新生活商户管理系统</title>
+<title>后台登录 - 嘿管家商户管理系统</title>
 </head>
 <body>
 
@@ -57,7 +57,7 @@
     </form>
   </div>
 </div>
-<div class="footer">Copyright 你的公司名称 by H-ui.admin.v2.3</div>
+<div class="footer">Copyright 嘿管家 </div>
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/lib/jquery/1.9.1/jquery.min.js?v=0.1"></script> 
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/H-ui.js?v=0.1"></script> 

@@ -25,7 +25,7 @@
 <script type="text/javascript" src="http://lib.h-ui.net/DD_belatedPNG_0.0.8a-min.js" ></script>
 <script>DD_belatedPNG.fix('*');</script>
 <![endif]-->
-<title>新生活商户管理系统</title>
+<title>嘿管家商户管理系统</title>
 </head>
 <body>
 <header class="Hui-header cl"> <a class="Hui-logo l" title="H-ui.admin v2.3" href="/manager/index.html">新生活商户管理系统</a> <span class="Hui-subtitle l">V0.1</span>

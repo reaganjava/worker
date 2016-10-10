@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ import com.umbrella.worker.service.IOrderService;
 
 @Controller
 @RequestMapping(value = "/order")
-public class OrderController {
+public class OrderController extends BaseController{
 	
 	@Autowired
 	private IOrderService orderService;
@@ -44,16 +45,15 @@ public class OrderController {
 		
 		TaskDO taskDO = (TaskDO) request.getSession().getAttribute("TASK_INFO");
 		
-		String memberMobile = (String) request.getSession().getAttribute("MEMBER_MOBILE");
-		
-		Integer memberId = (Integer) request.getSession().getAttribute("MEMBER_ID");
+		Cookie cookie = getCookieByName(request, "MEMBER_ID");
 		
 		
-		
-		if(memberId == null && memberMobile == null) {
+		if(cookie == null) {
 			return new ModelAndView("redirect:/members/login.html");
 		}
-		
+		Integer memberId = Integer.parseInt(cookie.getValue());
+		cookie = getCookieByName(request, "MEMBER_MOBILE");
+		String memberMobile = cookie.getValue();
 		
 		
 		ResultDO result = contactService.get(orderDetailDO.getContactId());
@@ -252,11 +252,11 @@ public class OrderController {
 			@PathVariable(value="status") Integer status,
 			@PathVariable(value="pageNo") Integer pageNo,
 			HttpServletRequest request) {
-		Integer memberId = (Integer) request.getSession().getAttribute("MEMBER_ID");
-	
-		if(memberId == null) {
+		Cookie cookie = getCookieByName(request, "MEMBER_ID");	
+		if(cookie == null) {
 			return new ModelAndView("redirect:/members/login.html");
-		}
+		} 
+		Integer memberId = Integer.parseInt(cookie.getValue());
 		OrderQuery query = new OrderQuery();
 		query.setStatus(status);
 		query.setMemberId(memberId);

@@ -39,8 +39,10 @@
 				<th width="80">ID</th>
 				<th width="40">订单号</th>
 				<th width="40">服务名称</th>
+				<th width="40">是否支付</th>
 				<th width="90">费用</th>
 				<th width="70">创建时间</th>
+				<th width="40">订单状态</th>
 				<th width="100">操作</th>
 			</tr>
 		</thead>
@@ -51,11 +53,29 @@
 				<td>${order.id}</td>
 				<td>${order.wOOrderNo}</td>
 				<td>${order.wOServiceName}</td>
+				<td>
+				<c:if test="${order.wOIsPay == 0}">
+				<span class="label label-success radius">已支付</span></td>
+				</c:if>
+				<c:if test="${order.wOIsPay == 1}">
+				<span class="label label-defaunt radius">未支付</span></td>
+				</c:if>
+				</td>
 				<td>￥${order.wOFee}元</td>
 				<td>${order.formatDate}</td>
+				<td>
+				<c:if test="${order.status == 3}">
+				<span class="label label-success radius">已分配</span></td>
+				</c:if>
+				<c:if test="${order.status == 5}">
+				<span class="label label-defaunt radius">已取消</span></td>
+				</c:if>
+				<c:if test="${order.status == 6}">
+				<span class="label label-defaunt radius">已完成</span></td>
+				</c:if></td>
 				<td class="td-manage">
 			
-				<i class="Hui-iconfont">&#xe631;</i></a> <a title="商家确认" href="javascript:;" onclick="order_assigned('商家确认','/morder/assigned/${order.id}.html','${order.id}','','510')" class="ml-5" style="text-decoration:none">
+				<i class="Hui-iconfont">&#xe631;</i></a> <a title="确认取消订单" href="javascript:;" onclick="confirm_canecl(this,'${order.id}')" >
 				
 				<i class="Hui-iconfont">&#xe6df;</i></a> 
 				
@@ -98,11 +118,23 @@ $(function(){
 	
 });
 
-/*渠道-编辑*/
-function order_assigned(title,url,id,w,h){
-	layer_show(title,url,w,h);
+/*用户-停用*/
+function confirm_canecl(obj,id){
+	layer.confirm('确认要取消订单吗？',function(index){
+		$.ajax(
+				{url:"/morder/confirmCanecl/" + id + ".json",
+				async:false,
+				success: function(data){
+					if(data.status == 'y') {
+						layer.msg('已确认消订单!',{icon: 5,time:1000});
+					} else {
+						layer.msg(data.info,{icon: 5,time:1000});
+					}
+				}
+		});
+		
+	});
 }
-
 </script> 
 </body>
 </html>

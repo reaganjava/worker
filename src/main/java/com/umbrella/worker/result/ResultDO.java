@@ -10,6 +10,8 @@ public interface ResultDO extends Serializable {
 	
 	String SECOND_MODEL_KEY="second_model";
 	
+	String THIRD_MODEL_KEY="third_model";
+	
 	String PROPERTY_VALUE_SET_ERROR = "property setting fail";
 	
 	String PROPERTY_VALUE_SET_ERROR_MSG ="属性設定に失敗して";

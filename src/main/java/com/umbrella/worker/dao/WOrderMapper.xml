@@ -461,4 +461,7 @@
       STATUS = #{status,jdbcType=INTEGER}
     where ID = #{id,jdbcType=INTEGER}
   </update>
+  <select id="orderStatistics"  resultType="java.math.BigDecimal">
+   	SELECT sum(w_o_fee) FROM worker.w_order where W_O_SUPPLIER_ID = #{0} and status = 6 and create_time like #{0}
+  </select>
 </mapper>

@@ -2,7 +2,10 @@ package com.umbrella.worker.dao;
 
 import com.umbrella.worker.entity.WOrder;
 import com.umbrella.worker.entity.WOrderExample;
+
+import java.math.BigDecimal;
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 @Repository
@@ -94,4 +97,7 @@ public interface WOrderMapper {
      * @mbggenerated Tue Aug 02 17:01:48 CST 2016
      */
     int updateByPrimaryKey(WOrder record);
+    
+    
+    BigDecimal orderStatistics(Integer id, String date);
 }
