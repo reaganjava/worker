@@ -115,7 +115,7 @@ $(function(){
 <nav class="navbar">
 <ul>
 <li><a href="${pageContext.request.contextPath}/members/login.html"><img src="${pageContext.request.contextPath}/images/left.png"/></a></li>
-<li><span>忘记密码</span></li>
+<li><span class="navber-word">忘记密码</span></li>
 <li></li>
 </ul>
 </nav>

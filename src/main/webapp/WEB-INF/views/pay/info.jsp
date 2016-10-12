@@ -23,7 +23,7 @@
 <nav class="navbar">
 <ul>
 <li><a href="javascript:void();" onclick="window.history.back(-1);"><img src="${pageContext.request.contextPath}/images/left.png"/></a></li>
-<li><span>支付确认</span></li>
+<li><span class="navber-word">支付确认</span></li>
 <li></li>
 </ul>
 </nav>

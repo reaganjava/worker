@@ -51,6 +51,7 @@ img{ border:0; padding:0; margin:0;}
 .go-register{ color:#fc4e02;}
 .intro-di{ width:80%; margin:0 auto;}
 /*****临时保洁预定页面****/
+.add-address{ margin-top:45px;}
 .add-address p,.add-ads{ width:80%; margin:0 auto; margin-top:15px;}
 .add-ads{ height:80px; background:#FFF; width:96%; line-height:80px; border:1px solid #dadada; margin:0 auto; margin-top:20px;}
 .add-ads img { display:inline-block; vertical-align:middle;}
@@ -118,7 +119,7 @@ img{ border:0; padding:0; margin:0;}
 /**2016-08-08-我的订单页面**/
 .order-type{ height:38px;position: fixed;max-width: 640px;left: 0;right: 0;top: 0;margin: 0 auto;}
 .order-type ul{ width:100%; margin:0 auto;}
-.order-type ul li{ background:#FFF; width:33.3%; height:38px; text-align:center; float:left; line-height:38px;}
+.order-type ul li{ background:#FFF; width:25%; height:38px; text-align:center; float:left; line-height:38px;}
 .order-type ul .not-service{ border-bottom:1px solid #F30; color:#F30;}
 .order-title span{ height:38px; line-height:38px; color:#fff; padding-left:18px;}
 .order-title .o-more{ background:url(../images/right.png) right center no-repeat; float:right; margin-right:30px;}
@@ -128,7 +129,8 @@ img{ border:0; padding:0; margin:0;}
 .order-detail ul li span i{ font-style:normal; display:block;}
 .order-detail ul li span{display:inline-block; width:70%; margin:0 auto;}
 .order-detail ul li{ padding-left:18px;}
-.order{ margin-top:38px;}
+.my-order{ margin-top:10px;}
+.order{ margin-top:40px;}
 .cancle-btn{ width:33%; height:30px; float:right;}
 .cancle-btn button{ background:#00cced; border-radius:5px; color:#fff;border:none; height:30px; width:80px; font-weight:600; font-family:"微软雅黑";}
 /***2016-08-09****/
@@ -264,7 +266,7 @@ img{ border:0; padding:0; margin:0;}
 .rg-fail{ margin-top:80px;}
 .navber-word{ text-align:center;}
 .add-list{ margin-top:45px;}
-
+.xsh_btn xsh_btn_mini{ font-family:"微软雅黑";}
 
 
 

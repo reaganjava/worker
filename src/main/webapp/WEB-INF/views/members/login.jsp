@@ -60,8 +60,8 @@ $(document).ready(function(){
 <div class="container">
 <nav class="navbar">
 <ul>
-<li><a><img src="${pageContext.request.contextPath}/images/left.png"/></a></li>
-<li><span>登陆</span></li>
+<li><a href="/"><img src="${pageContext.request.contextPath}/images/left.png"/></a></li>
+<li class=""><span class="navber-word">登陆</span></li>
 <li></li>
 </ul>
 </nav>
@@ -89,7 +89,7 @@ $(document).ready(function(){
 <i class="xsh_icon xsh_icon_success" style="display: none;"></i> 
 <span class="nosend" id="viewPwd">显示密码</span></div></div> 
 </div>
-
+<span>${ERROR_INFO}</span>
 </div>
 
 </form>

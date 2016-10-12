@@ -23,7 +23,7 @@
 <nav class="navbar">
 <ul>
 <li><a href="${pageContext.request.contextPath}/members/register.html"><img src="${pageContext.request.contextPath}/images/left.png?v=0.1"/></a></li>
-<li><span>会员规则</span></li>
+<li><span class="navber-word">会员规则</span></li>
 <li></li>
 </ul>
 </nav>

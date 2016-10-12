@@ -178,14 +178,16 @@ public class PayController extends BaseController{
 		if(status == 1) {
 			result = orderService.updateStatus(orderDO);
 		} else {
+			mav.addObject("ORDERNO", orderNo);
 			mav.setViewName("pay/fail");
+			return mav;
 		}
 		
 		if(result.isSuccess()) {
 			Integer id = (Integer) result.getModel(ResultSupport.FIRST_MODEL_KEY);
 			return new ModelAndView("redirect:/order/orderDetail/" +id + ".html");
 		} else {
-			mav.setViewName("pay/fail");
+			mav.setViewName("error");
 		}
 		return mav;
 	}

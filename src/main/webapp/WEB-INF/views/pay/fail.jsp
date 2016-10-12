@@ -29,8 +29,8 @@
 </div>
 <!--提示结束-->
 <div class="back-btn">
-<a class="wrong-back">返回</a>
-<a class="pay-again">重新支付</a>
+<a href="/" class="wrong-back">返回</a>
+<a href="${pageContext.request.contextPath}/pay/payInfo/${ORDERNO}.html"class="pay-again">重新支付</a>
 </div>
 </div>
 </div>

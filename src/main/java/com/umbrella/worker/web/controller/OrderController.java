@@ -277,7 +277,7 @@ public class OrderController extends BaseController{
 			mav.addObject("PAGE_BEAN", pageBean);
 			mav.setViewName("order/userOrders");
 		} else {
-			mav.setViewName("error");
+			return new ModelAndView("redirect:/members/login.html");
 		}
 		
 		return mav;

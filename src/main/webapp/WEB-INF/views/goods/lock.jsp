@@ -161,6 +161,13 @@ function selectLock(id) {
 <div class="xsh">
 <div class="page-all">
 <div class="container">
+<nav class="navbar">
+<ul>
+<li><a href="/"><img src="${pageContext.request.contextPath}/images/left.png"/></a></li>
+<li><span class="navber-word">开锁</span></li>
+<li></li>
+</ul>
+</nav>
 <div class="lock-type"><span>请选择服务类型</span></div>
 <div class="lock-choose">
 <a href="javascript:void();">

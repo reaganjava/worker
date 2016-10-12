@@ -129,7 +129,8 @@ public class MembersController extends BaseController {
 				return new ModelAndView("redirect:/" + backPage + ".html");
 			}
 		} else {
-			mav.setViewName("error");
+			mav.addObject("ERROR_INFO", "用户名或者密码错误!");
+			mav.setViewName("members/login");
 		}
 		return mav;
 	}
@@ -195,7 +196,7 @@ public class MembersController extends BaseController {
 			mav.addObject("MEMBER_INFO", resultDO.getModel(ResultSupport.FIRST_MODEL_KEY));
 			mav.setViewName("members/accountInfo");
 		} else {
-			mav.setViewName("error");
+			return new ModelAndView("redirect:/members/login.html");
 		}
 		
 		return mav; 

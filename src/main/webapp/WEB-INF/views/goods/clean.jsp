@@ -22,7 +22,7 @@
 <nav class="navbar">
 <ul>
 <li><a href="/"><img src="${pageContext.request.contextPath}/images/left.png"/></a></li>
-<li><span>选择面积</span></li>
+<li><span class="navber-word">选择面积</span></li>
 <li></li>
 </ul>
 </nav>
@@ -101,7 +101,7 @@
 		$("#ss1").css("color","#fff");
 		$("#h").val(2);
 		$("#sc").val(1);
-		var price = 30 * 1 * 2;
+		var price = 34 * 1 * 2;
 		$("#price").html("￥" + price);
 	});
 	
@@ -115,7 +115,7 @@
 		$("#h").val(hours);
 		$("#sc").val(staff);
 		
-		var price = 30 * hours * staff;
+		var price = 34 * hours * staff;
 		$("#price").html("￥" + price);
 	}
 	function selectArea(id) {

@@ -25,25 +25,25 @@
 <li class="not-service"><a style="color:#f30;">待付款</a></li>
 <li><a href="${pageContext.request.contextPath}/order/userOrders/2/1.html" >待服务</a></li>
 <li><a href="${pageContext.request.contextPath}/order/userOrders/3/1.html">待验收</a></li>
-<li><a href="${pageContext.request.contextPath}/order/userOrders/4/1.html">待取消</a></li>
+<li><a href="${pageContext.request.contextPath}/order/userOrders/4/1.html">退款中</a></li>
 </c:if>
 <c:if test="${status == 2}">
 <li><a href="${pageContext.request.contextPath}/order/userOrders/1/1.html" >待付款</a></li>
 <li class="not-service"><a style="color:#f30;" >待服务</a></li>
 <li><a href="${pageContext.request.contextPath}/order/userOrders/3/1.html">待验收</a></li>
-<li><a href="${pageContext.request.contextPath}/order/userOrders/4/1.html">待取消</a></li>
+<li><a href="${pageContext.request.contextPath}/order/userOrders/4/1.html">退款中</a></li>
 </c:if>
 <c:if test="${status == 3}">
 <li><a href="${pageContext.request.contextPath}/order/userOrders/1/1.html" >待付款</a></li>
 <li><a href="${pageContext.request.contextPath}/order/userOrders/2/1.html" >待服务</a></li>
 <li><a href="${pageContext.request.contextPath}/order/userOrders/3/1.html">待验收</a></li>
-<li><a href="${pageContext.request.contextPath}/order/userOrders/4/1.html">待取消</a></li>
+<li><a href="${pageContext.request.contextPath}/order/userOrders/4/1.html">退款中</a></li>
 </c:if>
 <c:if test="${status == 4}">
 <li><a href="${pageContext.request.contextPath}/order/userOrders/1/1.html" >待付款</a></li>
 <li><a href="${pageContext.request.contextPath}/order/userOrders/2/1.html" >待服务</a></li>
 <li><a href="${pageContext.request.contextPath}/order/userOrders/3/1.html">待验收</a></li>
-<li class="not-service"><a style="color:#f30;" >待取消</a></li>
+<li class="not-service"><a style="color:#f30;" >退款中</a></li>
 </c:if>
 </ul>
 </div>
