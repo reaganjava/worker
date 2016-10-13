@@ -98,6 +98,14 @@ public class OrderController extends BaseController{
 			orderDetailDO.setwOPrice(taskDO.getPrice());
 			break;
 		}
+		case 3: {
+			orderDO.setwOServiceName(taskDO.getServiceName());
+			orderDO.setServiceType(taskDO.getServiceType());
+			orderDetailDO.setwOServerTime(taskDO.getHours());
+			orderDetailDO.setwODamageType(taskDO.getDamageType());
+			orderDetailDO.setwOPrice(taskDO.getPrice());
+			break;
+		}
 		}
 		
 	
@@ -204,16 +212,16 @@ public class OrderController extends BaseController{
 		return mav;
 	}
 	
-	@RequestMapping(value = "/confirmOrder/{id}.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/confirmOrder/{id}.json", method = RequestMethod.GET)
 	public ModelAndView confirmOrder(ModelAndView mav, 
 			@PathVariable(value="id") Integer id,
 			HttpServletRequest request) {
 	
 		ResultDO resultDO = orderService.confirm(id);
 		if(resultDO.isSuccess()) {
-			mav.setViewName("order/grade");
+			mav.addObject("JSON_DATA", 1);
 		} else {
-			mav.setViewName("error");
+			mav.addObject("JSON_DATA", 0);
 		}
 		return mav;
 	}

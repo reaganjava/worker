@@ -196,9 +196,14 @@ public class PayServiceImpl  extends BaseServiceImpl implements IPayService {
 		
 		WPayrecordExample example = new WPayrecordExample();
 		WPayrecordExample.Criteria c = example.createCriteria();
-	
-		if(StringUtil.isEmpty(payrecordQuery.getOrderNo())) {
+		
+		if(StringUtil.isNotEmpty(payrecordQuery.getOrderNo())) {
+			System.out.println("query:" + payrecordQuery.getOrderNo());
 			c.andWPrOrderNoEqualTo(payrecordQuery.getOrderNo());
+		}
+		
+		if(StringUtil.isGreatOne(payrecordQuery.getPayStatus())) {
+			c.andWPrStatusEqualTo(payrecordQuery.getPayStatus());
 		}
 		
 		if(StringUtil.isNotEmpty(payrecordQuery.getOrderByClause())) {	

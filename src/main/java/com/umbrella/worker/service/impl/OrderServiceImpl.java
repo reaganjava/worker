@@ -54,7 +54,6 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 		BigDecimal price = orderDO.getOrderDetailDO().getwOPrice();
 		BigDecimal priceCount = null;
 		if(orderDO.getServiceType() == 0) {
-		
 			int staffCount = orderDO.getOrderDetailDO().getwOStaffCount();
 			int hours = orderDO.getOrderDetailDO().getwOServerTime();
 			int countHours = staffCount * hours;
@@ -90,6 +89,7 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
 			logger.error("[obj:order][opt:create][msg:" + e.getMessage()
 			+ "]");
+			e.printStackTrace();
 			return result;
 		}
 		
@@ -120,6 +120,7 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
 			logger.error("[obj:order][opt:create][msg:" + e.getMessage()
 			+ "]");
+			e.printStackTrace();
 			return result;
 		}
 		
@@ -170,6 +171,7 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
 			logger.error("[obj:order][opt:modifi][msg:" + e.getMessage()
 					+ "]");
+			e.printStackTrace();
 			return result;
 		}
 		if (recordNum < 1) {
@@ -196,6 +198,7 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
 			logger.error("[obj:order][opt:modifi][msg:" + e.getMessage()
 					+ "]");
+			e.printStackTrace();
 			return result;
 		}
 		if (recordNum < 1) {
@@ -226,6 +229,7 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
 			logger.error("[obj:order][opt:modifi][msg:" + e.getMessage()
 					+ "]");
+			e.printStackTrace();
 			return result;
 		}
 		if (recordNum < 1) {
@@ -251,6 +255,7 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
 			logger.error("[obj:order][opt:modifi][msg:" + e.getMessage()
 					+ "]");
+			e.printStackTrace();
 			return result;
 		}
 		if(list.size() == 0) {
@@ -343,6 +348,7 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
 			logger.error("[obj:order][opt:modifi][msg:" + e.getMessage()
 					+ "]");
+			e.printStackTrace();
 			return result;
 		}
 		
@@ -369,6 +375,7 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
 			logger.error("[obj:order][opt:modifi][msg:" + e.getMessage()
 					+ "]");
+			e.printStackTrace();
 			return result;
 		}
 		System.out.println(recordNum);
@@ -385,32 +392,25 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 		
 		ResultSupport result = new ResultSupport();
 		
-		WOrder order = null;
+		WOrder order = new WOrder();
 		if(!StringUtil.isGreatOne(orderId)) {
 			 result.setSuccess(false);
 			 return result;
 		} 
 		
-		try {
-			order = orderMapper.selectByPrimaryKey(orderId);
-		} catch (Exception e) {
-			result.setSuccess(false);
-	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
-	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
-	        logger.error("[obj:supplier][opt:get][msg:"+e.getMessage()+"]");
-	        return result;
-		}
-		
 		int recordNum = -1;
 		
+		order.setId(orderId);
 		order.setwOIsConfim(1);
+		order.setStatus(6);
 		try {
-			recordNum = orderMapper.updateByPrimaryKey(order);
+			recordNum = orderMapper.updateByPrimaryKeySelective(order);
 		} catch (Exception e) {
 			result.setSuccess(false);
 	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
 	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
 	        logger.error("[obj:supplier][opt:get][msg:"+e.getMessage()+"]");
+	        e.printStackTrace();
 	        return result;
 		}
 		
@@ -451,6 +451,7 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
 	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
 	        logger.error("[obj:supplier][opt:get][msg:"+e.getMessage()+"]");
+	        e.printStackTrace();
 	        return result;
 		}
 		

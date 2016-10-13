@@ -79,7 +79,7 @@ public class MembersController extends BaseController {
 		if(resultDO.isSuccess()) {
 			return new ModelAndView("redirect:/members/login.html");
 		} else {
-			mav.setViewName("errer");
+			mav.setViewName("/members/regfail");
 		}
 		return mav;
 	}
@@ -118,8 +118,8 @@ public class MembersController extends BaseController {
 			membersDO = (MembersDO) resultDO.getModel(ResultSupport.FIRST_MODEL_KEY);
 			//request.getSession().setAttribute("MEMBER_ID", membersDO.getId());
 			//request.getSession().setAttribute("MEMBER_MOBILE", membersDO.getwMMobile());
-			addCookie(response, "MEMBER_ID", membersDO.getId() + "", 2592000);
-			addCookie(response, "MEMBER_MOBILE", membersDO.getwMMobile() + "", 2592000);
+			addCookie(response, "MEMBER_ID", membersDO.getId() + "", 86400);
+			addCookie(response, "MEMBER_MOBILE", membersDO.getwMMobile() + "", 86400 );
 			if(backPage == null) {
 				return new ModelAndView("redirect:/");
 			}
@@ -175,7 +175,8 @@ public class MembersController extends BaseController {
 		if(resultDO.isSuccess()) {
 			return new ModelAndView("redirect:/members/accountInfo.html");
 		} else {
-			mav.setViewName("error");
+			mav.addObject("ERROR_INFO", "修改密码错误，请检查旧密码是否正确");
+			mav.setViewName("members/accountPassword");
 		}
 		
 		return mav; 
@@ -328,8 +329,15 @@ public class MembersController extends BaseController {
 	public ModelAndView ajaxContactDefault(ModelAndView mav, 
 			@PathVariable(value="id") Integer id,
 			HttpServletRequest request) {
-		
-		ResultDO result = contactService.setDefault(id);
+		Cookie cookie = getCookieByName(request, "MEMBER_ID");
+		Integer memberId = Integer.parseInt(cookie.getValue());
+		cookie = getCookieByName(request, "MEMBER_MOBILE");
+		String memberMobile = cookie.getValue();
+		ContactDO contactDO = new ContactDO();
+		contactDO.setwCMembersId(memberId);
+		contactDO.setId(id);
+		contactDO.setModifiAuthor(memberMobile);
+		ResultDO result = contactService.setDefault(contactDO);
 		
 		if(result.isSuccess()) {
 			mav.addObject("JSON_DATA", 1);

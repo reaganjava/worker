@@ -33,7 +33,8 @@ public class ContactServiceImpl  extends BaseServiceImpl implements IContactServ
 		int recordNum = -1;
 		
 		WContactExample example = new WContactExample();
-		example.createCriteria().andWCDefaultEqualTo(1);
+		example.createCriteria().andWCMembersIdEqualTo(contactDO.getwCMembersId()).andWCDefaultEqualTo(1);
+		
 		contact.setwCDefault(0);
 		try{
 			recordNum = contactMapper.updateByExampleSelective(contact, example);
@@ -113,7 +114,7 @@ public class ContactServiceImpl  extends BaseServiceImpl implements IContactServ
 	}
 	
 	@Override
-	public ResultDO setDefault(int id) {
+	public ResultDO setDefault(ContactDO contactDO) {
 		
 		WContact contact = new WContact();
 		ResultSupport result = new ResultSupport();
@@ -121,7 +122,7 @@ public class ContactServiceImpl  extends BaseServiceImpl implements IContactServ
 		contact.setModifiTime(Calendar.getInstance().getTime());
 		int recordNum = -1;
 		WContactExample example = new WContactExample();
-		example.createCriteria().andWCDefaultEqualTo(1);
+		example.createCriteria().andWCMembersIdEqualTo(contactDO.getwCMembersId()).andWCDefaultEqualTo(1);
 		contact.setwCDefault(0);
 		try {
 			recordNum = contactMapper.updateByExampleSelective(contact, example);
@@ -136,7 +137,7 @@ public class ContactServiceImpl  extends BaseServiceImpl implements IContactServ
 		
 		WContact defaultContact = new WContact();
 		defaultContact.setModifiTime(Calendar.getInstance().getTime());
-		defaultContact.setId(id);
+		defaultContact.setId(contactDO.getId());
 		defaultContact.setwCDefault(1);
 		recordNum = -1;
 		try {
@@ -154,7 +155,7 @@ public class ContactServiceImpl  extends BaseServiceImpl implements IContactServ
 		}
 		
 		try {
-			defaultContact = contactMapper.selectByPrimaryKey(id);
+			defaultContact = contactMapper.selectByPrimaryKey(contactDO.getId());
 		} catch (Exception e) {
 			result.setSuccess(false);
 			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
@@ -164,7 +165,7 @@ public class ContactServiceImpl  extends BaseServiceImpl implements IContactServ
 			return result;
 		}
 		
-		ContactDO contactDO = getContactDO(contact);
+		contactDO = getContactDO(contact);
 		if(contactDO != null) {
 			result.setModel(ResultSupport.FIRST_MODEL_KEY, contactDO);
 		} else {

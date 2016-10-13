@@ -74,7 +74,7 @@ public class GoodsController extends BaseController {
 		switch(taskDO.getServiceType()) {
 		case 0: {
 			taskDO.setServiceName("保洁服务");
-			taskDO.setPrice(new BigDecimal(34.00));
+			taskDO.setPrice(new BigDecimal(30.00));
 			break;
 		}
 		case 1: {

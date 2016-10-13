@@ -108,7 +108,7 @@
 		$("#cancelInfo").show();
 	}
 	function cancel(index) {
-		alert(id + ":" + index);
+		
 		$.ajax({
 			  url: "${pageContext.request.contextPath}/order/cancel/" + id + "/" + index + ".json",
 			  success:function(data) {
@@ -117,6 +117,21 @@
 				  }
 			  }
 			});
+	}
+	
+	function confirmOrder(id) {
+		var mes = confirm('是否确认订单！');
+		if(mes == true){
+			$.ajax({
+				  url: "${pageContext.request.contextPath}/confirmOrder/" + id + ".json",
+				  success:function(data) {
+					
+					  if(data != 0) {
+						
+					  }
+				  }
+				});
+		}
 	}
 </script>
 </html>

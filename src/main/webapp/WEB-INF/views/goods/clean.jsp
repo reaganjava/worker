@@ -101,7 +101,7 @@
 		$("#ss1").css("color","#fff");
 		$("#h").val(2);
 		$("#sc").val(1);
-		var price = 34 * 1 * 2;
+		var price = 30 * 1 * 2;
 		$("#price").html("￥" + price);
 	});
 	
@@ -115,7 +115,7 @@
 		$("#h").val(hours);
 		$("#sc").val(staff);
 		
-		var price = 34 * hours * staff;
+		var price = 30 * hours * staff;
 		$("#price").html("￥" + price);
 	}
 	function selectArea(id) {

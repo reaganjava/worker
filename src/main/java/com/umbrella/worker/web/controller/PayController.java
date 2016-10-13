@@ -58,9 +58,6 @@ public class PayController extends BaseController{
 	private Logger logger = Logger.getLogger(PayController.class);
 	
 	@Autowired
-	private IMemberService memberService;
-	
-	@Autowired
 	private IOrderService orderService;
 	
 	@Autowired
@@ -91,6 +88,7 @@ public class PayController extends BaseController{
 			HttpServletRequest request, HttpServletResponse response) {
 		String url = null;
 		if(payrecordDO.getPayChannelValue() == 0) {
+			System.out.println("************************" + payrecordDO.getwPrOrderNo());
 			url = GetWeiXinOAuthUrl.getCodeRequest(payrecordDO.getwPrOrderNo());
 			System.out.println(url);
 		}
@@ -134,6 +132,7 @@ public class PayController extends BaseController{
 		
 		PayrecordQuery payrecordQuery = new PayrecordQuery();
 		payrecordQuery.setOrderNo(orderNo);
+		System.out.println("=================" + orderNo + "======================");
 		ResultDO result = payService.list(payrecordQuery);
 		
 		if(result.isSuccess()) {
@@ -174,6 +173,7 @@ public class PayController extends BaseController{
 			HttpServletRequest request) {
 		OrderDO orderDO = new OrderDO();
 		orderDO.setwOOrderNo(orderNo);
+		System.out.println("=================" + orderNo + "======================");
 		ResultDO result = null;
 		if(status == 1) {
 			result = orderService.updateStatus(orderDO);
@@ -266,7 +266,12 @@ public class PayController extends BaseController{
 		map.put("appid", Constant.APP_ID);
 		map.put("mch_id", Constant.MCH_ID);
 		map.put("nonce_str", nonceStr);
-		map.put("body", "服务费用");
+		try {
+			map.put("body", new String("嘿管家服务费".getBytes("utf-8")));
+		} catch (UnsupportedEncodingException e1) {
+			
+			e1.printStackTrace();
+		}
 		map.put("out_trade_no", payrecordDO.getwPrOrderNo());
 		//map.put("total_fee", fee + "");
 		map.put("total_fee", "1");
