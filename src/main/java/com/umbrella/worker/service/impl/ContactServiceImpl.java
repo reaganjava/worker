@@ -89,7 +89,7 @@ public class ContactServiceImpl  extends BaseServiceImpl implements IContactServ
 		
 		WContact contact = new WContact();
 
-		ResultSupport result = BeanUtilsExtends.copy(contactDO, contact);
+		ResultSupport result = BeanUtilsExtends.copy(contact, contactDO);
 		// 拷贝失败
 		if (!result.isSuccess()) {
 			return result;

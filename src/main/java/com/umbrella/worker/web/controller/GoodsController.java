@@ -102,7 +102,7 @@ public class GoodsController extends BaseController {
 		request.getSession().setAttribute("TASK_INFO", taskDO);
 		ContactQuery query = new ContactQuery();
 		query.setMemberId(memberId);
-		
+		System.out.println(memberId);
 		ResultDO result = contactService.list(query);
 		
 		long timestamp = Calendar.getInstance().getTimeInMillis();
@@ -129,6 +129,7 @@ public class GoodsController extends BaseController {
 			if(list != null) {
 				mav.addObject("MEMBER_CONTACT_LIST", list);
 				for(ContactDO contactDO : list) {
+					System.out.println(contactDO.getwCMembersId());
 					if(contactDO.getwCDefault() == 1) {
 						mav.addObject("CONTACT_ID", contactDO.getId());
 						break;

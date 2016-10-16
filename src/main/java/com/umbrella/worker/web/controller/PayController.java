@@ -89,8 +89,9 @@ public class PayController extends BaseController{
 		String url = null;
 		if(payrecordDO.getPayChannelValue() == 0) {
 			System.out.println("************************" + payrecordDO.getwPrOrderNo());
-			url = GetWeiXinOAuthUrl.getCodeRequest(payrecordDO.getwPrOrderNo());
-			System.out.println(url);
+			GetWeiXinOAuthUrl gwxa = new GetWeiXinOAuthUrl();
+			url = gwxa.getCodeRequest(payrecordDO.getwPrOrderNo());
+			System.out.println("payURL:" + url);
 		}
 		
 		payrecordDO.setModifiAuthor((String) request.getSession().getAttribute("MEMBER_MOBILE"));
