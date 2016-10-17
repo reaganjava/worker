@@ -123,7 +123,7 @@
 		var mes = confirm('是否确认订单！');
 		if(mes == true){
 			$.ajax({
-				  url: "${pageContext.request.contextPath}/confirmOrder/" + id + ".json",
+				  url: "${pageContext.request.contextPath}/order/confirmOrder/" + id + ".json",
 				  success:function(data) {
 					
 					  if(data != 0) {

@@ -51,7 +51,7 @@
     <div class="row cl">
       <label class="form-label col-3"><span class="c-red">*</span>真实姓名：</label>
       <div class="formControls col-5">
-        <input type="text" class="input-text" placeholder="" name="wARealName" id="wARealName" datatype="*3-8" nullmsg="真实姓名不能为空">
+        <input type="text" class="input-text" placeholder="" name="wARealName" id="wARealName" datatype="*1-8" nullmsg="真实姓名不能为空">
       </div>
       <div class="col-4"> </div>
     </div>

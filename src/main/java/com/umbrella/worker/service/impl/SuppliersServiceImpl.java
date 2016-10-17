@@ -7,9 +7,12 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.umbrella.worker.dao.WSupplierAccountMapper;
 import com.umbrella.worker.dao.WSupplierMapper;
+import com.umbrella.worker.dto.SupplierAccountDO;
 import com.umbrella.worker.dto.SupplierDO;
 import com.umbrella.worker.entity.WSupplier;
+import com.umbrella.worker.entity.WSupplierAccount;
 import com.umbrella.worker.entity.WSupplierExample;
 import com.umbrella.worker.query.SupplierQuery;
 import com.umbrella.worker.result.ResultDO;
@@ -23,7 +26,8 @@ public class SuppliersServiceImpl  extends BaseServiceImpl implements ISuppliers
 	private static Logger logger = Logger.getLogger(SuppliersServiceImpl.class);
 	@Autowired
 	private WSupplierMapper supplierMapper;
-
+	@Autowired
+	private WSupplierAccountMapper supplierAccountMapper;
 	@Override
 	public ResultDO create(SupplierDO supplierDO) {
 		
@@ -46,6 +50,26 @@ public class SuppliersServiceImpl  extends BaseServiceImpl implements ISuppliers
 		
 		try {
 			recordNum = supplierMapper.insertSelective(supplier);
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+			logger.error("[obj:supplier][opt:create][msg:" + e.getMessage()
+			+ "]");
+			return result;
+		}
+		
+		WSupplierAccount supplierAccount = new WSupplierAccount();
+		supplierAccount.setId(supplier.getId());
+		supplierAccount.setCreateAuthor(supplierDO.getCreateAuthor());
+		supplierAccount.setCreateTime(Calendar.getInstance().getTime());
+		supplierAccount.setModifiAuthor(supplierAccount.getCreateAuthor());
+		supplierAccount.setModifiTime(supplierAccount.getCreateTime());
+		supplierAccount.setStatus(1);
+		supplierAccount.setDatalevel(1);
+		
+		try {
+			recordNum = supplierAccountMapper.insertSelective(supplierAccount);
 		} catch (Exception e) {
 			result.setSuccess(false);
 			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
@@ -157,6 +181,40 @@ public class SuppliersServiceImpl  extends BaseServiceImpl implements ISuppliers
 		
 		return result;
 	}
+	
+	public ResultDO getAccount(Integer id) {
+		
+		ResultSupport result = new ResultSupport();
+		
+		WSupplierAccount supplierAccount = null;
+		if(!StringUtil.isGreatOne(id)) {
+			 result.setSuccess(false);
+			 return result;
+		} 
+		
+		try {
+			supplierAccount = supplierAccountMapper.selectByPrimaryKey(id);
+		} catch (Exception e) {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+	        logger.error("[obj:supplier][opt:get][msg:"+e.getMessage()+"]");
+	        return result;
+		}
+		
+		
+		SupplierAccountDO supplierAccountDO = getSupplierAccountDO(supplierAccount);
+		if(supplierAccountDO != null) {
+			result.setModel(ResultSupport.FIRST_MODEL_KEY, supplierAccountDO);
+		} else {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			return result;
+		}
+		
+		return result;
+	}
 
 	@Override
 	public ResultDO list(SupplierQuery supplierQuery) {
@@ -219,9 +277,7 @@ public class SuppliersServiceImpl  extends BaseServiceImpl implements ISuppliers
 		}
 		
 		List<SupplierDO> supplierList = getSupplierDOList(list);
-		
-		
-		
+
 		result.setModel(ResultSupport.FIRST_MODEL_KEY, supplierList);
 		
 		return result;

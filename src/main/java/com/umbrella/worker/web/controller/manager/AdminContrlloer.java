@@ -57,7 +57,7 @@ public class AdminContrlloer {
 		JsonResultDO jsonResultDO = new JsonResultSupport();
 		
 		adminDO.setCreateAuthor((String) request.getSession().getAttribute("MANAGER_NAME"));
-		
+		adminDO.setModifiAuthor(adminDO.getCreateAuthor());
 		MD5 md5 = new MD5();
 		String md5Pwd = md5.getMD5ofStr(adminDO.getwAPassword() 
 				+ adminDO.getwAUsername());

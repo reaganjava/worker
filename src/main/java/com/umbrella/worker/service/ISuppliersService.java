@@ -15,4 +15,6 @@ public interface ISuppliersService {
 	public ResultDO get(int supplierId);
 	
 	public ResultDO list(SupplierQuery supplierQuery);
+	
+	public ResultDO getAccount(Integer id);
 }

@@ -5,16 +5,28 @@ import java.util.List;
 
 
 
+
+
+
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
 
+
+
+
+
 import com.umbrella.worker.dao.WPayrecordMapper;
+import com.umbrella.worker.dao.WSupplierPayrecordMapper;
 import com.umbrella.worker.dto.PayrecordDO;
+import com.umbrella.worker.dto.SupplierPayrecordDO;
 import com.umbrella.worker.entity.WPayrecord;
 import com.umbrella.worker.entity.WPayrecordExample;
+import com.umbrella.worker.entity.WSupplierPayrecord;
+import com.umbrella.worker.entity.WSupplierPayrecordExample;
 import com.umbrella.worker.query.PayrecordQuery;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
@@ -30,6 +42,9 @@ public class PayServiceImpl  extends BaseServiceImpl implements IPayService {
 
 	@Autowired
 	private WPayrecordMapper payrecordMapper;
+	
+	@Autowired
+	private WSupplierPayrecordMapper supplierPayrecordMapper;
 
 	@Override
 	public ResultDO create(PayrecordDO payrecordDO) {
@@ -259,6 +274,75 @@ public class PayServiceImpl  extends BaseServiceImpl implements IPayService {
 		}
 		return result;
 	}
+	
+	
+	public ResultDO createSupplierPayrecord(SupplierPayrecordDO supplierPayrecordDO) {
+		WSupplierPayrecord supplierPayrecord = new WSupplierPayrecord() ;
+		
+		ResultSupport result = BeanUtilsExtends.copy(supplierPayrecord, supplierPayrecordDO);
+		
+		if(!result.isSuccess()) {
+			return result;
+		}
+		
+		int recordNum = -1;
+		
+		supplierPayrecord.setDatalevel(1);
+		supplierPayrecord.setStatus(1);
+		supplierPayrecord.setCreateTime(Calendar.getInstance().getTime());
+		supplierPayrecord.setModifiTime(Calendar.getInstance().getTime());
+		
+		try {
+			recordNum = supplierPayrecordMapper.insertSelective(supplierPayrecord);
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+			logger.error("[obj:coupon][opt:create][msg:" + e.getMessage()
+			+ "]");
+			return result;
+		}
+		
+		if(recordNum == 1) {
+			result.setModel(ResultDO.FIRST_MODEL_KEY, supplierPayrecord.getId());
+		} else {
+			result.setSuccess(false);
+		}
+		return result;
+	}
+	
+	public ResultDO supplierPayrecordList(Integer supplierId) { 
+		ResultSupport result = new ResultSupport();
+		
+		WSupplierPayrecordExample example = new WSupplierPayrecordExample();
+		
+		example.createCriteria().andWPSupperIdEqualTo(supplierId);
+		
+		List<WSupplierPayrecord> list = null;
+		try {
+			list = supplierPayrecordMapper.selectByExample(example);
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+			logger.error("[obj:coupon][opt:create][msg:" + e.getMessage()
+			+ "]");
+			return result;
+		}
+		List<SupplierPayrecordDO> supplierPayrecordList = getSupplierPayrecordDOList(list);
+		
+		if(supplierPayrecordList.size() > 0) {
+			result.setModel(ResultSupport.FIRST_MODEL_KEY, supplierPayrecordList);
+		} else {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+	        return result;
+		}
+		return result;
+		
+	}
+	
 	
 	
 }

@@ -32,7 +32,7 @@ $(function(){
             success: function(data){
                  if(data == 0) {
                 	 isReg = true;
-                	 alert('手机号码已经注册过');
+                	 $('#error_info').html('手机号码已经注册过');
                  }     
             }
         });
@@ -41,7 +41,7 @@ $(function(){
     	var is = true;
     	var mobile = $("#mobile").val();
     	if(mobile == '' || mobile.length < 10 || isNaN(mobile)) {
-    		alert('请输入手机号码');
+    		$('#error_info').html('请输入手机号码');
  		  	is = false; 
  	   	}
     	
@@ -64,31 +64,31 @@ $(function(){
  	    var is = true;
  		var mobile = $("#mobile").val();
  	   	if(mobile == '' || mobile.length < 10 || isNaN(mobile)) {
- 	   		alert('请输入手机号码');
+ 	   	$('#error_info').html('请输入手机号码');
  		  	is = false; 
  	   	}
  	    var smsCode =  $("#smsCode").val();
  	   
 	    if(smsCode == '' || smsCode.length < 6) {
-	    	alert('请输入短信验证码');
+	    	$('#error_info').html('请输入短信验证码');
 		  	is = false; 
 	   	}
  	    var password =  $("#password").val();
  	    if(password == '' || password.length < 6) {
- 	    	alert('请输入密码');
+ 	    	$('#error_info').html('请输入密码');
 		  	is = false; 
 	   	}
  	   var repassword =  $("#repassword").val();
 	    if(repassword == '' || repassword.length < 6) {
-	    	alert('请再次输入密码');
+	    	$('#error_info').html('请再次输入密码');
 		  	is = false; 
 		  	if(repassword != password) {
-		  		alert('两次密码输入不相同');
+		  		$('#error_info').html('两次密码输入不相同');
 		  		is = false;
 		  	}
 	   	}
 	    if(isReg) {
-	    	alert('手机号码已经注册过');
+	    	$('#error_info').html('手机号码已经注册过');
 	    	is = false;
 	    }
  	   	if(is) {
@@ -111,7 +111,7 @@ $(function(){
 	               dataType: "json",
 	               success: function(data){
 	                        if(data == 0) {
-	                        	alert("验证码错误或者已经过期！", "警告对话框");
+	                        	$('#error_info').html("验证码错误或者已经过期！");
 	                        } 
 	               }
 	           });
@@ -160,7 +160,9 @@ $(function(){
 <div class="xsh_cell xsh_cell_warn"> <div class="xsh_cell_hd"></div> <div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" id="password" name="wMPassword" type="password" placeholder="密码"> </div></div>
 
 <div class="xsh_cell xsh_cell_warn"> <div class="xsh_cell_hd"></div> <div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" id="repassword" name="rePassword" type="password" placeholder="重复密码"></div></div>
-</div> </div>
+</div> 
+<span id="error_info">${ERROR_INFO}</span>
+</div>
 </form>
 <!--表单结束-->
 <div class="register-btn"><a  href="javascript:void();" id="btn_sub" ><button class="rg-btn">立即注册</button></a></div>

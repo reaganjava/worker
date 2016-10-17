@@ -23,12 +23,12 @@ $(document).ready(function(){
  	    var is = true;
  		var mobile = $("#mobile").val();
  	   	if(mobile == '' || mobile.length < 10 || isNaN(mobile)) {
- 	   	    alert('请输入手机号码');
+ 	   		$('#error_info').html('请输入手机号码');
  		  	is = false; 
  	   	}
  	    var password =  $("#password").val();
  	    if(password == '' || password.length < 6) {
- 	    	alert('请输入密码');
+ 	    	$('#error_info').html('请输入密码');
 		  	is = false; 
 	   	}
  	   	if(is) {
@@ -89,7 +89,7 @@ $(document).ready(function(){
 <i class="xsh_icon xsh_icon_success" style="display: none;"></i> 
 <span class="nosend" id="viewPwd">显示密码</span></div></div> 
 </div>
-<span>${ERROR_INFO}</span>
+<span id="error_info">${ERROR_INFO}</span>
 </div>
 
 </form>

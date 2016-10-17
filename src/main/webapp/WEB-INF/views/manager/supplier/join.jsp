@@ -52,10 +52,7 @@
       <span class="c-red">*</span><label class="form-label col-3">所在城市：</label>
       <div class="formControls col-5"> <span class="select-box">
         <select class="select" size="1" name="wSCity" datatype="*" nullmsg="请选择所在城市！">
-          <option value="" selected>请选择城市</option>
-          <option value="1">北京</option>
-          <option value="2">上海</option>
-          <option value="3">重庆</option>
+          <option value="重庆">重庆</option>
         </select>
         </span> </div>
       <div class="col-4"> </div>
@@ -65,13 +62,28 @@
       <div class="formControls col-5"> <span class="select-box">
         <select class="select" size="1" name="wSDistrict" datatype="*" nullmsg="请选择所在城市！">
           <option value="" selected>请选择区(县)</option>
-          <option value="1">渝中区</option>
-          <option value="2">南岸区</option>
-          <option value="3">巴南区</option>
-          <option value="3">江北区</option>
-          <option value="3">渝北区</option>
-          <option value="3">九龙坡区</option>
-          <option value="3">大渡口区</option>
+         <option value="渝中区">渝中区</option>
+																													<option value="南岸区">南岸区</option>
+																													<option value="江北区">江北区</option>
+																													<option value="沙坪坝区">沙坪坝区</option>
+																													<option value="九龙坡">九龙坡</option>
+																													<option value="巴南区">巴南区</option>
+																													<option value="渝北区">渝北区</option>
+																													<option value="大渡口区">大渡口区</option>
+																													<option value="北碚区">北碚区</option>
+																													<option value="綦江区 ">綦江区</option>
+																													<option value="长寿区">长寿区</option>
+																													<option value="江津区">江津区</option>
+																													<option value="合川区">合川区</option>
+																													<option value="永川区">永川区</option>
+																													<option value="南川区">南川区</option>
+																													<option value="铜梁区">铜梁区</option>
+																													<option value="潼南区">潼南区</option>
+																													<option value="黔江区">黔江区</option>
+																													<option value="荣昌区">荣昌区</option>
+																													<option value="璧山区">璧山区</option>
+																													<option value="万州区">万州区</option>
+																													<option value="涪陵区">涪陵区</option>
         </select>
         </span> </div>
       <div class="col-4"> </div>

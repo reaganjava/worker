@@ -30,7 +30,8 @@
     
      <table schema="worker" tableName="w_payrecord" ></table> 
      <table schema="worker" tableName="w_supplier_account" ></table>
-     <table schema="worker" tableName="w_supplier_payrecord" ></table> -->
-       <table schema="worker" tableName="w_order_detail" ></table>
+     
+       <table schema="worker" tableName="w_order_detail" ></table> -->
+       <table schema="worker" tableName="w_supplier_payrecord" ></table>
   </context>
 </generatorConfiguration>

@@ -11,6 +11,8 @@ public interface IOrderService {
 	
 	public ResultDO modifi(OrderDO orderDO);
 	
+	public ResultDO assigned(OrderDO orderDO);
+	
 	public ResultDO updateStatus(OrderDO orderDO);
 	
 	public ResultDO remove(int orderId);

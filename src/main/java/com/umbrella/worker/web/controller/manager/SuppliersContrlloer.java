@@ -254,4 +254,17 @@ public class SuppliersContrlloer {
 		return mav;
 		
 	}
+	
+	@RequestMapping(value = "/account.html", method = RequestMethod.GET)
+	public ModelAndView account(ModelAndView mav, HttpServletRequest request) {
+		Integer supplerId = (Integer) request.getSession().getAttribute("MANAGER_SUPPLIER_ID");
+		ResultDO result = suppliersService.getAccount(supplerId);
+		if(result.isSuccess()) {
+			mav.addObject("SUPPLIER_ACCOUNT", result.getModel(ResultSupport.FIRST_MODEL_KEY));
+			mav.setViewName("manager/supplier/account");
+		} else {
+			mav.setViewName("error");
+		}
+		return mav;
+	}
 }

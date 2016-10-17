@@ -53,6 +53,7 @@ function selectToitle(t) {
 <li><span class="navber-word">管道疏通</span></li>
 <li></li>
 </ul>
+</nav>
 <div class="lock-type"><span>请选择服务类型</span></div>
 <div class="lock-choose">
 <a>

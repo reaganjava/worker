@@ -55,7 +55,7 @@ public class SMSGatewayServiceImpl implements ISMSGatewayService {
 		if(StringUtil.isNotEmpty(value)) {
 			sendContent = EMYGateway.SMS_PREX + template.getwSmContent().replace("{code}", value);
 		}
-		
+		System.out.println(sendContent);
 		boolean isSend = false;
 		if(template != null) {
 			long seq = System.currentTimeMillis() - java.util.UUID.randomUUID().hashCode();

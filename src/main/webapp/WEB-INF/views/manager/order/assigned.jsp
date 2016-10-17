@@ -29,17 +29,29 @@
   <form action="${pageContext.request.contextPath}/morder/assigned.json" method="post" class="form form-horizontal" id="form-order-assigned">
     <input type="hidden" value="${ORDER_INFO.id}" name="id"/>
     <input type="hidden" value="3" name="status"/>
+     <div class="row cl">
+      <label class="form-label col-3"><span class="c-red">*</span>客户地址：${ORDER_INFO.orderDetailDO.wOAddress}</label>
+      <div class="col-4"> </div>
+    </div>
+    <div class="row cl">
+      <label class="form-label col-3"><span class="c-red">*</span>联系人：${ORDER_INFO.orderDetailDO.wOContact}</label>
+      <div class="col-4"> </div>
+    </div>
+    <div class="row cl">
+      <label class="form-label col-3"><span class="c-red">*</span>客户电话：${ORDER_INFO.orderDetailDO.wOTelephone}</label>
+      <div class="col-4"> </div>
+    </div>
     <div class="row cl">
       <label class="form-label col-3"><span class="c-red">*</span>派遣人员姓名：</label>
       <div class="formControls col-5">
-        <input type="text" class="input-text"  placeholder="" id="orderDetailDO.wOStaffContact" name="wOStaffContact" datatype="*2-20" nullmsg="派遣人员姓名不能为空">
+        <input type="text" class="input-text"  placeholder="" id="" name="orderDetailDO.wOStaffContact" datatype="*2-20" nullmsg="派遣人员姓名不能为空">
       </div>
       <div class="col-4"> </div>
     </div>
     <div class="row cl">
       <label class="form-label col-3"><span class="c-red">*</span>派遣人员电话：</label>
       <div class="formControls col-5">
-        <input type="text" class="input-text" placeholder="" name="orderDetailDO.wOStaffTelephone" id="wOStaffTelephone" datatype="*8-20" nullmsg="派遣人员电话不能为空">
+        <input type="text" class="input-text" placeholder="" name="orderDetailDO.wOStaffTelephone" id="" datatype="*8-20" nullmsg="派遣人员电话不能为空">
       </div>
       <div class="col-4"> </div>
     </div>

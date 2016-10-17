@@ -107,9 +107,13 @@ public class ManagerOrderController {
 			OrderDO orderDO,
 			HttpServletRequest request) {
 		JsonResultDO jsonResultDO = new JsonResultSupport();
+		String adminName = (String) request.getSession().getAttribute("MANAGER_NAME");
 		orderDO.setStatus(3);
+		orderDO.setModifiAuthor(adminName);
 		orderDO.getOrderDetailDO().setId(orderDO.getId());
-		ResultDO resultDO = orderService.modifi(orderDO);
+		orderDO.getOrderDetailDO().setModifiAuthor(adminName);
+		System.out.println(orderDO.getOrderDetailDO().getwOStaffContact());
+		ResultDO resultDO = orderService.assigned(orderDO);
 		if(resultDO.isSuccess()) {
 			jsonResultDO.setInfo("提交成功");
 			jsonResultDO.setStatus(JsonResultDO.JSON_SUCCESS);

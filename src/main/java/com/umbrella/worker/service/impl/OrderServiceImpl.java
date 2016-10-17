@@ -4,24 +4,34 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.log4j.Logger;
+import org.aspectj.weaver.reflect.Java14GenericSignatureInformationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.umbrella.worker.dao.WOrderDetailMapper;
 import com.umbrella.worker.dao.WOrderMapper;
+import com.umbrella.worker.dao.WSupplierAccountMapper;
+import com.umbrella.worker.dao.WSupplierMapper;
 import com.umbrella.worker.dto.OrderDO;
 import com.umbrella.worker.dto.OrderDetailDO;
 import com.umbrella.worker.dto.PayrecordDO;
 import com.umbrella.worker.entity.WOrder;
 import com.umbrella.worker.entity.WOrderDetail;
 import com.umbrella.worker.entity.WOrderExample;
+import com.umbrella.worker.entity.WSupplier;
+import com.umbrella.worker.entity.WSupplierAccount;
+import com.umbrella.worker.entity.WSupplierExample;
 import com.umbrella.worker.query.OrderQuery;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.IOrderService;
 import com.umbrella.worker.service.IPayService;
+import com.umbrella.worker.service.ISMSGatewayService;
 import com.umbrella.worker.util.BeanUtilsExtends;
+import com.umbrella.worker.util.Constant;
 import com.umbrella.worker.util.MakeOrderNum;
 import com.umbrella.worker.util.StringUtil;
 @Service("orderService")
@@ -34,7 +44,17 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 	private WOrderDetailMapper orderDetailMapper;
 	@Autowired
 	private IPayService payService;
-
+	@Autowired
+	private ISMSGatewayService smsGatewayService;
+	@Autowired
+	private WSupplierMapper supplierMapper;
+	@Autowired
+	private WSupplierAccountMapper supplierAccountMapper;
+	
+	@PostConstruct  
+	public void orderInit() {
+		new Thread(new Settle()).start();
+	}
 
 	@Override
 	public ResultDO create(OrderDO orderDO) {
@@ -205,6 +225,83 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 			result.setSuccess(false);
 		}
 
+		return result;
+	}
+	
+	public ResultDO assigned(OrderDO orderDO) {
+		WOrder order = new WOrder();
+
+		ResultSupport result = BeanUtilsExtends.copy(order, orderDO);
+		// 拷贝失败
+		if (!result.isSuccess()) {
+			return result;
+		}
+		order.setModifiTime(Calendar.getInstance().getTime());
+		
+		int recordNum = -1;
+		try {
+			recordNum = orderMapper.updateByPrimaryKeySelective(order);
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			logger.error("[obj:order][opt:modifi][msg:" + e.getMessage()
+					+ "]");
+			e.printStackTrace();
+			return result;
+		}
+		if (recordNum < 1) {
+			result.setSuccess(false);
+		}
+		
+		if(!StringUtil.isGreatOne(orderDO.getOrderDetailDO().getId())) {
+			return result;
+		}
+		WOrderDetail orderDetail = new WOrderDetail();
+
+		result = BeanUtilsExtends.copy(orderDetail, orderDO.getOrderDetailDO());
+		// 拷贝失败
+		if (!result.isSuccess()) {
+			return result;
+		}
+		
+		recordNum = -1;
+		try {
+			recordNum = orderDetailMapper.updateByPrimaryKeySelective(orderDetail);
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			logger.error("[obj:order][opt:modifi][msg:" + e.getMessage()
+					+ "]");
+			e.printStackTrace();
+			return result;
+		}
+		
+		try {
+			orderDetail = orderDetailMapper.selectByPrimaryKey(order.getId());
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			logger.error("[obj:order][opt:modifi][msg:" + e.getMessage()
+					+ "]");
+			e.printStackTrace();
+			return result;
+		}
+		
+		String arg = orderDetail.getwOStaffContact() + "联系电话" + orderDetail.getwOStaffTelephone() + "本次服务由" + orderDetail.getwOSupplierName() + "为您提供！";
+		
+		if(recordNum > 0) {
+			smsGatewayService.initSMS();
+			ResultDO resultDO = smsGatewayService.send(orderDetail.getwOTelephone(), Constant.SMS_ORDER_ASSIGNED_KEY, arg, 1);
+			if(!resultDO.isSuccess()) {
+				result.setSuccess(false);
+			}
+		} else {
+			result.setSuccess(false);
+		}
+		
 		return result;
 	}
 	
@@ -490,7 +587,7 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 		if(StringUtil.isGreatOne(orderQuery.getSupplierId())) {
 			c.andWOSupplierIdEqualTo(orderQuery.getSupplierId());
 		}
-		
+		System.out.println(orderQuery.getStatus());
 		if(StringUtil.isGreatOne(orderQuery.getStatus())) {
 			c.andStatusEqualTo(orderQuery.getStatus());
 		}
@@ -602,6 +699,69 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 		result.setModel(ResultSupport.FIRST_MODEL_KEY, orderList);
 		
 		return result;
+	}
+	
+	class Settle implements Runnable {
+
+		@Override
+		public void run() {
+			WSupplierExample example = new WSupplierExample();
+			example.createCriteria().andDatalevelEqualTo(1);
+			List<WSupplier> list = null;
+			try {
+				list = supplierMapper.selectByExample(example);
+			} catch (Exception e) {
+		        logger.error("[obj:order][opt:get][msg:"+e.getMessage()+"]");
+		        e.printStackTrace();
+			}
+			
+			if(list != null) {
+				for(WSupplier supplier : list) {
+					WOrderExample woex = new WOrderExample();
+					Integer id = supplier.getId();
+					logger.info("结算渠道商：" + supplier.getwSName());
+					woex.createCriteria()
+					.andWOSupplierIdEqualTo(id)
+					.andWOIsPayEqualTo(1)
+					.andStatusEqualTo(6);
+					List<WOrder> ls = null;
+					try {
+						ls = orderMapper.selectByExample(woex);
+					} catch (Exception e) {
+				        logger.error("[obj:order][opt:get][msg:"+e.getMessage()+"]");
+				        e.printStackTrace();
+					}
+					if(ls != null) {
+						for(WOrder order : ls) {
+							int recordNum = -1;
+							logger.info("结算账单号：" + order.getwOOrderNo());
+							try {
+								WSupplierAccount suplierAccount = supplierAccountMapper.selectByPrimaryKey(id);
+								BigDecimal balance = suplierAccount.getwABalance();
+								balance = balance.add(order.getwOFee());
+								suplierAccount.setwABalance(balance);
+								recordNum = supplierAccountMapper.updateByPrimaryKey(suplierAccount);
+								if(recordNum > 0) {
+									order.setStatus(7);
+									orderMapper.updateByPrimaryKey(order);
+								}
+							} catch (Exception e) {
+						        logger.error("[obj:order][opt:get][msg:"+e.getMessage()+"]");
+						        e.printStackTrace();
+							}
+							logger.info("结算账单号完成");
+						}
+					}
+				}
+			}
+			
+			try {
+				Thread.sleep(1 * 60 * 60 * 1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		
 	}
 	
 }

@@ -27,8 +27,13 @@
 <nav class="breadcrumb"> <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 <div class="pd-20">
 	<div class="text-c">
-		<input type="text" class="input-text" style="width:250px" placeholder="输入订单号" id="" name="">
-		<button type="submit" class="btn btn-success radius" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 搜管订单</button>
+		<select name="status" id="status">
+			<option value="3">已分配</option>
+			<option value="5">已取消</option>
+			<option value="6">已完成</option>
+			<option value="7">已结算</option>
+		</select>
+		<button type="submit" class="btn btn-success radius" id="find" name=""><i class="Hui-iconfont">&#xe665;</i> 搜管订单</button>
 	</div>
 	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><span class="r">总共金额：<strong>${INCOME}</strong> 元</span> </div>
 	<div class="mt-20">
@@ -54,10 +59,10 @@
 				<td>${order.wOOrderNo}</td>
 				<td>${order.wOServiceName}</td>
 				<td>
-				<c:if test="${order.wOIsPay == 0}">
+				<c:if test="${order.wOIsPay == 1}">
 				<span class="label label-success radius">已支付</span></td>
 				</c:if>
-				<c:if test="${order.wOIsPay == 1}">
+				<c:if test="${order.wOIsPay == 0}">
 				<span class="label label-defaunt radius">未支付</span></td>
 				</c:if>
 				</td>
@@ -115,6 +120,11 @@ $(function(){
 		}
 	});
 	
+	$("#find").on('click', function() {
+		var status = $("#status").val();
+		
+		window.location.href="${pageContext.request.contextPath}/morder/list/all/" + status + "/1.html";
+	})
 	
 });
 function order_detail(title,url,id,w,h){

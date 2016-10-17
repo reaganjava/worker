@@ -17,7 +17,9 @@ import com.umbrella.worker.dto.OrderDO;
 import com.umbrella.worker.dto.OrderDetailDO;
 import com.umbrella.worker.dto.PayrecordDO;
 import com.umbrella.worker.dto.StaffDO;
+import com.umbrella.worker.dto.SupplierAccountDO;
 import com.umbrella.worker.dto.SupplierDO;
+import com.umbrella.worker.dto.SupplierPayrecordDO;
 import com.umbrella.worker.dto.TransactionDO;
 import com.umbrella.worker.entity.WAdmin;
 import com.umbrella.worker.entity.WAttachment;
@@ -34,6 +36,8 @@ import com.umbrella.worker.entity.WOrderDetail;
 import com.umbrella.worker.entity.WPayrecord;
 import com.umbrella.worker.entity.WStaff;
 import com.umbrella.worker.entity.WSupplier;
+import com.umbrella.worker.entity.WSupplierAccount;
+import com.umbrella.worker.entity.WSupplierPayrecord;
 import com.umbrella.worker.entity.WTransaction;
 import com.umbrella.worker.util.BeanUtilsExtends;
 
@@ -327,19 +331,19 @@ public class BaseServiceImpl {
 		return resultList;
 	}
 	
-	protected TransactionDO getTransactionDO(WTransaction obj) {
+	protected SupplierPayrecordDO getSupplierPayrecordDO(WSupplierPayrecord obj) {
 		if(obj == null) return null;
-		TransactionDO dst = new TransactionDO();
+		SupplierPayrecordDO dst = new SupplierPayrecordDO();
 		return BeanUtilsExtends.copyProperties(dst, obj) ? dst : null;
 	}
 	
-	protected List<TransactionDO> getTransactionDOList(List<WTransaction> list) {
-		List<TransactionDO> resultList = new ArrayList<TransactionDO>();
+	protected List<SupplierPayrecordDO> getSupplierPayrecordDOList(List<WSupplierPayrecord> list) {
+		List<SupplierPayrecordDO> resultList = new ArrayList<SupplierPayrecordDO>();
 		if(list.size() > 0) {
-			for(WTransaction transaction : list) {
-				TransactionDO transactionDO = this.getTransactionDO(transaction);
-				if(transactionDO != null) {
-					resultList.add(transactionDO);
+			for(WSupplierPayrecord supplierPayrecord : list) {
+				SupplierPayrecordDO supplierPayrecordDO = this.getSupplierPayrecordDO(supplierPayrecord);
+				if(supplierPayrecordDO != null) {
+					resultList.add(supplierPayrecordDO);
 				} else {
 					return null;
 				}
@@ -356,5 +360,11 @@ public class BaseServiceImpl {
 		return BeanUtilsExtends.copyProperties(dst, obj) ? dst : null;
 	}
 	
+	protected SupplierAccountDO getSupplierAccountDO(WSupplierAccount obj) {
+		if(obj == null) return null;
+		SupplierAccountDO dst = new SupplierAccountDO();
+		return BeanUtilsExtends.copyProperties(dst, obj) ? dst : null;
+	}
 	
+
 }

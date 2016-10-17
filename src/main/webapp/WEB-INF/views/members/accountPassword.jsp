@@ -23,20 +23,20 @@ $(document).ready(function(){
  	    var is = true;
  		var oldPassword = $("#oldPassword").val();
  	   	if(oldPassword == '' || oldPassword.length < 6) {
- 	   	    alert('请输旧密码');
+ 	   	$('#error_info').html('请输旧密码');
  		  	is = false; 
  	   	}
  	    var password =  $("#password").val();
  	    if(password == '' || password.length < 6) {
- 	    	alert('请输入密码');
+ 	    	$('#error_info').html('请输入密码');
 		  	is = false; 
 	   	}
  	   var repassword =  $("#rePassword").val();
 	    if(repassword == '' || repassword.length < 6) {
-	    	alert('请再次输入密码');
+	    	$('#error_info').html('请再次输入密码');
 		  	is = false; 
 		  	if(repassword != password) {
-		  		alert('两次密码输入不相同');
+		  		$('#error_info').html('两次密码输入不相同');
 		  		is = false;
 		  	}
 	   	}
@@ -68,7 +68,7 @@ $(document).ready(function(){
 <div class="xsh_cell xsh_cell_warn"> <div class="xsh_cell_hd"></div> <div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" id="password" name="wMPassword" placeholder="输入新密码"  type="password"></div></div>
 
 <div class="xsh_cell xsh_cell_warn"> <div class="xsh_cell_hd"></div> <div class="xsh_cell_bd xsh_cell_primary"> <input class="xsh_input" id="rePassword" placeholder="再次输入新密码"  type="password"></div></div>
-</div> </div>
+</div><span id="error_info">${ERROR_INFO}</span> </div>
 </form>
 <!--表单结束-->
 <div class="register-btn"><button class="rg-btn" id="btn_sub">确认修改</button></div>
