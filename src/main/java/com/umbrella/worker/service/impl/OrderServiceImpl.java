@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.umbrella.worker.dao.WOrderDetailMapper;
 import com.umbrella.worker.dao.WOrderMapper;
+import com.umbrella.worker.dao.WSmsRecordMapper;
 import com.umbrella.worker.dao.WSupplierAccountMapper;
 import com.umbrella.worker.dao.WSupplierMapper;
 import com.umbrella.worker.dto.OrderDO;
@@ -21,6 +22,8 @@ import com.umbrella.worker.dto.PayrecordDO;
 import com.umbrella.worker.entity.WOrder;
 import com.umbrella.worker.entity.WOrderDetail;
 import com.umbrella.worker.entity.WOrderExample;
+import com.umbrella.worker.entity.WSmsRecord;
+import com.umbrella.worker.entity.WSmsRecordExample;
 import com.umbrella.worker.entity.WSupplier;
 import com.umbrella.worker.entity.WSupplierAccount;
 import com.umbrella.worker.entity.WSupplierExample;
@@ -50,6 +53,8 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 	private WSupplierMapper supplierMapper;
 	@Autowired
 	private WSupplierAccountMapper supplierAccountMapper;
+	@Autowired
+	private WSmsRecordMapper smsRecordMapper;
 	
 	@PostConstruct  
 	public void orderInit() {
@@ -73,7 +78,7 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 
 		BigDecimal price = orderDO.getOrderDetailDO().getwOPrice();
 		BigDecimal priceCount = null;
-		if(orderDO.getServiceType() == 0) {
+		if(orderDO.getwOServiceType() == 0) {
 			int staffCount = orderDO.getOrderDetailDO().getwOStaffCount();
 			int hours = orderDO.getOrderDetailDO().getwOServerTime();
 			int countHours = staffCount * hours;
@@ -291,7 +296,24 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 		}
 		
 		String arg = orderDetail.getwOStaffContact() + "联系电话" + orderDetail.getwOStaffTelephone() + "本次服务由" + orderDetail.getwOSupplierName() + "为您提供！";
-		
+		WSmsRecord smsRecord = new WSmsRecord();
+		smsRecord.setsSupplierId(orderDO.getwOSupplierId());
+		smsRecord.setsMobile(orderDetail.getwOTelephone());
+		smsRecord.setsFee(new BigDecimal(0.08));
+		smsRecord.setCreateAuthor("system");
+		smsRecord.setModifiAuthor(smsRecord.getCreateAuthor());
+		smsRecord.setCreateTime(Calendar.getInstance().getTime());
+		smsRecord.setModifiTime(smsRecord.getCreateTime());
+		smsRecord.setStatus(1);
+		smsRecord.setDatalevel(1);
+		try {
+			smsRecordMapper.insertSelective(smsRecord);
+		} catch (Exception e) {
+			
+			logger.error("[obj:order][opt:modifi][msg:" + e.getMessage()
+					+ "]");
+			e.printStackTrace();
+		}
 		if(recordNum > 0) {
 			smsGatewayService.initSMS();
 			ResultDO resultDO = smsGatewayService.send(orderDetail.getwOTelephone(), Constant.SMS_ORDER_ASSIGNED_KEY, arg, 1);
@@ -592,6 +614,10 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 			c.andStatusEqualTo(orderQuery.getStatus());
 		}
 		
+		if(orderQuery.getSupplierId() != 1) {
+			c.andWOServiceTypeEqualTo(0);
+		}
+		
 		if(StringUtil.isNotEmpty(orderQuery.getOrderByClause())) {	
 			example.setOrderByClause(" " + orderQuery.getOrderByClause() + " " + orderQuery.getSort());
 		} else {
@@ -662,7 +688,7 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 		WOrderExample.Criteria c = example.createCriteria();
 		
 	
-		c.andStatusEqualTo(2);
+		c.andWOServiceTypeEqualTo(0).andStatusEqualTo(2);
 	
 		example.setOrderByClause(" CREATE_TIME DESC");
 		
@@ -705,60 +731,94 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 
 		@Override
 		public void run() {
-			WSupplierExample example = new WSupplierExample();
-			example.createCriteria().andDatalevelEqualTo(1);
-			List<WSupplier> list = null;
-			try {
-				list = supplierMapper.selectByExample(example);
-			} catch (Exception e) {
-		        logger.error("[obj:order][opt:get][msg:"+e.getMessage()+"]");
-		        e.printStackTrace();
-			}
-			
-			if(list != null) {
-				for(WSupplier supplier : list) {
-					WOrderExample woex = new WOrderExample();
-					Integer id = supplier.getId();
-					logger.info("结算渠道商：" + supplier.getwSName());
-					woex.createCriteria()
-					.andWOSupplierIdEqualTo(id)
-					.andWOIsPayEqualTo(1)
-					.andStatusEqualTo(6);
-					List<WOrder> ls = null;
-					try {
-						ls = orderMapper.selectByExample(woex);
-					} catch (Exception e) {
-				        logger.error("[obj:order][opt:get][msg:"+e.getMessage()+"]");
-				        e.printStackTrace();
-					}
-					if(ls != null) {
-						for(WOrder order : ls) {
-							int recordNum = -1;
-							logger.info("结算账单号：" + order.getwOOrderNo());
-							try {
-								WSupplierAccount suplierAccount = supplierAccountMapper.selectByPrimaryKey(id);
-								BigDecimal balance = suplierAccount.getwABalance();
-								balance = balance.add(order.getwOFee());
-								suplierAccount.setwABalance(balance);
-								recordNum = supplierAccountMapper.updateByPrimaryKey(suplierAccount);
-								if(recordNum > 0) {
-									order.setStatus(7);
-									orderMapper.updateByPrimaryKey(order);
-								}
-							} catch (Exception e) {
-						        logger.error("[obj:order][opt:get][msg:"+e.getMessage()+"]");
-						        e.printStackTrace();
+			while(true) {
+				WSupplierExample example = new WSupplierExample();
+				example.createCriteria().andDatalevelEqualTo(1);
+				List<WSupplier> list = null;
+				try {
+					list = supplierMapper.selectByExample(example);
+				} catch (Exception e) {
+			        logger.error("[obj:order][opt:get][msg:"+e.getMessage()+"]");
+			        e.printStackTrace();
+				}
+				
+				if(list != null) {
+					for(WSupplier supplier : list) {
+						WOrderExample woex = new WOrderExample();
+						Integer id = supplier.getId();
+						logger.info("结算渠道商：" + supplier.getwSName());
+						woex.createCriteria()
+						.andWOSupplierIdEqualTo(id)
+						.andWOIsPayEqualTo(1)
+						.andStatusEqualTo(6);
+						List<WOrder> ls = null;
+						try {
+							ls = orderMapper.selectByExample(woex);
+						} catch (Exception e) {
+					        logger.error("[obj:order][opt:get][msg:"+e.getMessage()+"]");
+					        e.printStackTrace();
+						}
+						List<WSmsRecord> recordList = null;
+						WSmsRecordExample srex = new WSmsRecordExample();
+						srex.createCriteria().andSSupplierIdEqualTo(id).andStatusEqualTo(1);
+						BigDecimal smsFee = new BigDecimal(0.00);
+						try {
+							recordList = smsRecordMapper.selectByExample(srex);
+							
+							for(WSmsRecord record : recordList) {
+								smsFee = smsFee.add(record.getsFee());
+								record.setStatus(2);
+								smsRecordMapper.updateByPrimaryKey(record);
 							}
-							logger.info("结算账单号完成");
+						} catch (Exception e) {
+					        logger.error("[obj:order][opt:get][msg:"+e.getMessage()+"]");
+					        e.printStackTrace();
+						}
+						if(ls != null) {
+							for(WOrder order : ls) {
+								int recordNum = -1;
+								logger.info("结算账单号：" + order.getwOOrderNo());
+								try {
+									WSupplierAccount supplierAccount = supplierAccountMapper.selectByPrimaryKey(id);
+									if(supplierAccount != null) {
+										BigDecimal balance = supplierAccount.getwABalance();
+										balance = balance.add(order.getwOFee());
+										supplierAccount.setwABalance(balance);
+										recordNum = supplierAccountMapper.updateByPrimaryKey(supplierAccount);
+										if(recordNum > 0) {
+											order.setStatus(7);
+											orderMapper.updateByPrimaryKey(order);
+										}
+									}
+								} catch (Exception e) {
+							        logger.error("[obj:order][opt:get][msg:"+e.getMessage()+"]");
+							        e.printStackTrace();
+								}
+								logger.info("结算账单号完成");
+							}
+						}
+						try {
+							WSupplierAccount supplierAccount = supplierAccountMapper.selectByPrimaryKey(id);
+							if(supplierAccount != null) {
+								BigDecimal balance = supplierAccount.getwABalance();
+								logger.info("结算短信费用" + smsFee);
+								balance = balance.divide(smsFee);
+								supplierAccount.setwABalance(balance);
+								supplierAccountMapper.updateByPrimaryKey(supplierAccount);
+								
+							}
+						} catch (Exception e) {
+					        logger.error("[obj:order][opt:get][msg:"+e.getMessage()+"]");
+					        e.printStackTrace();
 						}
 					}
 				}
-			}
-			
-			try {
-				Thread.sleep(1 * 60 * 60 * 1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+				
+				try {
+					Thread.sleep(1 * 60 * 60 * 1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		

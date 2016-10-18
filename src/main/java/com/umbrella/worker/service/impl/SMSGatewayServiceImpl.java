@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.umbrella.worker.dao.WSmsRecordMapper;
 import com.umbrella.worker.dao.WSmsTemplateMapper;
 import com.umbrella.worker.entity.WSmsTemplate;
 import com.umbrella.worker.result.ResultDO;

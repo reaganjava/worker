@@ -10,6 +10,9 @@ public class OrderQuery extends BaseQuery {
     private Integer supplierId;
     
     
+    private Integer serviceType;
+    
+    
     private String tradeNo;
 
     
@@ -42,6 +45,16 @@ public class OrderQuery extends BaseQuery {
 
 	public void setSupplierId(Integer supplierId) {
 		this.supplierId = supplierId;
+	}
+
+
+	public Integer getServiceType() {
+		return serviceType;
+	}
+
+
+	public void setServiceType(Integer serviceType) {
+		this.serviceType = serviceType;
 	}
 
 

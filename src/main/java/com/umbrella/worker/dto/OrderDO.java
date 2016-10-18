@@ -27,7 +27,7 @@ public class OrderDO extends BaseDO {
     private String wOServiceName;
     
     
-    private Integer serviceType;
+    private Integer wOServiceType;
 
    
     private Integer wOPayType;
@@ -85,14 +85,13 @@ public class OrderDO extends BaseDO {
 		this.wOServiceName = wOServiceName;
 	}
 
-
-	public Integer getServiceType() {
-		return serviceType;
+	public Integer getwOServiceType() {
+		return wOServiceType;
 	}
 
 
-	public void setServiceType(Integer serviceType) {
-		this.serviceType = serviceType;
+	public void setwOServiceType(Integer wOServiceType) {
+		this.wOServiceType = wOServiceType;
 	}
 
 

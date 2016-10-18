@@ -16,6 +16,7 @@ import com.umbrella.worker.dto.MenuDO;
 import com.umbrella.worker.dto.OrderDO;
 import com.umbrella.worker.dto.OrderDetailDO;
 import com.umbrella.worker.dto.PayrecordDO;
+import com.umbrella.worker.dto.SmsRecordDO;
 import com.umbrella.worker.dto.StaffDO;
 import com.umbrella.worker.dto.SupplierAccountDO;
 import com.umbrella.worker.dto.SupplierDO;
@@ -34,6 +35,7 @@ import com.umbrella.worker.entity.WMenu;
 import com.umbrella.worker.entity.WOrder;
 import com.umbrella.worker.entity.WOrderDetail;
 import com.umbrella.worker.entity.WPayrecord;
+import com.umbrella.worker.entity.WSmsRecord;
 import com.umbrella.worker.entity.WStaff;
 import com.umbrella.worker.entity.WSupplier;
 import com.umbrella.worker.entity.WSupplierAccount;
@@ -366,5 +368,26 @@ public class BaseServiceImpl {
 		return BeanUtilsExtends.copyProperties(dst, obj) ? dst : null;
 	}
 	
-
+	protected SmsRecordDO getSmsRecordDO(WSmsRecord obj) {
+		if(obj == null) return null;
+		SmsRecordDO dst = new SmsRecordDO();
+		return BeanUtilsExtends.copyProperties(dst, obj) ? dst : null;
+	}
+	
+	protected List<SmsRecordDO> getSmsRecordDOList(List<WSmsRecord> list) {
+		List<SmsRecordDO> resultList = new ArrayList<SmsRecordDO>();
+		if(list.size() > 0) {
+			for(WSmsRecord smsRecord : list) {
+				SmsRecordDO smsRecordDO = this.getSmsRecordDO(smsRecord);
+				if(smsRecordDO != null) {
+					resultList.add(smsRecordDO);
+				} else {
+					return null;
+				}
+			}
+		} else {
+			return null;
+		}
+		return resultList;
+	}
 }

@@ -138,7 +138,7 @@ public class ManagerOrderController {
 		query.setPageNO(pageNo);
 		query.setPageRows(10);
 		query.setStatus(3);
-		
+
 		ResultDO result = orderService.list(query);
 		if(result.isSuccess()) {
 			PageBeanUtil pageBean = new PageBeanUtil();

@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.umbrella.worker.dto.SupplierDO;
+import com.umbrella.worker.query.SmsRecordQuery;
 import com.umbrella.worker.query.SupplierQuery;
 import com.umbrella.worker.result.JsonResultDO;
 import com.umbrella.worker.result.JsonResultSupport;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
+import com.umbrella.worker.service.ISmsService;
 import com.umbrella.worker.service.ISuppliersService;
 import com.umbrella.worker.util.PageBeanUtil;
 
@@ -26,6 +28,9 @@ public class SuppliersContrlloer {
 
 	@Autowired
 	private ISuppliersService suppliersService;
+	
+	@Autowired
+	private ISmsService smsService;
 	
 	@RequestMapping(value = "/join.html", method = RequestMethod.GET)
 	public ModelAndView join(ModelAndView mav, HttpServletRequest request) {
@@ -262,6 +267,33 @@ public class SuppliersContrlloer {
 		if(result.isSuccess()) {
 			mav.addObject("SUPPLIER_ACCOUNT", result.getModel(ResultSupport.FIRST_MODEL_KEY));
 			mav.setViewName("manager/supplier/account");
+		} else {
+			mav.setViewName("error");
+		}
+		return mav;
+	}
+	
+	@RequestMapping(value = "/smsList/{name}/{pageNo}.html", method = RequestMethod.GET)
+	public ModelAndView smsList(ModelAndView mav, 
+			@PathVariable(value="pageNo") Integer pageNo,
+			HttpServletRequest request) {
+		Integer supplerId = (Integer) request.getSession().getAttribute("MANAGER_SUPPLIER_ID");
+		SmsRecordQuery query = new SmsRecordQuery();
+		query.setSupplierId(supplerId);
+		query.setPageNO(pageNo);
+		ResultDO result = smsService.recordList(query);
+		
+		if(result.isSuccess()) {
+			PageBeanUtil pageBean = new PageBeanUtil();
+			long count = (Long) result.getModel(ResultSupport.SECOND_MODEL_KEY);
+			pageBean.setCurrentPage(pageNo);
+			pageBean.setPageSize(query.getPageRows());
+			pageBean.setRecordCount(count);
+			pageBean.setPageCount(count);
+			pageBean.setPages(pageNo);
+			pageBean.setDataList((List<Object>) result.getModel(ResultSupport.FIRST_MODEL_KEY));
+			mav.addObject("PAGE_BEAN", pageBean);
+			mav.setViewName("manager/supplier/smsList");
 		} else {
 			mav.setViewName("error");
 		}

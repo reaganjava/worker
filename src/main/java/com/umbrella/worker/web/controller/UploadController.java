@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.umbrella.worker.dto.AttachmentDO;
 import com.umbrella.worker.result.ResultDO;
@@ -84,8 +85,8 @@ public class UploadController {
 
 				}
 				
-				ResultDO result = attachmentService.create(attachmentDO);
-				if (!result.isSuccess()) {
+				//ResultDO result = attachmentService.create(attachmentDO);
+				if (true) {
 					isUp = false;
 					break;
 				}
@@ -96,6 +97,12 @@ public class UploadController {
 		} else {
 			return "fail";
 		}
+	}
+	
+	@RequestMapping(value = "/upload.html", method = RequestMethod.GET)
+	public ModelAndView upload(ModelAndView mav, HttpServletRequest request) {
+		mav.setViewName("upload");
+		return mav;
 	}
 
 }

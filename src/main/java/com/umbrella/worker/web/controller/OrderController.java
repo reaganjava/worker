@@ -73,7 +73,7 @@ public class OrderController extends BaseController{
 		switch(taskDO.getServiceType()) {
 		case 0: {
 			orderDO.setwOServiceName(taskDO.getServiceName());
-			orderDO.setServiceType(taskDO.getServiceType());
+			orderDO.setwOServiceType(taskDO.getServiceType());
 			orderDetailDO.setwOServerTime(taskDO.getHours());
 			orderDetailDO.setwOStaffCount(taskDO.getStaffCount());
 			orderDetailDO.setwOPrice(taskDO.getPrice());
@@ -81,7 +81,7 @@ public class OrderController extends BaseController{
 		}
 		case 1: {
 			orderDO.setwOServiceName(taskDO.getServiceName());
-			orderDO.setServiceType(taskDO.getServiceType());
+			orderDO.setwOServiceType(taskDO.getServiceType());
 			orderDetailDO.setwOServerTime(taskDO.getHours());
 			orderDetailDO.setwOLockType(taskDO.getLockType());
 			orderDetailDO.setwOPrice(taskDO.getPrice());
@@ -89,7 +89,7 @@ public class OrderController extends BaseController{
 		}
 		case 2: {
 			orderDO.setwOServiceName(taskDO.getServiceName());
-			orderDO.setServiceType(taskDO.getServiceType());
+			orderDO.setwOServiceType(taskDO.getServiceType());
 			orderDetailDO.setwOServerTime(taskDO.getHours());
 			orderDetailDO.setwOPipType(taskDO.getPipType());
 			if(taskDO.getPipType() == 2) {
@@ -100,7 +100,7 @@ public class OrderController extends BaseController{
 		}
 		case 3: {
 			orderDO.setwOServiceName(taskDO.getServiceName());
-			orderDO.setServiceType(taskDO.getServiceType());
+			orderDO.setwOServiceType(taskDO.getServiceType());
 			orderDetailDO.setwOServerTime(taskDO.getHours());
 			orderDetailDO.setwODamageType(taskDO.getDamageType());
 			orderDetailDO.setwOPrice(taskDO.getPrice());
