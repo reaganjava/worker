@@ -106,7 +106,7 @@ function selectAar(id) {
 	switch(id){
 	case 1: {
 		$("#car-t").empty();
-		$("#car-t").append('<li  class="be-selected"><a href="javascript:void(0);" onclick="selectAar(1)" style=" color:#00cced; border:1.5px solid #00cced; background:url(images/choosed.png) right bottom no-repeat #fff; background-size:25px;"><span >普通车</span><span>10万以下</span></a></li>');
+		$("#car-t").append('<li  class="be-selected"><a href="javascript:void(0);" onclick="selectAar(1)" style=" color:#00cced; border:1.5px solid #00cced; background:url(${pageContext.request.contextPath}/images/choosed.png) right bottom no-repeat #fff; background-size:25px;"><span >普通车</span><span>10万以下</span></a></li>');
 		$("#car-t").append('<li><a href="javascript:void(0);" onclick="selectAar(2)"><span>中档车</span><span>10-20万</span></a></li>');
 		$("#car-t").append('<li><a href="javascript:void(0);" onclick="selectAar(3)"><span>高档车</span><span>20万以上</span></a></li>');
 		$("#price").html("￥100.00");
@@ -117,7 +117,7 @@ function selectAar(id) {
 	case 2: {
 		$("#car-t").empty();
 		$("#car-t").append('<li><a href="javascript:void(0);" onclick="selectAar(1)"><span>普通车</span><span>10万以下</span></a></li>');
-		$("#car-t").append('<li  class="be-selected"><a href="javascript:void(0);" onclick="selectAar(2)" style=" color:#00cced; border:1.5px solid #00cced; background:url(images/choosed.png) right bottom no-repeat #fff; background-size:25px;"><span >中档车</span><span>10-20万</span></a></li>');
+		$("#car-t").append('<li  class="be-selected"><a href="javascript:void(0);" onclick="selectAar(2)" style=" color:#00cced; border:1.5px solid #00cced; background:url(${pageContext.request.contextPath}/images/choosed.png) right bottom no-repeat #fff; background-size:25px;"><span >中档车</span><span>10-20万</span></a></li>');
 		$("#car-t").append('<li><a href="javascript:void(0);" onclick="selectAar(3)"><span>高档车</span><span>20万以上</span></a></li>');
 		$("#price").html("￥200.00");
 		$("#ct").val(2);
@@ -128,7 +128,7 @@ function selectAar(id) {
 		$("#car-t").empty();
 		$("#car-t").append('<li><a href="javascript:void(0);" onclick="selectAar(1)"><span>普通车</span><span>10万以下</span></a></li>');
 		$("#car-t").append('<li><a href="javascript:void(0);" onclick="selectAar(2)"><span>中档车</span><span>10-20万</span></a></li>');
-		$("#car-t").append('<li class="be-selected"><a href="javascript:void(0);" onclick="selectAar(3)" style=" color:#00cced; border:1.5px solid #00cced; background:url(images/choosed.png) right bottom no-repeat #fff; background-size:25px;"><span >高档车</span><span>20万以上</span></a></li>');
+		$("#car-t").append('<li class="be-selected"><a href="javascript:void(0);" onclick="selectAar(3)" style=" color:#00cced; border:1.5px solid #00cced; background:url(${pageContext.request.contextPath}/images/choosed.png) right bottom no-repeat #fff; background-size:25px;"><span >高档车</span><span>20万以上</span></a></li>');
 		$("#price").html("￥300.00");
 		$("#ct").val(3);
 		$("#p").val(300.00);
@@ -141,7 +141,7 @@ function selectLock(id) {
 	switch(id){
 	case 1: {
 		$("#lock-t").empty();
-		$("#lock-t").append('<li class="be-selected"><a href="javascript:void(0);" onclick="selectLock(1)" style=" color:#00cced; border:1.5px solid #00cced; background:url(images/choosed.png) right bottom no-repeat #fff; background-size:25px;">反锁</a></li>');
+		$("#lock-t").append('<li class="be-selected"><a href="javascript:void(0);" onclick="selectLock(1)" style=" color:#00cced; border:1.5px solid #00cced; background:url(${pageContext.request.contextPath}/images/choosed.png) right bottom no-repeat #fff; background-size:25px;">反锁</a></li>');
 		$("#lock-t").append('<li><a href="javascript:void(0);" onclick="selectLock(2)">未反锁</a></li>');
 		$("#il").val(0);
 		break;
@@ -149,7 +149,7 @@ function selectLock(id) {
 	case 2: {
 		$("#lock-t").empty();
 		$("#lock-t").append('<li><a href="javascript:void(0);" onclick="selectLock(1)">反锁</a></li>');
-		$("#lock-t").append('<li  class="be-selected"><a href="javascript:void(0);" onclick="selectLock(2)"  style=" color:#00cced; border:1.5px solid #00cced; background:url(images/choosed.png) right bottom no-repeat #fff; background-size:25px;">未反锁</a></li>');
+		$("#lock-t").append('<li  class="be-selected"><a href="javascript:void(0);" onclick="selectLock(2)" style=" color:#00cced; border:1.5px solid #00cced; background:url(${pageContext.request.contextPath}/images/choosed.png) right bottom no-repeat #fff; background-size:25px;">未反锁</a></li>');
 		$("#il").val(1);
 		break;
 	}
@@ -164,7 +164,7 @@ function selectLock(id) {
 <nav class="navbar">
 <ul>
 <li><a href="/"><img src="${pageContext.request.contextPath}/images/left.png"/></a></li>
-<li><span class="navber-word">开锁</span></li>
+<li><span class="navber-word">开锁换锁</span></li>
 <li></li>
 </ul>
 </nav>
@@ -189,7 +189,7 @@ function selectLock(id) {
 </section>
 <div class="car-choose" id="car-choose">
 <ul id="car-t">
-<li  class="be-selected"><a href="javascript:void(0);" onclick="selectAar(1)" style=" color:#00cced; border:1.5px solid #00cced; background:url(images/choosed.png) right bottom no-repeat #fff; background-size:25px;"><span >普通车</span><span>10万以下</span></a></li>
+<li  class="be-selected"><a href="javascript:void(0);" onclick="selectAar(1)" style=" color:#00cced; border:1.5px solid #00cced; background:url(${pageContext.request.contextPath}/images/choosed.png) right bottom no-repeat #fff; background-size:25px;"><span>普通车</span><span>10万以下</span></a></li>
 <li><a href="javascript:void(0);" onclick="selectAar(2)"><span>中档车</span><span>10-20万</span></a></li>
 <li><a href="javascript:void(0);" onclick="selectAar(3)"><span>高档车</span><span>20万以上</span></a></li>
 </ul>

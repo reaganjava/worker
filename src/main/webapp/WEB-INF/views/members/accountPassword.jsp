@@ -23,23 +23,27 @@ $(document).ready(function(){
  	    var is = true;
  		var oldPassword = $("#oldPassword").val();
  	   	if(oldPassword == '' || oldPassword.length < 6) {
- 	   	$('#error_info').html('请输旧密码');
+ 	   	    alert('请重新输入当前密码');
  		  	is = false; 
  	   	}
  	    var password =  $("#password").val();
  	    if(password == '' || password.length < 6) {
- 	    	$('#error_info').html('请输入密码');
+ 	    	alert('新密码长度不足,请重新输入');
 		  	is = false; 
 	   	}
  	   var repassword =  $("#rePassword").val();
 	    if(repassword == '' || repassword.length < 6) {
-	    	$('#error_info').html('请再次输入密码');
+	    	alert('请再次输入新密码');
 		  	is = false; 
-		  	if(repassword != password) {
-		  		$('#error_info').html('两次密码输入不相同');
+		}
+		  if(repassword != password&&repassword.length>=6&&password.length>=6) {
+		  		alert('两次密码输入不一致');
 		  		is = false;
+		  	}else if(repassword == password&&repassword.length>=6&&password.length>=6){
+		  		alert('修改密码成功');
 		  	}
-	   	}
+	  
+	
  	   	if(is) {
  	   		$("#mdPwdForm").submit();
  	   	}

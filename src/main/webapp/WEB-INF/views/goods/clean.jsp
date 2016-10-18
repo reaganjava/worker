@@ -22,7 +22,7 @@
 <nav class="navbar">
 <ul>
 <li><a href="/"><img src="${pageContext.request.contextPath}/images/left.png"/></a></li>
-<li><span class="navber-word">选择面积</span></li>
+<li><span>选择面积</span></li>
 <li></li>
 </ul>
 </nav>
@@ -55,7 +55,7 @@
 <div class="clean"></div>
 <section class="two-service" style=" height:120px;">
 <p>为节省您的时间，特推出2人服务</p>
-<ul class="house-area">
+<ul class="house-area" id="staffsSelect">
 <li id="f7"><div id="staff7" onClick="selectStaff(7,2,3);"><span>2人3小时</span></div></li>
 <li id="f8"><div id="staff8" onClick="selectStaff(8,2,4);"><span>2人4小时</span></div></li>
 <li id="f9"><div id="staff9" onClick="selectStaff(9,2,5);"><span>2人5小时</span></div></li>
@@ -63,8 +63,9 @@
 </section>
 <section class="lin-intro">
 <div class="intro-di">
-<span>服务项目：临时保洁</span>
-<span>嘿管家为您提供临时保洁服务。服务涵盖卫生间、卧室、厨房、客厅、阳台等区域的保洁服务</span>
+	<span class="intro-di-top" style="line-height:40px;">服务项目：临时保洁</span>
+	<span class="intro-di-center" style="margin-top: -10px;">单价:<strong style="color:#ff055d;">￥30/时</strong></span>
+	<span>嘿管家为您提供临时保洁服务。服务涵盖卫生间、卧室、厨房、客厅、阳台等区域的保洁服务</span>
 </div>
 </section>
 <div class="clean"></div>
@@ -128,62 +129,86 @@
 		switch(id) {
 			case 1:{
 				$("#staffSelect").empty(); 
+				$("#staffsSelect").empty();
 				$("#staffSelect").append('<li id="f1"><div id="staff1" onClick="selectStaff(1, 1, 2);"><span id="ss1">1人2小时</span></div></li>');
 				$("#staffSelect").append('<li id="f2"><div id="staff2" onClick="selectStaff(2, 1, 3);"><span id="ss2">1人3小时</span></div></li>');
 				$("#staffSelect").append('<li id="f3"><div id="staff3" onClick="selectStaff(3, 1, 4);"><span id="ss3">1人4小时</span></div></li>');
 				$("#staffSelect").append('<li id="f4"><div id="staff4" onClick="selectStaff(4, 1, 6);"><span id="ss4">1人6小时</span></div></li>');
 				$("#staffSelect").append('<li id="f5"><div id="staff5" onClick="selectStaff(5, 1, 8);"><span id="ss5">1人8小时</span></div></li>');
 				$("#staffSelect").append('<li id="f6"><div id="staff6" onClick="selectStaff(6, 1, 10);"><span id="ss6">1人10小时</span></div></li>');
+				$("#staffsSelect").append('<li id="f7"><div id="staff9" onClick="selectStaff(7,2,3);"><span>2人3小时</span></div></li>');
+				$("#staffsSelect").append('<li id="f8"><div id="staff9" onClick="selectStaff(8,2,4);"><span>2人4小时</span></div></li>');
+				$("#staffsSelect").append('<li id="f9"><div id="staff9" onClick="selectStaff(9,2,5);"><span>2人5小时</span></div></li>');
 				break;
 			}
 			case 2:{
 				$("#staffSelect").empty(); 
+				$("#staffsSelect").empty();
 				$("#staffSelect").append('<li class="no-service"><div><span>1人2小时</span></div></li>');
 				$("#staffSelect").append('<li id="f2"><div id="staff2" onClick="selectStaff(2, 1, 3);"><span id="ss2">1人3小时</span></div></li>');
 				$("#staffSelect").append('<li id="f3"><div id="staff3" onClick="selectStaff(3, 1, 4);"><span id="ss3">1人4小时</span></div></li>');
 				$("#staffSelect").append('<li id="f4"><div id="staff4" onClick="selectStaff(4, 1, 6);"><span id="ss4">1人6小时</span></div></li>');
 				$("#staffSelect").append('<li id="f5"><div id="staff5" onClick="selectStaff(5, 1, 8);"><span id="ss5">1人8小时</span></div></li>');
 				$("#staffSelect").append('<li id="f6"><div id="staff6" onClick="selectStaff(6, 1, 10);"><span id="ss6">1人10小时</span></div></li>');
+				$("#staffsSelect").append('<li id="f7"><div id="staff9" onClick="selectStaff(7,2,3);"><span>2人3小时</span></div></li>');
+				$("#staffsSelect").append('<li id="f8"><div id="staff9" onClick="selectStaff(8,2,4);"><span>2人4小时</span></div></li>');
+				$("#staffsSelect").append('<li id="f9"><div id="staff9" onClick="selectStaff(9,2,5);"><span>2人5小时</span></div></li>');
 				break;
 			}
 			case 3:{
 				$("#staffSelect").empty(); 
+				$("#staffsSelect").empty();
 				$("#staffSelect").append('<li class="no-service"><div><span>1人2小时</span></div></li>');
 				$("#staffSelect").append('<li class="no-service""><div><span>1人3小时</span></div></li>');
 				$("#staffSelect").append('<li id="f3"><div id="staff3" onClick="selectStaff(3, 1, 4);"><span id="ss3">1人4小时</span></div></li>');
 				$("#staffSelect").append('<li id="f4"><div id="staff4" onClick="selectStaff(4, 1, 6);"><span id="ss4">1人6小时</span></div></li>');
 				$("#staffSelect").append('<li id="f5"><div id="staff5" onClick="selectStaff(5, 1, 8);"><span id="ss5">1人8小时</span></div></li>');
 				$("#staffSelect").append('<li id="f6"><div id="staff6" onClick="selectStaff(6, 1, 10);"><span id="ss6">1人10小时</span></div></li>');
+				$("#staffsSelect").append('<li id="f7"><div id="staff9" onClick="selectStaff(7,2,3);"><span>2人3小时</span></div></li>');
+				$("#staffsSelect").append('<li id="f8"><div id="staff9" onClick="selectStaff(8,2,4);"><span>2人4小时</span></div></li>');
+				$("#staffsSelect").append('<li id="f9"><div id="staff9" onClick="selectStaff(9,2,5);"><span>2人5小时</span></div></li>');
 				break;
 			}
 			case 4:{
 				$("#staffSelect").empty(); 
+				$("#staffsSelect").empty();
 				$("#staffSelect").append('<li class="no-service"><div><span>1人2小时</span></div></li>');
 				$("#staffSelect").append('<li class="no-service"><div><span>1人3小时</span></div></li>');
 				$("#staffSelect").append('<li class="no-service"><div><span>1人4小时</span></div></li>');
 				$("#staffSelect").append('<li id="f4"><div id="staff4" onClick="selectStaff(4, 1, 6);"><span id="ss4">1人6小时</span></div></li>');
 				$("#staffSelect").append('<li id="f5"><div id="staff5" onClick="selectStaff(5, 1, 8);"><span id="ss5">1人8小时</span></div></li>');
 				$("#staffSelect").append('<li id="f6"><div id="staff6" onClick="selectStaff(6, 1, 10);"><span id="ss6">1人10小时</span></div></li>');
+				$("#staffsSelect").append('<li id="f7"><div id="staff9" onClick="selectStaff(7,2,3);"><span>2人3小时</span></div></li>');
+				$("#staffsSelect").append('<li id="f8"><div id="staff9" onClick="selectStaff(8,2,4);"><span>2人4小时</span></div></li>');
+				$("#staffsSelect").append('<li id="f9"><div id="staff9" onClick="selectStaff(9,2,5);"><span>2人5小时</span></div></li>');
 				break;
 			}
 			case 5:{
 				$("#staffSelect").empty(); 
+				$("#staffsSelect").empty();
 				$("#staffSelect").append('<li class="no-service"><div><span>1人2小时</span></div></li>');
 				$("#staffSelect").append('<li class="no-service"><div><span>1人3小时</span></div></li>');
 				$("#staffSelect").append('<li class="no-service"><div><span>1人4小时</span></div></li>');
 				$("#staffSelect").append('<li class="no-service"><div><span>1人6小时</span></div></li>');
+				$("#staffsSelect").append('<li class="no-service"><div><span>2人3小时</span></div></li>');
 				$("#staffSelect").append('<li id="f5"><div id="staff5" onClick="selectStaff(5, 1, 8);"><span id="ss5">1人8小时</span></div></li>');
 				$("#staffSelect").append('<li id="f6"><div id="staff6" onClick="selectStaff(6, 1, 10);"><span id="ss6">1人10小时</span></div></li>');
+				$("#staffsSelect").append('<li id="f8"><div id="staff9" onClick="selectStaff(8,2,4);"><span>2人4小时</span></div></li>');
+				$("#staffsSelect").append('<li id="f9"><div id="staff9" onClick="selectStaff(9,2,5);"><span>2人5小时</span></div></li>');
 				break;
 			}
 			case 6:{
 				$("#staffSelect").empty(); 
+				$("#staffsSelect").empty();
 				$("#staffSelect").append('<li class="no-service"><div><span>1人2小时</span></div></li>');
 				$("#staffSelect").append('<li class="no-service"><div><span>1人3小时</span></div></li>');
 				$("#staffSelect").append('<li class="no-service"><div><span>1人4小时</span></div></li>');
 				$("#staffSelect").append('<li class="no-service"><div><span>1人6小时</span></div></li>');
-				$("#staffSelect").append('<li class="no-service"><div><span>1人8小时</span></div></li>');
+				$("#staffSelect").append('<li class="no-service"><div><span>1人8小时</span></div></li>');	
+				$("#staffsSelect").append('<li class="no-service"><div><span>2人3小时</span></div></li>');
+				$("#staffsSelect").append('<li class="no-service"><div><span>2人4小时</span></div></li>');
 				$("#staffSelect").append('<li id="f6"><div id="staff6" onClick="selectStaff(6, 1, 10);"><span id="ss6">1人10小时</span></div></li>');
+				$("#staffsSelect").append('<li id="f9"><div id="staff9" onClick="selectStaff(9,2,5);"><span>2人5小时</span></div></li>');
 				break;
 			}
 		}

@@ -166,8 +166,7 @@ $(function(){
 </form>
 <!--表单结束-->
 <div class="register-btn"><a  href="javascript:void();" id="btn_sub" ><button class="rg-btn">立即注册</button></a></div>
-<div class="agreement">点击-立即注册，即表示您同意<a style=" color:00cced;">《新生活使用协议》</a></div>
-<div class="members-quota"><a href="${pageContext.request.contextPath}/members/rule.html"><img src="${pageContext.request.contextPath}/images/fire-hot.png"/>新生活前3万名会员永久享受最高9.5折!<span>了解详情</span></a></div>
+<!-- <div class="members-quota"><a href="${pageContext.request.contextPath}/members/rule.html"><img src="${pageContext.request.contextPath}/images/fire-hot.png"/>新用户注册即送60元代金卷!<span>了解详情</span></a></div> -->
 </div>
 </div>
 </div>

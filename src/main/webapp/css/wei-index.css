@@ -50,6 +50,8 @@ img{ border:0; padding:0; margin:0;}
 .dn a{font-size:14px; float:right;}
 .go-register{ color:#fc4e02;}
 .intro-di{ width:80%; margin:0 auto;}
+.intro-di-top{line-height:40px;}
+.intro-di-center{margin-top: -10px;}
 /*****临时保洁预定页面****/
 .add-address{ margin-top:45px;}
 .add-address p,.add-ads{ width:80%; margin:0 auto; margin-top:15px;}
