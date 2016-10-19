@@ -738,9 +738,11 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 		if(StringUtil.isNotEmpty(orderQuery.getOrderNo())) {
 			c.andWOOrderNoEqualTo(orderQuery.getOrderNo());
 		}
-		if(orderQuery.getSupplierId() != 1) {
-			if(StringUtil.isGreatOne(orderQuery.getSupplierId())) {
-				c.andWOSupplierIdEqualTo(orderQuery.getSupplierId());
+		if(orderQuery.getSupplierId() != null) {
+			if(orderQuery.getSupplierId() != 1) {
+				if(StringUtil.isGreatOne(orderQuery.getSupplierId())) {
+					c.andWOSupplierIdEqualTo(orderQuery.getSupplierId());
+				}
 			}
 		}
 		System.out.println(orderQuery.getStatus());
