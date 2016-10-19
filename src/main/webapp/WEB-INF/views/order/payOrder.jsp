@@ -56,13 +56,14 @@
 				<!--服务内容 end-->
 				<section class="sale-info">
 					<div class="sale-in">
-						<form action="">
-							优惠： <select name="sales">
-								<option value="30">临时保洁30元优惠劵</option>
-								<option value="20">临时保洁20元优惠劵</option>
-								<option value="10">临时保洁10元优惠劵</option>
+						
+							优惠： <select id="sales" >
+							<option value="0">请使用优化卷</option>
+							 <c:forEach tems="${MEMBER_COUPON_LIST}" var="coupon">
+								<option value="${coupon.id}">${coupon.wCMoney}元优惠劵</option>
+							 </c:forEach>
 							</select>
-						</form>
+						
 					</div>
 				</section>
 				<!---优惠结束--->
@@ -79,7 +80,8 @@
 </body>
 <script type="text/javascript">
 	function payInfo() {
-		window.location = "${pageContext.request.contextPath}/pay/payInfo/${ORDER_INFO.wOOrderNo}.html";
+		var couponId = $("#sales").val();
+		window.location = "${pageContext.request.contextPath}/pay/payInfo/${ORDER_INFO.wOOrderNo}/" + couponId + ".html";
 	}
 </script>
 </html>

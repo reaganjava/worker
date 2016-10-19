@@ -64,9 +64,10 @@ public class PayController extends BaseController{
 	private IPayService payService;
 	
 	
-	@RequestMapping(value = "/payInfo/{orderNo}.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/payInfo/{orderNo}/{couponId}.html", method = RequestMethod.GET)
 	public ModelAndView payInfo(ModelAndView mav, 
 			@PathVariable(value="orderNo") String orderNo,
+			@PathVariable(value="couponId") Integer couponId,
 			HttpServletRequest request, HttpServletResponse response) {
 		PayrecordQuery query = new PayrecordQuery();
 		query.setOrderNo(orderNo);

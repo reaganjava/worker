@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.umbrella.worker.util.PageBeanUtil;
+import com.umbrella.worker.dto.MemberCouponDO;
+import com.umbrella.worker.dto.MembersDO;
 import com.umbrella.worker.dto.TaskDO;
 import com.umbrella.worker.dto.ContactDO;
 import com.umbrella.worker.dto.OrderDO;
@@ -23,6 +25,7 @@ import com.umbrella.worker.query.OrderQuery;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.IContactService;
+import com.umbrella.worker.service.IMemberService;
 import com.umbrella.worker.service.IOrderService;
 
 
@@ -36,6 +39,9 @@ public class OrderController extends BaseController{
 	
 	@Autowired
 	private IContactService contactService;
+	
+	@Autowired
+	private IMemberService memberService;
 
 	
 	@RequestMapping(value = "/getOrder.html", method = RequestMethod.POST)
@@ -144,11 +150,24 @@ public class OrderController extends BaseController{
 			@PathVariable(value="id") Integer id,
 			HttpServletRequest request) {
 	
+	
+		Cookie cookie = getCookieByName(request, "MEMBER_ID");
+		
+		if(cookie == null) {
+			return new ModelAndView("redirect:/members/login.html");
+		} 
+		
 		ResultDO resultDO = orderService.get(id);
 		OrderDO orderOD = null;
+		
+		Integer memberId = Integer.parseInt(cookie.getValue());
 		if(resultDO.isSuccess()) {
 			orderOD = (OrderDO) resultDO.getModel(ResultSupport.FIRST_MODEL_KEY);
 			mav.addObject("ORDER_INFO", orderOD);
+			resultDO = memberService.get(memberId);
+			MembersDO membersDO = (MembersDO) resultDO.getModel(ResultSupport.FIRST_MODEL_KEY);
+			List<MemberCouponDO> memberCouponDOList = membersDO.getMemberCoupons();
+			mav.addObject("MEMBER_COUPON_LIST", memberCouponDOList);
 		} else {
 			mav.setViewName("error");
 		}
