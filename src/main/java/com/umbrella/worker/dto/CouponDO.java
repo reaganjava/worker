@@ -34,6 +34,9 @@ public class CouponDO extends BaseDO {
 
     
     private Date wCEndTime;
+    
+    
+    private Integer wCDays;
 
     
     private Integer wCPublishiCount;
@@ -139,6 +142,16 @@ public class CouponDO extends BaseDO {
 
 	public void setwCEndTime(Date wCEndTime) {
 		this.wCEndTime = wCEndTime;
+	}
+
+
+	public Integer getwCDays() {
+		return wCDays;
+	}
+
+
+	public void setwCDays(Integer wCDays) {
+		this.wCDays = wCDays;
 	}
 
 

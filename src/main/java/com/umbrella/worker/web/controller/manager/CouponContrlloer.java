@@ -12,59 +12,46 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.umbrella.worker.dto.AdminDO;
-import com.umbrella.worker.query.AdminQuery;
-import com.umbrella.worker.query.SupplierQuery;
+import com.umbrella.worker.dto.CouponDO;
+
+import com.umbrella.worker.query.CouponQuery;
+
 import com.umbrella.worker.result.JsonResultDO;
 import com.umbrella.worker.result.JsonResultSupport;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
-import com.umbrella.worker.service.IAdminService;
-import com.umbrella.worker.service.ISuppliersService;
-import com.umbrella.worker.util.MD5;
+
+import com.umbrella.worker.service.ICouponService;
+
 import com.umbrella.worker.util.PageBeanUtil;
-import com.umbrella.worker.util.StringUtil;
+
 
 @Controller
-@RequestMapping(value = "/admin")
-public class AdminContrlloer {
+@RequestMapping(value = "/coupon")
+public class CouponContrlloer {
 
 	@Autowired
-	private IAdminService adminService;
-	
-	@Autowired
-	private ISuppliersService suppliersService;
+	private ICouponService couponService;
+
 	
 	@RequestMapping(value = "/add.html", method = RequestMethod.GET)
 	public ModelAndView add(ModelAndView mav, 
 			HttpServletRequest request) {
-		
-		SupplierQuery query = new SupplierQuery();
-		ResultDO result = suppliersService.list(query);
-		if(result.isSuccess()) {
-			mav.addObject("SUPPLIER_LIST", result.getModel(ResultSupport.FIRST_MODEL_KEY));
-			mav.setViewName("manager/admin/add");
-		} else {
-			mav.setViewName("error");
-		}
+		mav.setViewName("manager/coupon/add");
 		return mav; 
 	}
 	
 	@RequestMapping(value = "/add.json", method = RequestMethod.POST)
 	public ModelAndView add(ModelAndView mav,
-			AdminDO adminDO,
+			CouponDO couponDO,
 			HttpServletRequest request) {
 		
 		JsonResultDO jsonResultDO = new JsonResultSupport();
 		
-		adminDO.setCreateAuthor((String) request.getSession().getAttribute("MANAGER_NAME"));
-		adminDO.setModifiAuthor(adminDO.getCreateAuthor());
-		MD5 md5 = new MD5();
-		String md5Pwd = md5.getMD5ofStr(adminDO.getwAPassword() 
-				+ adminDO.getwAUsername());
+		couponDO.setCreateAuthor((String) request.getSession().getAttribute("MANAGER_NAME"));
+		couponDO.setModifiAuthor(couponDO.getCreateAuthor());
 		
-		adminDO.setwAPassword(md5Pwd);
-		
-		ResultDO result = adminService.create(adminDO);
+		ResultDO result = couponService.create(couponDO);
 		
 		if(result.isSuccess()) {
 			jsonResultDO.setInfo("提交成功");
@@ -84,7 +71,7 @@ public class AdminContrlloer {
 			HttpServletRequest request) {
 		JsonResultDO jsonResultDO = new JsonResultSupport();
 		
-		ResultDO result = adminService.remove(id);
+		ResultDO result = couponService.remove(id);
 		
 		if(result.isSuccess()) {
 			jsonResultDO.setInfo("提交成功");
@@ -103,11 +90,11 @@ public class AdminContrlloer {
 			@PathVariable(value="id") Integer id,
 			HttpServletRequest request) {
 		JsonResultDO jsonResultDO = new JsonResultSupport();
-		AdminDO adminDO = new AdminDO();
+		CouponDO couponDO = new CouponDO();
 		
-		adminDO.setId(id);
-		adminDO.setStatus(0);
-		ResultDO result = adminService.modifi(adminDO);
+		couponDO.setId(id);
+		couponDO.setStatus(0);
+		ResultDO result = couponService.modifi(couponDO);
 		
 		if(result.isSuccess()) {
 			jsonResultDO.setInfo("提交成功");
@@ -126,11 +113,12 @@ public class AdminContrlloer {
 			@PathVariable(value="id") Integer id,
 			HttpServletRequest request) {
 		JsonResultDO jsonResultDO = new JsonResultSupport();
-		AdminDO adminDO = new AdminDO();
 		
-		adminDO.setId(id);
-		adminDO.setStatus(1);
-		ResultDO result = adminService.modifi(adminDO);
+		CouponDO couponDO = new CouponDO();
+		
+		couponDO.setId(id);
+		couponDO.setStatus(1);
+		ResultDO result = couponService.modifi(couponDO);
 		
 		if(result.isSuccess()) {
 			jsonResultDO.setInfo("提交成功");
@@ -148,22 +136,11 @@ public class AdminContrlloer {
 	public ModelAndView detail(ModelAndView mav, 
 			@PathVariable(value="id") Integer id,
 			HttpServletRequest request) {
-		
-		
-		
-		SupplierQuery query = new SupplierQuery();
-		ResultDO  result = suppliersService.list(query);
-		if(result.isSuccess()) {
-			mav.addObject("SUPPLIER_LIST", result.getModel(ResultSupport.FIRST_MODEL_KEY));
-			mav.setViewName("manager/admin/add");
-		} else {
-			mav.setViewName("error");
-		}
-		
-		result = adminService.get(id);
+	
+		ResultDO result = couponService.get(id);
 		if(result.isSuccess()) {
 			mav.addObject("MANAGER_INFO", (AdminDO) result.getModel(ResultSupport.FIRST_MODEL_KEY));
-			mav.setViewName("manager/admin/detail");
+			mav.setViewName("manager/coupon/detail");
 		} else {
 			mav.setViewName("error");
 		}
@@ -172,23 +149,14 @@ public class AdminContrlloer {
 	
 	@RequestMapping(value = "/edit.json", method = RequestMethod.POST)
 	public ModelAndView edit(ModelAndView mav,
-			AdminDO adminDO,
+			CouponDO couponDO,
 			HttpServletRequest request) {
 		
 		JsonResultDO jsonResultDO = new JsonResultSupport();
 		
-		adminDO.setModifiAuthor((String) request.getSession().getAttribute("MANAGER_NAME"));
-		
-		
-		if(StringUtil.isEmpty(adminDO.getwAPassword())) {
-			MD5 md5 = new MD5();
-			String md5Pwd = md5.getMD5ofStr(adminDO.getwAPassword() 
-					+ adminDO.getwAUsername());
-			
-			adminDO.setwAPassword(md5Pwd);
-		}
-		
-		ResultDO result = adminService.modifi(adminDO);
+		couponDO.setModifiAuthor((String) request.getSession().getAttribute("MANAGER_NAME"));
+	
+		ResultDO result = couponService.modifi(couponDO);
 		
 		if(result.isSuccess()) {
 			jsonResultDO.setInfo("提交成功");
@@ -202,21 +170,18 @@ public class AdminContrlloer {
 		return mav;
 	}
 	
-	@RequestMapping(value = "/list/{username}/{pageNo}.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/list/{pageNo}.html", method = RequestMethod.GET)
 	public ModelAndView query(ModelAndView mav,
-			@PathVariable(value="username") String username,
 			@PathVariable(value="pageNo") Integer pageNo,
 			HttpServletRequest request) {
 		
-		AdminQuery query = new AdminQuery();
+		CouponQuery query = new CouponQuery();
 		query.setPage(true);
 		query.setPageNO(pageNo);
 		query.setPageRows(10);
-		if(!username.equals("all")) {
-			query.setUsername(username);
-		}
+	
 		
-		ResultDO result = adminService.list(query);
+		ResultDO result = couponService.list(query);
 		System.out.println(result);
 		if(result.isSuccess()) {
 			PageBeanUtil pageBean = new PageBeanUtil();
@@ -228,7 +193,7 @@ public class AdminContrlloer {
 			pageBean.setPages(pageNo);
 			pageBean.setDataList((List<Object>) result.getModel(ResultSupport.FIRST_MODEL_KEY));
 			mav.addObject("PAGE_BEAN", pageBean);
-			mav.setViewName("manager/admin/list");
+			mav.setViewName("manager/coupon/list");
 		} else {
 			mav.setViewName("error");
 		}

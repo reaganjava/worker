@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Service;
 
 import com.umbrella.worker.dao.WCouponMapper;
 import com.umbrella.worker.dto.CouponDO;
@@ -15,7 +16,7 @@ import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.ICouponService;
 import com.umbrella.worker.util.BeanUtilsExtends;
 import com.umbrella.worker.util.StringUtil;
-
+@Service("couponService")
 public class CouponServiceImpl  extends BaseServiceImpl implements ICouponService {
 	
 	private static Logger logger = Logger.getLogger(CouponServiceImpl.class);

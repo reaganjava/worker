@@ -17,6 +17,8 @@ public class MemberCouponDO extends BaseDO {
 
     
     private Integer wMcCouponType;
+    
+    private Date wMcDeadline;
 
    
     private Date wMcUseDate;
@@ -69,6 +71,16 @@ public class MemberCouponDO extends BaseDO {
 
 	public void setwMcCouponType(Integer wMcCouponType) {
 		this.wMcCouponType = wMcCouponType;
+	}
+
+
+	public Date getwMcDeadline() {
+		return wMcDeadline;
+	}
+
+
+	public void setwMcDeadline(Date wMcDeadline) {
+		this.wMcDeadline = wMcDeadline;
 	}
 
 
