@@ -7,6 +7,9 @@ public class MemberCouponDO extends BaseDO {
 	private Integer id;
 
     
+    private String wCCouponNo;
+
+    
     private Integer wMcMemberId;
 
     
@@ -91,6 +94,16 @@ public class MemberCouponDO extends BaseDO {
 
 	public void setwMcUseDate(Date wMcUseDate) {
 		this.wMcUseDate = wMcUseDate;
+	}
+
+
+	public String getwCCouponNo() {
+		return wCCouponNo;
+	}
+
+
+	public void setwCCouponNo(String wCCouponNo) {
+		this.wCCouponNo = wCCouponNo;
 	}
 
 }

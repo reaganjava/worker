@@ -15,5 +15,7 @@ public interface ICouponService {
 	public ResultDO get(int couponId);
 	
 	public ResultDO list(CouponQuery couponQuery);
+	
+	public ResultDO memberCoupon(Integer couponId);
 
 }

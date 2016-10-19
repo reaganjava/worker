@@ -1,5 +1,7 @@
 package com.umbrella.worker.web.controller.manager;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,16 +15,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.umbrella.worker.dto.AdminDO;
 import com.umbrella.worker.dto.CouponDO;
-
 import com.umbrella.worker.query.CouponQuery;
-
 import com.umbrella.worker.result.JsonResultDO;
 import com.umbrella.worker.result.JsonResultSupport;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
-
 import com.umbrella.worker.service.ICouponService;
-
 import com.umbrella.worker.util.PageBeanUtil;
 
 
@@ -50,6 +48,13 @@ public class CouponContrlloer {
 		
 		couponDO.setCreateAuthor((String) request.getSession().getAttribute("MANAGER_NAME"));
 		couponDO.setModifiAuthor(couponDO.getCreateAuthor());
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			couponDO.setwCBeginTime(format.parse(couponDO.getBeginTime()));
+			couponDO.setwCEndTime(format.parse(couponDO.getEndTime()));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 		
 		ResultDO result = couponService.create(couponDO);
 		
@@ -139,7 +144,7 @@ public class CouponContrlloer {
 	
 		ResultDO result = couponService.get(id);
 		if(result.isSuccess()) {
-			mav.addObject("MANAGER_INFO", (AdminDO) result.getModel(ResultSupport.FIRST_MODEL_KEY));
+			mav.addObject("COUPON_INFO", (CouponDO) result.getModel(ResultSupport.FIRST_MODEL_KEY));
 			mav.setViewName("manager/coupon/detail");
 		} else {
 			mav.setViewName("error");

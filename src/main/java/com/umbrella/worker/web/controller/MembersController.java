@@ -1,5 +1,8 @@
 package com.umbrella.worker.web.controller;
 
+import java.util.List;
+import java.util.UUID;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.umbrella.worker.dto.ContactDO;
+import com.umbrella.worker.dto.CouponDO;
+import com.umbrella.worker.dto.MemberCouponDO;
 import com.umbrella.worker.dto.MemberDetailDO;
 import com.umbrella.worker.dto.MembersDO;
 import com.umbrella.worker.dto.SmsCodeDO;
@@ -21,6 +26,7 @@ import com.umbrella.worker.query.SmsCodeQuery;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.IContactService;
+import com.umbrella.worker.service.ICouponService;
 import com.umbrella.worker.service.IMemberService;
 import com.umbrella.worker.service.ISmsService;
 import com.umbrella.worker.util.Constant;
@@ -40,6 +46,9 @@ public class MembersController extends BaseController {
 	
 	@Autowired
 	private IContactService contactService;
+	
+	@Autowired
+	private ICouponService couponService;
 
 	@RequestMapping(value = "/register.html", method = RequestMethod.GET)
 	public ModelAndView register(ModelAndView mav, HttpServletRequest request) {
@@ -120,6 +129,15 @@ public class MembersController extends BaseController {
 			//request.getSession().setAttribute("MEMBER_MOBILE", membersDO.getwMMobile());
 			addCookie(response, "MEMBER_ID", membersDO.getId() + "", 86400);
 			addCookie(response, "MEMBER_MOBILE", membersDO.getwMMobile() + "", 86400 );
+			resultDO = couponService.memberCoupon(1);
+			CouponDO couponDO = (CouponDO) resultDO.getModel(ResultSupport.FIRST_MODEL_KEY);
+			MemberCouponDO memberCouponDO = new MemberCouponDO();
+			memberCouponDO.setwMcCouponTitle(couponDO.getwCTitle());
+			memberCouponDO.setwMcCouponType(couponDO.getwCType());
+			memberCouponDO.setwMcMemberId(membersDO.getId());
+			memberCouponDO.setCreateAuthor(membersDO.getwMMobile());
+			memberCouponDO.setDatalevel((int) (System.currentTimeMillis() + (couponDO.getwCDays() * 24 * 60 * 60 * 1000)));
+			memberService.createCoupon(memberCouponDO);
 			if(backPage == null) {
 				return new ModelAndView("redirect:/");
 			}
@@ -381,5 +399,24 @@ public class MembersController extends BaseController {
 		return mav;
 	}
 	
-	
+	@RequestMapping(value = "/couponList.html", method = RequestMethod.GET)
+	public ModelAndView couponList(ModelAndView mav, HttpServletRequest request) {
+		Cookie cookie = getCookieByName(request, "MEMBER_ID");
+		
+		if(cookie == null) {
+			return new ModelAndView("redirect:/members/login.html");
+		} 
+		Integer memberId = Integer.parseInt(cookie.getValue());
+		ResultDO resultDO = memberService.get(memberId);
+		if(resultDO.isSuccess()) {
+			MembersDO membersDO = (MembersDO) resultDO.getModel(ResultSupport.FIRST_MODEL_KEY);
+			List<MemberCouponDO> memberCouponDOList = membersDO.getMemberCoupons();
+			mav.addObject("MEMBER_COUPON_LIST", memberCouponDOList);
+			mav.setViewName("members/couponList");
+		} else {
+			mav.setViewName("error");
+		}
+		return mav;
+	}
+
 }

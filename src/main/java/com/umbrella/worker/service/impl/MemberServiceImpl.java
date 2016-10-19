@@ -5,6 +5,8 @@ import java.util.List;
 
 
 
+import java.util.UUID;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -526,8 +528,50 @@ public class MemberServiceImpl  extends BaseServiceImpl implements IMemberServic
 		return result;
 	}
 	
+	public ResultDO createCoupon(MemberCouponDO memberCouponDO) {
+		
+		WMemberCoupon memberCoupon = new WMemberCoupon();
+		
+		ResultSupport result = BeanUtilsExtends.copy(memberCoupon, memberCouponDO);
+		
+		if(!result.isSuccess()) {
+			return result;
+		}
+		
+		int recordNum = -1;
+		memberCoupon.setModifiAuthor(memberCoupon.getCreateAuthor());
+		memberCoupon.setwCCouponNo(getCouponNO());
+		memberCoupon.setDatalevel(1);
+		memberCoupon.setStatus(1);
+		memberCoupon.setCreateTime(Calendar.getInstance().getTime());
+		memberCoupon.setModifiTime(Calendar.getInstance().getTime());
+		
+		
+		try {
+			recordNum = memberCouponMapper.insertSelective(memberCoupon);
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+			logger.error("[obj:catalogs][opt:create][msg:" + e.getMessage()
+			+ "]");
+			return result;
+		}
+		
+		if(recordNum < 1) {
+			result.setSuccess(false);
+			return result;
+		}
+		
+		result.setModel(ResultDO.FIRST_MODEL_KEY, memberCoupon.getId());
+		
+		return result;
+	}
 	
 	
-	
+	private String getCouponNO() {
+		String couponNO = System.currentTimeMillis() + UUID.randomUUID().hashCode() + "";
+		return couponNO;
+	}
 
 }

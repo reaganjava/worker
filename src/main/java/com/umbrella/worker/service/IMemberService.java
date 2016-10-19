@@ -1,5 +1,6 @@
 package com.umbrella.worker.service;
 
+import com.umbrella.worker.dto.MemberCouponDO;
 import com.umbrella.worker.dto.MemberDetailDO;
 import com.umbrella.worker.dto.MembersDO;
 import com.umbrella.worker.query.MembersQuery;
@@ -22,5 +23,7 @@ public interface IMemberService {
 	public ResultDO modifiPwd(MembersDO membersDO);
 
 	public ResultDO isMobileReg(MembersQuery membersQuery);
+	
+	public ResultDO createCoupon(MemberCouponDO memberCouponDO);
 	
 }

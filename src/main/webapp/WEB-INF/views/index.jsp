@@ -79,10 +79,10 @@
 <!---icon-end-->
 <div class="footerbar">
 <ul class="footer-icon">
-<li><a href="javascript:void();"><img src="${pageContext.request.contextPath}/images/index-icon-now.png"/><span class="be-now">首页</span></a></li>
-<li><a href="${pageContext.request.contextPath}/order/userOrders/1/1.html"><img src="${pageContext.request.contextPath}/images/order-icon.png"/><span>订单</span></a></li>
-<li><a href="javascript:void();"><img src="${pageContext.request.contextPath}/images/sale-icon.png"/><span>优惠券</span></a></li>
-<li><a href="${pageContext.request.contextPath}/members/accountInfo.html"><img src="${pageContext.request.contextPath}/images/mine.png"/><span>我的</span></a></li>
+<li><a href="${pageContext.request.contextPath}/index.html"><img src="${pageContext.request.contextPath}/images/index-icon.png"/><span>首页</span></a></li>
+<li><a href="${pageContext.request.contextPath}/order/userOrders/1/1.html"><img src="${pageContext.request.contextPath}/images/order-icon-now.png"/><span class="be-now">订单</span></a></li>
+<li><a href="${pageContext.request.contextPath}/members/couponList.html""><img src="${pageContext.request.contextPath}/images/sale-icon.png"/><span>优惠券</span></a></li>
+<li><a href="${pageContext.request.contextPath}/members/accountInfo.html"><img src="${pageContext.request.contextPath}/images/mine.png"/><span>我的</span></li>
 </ul>
 </div>
 <!--底部结束-->

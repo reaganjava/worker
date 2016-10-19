@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.umbrella.worker.dao.WCouponMapper;
@@ -20,7 +21,7 @@ import com.umbrella.worker.util.StringUtil;
 public class CouponServiceImpl  extends BaseServiceImpl implements ICouponService {
 	
 	private static Logger logger = Logger.getLogger(CouponServiceImpl.class);
-	
+	@Autowired
 	private WCouponMapper couponMapper;
 
 	@Override
@@ -161,7 +162,7 @@ public class CouponServiceImpl  extends BaseServiceImpl implements ICouponServic
 		WCouponExample example = new WCouponExample();
 		WCouponExample.Criteria c = example.createCriteria();
 		
-		if(StringUtil.isEmpty(couponQuery.getTitle())) {
+		if(StringUtil.isNotEmpty(couponQuery.getTitle())) {
 			c.andWCTitleEqualTo("%" + couponQuery.getTitle() + "%");
 		}
 		
@@ -208,17 +209,56 @@ public class CouponServiceImpl  extends BaseServiceImpl implements ICouponServic
 		
 		List<CouponDO> couponList = getCouponDOList(list);
 		
-		if(couponList.size() > 0) {
-			result.setModel(ResultSupport.FIRST_MODEL_KEY, couponList);
+		
+		result.setModel(ResultSupport.FIRST_MODEL_KEY, couponList);
+		
+		return result;
+	}
+	
+	public ResultDO memberCoupon(Integer couponId) {
+		
+		ResultSupport result = new ResultSupport();
+		
+		WCoupon coupon = null;
+		if(!StringUtil.isGreatOne(couponId)) {
+			 result.setSuccess(false);
+			 return result;
+		} 
+		
+		try {
+			coupon = couponMapper.selectByPrimaryKey(couponId);
+		} catch (Exception e) {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+	        logger.error("[obj:coupon][opt:get][msg:"+e.getMessage()+"]");
+	        return result;
+		}
+		int count = coupon.getwCPublishiCount();
+		if(count > 0) {
+			try {
+				count--;
+				coupon.setwCPublishiCount(count);
+				couponMapper.updateByPrimaryKeySelective(coupon);
+			} catch (Exception e) {
+				result.setSuccess(false);
+		        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+		        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+		        logger.error("[obj:coupon][opt:get][msg:"+e.getMessage()+"]");
+		        return result;
+			}
+		}
+		CouponDO couponDO = getCouponDO(coupon);
+		if(couponDO!= null) {
+			result.setModel(ResultSupport.FIRST_MODEL_KEY, couponDO);
 		} else {
 			result.setSuccess(false);
 	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
 	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
-	        return result;
+			return result;
 		}
+		
 		return result;
 	}
-	
-	
 
 }

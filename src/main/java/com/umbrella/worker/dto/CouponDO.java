@@ -9,9 +9,6 @@ public class CouponDO extends BaseDO {
     private Integer id;
 
     
-    private String wCCouponNo;
-
-    
     private String wCTitle;
 
     
@@ -28,6 +25,12 @@ public class CouponDO extends BaseDO {
 
     
     private Float wCDiscount;
+    
+    
+    private String beginTime;
+    
+    
+    private String endTime;
 
    
     private Date wCBeginTime;
@@ -52,16 +55,6 @@ public class CouponDO extends BaseDO {
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-
-	public String getwCCouponNo() {
-		return wCCouponNo;
-	}
-
-
-	public void setwCCouponNo(String wCCouponNo) {
-		this.wCCouponNo = wCCouponNo;
 	}
 
 
@@ -122,6 +115,26 @@ public class CouponDO extends BaseDO {
 
 	public void setwCDiscount(Float wCDiscount) {
 		this.wCDiscount = wCDiscount;
+	}
+
+
+	public String getBeginTime() {
+		return beginTime;
+	}
+
+
+	public void setBeginTime(String beginTime) {
+		this.beginTime = beginTime;
+	}
+
+
+	public String getEndTime() {
+		return endTime;
+	}
+
+
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
 	}
 
 
