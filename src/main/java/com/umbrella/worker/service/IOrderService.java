@@ -28,4 +28,8 @@ public interface IOrderService {
 	public ResultDO rush(OrderDO orderDO);
 	
 	public ResultDO watiList();
+	
+	public ResultDO cleanAssignedList(OrderQuery orderQuery);
+	
+	public ResultDO adminAssignedList(OrderQuery orderQuery);
 }

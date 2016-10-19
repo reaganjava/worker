@@ -28,6 +28,10 @@
 <div class="pd-20">
 	<div class="text-c">
 		<select name="status" id="status">
+		    <c:if test="${sessionScope.MANAGER_SUPPLIER_ID == 1}">
+		    	<option value="1">未付款</option>
+		    	<option value="2">已付款</option>
+		    </c:if>
 			<option value="3">已分配</option>
 			<option value="5">已取消</option>
 			<option value="6">已完成</option>

@@ -16,11 +16,13 @@ import org.springframework.web.servlet.ModelAndView;
 import com.umbrella.worker.dto.OrderDO;
 import com.umbrella.worker.dto.OrderDetailDO;
 import com.umbrella.worker.query.OrderQuery;
+import com.umbrella.worker.query.SupplierQuery;
 import com.umbrella.worker.result.JsonResultDO;
 import com.umbrella.worker.result.JsonResultSupport;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.IOrderService;
+import com.umbrella.worker.service.ISuppliersService;
 import com.umbrella.worker.util.PageBeanUtil;
 
 @Controller
@@ -29,6 +31,9 @@ public class ManagerOrderController {
 
 	@Autowired
 	private IOrderService orderService;
+	
+	@Autowired
+	private ISuppliersService suppliersService;
 	
 	@RequestMapping(value = "/waitOrderList.html", method = RequestMethod.GET)
 	public ModelAndView waitOrderList(ModelAndView mav,
@@ -92,9 +97,19 @@ public class ManagerOrderController {
 	public ModelAndView assigned(ModelAndView mav,
 			@PathVariable(value="id") Integer id,
 			HttpServletRequest request) {
+		int supplierId = (int) request.getSession().getAttribute("MANAGER_SUPPLIER_ID");
 		ResultDO result = orderService.get(id);
+		ResultDO result2 = null;
+		if(supplierId == 1) {
+			SupplierQuery query = new SupplierQuery();
+			result2 = suppliersService.list(query);
+		}
+		
 		if(result.isSuccess()) {
 			mav.addObject("ORDER_INFO", result.getModel(ResultSupport.FIRST_MODEL_KEY));
+			if(result2 != null) {
+				mav.addObject("SUPPLIER_LIST", result2.getModel(ResultSupport.FIRST_MODEL_KEY));
+			}
 			mav.setViewName("manager/order/assigned");
 		} else {
 			mav.setViewName("error");
@@ -138,8 +153,12 @@ public class ManagerOrderController {
 		query.setPageNO(pageNo);
 		query.setPageRows(10);
 		query.setStatus(3);
-
-		ResultDO result = orderService.list(query);
+		ResultDO result =  null;
+		if(supplierId != 1) {
+			result = orderService.cleanAssignedList(query);
+		} else {
+			result = orderService.adminAssignedList(query);
+		}
 		if(result.isSuccess()) {
 			PageBeanUtil pageBean = new PageBeanUtil();
 			long count = (Long) result.getModel(ResultSupport.SECOND_MODEL_KEY);
@@ -232,9 +251,7 @@ public class ManagerOrderController {
 		int supplierId = (int) request.getSession().getAttribute("MANAGER_SUPPLIER_ID");
 		OrderQuery query = new OrderQuery();
 		query.setPage(true);
-		if(supplierId != 1) { 
-			query.setSupplierId(supplierId);
-		}
+		query.setSupplierId(supplierId);
 		if(!orderNo.equals("all")) {
 			query.setOrderNo(orderNo);
 		}

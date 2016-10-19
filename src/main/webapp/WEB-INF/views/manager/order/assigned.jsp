@@ -41,6 +41,20 @@
       <label class="form-label col-3"><span class="c-red">*</span>客户电话：${ORDER_INFO.orderDetailDO.wOTelephone}</label>
       <div class="col-4"> </div>
     </div>
+    <c:if test="${SUPPLIER_LIST != null}">
+    <div class="row cl">
+      <span class="c-red">*</span><label class="form-label col-3">服务渠道：</label>
+      <div class="formControls col-5"> <span class="select-box">
+        <select class="select" size="1" name="wOSupplierId" datatype="*" nullmsg="请选择渠道！">
+          <option value="" selected>请选渠道</option>
+          <c:forEach items="${SUPPLIER_LIST}" var="supplier">
+          <option value="${supplier.id}">${supplier.wSName}</option>
+          </c:forEach>
+        </select>
+        </span> </div>
+      <div class="col-4"> </div>
+    </div>
+    </c:if>
     <div class="row cl">
       <label class="form-label col-3"><span class="c-red">*</span>派遣人员姓名：</label>
       <div class="formControls col-5">

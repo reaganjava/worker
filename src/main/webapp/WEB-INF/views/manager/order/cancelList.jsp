@@ -42,7 +42,7 @@
 				<th width="40">是否支付</th>
 				<th width="90">费用</th>
 				<th width="70">创建时间</th>
-				<th width="40">订单状态</th>
+				
 				<th width="100">操作</th>
 			</tr>
 		</thead>
@@ -54,25 +54,16 @@
 				<td>${order.wOOrderNo}</td>
 				<td>${order.wOServiceName}</td>
 				<td>
-				<c:if test="${order.wOIsPay == 0}">
+				<c:if test="${order.wOIsPay == 1}">
 				<span class="label label-success radius">已支付</span></td>
 				</c:if>
-				<c:if test="${order.wOIsPay == 1}">
+				<c:if test="${order.wOIsPay == 0}">
 				<span class="label label-defaunt radius">未支付</span></td>
 				</c:if>
 				</td>
 				<td>￥${order.wOFee}元</td>
 				<td>${order.formatDate}</td>
-				<td>
-				<c:if test="${order.status == 3}">
-				<span class="label label-success radius">已分配</span></td>
-				</c:if>
-				<c:if test="${order.status == 5}">
-				<span class="label label-defaunt radius">已取消</span></td>
-				</c:if>
-				<c:if test="${order.status == 6}">
-				<span class="label label-defaunt radius">已完成</span></td>
-				</c:if></td>
+				
 				<td class="td-manage">
 			
 				<i class="Hui-iconfont">&#xe631;</i></a> <a title="确认取消订单" href="javascript:;" onclick="confirm_canecl(this,'${order.id}')" >
