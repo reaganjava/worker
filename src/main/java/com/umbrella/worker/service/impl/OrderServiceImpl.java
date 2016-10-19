@@ -795,16 +795,17 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 		}
 		
 		List<OrderDO> orderList = getOrderDOList(list);
-		
-		if(orderQuery.getSupplierId() != 1) {
-			if(orderList != null) {
-				BigDecimal income = new BigDecimal(0.00);
-				for(OrderDO orderDO : orderList) {
-					if(orderDO.getStatus() == 6) {
-						income = income.add(orderDO.getwOFee());
+		if(orderQuery.getSupplierId() != null) {
+			if(orderQuery.getSupplierId() != 1) {
+				if(orderList != null) {
+					BigDecimal income = new BigDecimal(0.00);
+					for(OrderDO orderDO : orderList) {
+						if(orderDO.getStatus() == 6) {
+							income = income.add(orderDO.getwOFee());
+						}
 					}
+					result.setModel(ResultSupport.THIRD_MODEL_KEY, income);
 				}
-				result.setModel(ResultSupport.THIRD_MODEL_KEY, income);
 			}
 		}
 		result.setModel(ResultSupport.FIRST_MODEL_KEY, orderList);
