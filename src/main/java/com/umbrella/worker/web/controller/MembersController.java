@@ -1,5 +1,6 @@
 package com.umbrella.worker.web.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,6 +24,8 @@ import com.umbrella.worker.dto.SmsCodeDO;
 import com.umbrella.worker.query.ContactQuery;
 import com.umbrella.worker.query.MembersQuery;
 import com.umbrella.worker.query.SmsCodeQuery;
+import com.umbrella.worker.result.JsonResultDO;
+import com.umbrella.worker.result.JsonResultSupport;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.IContactService;
@@ -343,6 +346,24 @@ public class MembersController extends BaseController {
 		return mav;
 	}
 	
+	@RequestMapping(value = "/removeContact/{id}.json", method = RequestMethod.GET)
+	public ModelAndView remove(ModelAndView mav, 
+			@PathVariable(value="id") Integer id,
+			HttpServletRequest request) {
+		
+		
+		ResultDO result = contactService.remove(id);
+		
+		if(result.isSuccess()) {
+			
+			mav.addObject("JSON_DATA", 1);
+		} else {
+			
+			mav.addObject("JSON_DATA", 0);
+		}
+		return mav;
+	}
+	
 	@RequestMapping(value = "/default/{id}.json", method = RequestMethod.GET)
 	public ModelAndView ajaxContactDefault(ModelAndView mav, 
 			@PathVariable(value="id") Integer id,
@@ -411,7 +432,13 @@ public class MembersController extends BaseController {
 		if(resultDO.isSuccess()) {
 			MembersDO membersDO = (MembersDO) resultDO.getModel(ResultSupport.FIRST_MODEL_KEY);
 			List<MemberCouponDO> memberCouponDOList = membersDO.getMemberCoupons();
-			mav.addObject("MEMBER_COUPON_LIST", memberCouponDOList);
+			if(memberCouponDOList != null) {
+				mav.addObject("MEMBER_COUPON_SIZE", memberCouponDOList.size());
+				mav.addObject("MEMBER_COUPON_LIST", memberCouponDOList);
+			} else {
+				mav.addObject("MEMBER_COUPON_SIZE", 0);
+				mav.addObject("MEMBER_COUPON_LIST", new ArrayList<MemberCouponDO>());
+			}
 			mav.setViewName("members/couponList");
 		} else {
 			mav.setViewName("error");
