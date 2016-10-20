@@ -59,8 +59,8 @@
 						
 							优惠： <select id="sales" >
 							<option value="0">请使用优化卷</option>
-							 <c:forEach tems="${MEMBER_COUPON_LIST}" var="coupon">
-								<option value="${coupon.id}">${coupon.wCMoney}元优惠劵</option>
+							 <c:forEach items="${MEMBER_COUPON_LIST}" var="coupon">
+								<option value="${coupon.id}">${coupon.wMcMoney}元优惠劵</option>
 							 </c:forEach>
 							</select>
 						
@@ -81,7 +81,8 @@
 <script type="text/javascript">
 	function payInfo() {
 		var couponId = $("#sales").val();
-		window.location = "${pageContext.request.contextPath}/pay/payInfo/${ORDER_INFO.wOOrderNo}/" + couponId + ".html";
+		window.location = "${pageContext.request.contextPath}/pay/payInfo/${ORDER_INFO.wOOrderNo}/" + ${ORDER_INFO.wOFee} + "/" + couponId + ".html";
+		
 	}
 </script>
 </html>

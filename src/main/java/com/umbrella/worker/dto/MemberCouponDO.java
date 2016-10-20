@@ -1,5 +1,6 @@
 package com.umbrella.worker.dto;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class MemberCouponDO extends BaseDO {
@@ -20,6 +21,15 @@ public class MemberCouponDO extends BaseDO {
 
     
     private Integer wMcCouponType;
+    
+    
+    private BigDecimal wMcMoney;
+
+    private Integer discount;
+    
+    private Float wMcDiscount;
+    
+    
     
     private Date wMcDeadline;
 
@@ -104,6 +114,31 @@ public class MemberCouponDO extends BaseDO {
 
 	public void setwCCouponNo(String wCCouponNo) {
 		this.wCCouponNo = wCCouponNo;
+	}
+
+
+	public BigDecimal getwMcMoney() {
+		return wMcMoney;
+	}
+
+
+	public void setwMcMoney(BigDecimal wMcMoney) {
+		this.wMcMoney = wMcMoney;
+	}
+
+
+	public Float getwMcDiscount() {
+		return wMcDiscount;
+	}
+
+
+	public void setwMcDiscount(Float wMcDiscount) {
+		this.wMcDiscount = wMcDiscount;
+	}
+
+
+	public Integer getDiscount() {
+		return (int) (wMcDiscount * 100);
 	}
 
 }

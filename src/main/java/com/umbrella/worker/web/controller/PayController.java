@@ -3,6 +3,7 @@ package com.umbrella.worker.web.controller;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
@@ -21,8 +22,6 @@ import org.apache.commons.httpclient.SimpleHttpConnectionManager;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpClientParams;
 import org.apache.log4j.Logger;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,11 +29,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.umbrella.worker.dto.CouponDO;
+import com.umbrella.worker.dto.MemberCouponDO;
 import com.umbrella.worker.dto.OrderDO;
 import com.umbrella.worker.dto.PayrecordDO;
 import com.umbrella.worker.query.PayrecordQuery;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
+import com.umbrella.worker.service.ICouponService;
 import com.umbrella.worker.service.IMemberService;
 import com.umbrella.worker.service.IOrderService;
 import com.umbrella.worker.service.IPayService;
@@ -63,19 +65,45 @@ public class PayController extends BaseController{
 	@Autowired
 	private IPayService payService;
 	
+	@Autowired
+	private IMemberService memberService;
 	
-	@RequestMapping(value = "/payInfo/{orderNo}/{couponId}.html", method = RequestMethod.GET)
+	
+	@RequestMapping(value = "/payInfo/{orderNo}/{fee}/{couponId}.html", method = RequestMethod.GET)
 	public ModelAndView payInfo(ModelAndView mav, 
 			@PathVariable(value="orderNo") String orderNo,
+			@PathVariable(value="fee") BigDecimal fee,
 			@PathVariable(value="couponId") Integer couponId,
 			HttpServletRequest request, HttpServletResponse response) {
-		PayrecordQuery query = new PayrecordQuery();
-		query.setOrderNo(orderNo);
-		query.setPayStatus(0);
-		ResultDO result = payService.list(query);
+		
+		ResultDO result = memberService.getCoupon(couponId);
+		
+		MemberCouponDO memberCouponDO = (MemberCouponDO) result.getModel(ResultSupport.FIRST_MODEL_KEY);
+		PayrecordDO payrecordDO = new PayrecordDO();
+		payrecordDO.setwPrOrderNo(orderNo);
+		payrecordDO.setwPrFee(fee);
+		payrecordDO.setwPrIsCoupon(0);
+		if(memberCouponDO.getwMcCouponType() == 1) {
+			payrecordDO.setwPrCouponPrice(memberCouponDO.getwMcMoney());
+		} else {
+			float discount = memberCouponDO.getwMcDiscount();
+			payrecordDO.setwPrCouponPrice(fee.divide(fee.multiply(new BigDecimal(discount))));
+		}
+		//payrecordDO.setwPrPayChannel(Constant.PAY_CHANNELS[0]);
+		payrecordDO.setwPrTimestamp((int) System.currentTimeMillis());
+		//0未支付 1已支付 2支付失败
+		payrecordDO.setwPrStatus(0);
+		payrecordDO.setStatus(1);
+		payrecordDO.setCreateAuthor("system");
+		payrecordDO.setModifiAuthor("system");
+		payrecordDO.setDatalevel(1);
+		result = null;
+		
+		result = payService.create(payrecordDO);
 		if(result.isSuccess()) {
-			List<PayrecordDO> payList = (List<PayrecordDO>) result.getModel(ResultSupport.FIRST_MODEL_KEY);
-			mav.addObject("PAY_INFO", payList.get(0));
+			
+			mav.addObject("PAY_INFO", payrecordDO);
+			mav.addObject("COUPON_ID", couponId);
 			mav.setViewName("pay/info");
 		} else {
 			mav.setViewName("pay/fail");
@@ -91,7 +119,7 @@ public class PayController extends BaseController{
 		if(payrecordDO.getPayChannelValue() == 0) {
 			System.out.println("************************" + payrecordDO.getwPrOrderNo());
 			GetWeiXinOAuthUrl gwxa = new GetWeiXinOAuthUrl();
-			url = gwxa.getCodeRequest(payrecordDO.getwPrOrderNo());
+			url = gwxa.getCodeRequest(payrecordDO.getwPrOrderNo(), payrecordDO.getCouponId());
 			System.out.println("payURL:" + url);
 		}
 		
@@ -110,11 +138,13 @@ public class PayController extends BaseController{
 	public ModelAndView oauth(ModelAndView mav, HttpServletRequest request, HttpServletResponse response) {
 		String code = request.getParameter("code");
 		String orderNo = request.getParameter("orderNo");
+		Integer couponId = Integer.parseInt(request.getParameter("couponId"));
 		String openid = userOAuth(code);
 		if(openid != null) {
 			System.out.println(openid);
 			request.getSession().setAttribute("openid", openid);
 			request.getSession().setAttribute("orderNo", orderNo);
+			request.getSession().setAttribute("couponId", couponId);
 			return new ModelAndView("redirect:/pay/invoke.html");
 		} else {
 			mav.setViewName("pay/fail");
@@ -128,6 +158,7 @@ public class PayController extends BaseController{
 			HttpServletResponse response) throws Exception {
 		String openid = (String) request.getSession().getAttribute("openid");
 		String orderNo = (String) request.getSession().getAttribute("orderNo");
+		Integer couponId = (Integer) request.getSession().getAttribute("couponId");
 		String nonceStr = UUID.randomUUID().toString().substring(0, 32);
 
 		long timestamp = System.currentTimeMillis() / 1000;
@@ -160,6 +191,7 @@ public class PayController extends BaseController{
 			String paySign = SignUtil.getPayCustomSign(signMap, Constant.APP_KEY);
 			mav.addObject("paySign", paySign);
 			mav.addObject("ORDERNO", orderNo);
+			mav.addObject("COUPONID", couponId);
 			logger.info("paySign=" + paySign);
 			mav.setViewName("pay/invoke");
 		} else {
@@ -168,9 +200,10 @@ public class PayController extends BaseController{
 		return mav;
 	}
 	
-	@RequestMapping(value = "/status/{orderNo}/{status}.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/status/{orderNo}/{couponId}/{status}.html", method = RequestMethod.GET)
 	public ModelAndView paySuccess(ModelAndView mav, 
 			@PathVariable(value="orderNo") String orderNo, 
+			@PathVariable(value="couponId") Integer couponId,
 			@PathVariable(value="status") Integer status,
 			HttpServletRequest request) {
 		OrderDO orderDO = new OrderDO();
@@ -179,6 +212,7 @@ public class PayController extends BaseController{
 		ResultDO result = null;
 		if(status == 1) {
 			result = orderService.updateStatus(orderDO);
+			memberService.verification(couponId);
 		} else {
 			mav.addObject("ORDERNO", orderNo);
 			mav.setViewName("pay/fail");
@@ -260,8 +294,9 @@ public class PayController extends BaseController{
     public String getPrepayId(PayrecordDO payrecordDO, String openid, String memberIP, String nonceStr) {
 	
 		logger.info("************openid***********：" + openid);
-		
-		int fee = (int) (payrecordDO.getwPrFee().doubleValue() * 100);
+		int srcFee = (int) (payrecordDO.getwPrFee().doubleValue() * 100);
+		int d = (int) (payrecordDO.getwPrCouponPrice().doubleValue() * 100);
+		int fee = srcFee - d;
 		
 		// 获取prepayid
 		Map<String, String> map = new HashMap<String, String>();

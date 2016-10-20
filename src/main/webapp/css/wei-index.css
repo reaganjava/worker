@@ -27,10 +27,18 @@ img{ border:0; padding:0; margin:0;}
 .footerbar{ background-color:#fff; height:60px; position:fixed; bottom:0; left:0; right:0; max-width:640px; margin:0 auto; border-top:1px solid #d9d9d9;}
 /******2016-08-02 选择面积*********/
 .house-area{ width:96%; margin:0 auto;}
-.house-area li { width:29%; border:1px solid #c0c0c0;  height:36px; line-height:36px; float:left; text-align:center; margin:5px;}
+.house-area li { width:29%; border:1px solid #c0c0c0; height:36px; line-height:36px; float:left; text-align:center; margin:5px; border-radius:2px;}/**临时保洁添加圆角**/
+#l-city-price{ color:#ff055d;}/**临时保洁添加单价**/
+/**意见反馈页面**/
+.suggest{ margin-top:45px; text-align:center;}
+.suggest-tab input{ width:96%; border-radius:4px; border:1px solid #D9D6D6; font-family:"微软雅黑"; padding-left:10px; margin-top:5px;}
+.suggest-tab .sugg-word{ height:100px; padding-bottom:50px;}
+.suggest-tab .user-name,.suggest-tab .user-tel{ height:45px;}
+
+
 .house-area li span{color:#464646; font-size:12px;}
 .house-area li span sup{ font-size:12px;}
-.one-service,.choose-area,.two-service{ background:#fff; height:150px; margin:0 auto; width:96%;}
+.one-service,.choose-area,.two-service{ background:#fff; height:130px; margin:0 auto; width:96%;}
 .choose-area{ margin-top:45px;}
 .choose-area p,.two-service p,.one-service p{ padding-top:10px; padding-left:13px; font-weight:800;}
 .tab-bar-btn {position: fixed;height: 2.5rem;line-height: 2.5rem;bottom: 0.4rem;left: .5rem;right: .5rem;font-size: 1.2rem;text-align: center;border-radius: .2rem;background-color: #ff3057; color:#fff; max-width:640px; margin:0 auto;}
@@ -50,16 +58,13 @@ img{ border:0; padding:0; margin:0;}
 .dn a{font-size:14px; float:right;}
 .go-register{ color:#fc4e02;}
 .intro-di{ width:80%; margin:0 auto;}
-.intro-di-top{line-height:40px;}
-.intro-di-center{margin-top: -10px;}
 /*****临时保洁预定页面****/
-.add-address{ margin-top:45px;}
 .add-address p,.add-ads{ width:80%; margin:0 auto; margin-top:15px;}
-.add-ads{ height:80px; background:#FFF; width:96%; line-height:80px; border:1px solid #dadada; margin:0 auto; margin-top:20px;}
+.add-ads{ height:80px; background:#FFF; width:96%; line-height:80px; border:1px solid #dadada; margin:0 auto; margin-top:10px;}
 .add-ads img { display:inline-block; vertical-align:middle;}
 .add-ads span{display:inline-block; font-size:18px; color:#00cced; text-indent:10px;}
 /****2016-08-04**/
-.add-time{ background:#FFF; width:96%; margin:0 auto;  border:1px solid #dadada; margin-top:20px;}
+.add-time{ background:#FFF; width:96%; margin:0 auto;  border:1px solid #dadada; margin-top:45px;}
 .choose-date{ width:120px; height:30px;border:1px solid #dadada;}
 .choose-hour{ width:60px; height:30px; border:1px solid #dadada; margin-left:5px;}
 .time-words{padding:20px 0; font-size:18px;}
@@ -96,10 +101,11 @@ img{ border:0; padding:0; margin:0;}
 .ding ul li span i{ font-style:normal; display:block;}
 .ding ul li span{ color:#464646; display:inline-block; width:70%; margin:0 auto; vertical-align:text-top;}
 .tui i{ font-style:normal; color:#ff055d;}
-.c-content-title{ padding: 45px 0 10px 0; font-size:18px; font-weight:800;}
+.c-content-title{ padding: 15px 0 10px 0; font-size:18px; font-weight:800;}
 .c-content li{ background:url(../images/gou.png) left center no-repeat; line-height:22px;}
 .c-content li span{ padding-left:25px; font-size:14px;}
 .c-content li span i{ font-style:normal; font-size:12px;}
+.service-rule{ width:92%; margin:0 auto;}
 .sale-info select{ width:200px; height:30px;appearance:none;-moz-appearance:none;-webkit-appearance:none; background: url(../images/arrows_007ba21.png) no-repeat scroll  right center transparent; background-position: 80% 50%; font-family:"微软雅黑"; font-size:14px;}
 .sale-info select option{ padding-left:18px;}
 .order-details,.service-cont,.sale-info{ background:#FFF; margin:5px 0 5px 0; padding:10px 0 10px 0;}
@@ -188,7 +194,7 @@ img{ border:0; padding:0; margin:0;}
 .service-a span:nth-child(1){ background-size: 40px; width:56px; height:56px; display:inline-block; border-radius:50%;}
 .service-a .house-clean-img{background: url(../images/houseclean-icon.png) center no-repeat #ff6867;}
 .service-a .house-worker-img{ background:url(../images/houseworker-icon.png) center no-repeat #ff886c;}
-.service-a .baomu-img{ background:url(../images/baomu%20-icon.png) center no-repeat #ff8e6d;}
+.service-a .baomu-img{ background:url(../images/baomu--icon.png) center no-repeat #ff8e6d;}
 .service-a .old-img{ background:url(../images/older-icon.png) center no-repeat #ffa871;}
 .service-a .baby-img{ background:url(../images/child-icon.png) center no-repeat #ff986f;}
 .service-a .child-img{ background:url(../images/baby-icon.png) center no-repeat #ff7468;}
@@ -269,12 +275,21 @@ img{ border:0; padding:0; margin:0;}
 .navber-word{ text-align:center;}
 .add-list{ margin-top:45px;}
 .xsh_btn xsh_btn_mini{ font-family:"微软雅黑";}
-
-
-
-
-
-
+.use-now{ display:inline-block; line-height:34px; height:34px; width:80px; border:1px solid #fe3057; position:absolute; top:22%; right:15px; text-align:center; border-radius:4px; color:#fe3057;}
+.p-c-w{ position:absolute; left:35%; color:#0091ed;}
+/**推荐享优惠--推荐者页面**/
+.tui-img img, .b-tui-img img{ width:100%; height:auto;}
+.tui-word{ width:90%; margin:0 auto;}
+.tui-cont{display: block;margin: 20px 0; line-height:22px;}
+.t-r-title{ font-weight:bold; margin:10px 0; color:#ef3950;}
+.t-r-cont{ display:block; line-height:24px;}
+.tui-btn a{ display:inline-block; width:30%; margin:0 auto; height:45px; background:#ef3950; line-height:45px; color:#fff; text-align:center; font-size:22px; border-radius:4px; margin-top:18px;}
+.tui-btn{text-align:center;}
+.tui-btn .btn-back{ background:#A8A6A6; margin-left:30px;}
+/**被推荐者注册页面**/
+.index-demo img{ position:relative; z-index:999; bottom:120px; left:20px; background:none;}
+.index-demo span{ color:#fff; display:block; width:114px; height:70px; position:relative; z-index:9999; bottom:305px; left:63%; }
+.b-tui-btn a{ display:block; width:120px; height:42px; border-radius:4px; background:#fff; text-align:center; color:#1e0c0c; font-size:20px; line-height:42px; position:relative; z-index:9999; bottom:260px; left:60%; }
 /*****底部*****/
 @media screen and (max-device-width: 480px) { 
 #divMain{ float: none; width:auto; } 

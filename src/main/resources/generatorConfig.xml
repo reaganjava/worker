@@ -30,12 +30,12 @@
     
      <table schema="worker" tableName="w_payrecord" ></table> 
      <table schema="worker" tableName="w_supplier_account" ></table>
-     
+      <table schema="worker" tableName="w_coupon" ></table> 
        <table schema="worker" tableName="w_order_detail" ></table>
        <table schema="worker" tableName="w_supplier_payrecord" ></table>
        <table schema="worker" tableName="w_sms_record" ></table>
         <table schema="worker" tableName="w_order" ></table> -->
         <table schema="worker" tableName="w_member_coupon" ></table> 
-     <table schema="worker" tableName="w_coupon" ></table> 
+    
   </context>
 </generatorConfiguration>

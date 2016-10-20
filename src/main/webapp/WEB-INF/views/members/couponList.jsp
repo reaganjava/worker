@@ -26,10 +26,16 @@
         <div class="hey-txt"> <span>已有券(<span>${MEMBER_COUPON_SIZE}</span>)</span> <a class="hey-sort" href="javascript:;"></a></div>
        <c:forEach items="${MEMBER_COUPON_LIST}" var="coupon">
         <div class="hey-list hey-active1">
-          <div class="hey-list-t"><span class="hey-rmb-icon">￥</span><span class="hey-rmb-num">${coupon.wCMoney}</span>
-            <div class="p-c-w"><span>${coupon.wCTitle}</span><br>
-              <span>${coupon.wCDesc}</span></div>
-          <div class="hey-list-b"><span>有效 <span>${coupon.wCDays}天</span></span></div>
+          <div class="hey-list-t">
+          <c:if test="${coupon.wMcCouponType == 1}">
+          <span class="hey-rmb-icon">￥</span><span class="hey-rmb-num">${coupon.wMcMoney}</span>
+          </c:if>
+          <c:if test="${coupon.wMcCouponType == 2}">
+          <span class="hey-rmb-icon">优惠</span><span class="hey-rmb-num">${coupon.discount}%</span>
+          </c:if>
+            <div class="p-c-w"><span>${coupon.wMcCouponTitle}</span><br/></div>
+            </div>
+          <div class="hey-list-b"><span>有效 <span><fmt:formatDate value="${coupon.wMcDeadline}"  type="BOTH" dateStyle="full"/>前</span></span></div>
           </div>
          </c:forEach>
       </div>
@@ -41,8 +47,8 @@
 <div class="footerbar">
 <ul class="footer-icon">
 <li><a href="${pageContext.request.contextPath}/index.html"><img src="${pageContext.request.contextPath}/images/index-icon.png"/><span>首页</span></a></li>
-<li><a href="${pageContext.request.contextPath}/order/userOrders/1/1.html"><img src="${pageContext.request.contextPath}/images/order-icon-now.png"/><span class="be-now">订单</span></a></li>
-<li><a href="${pageContext.request.contextPath}/members/couponList.html"><img src="${pageContext.request.contextPath}/images/sale-icon.png"/><span>优惠券</span></a></li>
+<li><a href="${pageContext.request.contextPath}/order/userOrders/1/1.html"><img src="${pageContext.request.contextPath}/images/order-icon.png"/><span>订单</span></a></li>
+<li><a href="${pageContext.request.contextPath}/members/couponList.html"><img src="${pageContext.request.contextPath}/images/sale-icon-now.png"/><span class="be-now">优惠券</span></a></li>
 <li><a href="${pageContext.request.contextPath}/members/accountInfo.html"><img src="${pageContext.request.contextPath}/images/mine.png"/><span>我的</span></li>
 </ul>
 </div>

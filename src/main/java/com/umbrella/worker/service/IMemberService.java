@@ -26,4 +26,8 @@ public interface IMemberService {
 	
 	public ResultDO createCoupon(MemberCouponDO memberCouponDO);
 	
+	public ResultDO getCoupon(int id);
+	
+	public ResultDO verification(Integer id);
+	
 }

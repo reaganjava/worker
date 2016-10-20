@@ -1,6 +1,7 @@
 package com.umbrella.worker.web.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -89,6 +90,18 @@ public class MembersController extends BaseController {
 		ResultDO resultDO = memberService.create(membersDO);
 		
 		if(resultDO.isSuccess()) {
+			Integer memberId = (Integer) resultDO.getModel(ResultSupport.FIRST_MODEL_KEY);
+			resultDO = couponService.memberCoupon(1);
+			CouponDO couponDO = (CouponDO) resultDO.getModel(ResultSupport.FIRST_MODEL_KEY);
+			MemberCouponDO memberCouponDO = new MemberCouponDO();
+			memberCouponDO.setwMcCouponTitle(couponDO.getwCTitle());
+			memberCouponDO.setwMcCouponType(couponDO.getwCType());
+			memberCouponDO.setwMcMemberId(memberId);
+			memberCouponDO.setwMcMoney(couponDO.getwCMoney());
+			memberCouponDO.setwMcDiscount(couponDO.getwCDiscount());
+			memberCouponDO.setCreateAuthor(membersDO.getwMMobile());
+			memberCouponDO.setwMcDeadline(new Date(System.currentTimeMillis() + (couponDO.getwCDays() * 24 * 60 * 60 * 1000)));
+			memberService.createCoupon(memberCouponDO);
 			return new ModelAndView("redirect:/members/login.html");
 		} else {
 			mav.setViewName("/members/regfail");
@@ -132,15 +145,7 @@ public class MembersController extends BaseController {
 			//request.getSession().setAttribute("MEMBER_MOBILE", membersDO.getwMMobile());
 			addCookie(response, "MEMBER_ID", membersDO.getId() + "", 86400);
 			addCookie(response, "MEMBER_MOBILE", membersDO.getwMMobile() + "", 86400 );
-			resultDO = couponService.memberCoupon(1);
-			CouponDO couponDO = (CouponDO) resultDO.getModel(ResultSupport.FIRST_MODEL_KEY);
-			MemberCouponDO memberCouponDO = new MemberCouponDO();
-			memberCouponDO.setwMcCouponTitle(couponDO.getwCTitle());
-			memberCouponDO.setwMcCouponType(couponDO.getwCType());
-			memberCouponDO.setwMcMemberId(membersDO.getId());
-			memberCouponDO.setCreateAuthor(membersDO.getwMMobile());
-			memberCouponDO.setDatalevel((int) (System.currentTimeMillis() + (couponDO.getwCDays() * 24 * 60 * 60 * 1000)));
-			memberService.createCoupon(memberCouponDO);
+			
 			if(backPage == null) {
 				return new ModelAndView("redirect:/");
 			}
@@ -301,7 +306,7 @@ public class MembersController extends BaseController {
 		return mav;
 	}
 	
-	@RequestMapping(value = "/contacts.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/contacts.json", method = RequestMethod.GET)
 	public ModelAndView contacts(ModelAndView mav, HttpServletRequest request) {
 		
 		Cookie cookie = getCookieByName(request, "MEMBER_ID");
@@ -311,10 +316,29 @@ public class MembersController extends BaseController {
 		ResultDO resultDO = contactService.list(query);
 		System.out.println(resultDO);
 		if(resultDO.isSuccess()) {
-			mav.addObject("CONTACT_LIST", resultDO.getModel(ResultSupport.FIRST_MODEL_KEY));
-			mav.setViewName("members/contacts");
+			String html = "";
+			List<ContactDO> list = (List<ContactDO>) resultDO.getModel(ResultSupport.FIRST_MODEL_KEY);
+			for(ContactDO contactDO : list) {
+				if(contactDO.getwCDefault() != 1) {
+					html = html + "<ul><li class=\"choose-2\" onClick=\"onDefault(" + contactDO.getId() + ") \" id=\"c" + contactDO.getId() + "\"><div class=\"choose-con1\">"
+							+ "<span>" + contactDO.getwCAddress() + "</span>"
+							+ "<span>" + contactDO.getwCContact() + "</span>"
+							+ "<span>" + contactDO.getwCTelephone() + "</span>"
+							+ "<a href=\"javascript:void(0);\" class=\"del\" style=\"float: right;margin-top: -20px;\" onclick=\"del(" + contactDO.getId() + ");\" >删除地址</a>"
+							+ "</div><div class=\"choose-con2\">重庆</div></li></ul></div>";
+				} else {
+					html = html + "<ul><li onClick=\"onDefault(" + contactDO.getId() + ") \" id=\"c" + contactDO.getId() + "\"><div class=\"choose-con1\">"
+						+ "<span>" + contactDO.getwCAddress() + "</span>"
+						+ "<span>" + contactDO.getwCContact() + "</span>"
+						+ "<span>" + contactDO.getwCTelephone() + "</span>"
+						+ "<a href=\"javascript:void(0);\" class=\"del\" style=\"float: right;margin-top: -20px;\" onclick=\"del(" + contactDO.getId() + ");\" >删除地址</a>"
+						+ "</div><div class=\"choose-con2\">重庆</div></li></ul></div>";
+				}
+				
+			}
+			mav.addObject("JSON_DATA", html);
 		} else {
-			mav.setViewName("error");
+			mav.addObject("JSON_DATA", 0);
 			return mav;
 		}
 		return mav;

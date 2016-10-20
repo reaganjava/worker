@@ -102,6 +102,7 @@ public class GoodsController extends BaseController {
 		request.getSession().setAttribute("TASK_INFO", taskDO);
 		ContactQuery query = new ContactQuery();
 		query.setMemberId(memberId);
+		query.setIsDefault(1);
 		System.out.println(memberId);
 		ResultDO result = contactService.list(query);
 		
@@ -126,16 +127,9 @@ public class GoodsController extends BaseController {
 		
 		if(result.isSuccess()) {
 			List<ContactDO> list = (List<ContactDO>) result.getModel(ResultSupport.FIRST_MODEL_KEY);
-			if(list != null) {
-				mav.addObject("MEMBER_CONTACT_LIST", list);
-				for(ContactDO contactDO : list) {
-					System.out.println(contactDO.getwCMembersId());
-					if(contactDO.getwCDefault() == 1) {
-						mav.addObject("CONTACT_ID", contactDO.getId());
-						break;
-					}
-				}
-			}
+		
+			mav.addObject("CONTACT_ID", list.get(0).getId());
+				
 			mav.addObject("WEEK_DATE_LIST", dateValueDOList);
 			mav.setViewName("goods/reserver");
 		} else {

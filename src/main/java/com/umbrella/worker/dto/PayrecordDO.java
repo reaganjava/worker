@@ -25,6 +25,8 @@ public class PayrecordDO extends BaseDO {
 	private Integer wPrStatus;
 	
 	private Integer payChannelValue;
+	
+	private Integer couponId;
 
 	public Integer getId() {
 		return id;
@@ -112,6 +114,14 @@ public class PayrecordDO extends BaseDO {
 
 	public void setPayChannelValue(Integer payChannelValue) {
 		this.payChannelValue = payChannelValue;
+	}
+
+	public Integer getCouponId() {
+		return couponId;
+	}
+
+	public void setCouponId(Integer couponId) {
+		this.couponId = couponId;
 	}
 	
 }

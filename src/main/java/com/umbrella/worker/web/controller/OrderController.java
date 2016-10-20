@@ -167,14 +167,8 @@ public class OrderController extends BaseController{
 			resultDO = memberService.get(memberId);
 			MembersDO membersDO = (MembersDO) resultDO.getModel(ResultSupport.FIRST_MODEL_KEY);
 			List<MemberCouponDO> memberCouponDOList = membersDO.getMemberCoupons();
+			System.out.println(memberCouponDOList.size());
 			mav.addObject("MEMBER_COUPON_LIST", memberCouponDOList);
-		} else {
-			mav.setViewName("error");
-		}
-		
-		System.out.println(resultDO);
-		if(resultDO.isSuccess()) {
-		
 		} else {
 			mav.setViewName("error");
 		}

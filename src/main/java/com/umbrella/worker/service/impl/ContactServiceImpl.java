@@ -263,6 +263,7 @@ public class ContactServiceImpl  extends BaseServiceImpl implements IContactServ
 			example.setOrderByClause(" CREATE_TIME DESC");
 		}
 		
+		c.andDatalevelEqualTo(1);
 		List<WContact> list = null;
 		
 		try {

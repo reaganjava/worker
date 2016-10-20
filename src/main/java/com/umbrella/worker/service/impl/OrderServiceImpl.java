@@ -148,30 +148,10 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 			e.printStackTrace();
 			return result;
 		}
+	
 		
-		PayrecordDO payrecordDO = new PayrecordDO();
+		result.setModel(ResultDO.FIRST_MODEL_KEY, order.getId());
 		
-		payrecordDO.setwPrOrderNo(orderNO);
-		payrecordDO.setwPrFee(priceCount);
-		payrecordDO.setwPrIsCoupon(0);
-		//payrecordDO.setwPrPayChannel(Constant.PAY_CHANNELS[0]);
-		payrecordDO.setwPrTimestamp((int) System.currentTimeMillis());
-		//0未支付 1已支付 2支付失败
-		payrecordDO.setwPrStatus(0);
-		payrecordDO.setStatus(1);
-		payrecordDO.setCreateAuthor(orderDetail.getCreateAuthor());
-		payrecordDO.setModifiAuthor(orderDetail.getCreateAuthor());
-		payrecordDO.setDatalevel(1);
-		ResultDO resultDO = null;
-		
-		resultDO = payService.create(payrecordDO);
-		
-		
-		if(resultDO.isSuccess()) {
-			result.setModel(ResultDO.FIRST_MODEL_KEY, order.getId());
-		} else {
-			result.setSuccess(false);
-		}
 		return result;
 	}
 

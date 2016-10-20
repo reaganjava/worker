@@ -20,6 +20,7 @@
 <div class="container">
 <form action="${pageContext.request.contextPath}/pay/confirm.html" method="POST" id="confirmForm">
 <input type="hidden" value="${PAY_INFO.id}" name="id"/> 
+<input type="hidden" value="${COUPON_ID}" name="couponId"/> 
 <nav class="navbar">
 <ul>
 <li><a href="javascript:void();" onclick="window.history.back(-1);"><img src="${pageContext.request.contextPath}/images/left.png"/></a></li>

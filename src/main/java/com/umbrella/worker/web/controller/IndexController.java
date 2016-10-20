@@ -18,9 +18,11 @@ public class IndexController {
 	}
 	
 	@RequestMapping(value = "/waiting.html", method = RequestMethod.GET)
-	public ModelAndView test(ModelAndView mav, 
+	public ModelAndView waiting(ModelAndView mav, 
 			HttpServletRequest request) {
 		mav.setViewName("waiting");
 		return mav;
 	}
+	
+	
 }

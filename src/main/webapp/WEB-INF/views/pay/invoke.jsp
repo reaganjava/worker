@@ -21,11 +21,11 @@ function jsApiCall(){
 	       function(res){     
 	    	  if(res.err_msg == "get_brand_wcpay_request:ok" ) {
 	        	   
-	        	   window.location.href = "http://wx.xsh1314.com/pay/status/${ORDERNO}/1.html"
+	        	   window.location.href = "http://wx.xsh1314.com/pay/status/${ORDERNO}/${COUPONID}/1.html"
 	           } else if(res.err_msg == "get_brand_wcpay_request:fail" ) {
-	        	  lwindow.location.href = "http://wx.xsh1314.com/pay/status/${ORDERNO}/2.html"
+	        	  lwindow.location.href = "http://wx.xsh1314.com/pay/status/${ORDERNO}/${COUPONID}/2.html"
 	           } else if(res.err_msg == "get_brand_wcpay_request:cancel" )  {
-	        	   window.location.href  = "http://wx.xsh1314.com/pay/status/${ORDERNO}/2.html" 
+	        	   window.location.href  = "http://wx.xsh1314.com/pay/status/${ORDERNO}/${COUPONID}/2.html" 
 	           }  
 	           
 	           // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。 

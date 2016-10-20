@@ -25,6 +25,7 @@ import com.umbrella.worker.dto.ContactDO;
 import com.umbrella.worker.dto.MemberCouponDO;
 import com.umbrella.worker.dto.MemberDetailDO;
 import com.umbrella.worker.dto.MembersDO;
+import com.umbrella.worker.dto.MenuDO;
 import com.umbrella.worker.entity.WContact;
 import com.umbrella.worker.entity.WContactExample;
 import com.umbrella.worker.entity.WMemberCoupon;
@@ -32,6 +33,7 @@ import com.umbrella.worker.entity.WMemberCouponExample;
 import com.umbrella.worker.entity.WMemberDetail;
 import com.umbrella.worker.entity.WMembers;
 import com.umbrella.worker.entity.WMembersExample;
+import com.umbrella.worker.entity.WMenu;
 import com.umbrella.worker.entity.WMembersExample.Criteria;
 import com.umbrella.worker.entity.WOrderExample;
 import com.umbrella.worker.query.MembersQuery;
@@ -568,6 +570,64 @@ public class MemberServiceImpl  extends BaseServiceImpl implements IMemberServic
 		return result;
 	}
 	
+	@Override
+	public ResultDO getCoupon(int id) {
+		
+		ResultSupport result = new ResultSupport();
+		
+		WMemberCoupon memberCoupon = null;
+		if(!StringUtil.isGreatOne(id)) {
+			 result.setSuccess(false);
+			 return result;
+		} 
+		
+		try {
+			memberCoupon = memberCouponMapper.selectByPrimaryKey(id);
+		} catch (Exception e) {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+	        logger.error("[obj:supplier][opt:get][msg:"+e.getMessage()+"]");
+	        return result;
+		}
+		
+		MemberCouponDO memberCouponDO = getMemberCouponDO(memberCoupon);
+		if(memberCouponDO != null) {
+			result.setModel(ResultSupport.FIRST_MODEL_KEY, memberCouponDO);
+		} else {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			return result;
+		}
+		
+		return result;
+	}
+	
+	
+	public ResultDO verification(Integer id) {
+		ResultSupport result = new ResultSupport();
+		WMemberCoupon memberCoupon = new WMemberCoupon();
+		memberCoupon.setId(id);
+		memberCoupon.setStatus(2);
+		memberCoupon.setModifiAuthor("system");
+		memberCoupon.setModifiTime(Calendar.getInstance().getTime());
+		int recordNum = -1;
+		try {
+			recordNum = memberCouponMapper.updateByPrimaryKeySelective(memberCoupon);
+		} catch (Exception e) {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+	        logger.error("[obj:supplier][opt:get][msg:"+e.getMessage()+"]");
+	        return result;
+		}
+		if (recordNum != 1) {
+			result.setSuccess(false);
+			return result;
+		}
+		return result;
+	}
 	
 	private String getCouponNO() {
 		String couponNO = System.currentTimeMillis() + UUID.randomUUID().hashCode() + "";
