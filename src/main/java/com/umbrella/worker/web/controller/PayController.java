@@ -4,13 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -29,14 +27,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.umbrella.worker.dto.CouponDO;
+
 import com.umbrella.worker.dto.MemberCouponDO;
 import com.umbrella.worker.dto.OrderDO;
 import com.umbrella.worker.dto.PayrecordDO;
 import com.umbrella.worker.query.PayrecordQuery;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
-import com.umbrella.worker.service.ICouponService;
+
 import com.umbrella.worker.service.IMemberService;
 import com.umbrella.worker.service.IOrderService;
 import com.umbrella.worker.service.IPayService;
@@ -82,12 +80,16 @@ public class PayController extends BaseController{
 		PayrecordDO payrecordDO = new PayrecordDO();
 		payrecordDO.setwPrOrderNo(orderNo);
 		payrecordDO.setwPrFee(fee);
-		payrecordDO.setwPrIsCoupon(0);
-		if(memberCouponDO.getwMcCouponType() == 1) {
-			payrecordDO.setwPrCouponPrice(memberCouponDO.getwMcMoney());
+		if(result.isSuccess()) {
+			payrecordDO.setwPrIsCoupon(1);
+			if(memberCouponDO.getwMcCouponType() == 1) {
+				payrecordDO.setwPrCouponPrice(memberCouponDO.getwMcMoney());
+			} else {
+				float discount = memberCouponDO.getwMcDiscount();
+				payrecordDO.setwPrCouponPrice(fee.divide(fee.multiply(new BigDecimal(discount))));
+			}
 		} else {
-			float discount = memberCouponDO.getwMcDiscount();
-			payrecordDO.setwPrCouponPrice(fee.divide(fee.multiply(new BigDecimal(discount))));
+			payrecordDO.setwPrIsCoupon(0);
 		}
 		//payrecordDO.setwPrPayChannel(Constant.PAY_CHANNELS[0]);
 		payrecordDO.setwPrTimestamp((int) System.currentTimeMillis());
@@ -97,11 +99,13 @@ public class PayController extends BaseController{
 		payrecordDO.setCreateAuthor("system");
 		payrecordDO.setModifiAuthor("system");
 		payrecordDO.setDatalevel(1);
+	
 		result = null;
 		
 		result = payService.create(payrecordDO);
 		if(result.isSuccess()) {
-			
+			Integer id = (Integer) result.getModel(ResultSupport.FIRST_MODEL_KEY);
+			payrecordDO.setId(id);
 			mav.addObject("PAY_INFO", payrecordDO);
 			mav.addObject("COUPON_ID", couponId);
 			mav.setViewName("pay/info");
@@ -212,7 +216,9 @@ public class PayController extends BaseController{
 		ResultDO result = null;
 		if(status == 1) {
 			result = orderService.updateStatus(orderDO);
-			memberService.verification(couponId);
+			if(couponId != 0) {
+				memberService.verification(couponId);
+			}
 		} else {
 			mav.addObject("ORDERNO", orderNo);
 			mav.setViewName("pay/fail");
@@ -294,9 +300,12 @@ public class PayController extends BaseController{
     public String getPrepayId(PayrecordDO payrecordDO, String openid, String memberIP, String nonceStr) {
 	
 		logger.info("************openid***********：" + openid);
-		int srcFee = (int) (payrecordDO.getwPrFee().doubleValue() * 100);
-		int d = (int) (payrecordDO.getwPrCouponPrice().doubleValue() * 100);
-		int fee = srcFee - d;
+		int fee = (int) (payrecordDO.getwPrFee().doubleValue() * 100);
+		if(payrecordDO.getwPrIsCoupon() != 0) {
+			int srcFee = (int) (payrecordDO.getwPrFee().doubleValue() * 100);
+			int d = (int) (payrecordDO.getwPrCouponPrice().doubleValue() * 100);
+			fee = srcFee - d;
+		}
 		
 		// 获取prepayid
 		Map<String, String> map = new HashMap<String, String>();

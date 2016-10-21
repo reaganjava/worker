@@ -32,7 +32,7 @@
 <section class="pay-info">
 <p>订单号：<span>${PAY_INFO.wPrOrderNo}</span></p>
 <input type="hidden" value="${PAY_INFO.wPrOrderNo}" name="wPrOrderNo"/> 
-<p>订单总价：<span class="pay-price">￥${PAY_INFO.wPrFee}元 优惠 ￥${PAY_INFO.wPrCouponPrice}元</span></p>
+<p>订单总价：<span class="pay-price">￥${PAY_INFO.wPrFee}元<c:if test="${PAY_INFO.wPrIsCoupon != 0}"> 优惠 ￥${PAY_INFO.wPrCouponPrice}元</c:if></span></p>
 </section>
 <!--订单信息-->
 <section class="pays">
