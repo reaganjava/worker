@@ -1,7 +1,10 @@
 package com.umbrella.worker.web.controller;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.Cookie;
@@ -82,7 +85,12 @@ public class OrderController extends BaseController{
 			orderDO.setwOServiceType(taskDO.getServiceType());
 			orderDetailDO.setwOServerTime(taskDO.getHours());
 			orderDetailDO.setwOStaffCount(taskDO.getStaffCount());
-			orderDetailDO.setwOPrice(taskDO.getPrice());
+			int v = Integer.parseInt(orderDetailDO.getSubTime().split(":")[0]);
+			if(v == 18) {
+				orderDetailDO.setwOPrice(new BigDecimal(40));
+			} else {
+				orderDetailDO.setwOPrice(taskDO.getPrice());
+			}
 			break;
 		}
 		case 1: {
@@ -122,8 +130,11 @@ public class OrderController extends BaseController{
 		
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm");
 		
+		
 		try {
-			orderDetailDO.setwOSubscribe(format.parse(strDate));
+			Date d = format.parse(strDate);
+			
+			orderDetailDO.setwOSubscribe(d);
 		} catch (ParseException e) {
 			e.printStackTrace();
 			mav.setViewName("error");
