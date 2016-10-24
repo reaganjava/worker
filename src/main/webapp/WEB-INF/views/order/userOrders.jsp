@@ -16,6 +16,8 @@
 </head>
 
 <body>
+<form action="${pageContext.request.contextPath}/order/getOrder.html"
+		method="POST" id="orderForm">
 <div class="xsh">
 <div class="page-all">
 <div class="container">
@@ -60,6 +62,12 @@
 <div class="cancle-btn">
 <c:if test="${status == 1}">
 <a href="${pageContext.request.contextPath}/order/payOrder/${order.id}.html">立即支付</a>
+<!-- 删除订单 -->
+<div class="address-detail"
+						style="width: 96%; margin: 0 auto; margin-top: 45px;" id="clist">
+						
+				 	 </div>
+				 	 
 </c:if>
 <c:if test="${status == 2}">
 <a href="javascript:;" onclick="cancelShow(${order.id})">取消订单</a>
@@ -100,6 +108,7 @@
 </ul>
 </div>
 <!---内容结束-->
+</form>
 </body>
 <script type="text/javascript">
 	var id = 0;
@@ -133,5 +142,65 @@
 				});
 		}
 	}
+	
+	
+	//删除订单
+	function del(id) {
+
+		$.ajax({
+			  url: "${pageContext.request.contextPath}/members/removeContact/" + id + ".json",
+			  success:function(data) {
+				
+				  if(data != 0) {
+					  $.ajax({
+						  url: "${pageContext.request.contextPath}/members/contacts.json",
+						  success:function(data) {
+							
+							  if(data != 0) {
+								 $("#clist").empty();
+								 $("#clist").append(data);
+							  }
+						  }
+						});
+				  }
+			  }
+			});
+	}
+
+		
+	function onDefault(id) {//设置一个默认的
+		
+		$.ajax({
+			  url: "${pageContext.request.contextPath}/members/default/" + id + ".json",
+			  success:function(data) {
+				
+				  if(data != 0) {
+					 	$('li').addClass('choose-2');
+					 	$('#c' + id).removeClass('choose-2');
+					 	$('#cid').val(id);
+				  }
+			  }
+			});
+	}
+	$(function(){	
+		$.ajax({
+			  url: "${pageContext.request.contextPath}/members/contacts.json",
+			  success:function(data) {
+				
+				  if(data != 0) {
+					
+					 $("#clist").append(data);
+				  }
+			  }
+			});
+			var isView = false;
+		 	$("#btn_sub").click(function(){
+		 	    var is = true;
+		 	
+		 	   	if(is) {
+		 	   		$("#orderForm").submit();
+		 	   	}
+		 	});
+		 });
 </script>
 </html>
