@@ -19,7 +19,7 @@
 <div class="container">
 <nav class="navbar">
 <ul>
-<li><a href="${pageContext.request.contextPath}/order/userOrders/1/1.html"><img src="${pageContext.request.contextPath}/images/left.png"/></a></li>
+<li><a href="${pageContext.request.contextPath}/order/userOrders/1.html"><img src="${pageContext.request.contextPath}/images/left.png"/></a></li>
 <li><span class="navber-word">订单详情</span></li>
 <li></li>
 </ul>

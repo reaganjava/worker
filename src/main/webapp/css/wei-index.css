@@ -193,7 +193,7 @@ img{ border:0; padding:0; margin:0;}
 .service-a span:nth-child(1){ background-size: 40px; width:56px; height:56px; display:inline-block; border-radius:50%;}
 .service-a .house-clean-img{background: url(../images/houseclean-icon.png) center no-repeat #ff6867;}
 .service-a .house-worker-img{ background:url(../images/houseworker-icon.png) center no-repeat #ff886c;}
-.service-a .baomu-img{ background:url(../images/baomu--icon.png) center no-repeat #ff8e6d;}
+.service-a .baomu-img{ background:url(../images/baomu-icon.png) center no-repeat #ff8e6d;}
 .service-a .old-img{ background:url(../images/older-icon.png) center no-repeat #ffa871;}
 .service-a .baby-img{ background:url(../images/child-icon.png) center no-repeat #ff986f;}
 .service-a .child-img{ background:url(../images/baby-icon.png) center no-repeat #ff7468;}

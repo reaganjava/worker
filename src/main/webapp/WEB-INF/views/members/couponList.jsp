@@ -33,7 +33,7 @@
           <c:if test="${coupon.wMcCouponType == 2}">
           <span class="hey-rmb-icon">优惠</span><span class="hey-rmb-num">${coupon.discount}%</span>
           </c:if>
-            <div class="p-c-w"><span>${coupon.wMcCouponTitle}</span><br/></div>
+            <div class="p-c-w"><span style="margin-left: 100px;">${coupon.wMcCouponTitle}</span><br/></div>
             </div>
           <div class="hey-list-b"><span>有效 <span><fmt:formatDate value="${coupon.wMcDeadline}"  type="BOTH" dateStyle="full"/>前</span></span></div>
           </div>

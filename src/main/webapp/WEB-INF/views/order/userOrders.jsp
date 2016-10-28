@@ -62,7 +62,9 @@
 <li><a><button>返回</button></a></li></ul></div>
 </div>
 <!---弹窗开始---->
-<div class=" time-pop-ups" style=" display:none" id="cancelInfo">
+<!-- <div id="back">  -->
+<!-- width: 200px;height: 100px;border:1px solid red;width:500px;height:380px;position:absolute;left:50%;margin-left:-250px;top:50%;margin-top:-190px;background-color: fff" -->
+<div id="cancelInfo" class=" time-pop-ups" style=" display:none;" >
 <form class="f-time">
 <input type="radio" name="time" value="1" onclick="cancel(1)">时间定错了<br>
 <input type="radio" name="time" value="2" onclick="cancel(2)">位置定错了<br>
@@ -70,13 +72,14 @@
 <input type="radio" name="time" value="4" onclick="cancel(4)">其他原因<br>
 </form>
 </div>
+<!--</div> -->
 </div>
 </div>
 </div>
 <!--内容结束--->
 <div class="footerbar">
 <ul class="footer-icon">
-<li><a href="${pageContext.request.contextPath}/index.html"><img src="${pageContext.request.contextPath}/images/index-icon.png"/><span>首页</span></a></li>
+<li><a href="${pageContext.request.contextPath}/order/userOrders/1.html"><img src="${pageContext.request.contextPath}/images/index-icon.png"/><span>首页</span></a></li>
 <li><a href="${pageContext.request.contextPath}/order/userOrders/1.html"><img src="${pageContext.request.contextPath}/images/order-icon-now.png"/><span class="be-now">订单</span></a></li>
 <li><a href="${pageContext.request.contextPath}/members/couponList.html"><img src="${pageContext.request.contextPath}/images/sale-icon.png"/><span>优惠券</span></a></li>
 <li><a href="${pageContext.request.contextPath}/members/accountInfo.html"><img src="${pageContext.request.contextPath}/images/mine.png"/><span>我的</span></li>
@@ -140,6 +143,10 @@
 				  }
 			  }
 			});
+		
+		
+		
+		
 	}
 
 		
@@ -169,5 +176,27 @@
 			  }
 			});
 		 });
+	
+	
+	//showId表示弹出层的divId,backId表示遮罩层的divId;
+	
+	/* function del(showId,backId){
+		document.getElementById(showId).style.display = 'block';
+		document.getElementById(showId).style.display = 'block';
+		
+		var backdiv = document.getElementById(backId);
+		backId.style.width = document.body.scrollWidth;
+		$("#"+backId).height($(document).height());
+	} */
+	
+	
+	//关闭弹框
+	/*function hideDiv(showId,backId){
+		//关闭弹出层
+		document.getElementById(showId).style.display = 'none';
+		//关闭遮罩层
+		document.getElementById(backId).style.display = 'none';
+	}*/
+	
 </script>
 </html>
