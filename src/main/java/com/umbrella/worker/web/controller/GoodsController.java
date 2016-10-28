@@ -37,6 +37,25 @@ public class GoodsController extends BaseController {
 	@RequestMapping(value = "/clean.html", method = RequestMethod.GET)
 	public ModelAndView clean(ModelAndView mav, 
 			HttpServletRequest request) {
+		long timestamp = Calendar.getInstance().getTimeInMillis();
+		List<DateValueDO> dateValueDOList = new ArrayList<DateValueDO>();
+		
+		Date date = new Date(timestamp);
+		DateFormat dateFormat = new SimpleDateFormat("MM月dd日"); 
+		DateFormat dateValueFormat = new SimpleDateFormat("yyyy-MM-dd"); 
+		DateValueDO dateValueDO = new DateValueDO();
+		dateValueDO.setWeekDate(dateFormat.format(date) + "(今天)");
+		dateValueDO.setDateValue(dateValueFormat.format(date));
+		
+		for(int day = 1; day < 6; day++) {
+			date = new Date(timestamp);
+			dateValueDO = new DateValueDO();
+			dateValueDO.setWeekDate(dateFormat.format(date));
+			dateValueDO.setDateValue(dateValueFormat.format(date));
+			dateValueDOList.add(dateValueDO);
+			timestamp = timestamp + 86400000;
+		}
+		mav.addObject("WEEK_DATE_LIST", dateValueDOList);
 		mav.setViewName("goods/clean");
 		return mav;
 	}
@@ -105,32 +124,12 @@ public class GoodsController extends BaseController {
 		query.setIsDefault(1);
 		System.out.println(memberId);
 		ResultDO result = contactService.list(query);
-		
-		long timestamp = Calendar.getInstance().getTimeInMillis();
-		List<DateValueDO> dateValueDOList = new ArrayList<DateValueDO>();
-		
-		Date date = new Date(timestamp);
-		DateFormat dateFormat = new SimpleDateFormat("MM月dd日"); 
-		DateFormat dateValueFormat = new SimpleDateFormat("yyyy-MM-dd"); 
-		DateValueDO dateValueDO = new DateValueDO();
-		dateValueDO.setWeekDate(dateFormat.format(date) + "(今天)");
-		dateValueDO.setDateValue(dateValueFormat.format(date));
-		
-		for(int day = 1; day < 6; day++) {
-			date = new Date(timestamp);
-			dateValueDO = new DateValueDO();
-			dateValueDO.setWeekDate(dateFormat.format(date));
-			dateValueDO.setDateValue(dateValueFormat.format(date));
-			dateValueDOList.add(dateValueDO);
-			timestamp = timestamp + 86400000;
-		}
-		
+
 		if(result.isSuccess()) {
 			List<ContactDO> list = (List<ContactDO>) result.getModel(ResultSupport.FIRST_MODEL_KEY);
-		
-			mav.addObject("CONTACT_ID", list.get(0).getId());
-				
-			mav.addObject("WEEK_DATE_LIST", dateValueDOList);
+			if(list != null) {
+				mav.addObject("CONTACT_ID", list.get(0).getId());
+			}
 			mav.setViewName("goods/reserver");
 		} else {
 			mav.setViewName("error");

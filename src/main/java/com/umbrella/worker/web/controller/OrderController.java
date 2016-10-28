@@ -86,12 +86,7 @@ public class OrderController extends BaseController{
 			orderDO.setwOServiceType(taskDO.getServiceType());
 			orderDetailDO.setwOServerTime(taskDO.getHours());
 			orderDetailDO.setwOStaffCount(taskDO.getStaffCount());
-			int v = Integer.parseInt(orderDetailDO.getSubTime().split(":")[0]);
-			if(v == 18) {
-				orderDetailDO.setwOPrice(new BigDecimal(40));
-			} else {
-				orderDetailDO.setwOPrice(taskDO.getPrice());
-			}
+			orderDetailDO.setwOPrice(taskDO.getPrice());
 			break;
 		}
 		case 1: {
@@ -125,22 +120,9 @@ public class OrderController extends BaseController{
 		
 	
 		orderDetailDO.setCreateAuthor(memberMobile);
-		
-		String strDate = orderDetailDO.getSubDate() + " " + orderDetailDO.getSubTime();
-		
-		
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-		
-		
-		try {
-			Date d = format.parse(strDate);
-			
-			orderDetailDO.setwOSubscribe(d);
-		} catch (ParseException e) {
-			e.printStackTrace();
-			mav.setViewName("error");
-			return mav;
-		}
+
+		System.out.println(taskDO.getSubscribe());
+		orderDetailDO.setwOSubscribe(taskDO.getSubscribe());
 		
 		orderDO.setOrderDetailDO(orderDetailDO);
 		orderDO.setwOMembersId(memberId);
@@ -179,7 +161,7 @@ public class OrderController extends BaseController{
 			resultDO = memberService.get(memberId);
 			MembersDO membersDO = (MembersDO) resultDO.getModel(ResultSupport.FIRST_MODEL_KEY);
 			List<MemberCouponDO> memberCouponDOList = membersDO.getMemberCoupons();
-			System.out.println(memberCouponDOList.size());
+			
 			mav.addObject("MEMBER_COUPON_LIST", memberCouponDOList);
 		} else {
 			mav.setViewName("error");
@@ -280,14 +262,14 @@ public class OrderController extends BaseController{
 	
 	
 	
-	@RequestMapping(value = "/userOrders/{status}/{pageNo}.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/userOrders/{status}/{pageNo}.json", method = RequestMethod.GET)
 	public ModelAndView getUserOrders(ModelAndView mav,
 			@PathVariable(value="status") Integer status,
 			@PathVariable(value="pageNo") Integer pageNo,
 			HttpServletRequest request) {
 		Cookie cookie = getCookieByName(request, "MEMBER_ID");	
 		if(cookie == null) {
-			return new ModelAndView("redirect:/members/login.html");
+			return mav.addObject("JSON_DATA", 0);
 		} 
 		Integer memberId = Integer.parseInt(cookie.getValue());
 		OrderQuery query = new OrderQuery();
@@ -295,24 +277,63 @@ public class OrderController extends BaseController{
 		query.setMemberId(memberId);
 		query.setPage(true);
 		query.setPageNO(pageNo);
-		query.setPageRows(100);
+		query.setPageRows(1000);
 		ResultDO result = orderService.list(query);
 		if(result.isSuccess()) {
 			PageBeanUtil pageBean = new PageBeanUtil();
 			long count = (Long) result.getModel(ResultSupport.SECOND_MODEL_KEY);
 			pageBean.setCurrentPage(pageNo);
-			pageBean.setPageSize(100);
+			pageBean.setPageSize(1000);
 			pageBean.setRecordCount(count);
 			pageBean.setPageCount(count);
 			pageBean.setPages(pageNo);
-			pageBean.setDataList((List<Object>) result.getModel(ResultSupport.FIRST_MODEL_KEY));
-			mav.addObject("status", status);
-			mav.addObject("PAGE_BEAN", pageBean);
-			mav.setViewName("order/userOrders");
+			List<OrderDO> orderList = (List<OrderDO>) result.getModel(ResultSupport.FIRST_MODEL_KEY);
+			String html = "";
+		    for(OrderDO order : orderList) {
+		    	html += "<section class=\"order\">"
+		    	+ "<div class=\"order-title\"><span>下单时间：<fmt:formatDate value=\"" + order.getCreateTime() + "\"  type=\"BOTH\" dateStyle=\"full\"/></span><a href=\"/order/orderDetail/" + order.getId() + ".html\"><span class=\"o-more\"></span></a></div>"
+		        + "<div class=\"order-detail\"><ul>"
+		        + "<li>订单号：<span>" + order.getwOOrderNo() + "</span></li>"
+		        + "<li>服务类型：<span>" + order.getwOServiceName() + "</span></li></ul>"
+		        + "<div class=\"cancle-btn\">";
+		    	switch(status) {
+			    	case 1: {
+			    		html += "<a href=\"javascript:;\" onclick=\"del(" + order.getId() + ")\">删除订单</a><br/>";
+			    		html += "<a href=\"/order/payOrder/" + order.getId() + ".html\">立即支付</a>";
+			    		break;
+			    	}
+			    	case 2: {
+			    		html += "<a href=\"javascript:;\" onclick=\"cancelShow(" + order.getId() + ")\">取消订单</a>";
+			    		break;
+			    	}
+			    	case 3: {
+			    		html += "<button onclick=\"confirmOrder(" + order.getId() + ")\">确认订单</button>";
+			    		break;                                            
+			    	}
+			    	
+		    	}
+		    	html += "</div></div></section>";
+
+		    }
+		    mav.addObject("JSON_DATA", html);
 		} else {
-			return new ModelAndView("redirect:/members/login.html");
+			mav.addObject("JSON_DATA", 0);
 		}
 		
+		return mav;
+	}
+	
+	@RequestMapping(value = "/userOrders/{status}.html", method = RequestMethod.GET)
+	public ModelAndView getUserOrders(ModelAndView mav,
+			@PathVariable(value="status") Integer status,
+			HttpServletRequest request) {
+		Cookie cookie = getCookieByName(request, "MEMBER_ID");	
+		if(cookie == null) {
+			return new ModelAndView("redirect:/members/login.html");
+		} 
+		
+		mav.setViewName("order/userOrders");
+		mav.addObject("STATUS", status);
 		return mav;
 	}
 	
@@ -322,29 +343,15 @@ public class OrderController extends BaseController{
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "/contacts.json", method = RequestMethod.GET)
-	public ModelAndView contacts(ModelAndView mav, HttpServletRequest request) {
-		
-		Cookie cookie = getCookieByName(request, "MEMBER_ID");
-		Integer memberId = Integer.parseInt(cookie.getValue());
-		OrderQuery query = new OrderQuery();
-		query.setMemberId(memberId);
-		ResultDO resultDO = orderService.list(query);
-		System.out.println(resultDO);
-		if(resultDO.isSuccess()) {//判断查询是否成功  
-			String html = "";
-			List<OrderDO> list = (List<OrderDO>) resultDO.getModel(ResultSupport.FIRST_MODEL_KEY);
-			for(OrderDO orderDO : list) {
-					html = html + "<ul><li class=\"choose-2\" onClick=\"onDefault(" + orderDO.getId() + ") \" id=\"c" + orderDO.getId() + "\"><div class=\"choose-con1\">"
-							+ "<span>" + orderDO.getwOOrderNo()+ "</span>"
-							+ "<span>" + orderDO.getwOServiceName()+ "</span>"
-							+ "<a href=\"javascript:void(0);\" class=\"del\" style=\"float: right;margin-top: -20px;\" onclick=\"del(" + orderDO.getId() + ");\" >删除地址</a>"
-							+ "</div><div class=\"choose-con2\">重庆</div></li></ul></div>";
-			}
-			mav.addObject("JSON_DATA", html);
+	@RequestMapping(value = "/del/{id}.json", method = RequestMethod.GET)
+	public ModelAndView del(ModelAndView mav, 
+			@PathVariable(value="id") Integer id,
+			HttpServletRequest request) {
+		ResultDO result = orderService.remove(id);
+		if(result.isSuccess()) {
+			mav.addObject("JSON_DATA", 1);
 		} else {
 			mav.addObject("JSON_DATA", 0);
-			return mav;
 		}
 		return mav;
 	}

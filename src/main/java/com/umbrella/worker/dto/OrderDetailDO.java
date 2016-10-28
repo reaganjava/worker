@@ -81,14 +81,7 @@ public class OrderDetailDO extends BaseDO {
     
     private String wOMessage;
     
-    
-    private String subDate;
-    
-    
-    private String subTime;
-
-
-
+ 
 	public Integer getId() {
 		return id;
 	}
@@ -317,25 +310,7 @@ public class OrderDetailDO extends BaseDO {
 	}
 
 
-	public String getSubDate() {
-		return subDate;
-	}
-
-
-	public void setSubDate(String subDate) {
-		this.subDate = subDate;
-	}
-
-
-	public String getSubTime() {
-		return subTime;
-	}
-
-
-	public void setSubTime(String subTime) {
-		this.subTime = subTime;
-	}
-
+	
 
 	public String getwCaneclInfo() {
 		return wCaneclInfo;

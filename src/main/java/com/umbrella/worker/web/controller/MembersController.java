@@ -95,6 +95,7 @@ public class MembersController extends BaseController {
 			CouponDO couponDO = (CouponDO) resultDO.getModel(ResultSupport.FIRST_MODEL_KEY);
 			MemberCouponDO memberCouponDO = new MemberCouponDO();
 			memberCouponDO.setwMcCouponTitle(couponDO.getwCTitle());
+			memberCouponDO.setwMcCouponId(couponDO.getId());
 			memberCouponDO.setwMcCouponType(couponDO.getwCType());
 			memberCouponDO.setwMcMemberId(memberId);
 			memberCouponDO.setwMcMoney(couponDO.getwCMoney());

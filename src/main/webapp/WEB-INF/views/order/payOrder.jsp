@@ -58,7 +58,7 @@
 					<div class="sale-in">
 						
 							优惠： <select id="sales" >
-							<option value="0">请使用优化卷</option>
+							<option value="0">请使用优惠券</option>
 							 <c:forEach items="${MEMBER_COUPON_LIST}" var="coupon">
 								<option value="${coupon.id}">${coupon.wMcMoney}元优惠劵</option>
 							 </c:forEach>

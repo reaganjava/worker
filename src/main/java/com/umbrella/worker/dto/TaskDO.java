@@ -1,6 +1,9 @@
 package com.umbrella.worker.dto;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class TaskDO {
 
@@ -27,6 +30,11 @@ public class TaskDO {
 	private String message;
 
 	private BigDecimal price;
+	   
+    private String subDate;
+    
+    
+    private String subTime;
 
 	public String getServiceName() {
 		return serviceName;
@@ -122,6 +130,36 @@ public class TaskDO {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+	public String getSubDate() {
+		return subDate;
+	}
+
+
+	public void setSubDate(String subDate) {
+		this.subDate = subDate;
+	}
+
+
+	public String getSubTime() {
+		return subTime;
+	}
+
+
+	public void setSubTime(String subTime) {
+		this.subTime = subTime;
+	}
+
+	public Date getSubscribe() {
+		String strDate = subDate + " " + subTime;
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+		try {
+			return format.parse(strDate);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

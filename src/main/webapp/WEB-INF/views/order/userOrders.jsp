@@ -15,7 +15,7 @@
 <title>我的订单</title>
 </head>
 
-<body>
+<body >
 <form action="${pageContext.request.contextPath}/order/getOrder.html"
 		method="POST" id="orderForm">
 <div class="xsh">
@@ -25,60 +25,35 @@
 <ul>
 <c:if test="${status == 1}">
 <li class="not-service"><a style="color:#f30;">待付款</a></li>
-<li><a href="${pageContext.request.contextPath}/order/userOrders/2/1.html" >待服务</a></li>
-<li><a href="${pageContext.request.contextPath}/order/userOrders/3/1.html">待验收</a></li>
-<li><a href="${pageContext.request.contextPath}/order/userOrders/4/1.html">退款中</a></li>
+<li><a href="${pageContext.request.contextPath}/order/userOrders/2.html" >待服务</a></li>
+<li><a href="${pageContext.request.contextPath}/order/userOrders/3.html">待验收</a></li>
+<li><a href="${pageContext.request.contextPath}/order/userOrders/4.html">退款中</a></li>
 </c:if>
 <c:if test="${status == 2}">
-<li><a href="${pageContext.request.contextPath}/order/userOrders/1/1.html" >待付款</a></li>
+<li><a href="${pageContext.request.contextPath}/order/userOrders/1.html" >待付款</a></li>
 <li class="not-service"><a style="color:#f30;" >待服务</a></li>
-<li><a href="${pageContext.request.contextPath}/order/userOrders/3/1.html">待验收</a></li>
-<li><a href="${pageContext.request.contextPath}/order/userOrders/4/1.html">退款中</a></li>
+<li><a href="${pageContext.request.contextPath}/order/userOrders/3.html">待验收</a></li>
+<li><a href="${pageContext.request.contextPath}/order/userOrders/4.html">退款中</a></li>
 </c:if>
 <c:if test="${status == 3}">
-<li><a href="${pageContext.request.contextPath}/order/userOrders/1/1.html" >待付款</a></li>
-<li><a href="${pageContext.request.contextPath}/order/userOrders/2/1.html" >待服务</a></li>
-<li><a href="${pageContext.request.contextPath}/order/userOrders/3/1.html">待验收</a></li>
-<li><a href="${pageContext.request.contextPath}/order/userOrders/4/1.html">退款中</a></li>
+<li><a href="${pageContext.request.contextPath}/order/userOrders/1.html" >待付款</a></li>
+<li><a href="${pageContext.request.contextPath}/order/userOrders/2.html" >待服务</a></li>
+<li class="not-service"><a style="color:#f30;" >待验收</a></li>
+<li><a href="${pageContext.request.contextPath}/order/userOrders/4.html">退款中</a></li>
 </c:if>
 <c:if test="${status == 4}">
-<li><a href="${pageContext.request.contextPath}/order/userOrders/1/1.html" >待付款</a></li>
-<li><a href="${pageContext.request.contextPath}/order/userOrders/2/1.html" >待服务</a></li>
-<li><a href="${pageContext.request.contextPath}/order/userOrders/3/1.html">待验收</a></li>
+<li><a href="${pageContext.request.contextPath}/order/userOrders/1.html" >待付款</a></li>
+<li><a href="${pageContext.request.contextPath}/order/userOrders/2.html" >待服务</a></li>
+<li><a href="${pageContext.request.contextPath}/order/userOrders/3.html">待验收</a></li>
 <li class="not-service"><a style="color:#f30;" >退款中</a></li>
 </c:if>
 </ul>
 </div>
 <!--分类结束-->
 <div class="clean"></div>
-<c:forEach items="${PAGE_BEAN.dataList}" var="order">
-<section class="order">
-<div class="order-title"><span>下单时间：<fmt:formatDate value="${order.createTime}"  type="BOTH" dateStyle="full"/></span><a href="${pageContext.request.contextPath}/order/orderDetail/${order.id}.html"><span class="o-more"></span></a></div>
-<div class="order-detail">
-<ul>
-<li>订单号：<span>${order.wOOrderNo}</span></li>
-<li>服务类型：<span>${order.wOServiceName}</span></li>
-</ul>
-<div class="cancle-btn">
-<c:if test="${status == 1}">
-<a href="${pageContext.request.contextPath}/order/payOrder/${order.id}.html">立即支付</a>
-<!-- 删除订单 -->
-<div class="address-detail"
-						style="width: 96%; margin: 0 auto; margin-top: 45px;" id="clist">
-						
-				 	 </div>
-				 	 
-</c:if>
-<c:if test="${status == 2}">
-<a href="javascript:;" onclick="cancelShow(${order.id})">取消订单</a>
-</c:if>
-<c:if test="${status == 3}">
-<button onclick="confirmOrder(${order.id})">确认订单</button>
-</c:if>
+<div id="orderList">
+
 </div>
-</div>
-</section>
-</c:forEach>
 <div class="cancle-remaind" style="display:none;">
 <div class="cr-title"><span>温馨提示：服务前2小时取消订单，我们将收取全款50%的误工费。</span></div>
 <div class="cr-btn">
@@ -102,7 +77,7 @@
 <div class="footerbar">
 <ul class="footer-icon">
 <li><a href="${pageContext.request.contextPath}/index.html"><img src="${pageContext.request.contextPath}/images/index-icon.png"/><span>首页</span></a></li>
-<li><a href="${pageContext.request.contextPath}/order/userOrders/1/1.html"><img src="${pageContext.request.contextPath}/images/order-icon-now.png"/><span class="be-now">订单</span></a></li>
+<li><a href="${pageContext.request.contextPath}/order/userOrders/1.html"><img src="${pageContext.request.contextPath}/images/order-icon-now.png"/><span class="be-now">订单</span></a></li>
 <li><a href="${pageContext.request.contextPath}/members/couponList.html"><img src="${pageContext.request.contextPath}/images/sale-icon.png"/><span>优惠券</span></a></li>
 <li><a href="${pageContext.request.contextPath}/members/accountInfo.html"><img src="${pageContext.request.contextPath}/images/mine.png"/><span>我的</span></li>
 </ul>
@@ -148,17 +123,17 @@
 	function del(id) {
 
 		$.ajax({
-			  url: "${pageContext.request.contextPath}/members/removeContact/" + id + ".json",
+			  url: "${pageContext.request.contextPath}/order/del/" + id + ".json",
 			  success:function(data) {
 				
 				  if(data != 0) {
 					  $.ajax({
-						  url: "${pageContext.request.contextPath}/members/contacts.json",
+						  url: "${pageContext.request.contextPath}/order/userOrders/${status}/1.json",
 						  success:function(data) {
 							
 							  if(data != 0) {
-								 $("#clist").empty();
-								 $("#clist").append(data);
+								 $("#orderList").empty();
+								 $("#orderList").append(data);
 							  }
 						  }
 						});
@@ -184,23 +159,15 @@
 	}
 	$(function(){	
 		$.ajax({
-			  url: "${pageContext.request.contextPath}/members/contacts.json",
+			  url: "${pageContext.request.contextPath}/order/userOrders/${status}/1.json",
 			  success:function(data) {
 				
 				  if(data != 0) {
 					
-					 $("#clist").append(data);
+					 $("#orderList").append(data);
 				  }
 			  }
 			});
-			var isView = false;
-		 	$("#btn_sub").click(function(){
-		 	    var is = true;
-		 	
-		 	   	if(is) {
-		 	   		$("#orderForm").submit();
-		 	   	}
-		 	});
 		 });
 </script>
 </html>
