@@ -36,11 +36,11 @@
 <li>联系人&nbsp; &nbsp;：<span>${ORDER_INFO.orderDetailDO.wOContact}</span></li>
 <li>联系电话：<span>${ORDER_INFO.orderDetailDO.wOTelephone}</span></li>
 <li>服务地址：<span>${ORDER_INFO.orderDetailDO.wOAddress} </span></li>
-<cf:if test="${ORDER_INFO.wOServiceType == 0}">
+<c:if test="${ORDER_INFO.wOServiceType == 0}">
 <li>服务时长：<span>${ORDER_INFO.orderDetailDO.wOServerTime}小时</span></li>
 <li>服务人数：<span>${ORDER_INFO.orderDetailDO.wOStaffCount}人</span></li>
 <li>服务时间：<span><fmt:formatDate value="${ORDER_INFO.orderDetailDO.wOSubscribe}"  type="BOTH" dateStyle="full"/></span></li>
-</cf:if>
+</c:if>
 <li>实际付款：<span>${ORDER_INFO.wOFee}</span></li>
 </ul>
 </div>
