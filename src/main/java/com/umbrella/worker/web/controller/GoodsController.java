@@ -63,6 +63,25 @@ public class GoodsController extends BaseController {
 	@RequestMapping(value = "/lock.html", method = RequestMethod.GET)
 	public ModelAndView lock(ModelAndView mav, 
 			HttpServletRequest request) {
+		long timestamp = Calendar.getInstance().getTimeInMillis();
+		List<DateValueDO> dateValueDOList = new ArrayList<DateValueDO>();
+		
+		Date date = new Date(timestamp);
+		DateFormat dateFormat = new SimpleDateFormat("MM月dd日"); 
+		DateFormat dateValueFormat = new SimpleDateFormat("yyyy-MM-dd"); 
+		DateValueDO dateValueDO = new DateValueDO();
+		dateValueDO.setWeekDate(dateFormat.format(date) + "(今天)");
+		dateValueDO.setDateValue(dateValueFormat.format(date));
+		
+		for(int day = 1; day < 6; day++) {
+			date = new Date(timestamp);
+			dateValueDO = new DateValueDO();
+			dateValueDO.setWeekDate(dateFormat.format(date));
+			dateValueDO.setDateValue(dateValueFormat.format(date));
+			dateValueDOList.add(dateValueDO);
+			timestamp = timestamp + 86400000;
+		}
+		mav.addObject("WEEK_DATE_LIST", dateValueDOList);
 		mav.setViewName("goods/lock");
 		return mav;
 	}
@@ -70,6 +89,25 @@ public class GoodsController extends BaseController {
 	@RequestMapping(value = "/pip.html", method = RequestMethod.GET)
 	public ModelAndView pip(ModelAndView mav, 
 			HttpServletRequest request) {
+		long timestamp = Calendar.getInstance().getTimeInMillis();
+		List<DateValueDO> dateValueDOList = new ArrayList<DateValueDO>();
+		
+		Date date = new Date(timestamp);
+		DateFormat dateFormat = new SimpleDateFormat("MM月dd日"); 
+		DateFormat dateValueFormat = new SimpleDateFormat("yyyy-MM-dd"); 
+		DateValueDO dateValueDO = new DateValueDO();
+		dateValueDO.setWeekDate(dateFormat.format(date) + "(今天)");
+		dateValueDO.setDateValue(dateValueFormat.format(date));
+		
+		for(int day = 1; day < 6; day++) {
+			date = new Date(timestamp);
+			dateValueDO = new DateValueDO();
+			dateValueDO.setWeekDate(dateFormat.format(date));
+			dateValueDO.setDateValue(dateValueFormat.format(date));
+			dateValueDOList.add(dateValueDO);
+			timestamp = timestamp + 86400000;
+		}
+		mav.addObject("WEEK_DATE_LIST", dateValueDOList);
 		mav.setViewName("goods/pip");
 		return mav;
 	}
@@ -77,6 +115,25 @@ public class GoodsController extends BaseController {
 	@RequestMapping(value = "/toilet.html", method = RequestMethod.GET)
 	public ModelAndView toilet(ModelAndView mav, 
 			HttpServletRequest request) {
+		long timestamp = Calendar.getInstance().getTimeInMillis();
+		List<DateValueDO> dateValueDOList = new ArrayList<DateValueDO>();
+		
+		Date date = new Date(timestamp);
+		DateFormat dateFormat = new SimpleDateFormat("MM月dd日"); 
+		DateFormat dateValueFormat = new SimpleDateFormat("yyyy-MM-dd"); 
+		DateValueDO dateValueDO = new DateValueDO();
+		dateValueDO.setWeekDate(dateFormat.format(date) + "(今天)");
+		dateValueDO.setDateValue(dateValueFormat.format(date));
+		
+		for(int day = 1; day < 6; day++) {
+			date = new Date(timestamp);
+			dateValueDO = new DateValueDO();
+			dateValueDO.setWeekDate(dateFormat.format(date));
+			dateValueDO.setDateValue(dateValueFormat.format(date));
+			dateValueDOList.add(dateValueDO);
+			timestamp = timestamp + 86400000;
+		}
+		mav.addObject("WEEK_DATE_LIST", dateValueDOList);
 		mav.setViewName("goods/toilet");
 		return mav;
 	}

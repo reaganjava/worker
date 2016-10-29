@@ -27,6 +27,7 @@
 <li></li>
 </ul>
 </nav>
+
 <div class="lock-type"><span>请选择服务类型</span></div>
 <div class="lock-choose" id="pipType">
 <a href="javascript:void();" onclick="selectPip(1)">
@@ -128,5 +129,5 @@ function selectT(t) {
 	
 	};
 }
-</script>
+
 </html>

@@ -156,8 +156,7 @@ public class TaskDO {
 		try {
 			return format.parse(strDate);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		
 		}
 		return null;
 	}

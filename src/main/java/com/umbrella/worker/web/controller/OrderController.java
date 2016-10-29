@@ -87,6 +87,7 @@ public class OrderController extends BaseController{
 			orderDetailDO.setwOServerTime(taskDO.getHours());
 			orderDetailDO.setwOStaffCount(taskDO.getStaffCount());
 			orderDetailDO.setwOPrice(taskDO.getPrice());
+			orderDetailDO.setwOSubscribe(taskDO.getSubscribe());
 			break;
 		}
 		case 1: {
@@ -121,9 +122,6 @@ public class OrderController extends BaseController{
 	
 		orderDetailDO.setCreateAuthor(memberMobile);
 
-		System.out.println(taskDO.getSubscribe());
-		orderDetailDO.setwOSubscribe(taskDO.getSubscribe());
-		
 		orderDO.setOrderDetailDO(orderDetailDO);
 		orderDO.setwOMembersId(memberId);
 		orderDO.setCreateAuthor(memberMobile);
@@ -216,6 +214,30 @@ public class OrderController extends BaseController{
 		}
 		
 		mav.setViewName("order/detail");
+		return mav;
+	}
+	
+	@RequestMapping(value = "/paySuccessOrder/{id}.html", method = RequestMethod.GET)
+	public ModelAndView paySuccessOrder(ModelAndView mav, 
+			@PathVariable(value="id") Integer id,
+			HttpServletRequest request) {
+	
+		ResultDO resultDO = orderService.get(id);
+		OrderDO orderOD = null;
+		if(resultDO.isSuccess()) {
+			orderOD = (OrderDO) resultDO.getModel(ResultSupport.FIRST_MODEL_KEY);
+			mav.addObject("ORDER_INFO", orderOD);
+		} else {
+			mav.setViewName("error");
+		}
+	
+		if(resultDO.isSuccess()) {
+		
+		} else {
+			mav.setViewName("error");
+		}
+		
+		mav.setViewName("order/payOrderDetail");
 		return mav;
 	}
 	

@@ -35,10 +35,12 @@
 									<i>${ORDER_INFO.orderDetailDO.wOContact}
 										电话:${ORDER_INFO.orderDetailDO.wOTelephone}</i>
 							</span></li>
+							<cf:if test="${ORDER_INFO.wOServiceType == 0}">
 							<li>服务时长：<span>${ORDER_INFO.orderDetailDO.wOServerTime}小时</span></li>
 							<li>服务时间：<span><fmt:formatDate
 										value="${ORDER_INFO.orderDetailDO.wOSubscribe}" type="BOTH"
 										dateStyle="full" />上门</span></li>
+							</cf:if>
 							<li>费用明细：<span>${ORDER_INFO.orderDetailDO.wOPrice}元 X
 									${ORDER_INFO.orderDetailDO.wOServerTime}小时</span></li>
 						</ul>

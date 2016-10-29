@@ -227,7 +227,7 @@ public class PayController extends BaseController{
 		
 		if(result.isSuccess()) {
 			Integer id = (Integer) result.getModel(ResultSupport.FIRST_MODEL_KEY);
-			return new ModelAndView("redirect:/order/orderDetail/" +id + ".html");
+			return new ModelAndView("redirect:/order/paySuccessOrder/" +id + ".html");
 		} else {
 			mav.setViewName("error");
 		}

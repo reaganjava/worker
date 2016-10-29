@@ -18,7 +18,6 @@
 	src="${pageContext.request.contextPath}/lib/jquery/1.9.1/jquery.min.js?v=0.1"></script>
 <title>临时保洁选择面积</title>
 </head>
-</head>
 <body onload="loadData()">
 <form action="${pageContext.request.contextPath}/goods/buyJob.html"
 			method="post" id="cleanForm">
@@ -207,6 +206,7 @@
 		for (var i = 1; i <= 9; i++) {
 			$("#f" + i).css("background", fbg);
 			$("#ss" + i).css("color", scl);
+			$("#f" + i).css("border", "1px solid #c0c0c0");
 		}
 		$("#f" + id).css("background", "#00cded");
 		$("#ss" + id).css("color", "#fff");
@@ -237,7 +237,7 @@
 			$("#staffsSelect").empty();
 			$("#staffSelect")
 					.append(
-							'<li id="f1"><div id="staff1" onClick="selectStaff(1, 1, 2);"><span id="ss1">1人2小时</span></div></li>');
+							'<li style=" background:#00cded;border:1px solid #fff;list-style: outside none none;" id="f1"><div id="staff1" onClick="selectStaff(1, 1, 2);"><span id="ss1">1人2小时</span></div></li>');
 			$("#staffSelect")
 					.append(
 							'<li id="f2"><div id="staff2" onClick="selectStaff(2, 1, 3);"><span id="ss2">1人3小时</span></div></li>');
@@ -262,6 +262,17 @@
 			$("#staffsSelect")
 					.append(
 							'<li id="f9"><div id="staff9" onClick="selectStaff(9,2,5);"><span>2人5小时</span></div></li>');
+			var price = 0;
+			if($("#day").val().indexOf("18") > -1) {
+				price = 40 * 1 * 2;
+				$("#pc").val(40);
+			} else {
+				price = 30 * 1 * 2;
+				$("#pc").val(30);
+			}
+			
+			$("#price").html("￥" + price);
+			$("#pc").val(price);
 			break;
 		}
 		case 2: {
@@ -272,7 +283,7 @@
 							'<li class="no-service"><div><span>1人2小时</span></div></li>');
 			$("#staffSelect")
 					.append(
-							'<li id="f2"><div id="staff2" onClick="selectStaff(2, 1, 3);"><span id="ss2">1人3小时</span></div></li>');
+							'<li style=" background:#00cded;border:1px solid #fff; list-style: outside none none;" id="f2"><div id="staff2" onClick="selectStaff(2, 1, 3);"><span id="ss2">1人3小时</span></div></li>');
 			$("#staffSelect")
 					.append(
 							'<li id="f3"><div id="staff3" onClick="selectStaff(3, 1, 4);"><span id="ss3">1人4小时</span></div></li>');
@@ -294,6 +305,17 @@
 			$("#staffsSelect")
 					.append(
 							'<li id="f9"><div id="staff9" onClick="selectStaff(9,2,5);"><span>2人5小时</span></div></li>');
+			var price = 0;
+			if($("#day").val().indexOf("18") > -1) {
+				price = 40 * 1 * 3;
+				$("#pc").val(40);
+			} else {
+				price = 30 * 1 * 3;
+				$("#pc").val(30);
+			}
+			
+			$("#price").html("￥" + price);
+			$("#pc").val(price);
 			break;
 		}
 		case 3: {
@@ -307,7 +329,7 @@
 							'<li class="no-service""><div><span>1人3小时</span></div></li>');
 			$("#staffSelect")
 					.append(
-							'<li id="f3"><div id="staff3" onClick="selectStaff(3, 1, 4);"><span id="ss3">1人4小时</span></div></li>');
+							'<li style=" background:#00cded;border:1px solid #fff;list-style: outside none none;" id="f3"><div id="staff3" onClick="selectStaff(3, 1, 4);"><span id="ss3">1人4小时</span></div></li>');
 			$("#staffSelect")
 					.append(
 							'<li id="f4"><div id="staff4" onClick="selectStaff(4, 1, 6);"><span id="ss4">1人6小时</span></div></li>');
@@ -326,6 +348,17 @@
 			$("#staffsSelect")
 					.append(
 							'<li id="f9"><div id="staff9" onClick="selectStaff(9,2,5);"><span>2人5小时</span></div></li>');
+			var price = 0;
+			if($("#day").val().indexOf("18") > -1) {
+				price = 40 * 1 * 4;
+				$("#pc").val(40);
+			} else {
+				price = 30 * 1 * 4;
+				$("#pc").val(30);
+			}
+			
+			$("#price").html("￥" + price);
+			$("#pc").val(price);
 			break;
 		}
 		case 4: {
@@ -342,7 +375,7 @@
 							'<li class="no-service"><div><span>1人4小时</span></div></li>');
 			$("#staffSelect")
 					.append(
-							'<li id="f4"><div id="staff4" onClick="selectStaff(4, 1, 6);"><span id="ss4">1人6小时</span></div></li>');
+							'<li style=" background:#00cded;border:1px solid #fff;list-style: outside none none;" id="f4"><div id="staff4" onClick="selectStaff(4, 1, 6);"><span id="ss4">1人6小时</span></div></li>');
 			$("#staffSelect")
 					.append(
 							'<li id="f5"><div id="staff5" onClick="selectStaff(5, 1, 8);"><span id="ss5">1人8小时</span></div></li>');
@@ -358,6 +391,17 @@
 			$("#staffsSelect")
 					.append(
 							'<li id="f9"><div id="staff9" onClick="selectStaff(9,2,5);"><span>2人5小时</span></div></li>');
+			var price = 0;
+			if($("#day").val().indexOf("18") > -1) {
+				price = 40 * 1 * 6;
+				$("#pc").val(40);
+			} else {
+				price = 30 * 1 * 6;
+				$("#pc").val(30);
+			}
+			
+			$("#price").html("￥" + price);
+			$("#pc").val(price);
 			break;
 		}
 		case 5: {
@@ -380,7 +424,7 @@
 							'<li class="no-service"><div><span>2人3小时</span></div></li>');
 			$("#staffSelect")
 					.append(
-							'<li id="f5"><div id="staff5" onClick="selectStaff(5, 1, 8);"><span id="ss5">1人8小时</span></div></li>');
+							'<li style=" background:#00cded;border:1px solid #fff;list-style: outside none none;" id="f5"><div id="staff5" onClick="selectStaff(5, 1, 8);"><span id="ss5">1人8小时</span></div></li>');
 			$("#staffSelect")
 					.append(
 							'<li id="f6"><div id="staff6" onClick="selectStaff(6, 1, 10);"><span id="ss6">1人10小时</span></div></li>');
@@ -390,6 +434,17 @@
 			$("#staffsSelect")
 					.append(
 							'<li id="f9"><div id="staff9" onClick="selectStaff(9,2,5);"><span>2人5小时</span></div></li>');
+			var price = 0;
+			if($("#day").val().indexOf("18") > -1) {
+				price = 40 * 1 * 8;
+				$("#pc").val(40);
+			} else {
+				price = 30 * 1 * 8;
+				$("#pc").val(30);
+			}
+			
+			$("#price").html("￥" + price);
+			$("#pc").val(price);
 			break;
 		}
 		case 6: {
@@ -418,10 +473,21 @@
 							'<li class="no-service"><div><span>2人4小时</span></div></li>');
 			$("#staffSelect")
 					.append(
-							'<li id="f6"><div id="staff6" onClick="selectStaff(6, 1, 10);"><span id="ss6">1人10小时</span></div></li>');
+							'<li style=" background:#00cded;border:1px solid #fff;list-style: outside none none;" id="f6"><div id="staff6" onClick="selectStaff(6, 1, 10);"><span id="ss6">1人10小时</span></div></li>');
 			$("#staffsSelect")
 					.append(
 							'<li id="f9"><div id="staff9" onClick="selectStaff(9,2,5);"><span>2人5小时</span></div></li>');
+			var price = 0;
+			if($("#day").val().indexOf("18") > -1) {
+				price = 40 * 1 * 10;
+				$("#pc").val(40);
+			} else {
+				price = 30 * 1 * 10;
+				$("#pc").val(30);
+			}
+			
+			$("#price").html("￥" + price);
+			$("#pc").val(price);
 			break;
 		}
 		}

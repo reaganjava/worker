@@ -47,16 +47,25 @@
 </div>
 </div>
 <div class="order-st">
-<c:if test="status == 1">
-<span>待支付</span>
-</c:if>
-<c:if test="status == 2">
-<span>待分配</span>
-</c:if>
-<c:if test="status == 3">
-<span>待确认</span>
-</c:if>
+<p>您的订单已经受理请等待管理员分配服务人员</p>
+<p>分配完成会有短信发送到您的手机请注意查收。</p>
 </div>
 </div>
 </body>
+<script type="text/javascript">
+    $(function(){  
+        pushHistory();  
+        window.addEventListener("popstate", function(e) {  
+           window.location.href = "/order/userOrders/1.html";
+    }, false);  
+        function pushHistory() {  
+            var state = {  
+                title: "title",  
+                url: "#"  
+            };  
+            window.history.pushState(state, "title", "#");  
+        }  
+          
+    }); 
+</script>
 </html>
