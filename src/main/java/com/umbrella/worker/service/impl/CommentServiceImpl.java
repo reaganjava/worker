@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.umbrella.worker.dao.WCommentMapper;
 import com.umbrella.worker.dto.CommentDO;
@@ -15,11 +17,11 @@ import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.ICommentService;
 import com.umbrella.worker.util.BeanUtilsExtends;
 import com.umbrella.worker.util.StringUtil;
-
+@Service("commentService")
 public class CommentServiceImpl extends BaseServiceImpl implements ICommentService {
 	
 	private static Logger logger = Logger.getLogger(CommentServiceImpl.class);
-	
+	@Autowired
 	private WCommentMapper commentMapper;
 
 	@Override
@@ -37,6 +39,7 @@ public class CommentServiceImpl extends BaseServiceImpl implements ICommentServi
 		
 		comment.setDatalevel(1);
 		comment.setStatus(1);
+		comment.setModifiAuthor(comment.getCreateAuthor());
 		comment.setCreateTime(Calendar.getInstance().getTime());
 		comment.setModifiTime(Calendar.getInstance().getTime());
 		

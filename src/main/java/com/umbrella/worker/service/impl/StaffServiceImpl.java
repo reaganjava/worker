@@ -69,33 +69,6 @@ public class StaffServiceImpl  extends BaseServiceImpl implements IStaffService 
 			return result;
 		}
 	
-		for(CertificoreDO certificoreDO : staffDO.getCertificores()) {
-			recordNum = -1;
-			
-			WCertificore certificore = new WCertificore();
-			result = BeanUtilsExtends.copy(certificore, certificoreDO);
-			
-			if(!result.isSuccess()) {
-				return result;
-			}
-			
-			try {
-				recordNum = certificoreMapper.insertSelective(certificore);
-			} catch (Exception e) {
-				result.setSuccess(false);
-				result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
-				result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
-				logger.error("[obj:Staff][opt:create][msg:" + e.getMessage()
-				+ "]");
-				return result;
-			}
-			
-			if(recordNum < 1) {
-				result.setSuccess(false);
-				return result;
-			}
-		}
-		
 		result.setModel(ResultDO.FIRST_MODEL_KEY, staff.getId());
 		
 		return result;
@@ -129,34 +102,7 @@ public class StaffServiceImpl  extends BaseServiceImpl implements IStaffService 
 			return result;
 		}
 		
-		for(CertificoreDO certificoreDO : staffDO.getCertificores()) {
-			recordNum = -1;
-			
-			WCertificore certificore = new WCertificore();
-			result = BeanUtilsExtends.copy(certificore, certificoreDO);
-			
-			if(!result.isSuccess()) {
-				return result;
-			}
-			
-			WCertificoreExample example = new WCertificoreExample();
-			example.createCriteria().andWCeStaffIdEqualTo(staffDO.getId());
-			try {
-				recordNum = certificoreMapper.updateByExample(certificore, example);
-			} catch (Exception e) {
-				result.setSuccess(false);
-				result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
-				result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
-				logger.error("[obj:Staff][opt:create][msg:" + e.getMessage()
-				+ "]");
-				return result;
-			}
-			
-			if(recordNum < 1) {
-				result.setSuccess(false);
-				return result;
-			}
-		}
+		
 
 		return result;
 	}
@@ -189,31 +135,6 @@ public class StaffServiceImpl  extends BaseServiceImpl implements IStaffService 
 			result.setSuccess(false);
 			return result;
 		}
-		
-		
-		recordNum = -1;
-		
-		WCertificore certificore = new WCertificore();
-		
-		WCertificoreExample example = new WCertificoreExample();
-		certificore.setDatalevel(-1);
-		example.createCriteria().andWCeStaffIdEqualTo(staffId);
-		try {
-			recordNum = certificoreMapper.updateByExample(certificore, example);
-		} catch (Exception e) {
-			result.setSuccess(false);
-			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
-			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
-			logger.error("[obj:Staff][opt:create][msg:" + e.getMessage()
-			+ "]");
-			return result;
-		}
-		
-		if(recordNum < 1) {
-			result.setSuccess(false);
-			return result;
-		}
-		
 		
 		return result;
 	}
@@ -249,24 +170,6 @@ public class StaffServiceImpl  extends BaseServiceImpl implements IStaffService 
 			return result;
 		}
 		
-		List<WCertificore> certificoreList = null; 
-		
-		WCertificoreExample cfex = new WCertificoreExample();
-		cfex.createCriteria().andWCeStaffIdEqualTo(staffId);
-		try {
-			certificoreList = certificoreMapper.selectByExample(cfex);
-		} catch (Exception e) {
-			result.setSuccess(false);
-	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
-	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
-	        logger.error("[obj:supplier][opt:get][msg:"+e.getMessage()+"]");
-	        return result;
-		}
-		
-		if(certificoreList.size() > 0) {
-			staffDO.setCertificores(getCertificoreDOList(certificoreList));
-		}
-		
 		return result;
 	}
 
@@ -278,11 +181,11 @@ public class StaffServiceImpl  extends BaseServiceImpl implements IStaffService 
 		WStaffExample example = new WStaffExample();
 		WStaffExample.Criteria c = example.createCriteria();
 		
-		if(StringUtil.isEmpty(staffQuery.getStaffName())) {
+		if(StringUtil.isNotEmpty(staffQuery.getStaffName())) {
 			c.andWStaffNameLike("%" + staffQuery.getStaffName() + "%");
 		}
 		
-		if(StringUtil.isEmpty(staffQuery.getIdcard())) {
+		if(StringUtil.isNotEmpty(staffQuery.getIdcard())) {
 			c.andWSIdcardEqualTo(staffQuery.getIdcard());
 		}
 		
@@ -293,7 +196,7 @@ public class StaffServiceImpl  extends BaseServiceImpl implements IStaffService 
 		if(StringUtil.isGreatOne(staffQuery.getServiceType())) {
 			c.andWSTypeEqualTo(staffQuery.getServiceType());
 		}
-		
+		//1.未工作 2.工作中 3.休息
 		if(StringUtil.isGreatOne(staffQuery.getStatus())) {
 			c.andStatusEqualTo(staffQuery.getStatus());
 		}
@@ -344,13 +247,14 @@ public class StaffServiceImpl  extends BaseServiceImpl implements IStaffService 
 		
 		List<StaffDO> staffList2 = new ArrayList<StaffDO>();
 		
-		for(int i = 0; i < staffList.size(); i++) {
-			StaffDO staffDO = staffList.get(i);
-			WSupplier supplier = supplierMapper.selectByPrimaryKey(staffDO.getwSSupplierId());
-			staffDO.setSupplierName(supplier.getwSName());
-			staffList2.add(staffDO);
+		if(staffList != null) {
+			for(int i = 0; i < staffList.size(); i++) {
+				StaffDO staffDO = staffList.get(i);
+				WSupplier supplier = supplierMapper.selectByPrimaryKey(staffDO.getwSSupplierId());
+				staffDO.setSupplierName(supplier.getwSName());
+				staffList2.add(staffDO);
+			}
 		}
-		
 		
 		result.setModel(ResultSupport.FIRST_MODEL_KEY, staffList2);
 		

@@ -23,6 +23,5 @@ public class IndexController {
 		mav.setViewName("waiting");
 		return mav;
 	}
-	
-	
+
 }

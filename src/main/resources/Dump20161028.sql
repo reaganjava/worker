@@ -1,5 +1,5 @@
-CREATE DATABASE  IF NOT EXISTS `hdlm` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `hdlm`;
+
+USE `worker`;
 -- MySQL dump 10.13  Distrib 5.6.13, for Win32 (x86)
 --
 -- Host: reaganjava.mysql.rds.aliyuncs.com    Database: hdlm

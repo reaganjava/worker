@@ -245,8 +245,17 @@ public class OrderController extends BaseController{
 	public ModelAndView confirmOrder(ModelAndView mav, 
 			@PathVariable(value="id") Integer id,
 			HttpServletRequest request) {
-	
-		ResultDO resultDO = orderService.confirm(id);
+		Cookie cookie = getCookieByName(request, "MEMBER_ID");
+		Integer memberId = Integer.parseInt(cookie.getValue());
+		cookie = getCookieByName(request, "MEMBER_MOBILE");
+		String memberMobile = cookie.getValue();
+		OrderDO order = new OrderDO();
+		order.setId(id);
+		order.setwOMembersId(memberId);
+		order.setwOIsConfim(1);
+		order.setModifiAuthor(memberMobile);
+		order.setStatus(6);
+		ResultDO resultDO = orderService.confirm(order);
 		if(resultDO.isSuccess()) {
 			mav.addObject("JSON_DATA", 1);
 		} else {
@@ -329,7 +338,7 @@ public class OrderController extends BaseController{
 			    		break;
 			    	}
 			    	case 3: {
-			    		html += "<button onclick=\"confirmOrder(" + order.getId() + ")\">确认订单</button>";
+			    		html += "<a href=\"javascript:;\" onclick=\"confirmOrder(" + order.getId() + ")\">确认订单</a>";
 			    		break;                                            
 			    	}
 			    	

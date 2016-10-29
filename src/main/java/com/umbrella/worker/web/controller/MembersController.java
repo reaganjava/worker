@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.umbrella.worker.dto.CommentDO;
 import com.umbrella.worker.dto.ContactDO;
 import com.umbrella.worker.dto.CouponDO;
 import com.umbrella.worker.dto.MemberCouponDO;
@@ -29,6 +30,7 @@ import com.umbrella.worker.result.JsonResultDO;
 import com.umbrella.worker.result.JsonResultSupport;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
+import com.umbrella.worker.service.ICommentService;
 import com.umbrella.worker.service.IContactService;
 import com.umbrella.worker.service.ICouponService;
 import com.umbrella.worker.service.IMemberService;
@@ -53,6 +55,9 @@ public class MembersController extends BaseController {
 	
 	@Autowired
 	private ICouponService couponService;
+	
+	@Autowired 
+	private ICommentService commentService;
 
 	@RequestMapping(value = "/register.html", method = RequestMethod.GET)
 	public ModelAndView register(ModelAndView mav, HttpServletRequest request) {
@@ -471,4 +476,28 @@ public class MembersController extends BaseController {
 		return mav;
 	}
 
+	@RequestMapping(value = "/comment.html", method = RequestMethod.GET)
+	public ModelAndView comment(ModelAndView mav, HttpServletRequest request) {
+		mav.setViewName("members/comment");
+		return mav;
+	}
+	
+	@RequestMapping(value = "/comment.html", method = RequestMethod.POST)
+	public ModelAndView comment(ModelAndView mav, 
+			CommentDO commentDO,
+			HttpServletRequest request) {
+		Cookie cookie = getCookieByName(request, "MEMBER_ID");
+		Integer memberId = Integer.parseInt(cookie.getValue());
+		cookie = getCookieByName(request, "MEMBER_MOBILE");
+		String memberMobile = cookie.getValue();
+		commentDO.setwMembersId(memberId);
+		commentDO.setCreateAuthor(memberMobile);
+		ResultDO result = commentService.create(commentDO);
+		if(result.isSuccess()) {
+			return new ModelAndView("redirect:/members/accountInfo.html");
+		} else {
+			mav.setViewName("error");
+		}
+		return mav;
+	}
 }

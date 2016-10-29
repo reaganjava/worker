@@ -114,7 +114,16 @@
 				  success:function(data) {
 					
 					  if(data != 0) {
-						
+						  $.ajax({
+							  url: "${pageContext.request.contextPath}/order/userOrders/${status}/1.json",
+							  success:function(data) {
+								
+								  if(data != 0) {
+									 $("#orderList").empty();
+									 $("#orderList").append(data);
+								  }
+							  }
+							});
 					  }
 				  }
 				});

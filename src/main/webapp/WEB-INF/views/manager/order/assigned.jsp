@@ -55,20 +55,19 @@
       <div class="col-4"> </div>
     </div>
     </c:if>
+    <c:forEach begin="0" end="${ORDER_INFO.orderDetailDO.wOStaffCount - 1}" varStatus="status">
     <div class="row cl">
       <label class="form-label col-3"><span class="c-red">*</span>派遣人员姓名：</label>
       <div class="formControls col-5">
-        <input type="text" class="input-text"  placeholder="" id="" name="orderDetailDO.wOStaffContact" datatype="*2-20" nullmsg="派遣人员姓名不能为空">
+        <select class="select" size="1"  name="wStaffId${status.index}"  datatype="*" nullmsg="选择派遣人员">
+        	<c:forEach items="${STAFF_LIST}" var="staff">
+        	<option value="${staff.id}">${staff.wStaffName}</option>
+        	</c:forEach>
+        </select>
       </div>
       <div class="col-4"> </div>
     </div>
-    <div class="row cl">
-      <label class="form-label col-3"><span class="c-red">*</span>派遣人员电话：</label>
-      <div class="formControls col-5">
-        <input type="text" class="input-text" placeholder="" name="orderDetailDO.wOStaffTelephone" id="" datatype="*8-20" nullmsg="派遣人员电话不能为空">
-      </div>
-      <div class="col-4"> </div>
-    </div>
+    </c:forEach>
     <div class="row cl">
       <div class="col-9 col-offset-3">
         <input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">

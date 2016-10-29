@@ -16,12 +16,14 @@ import org.springframework.web.servlet.ModelAndView;
 import com.umbrella.worker.dto.OrderDO;
 import com.umbrella.worker.dto.OrderDetailDO;
 import com.umbrella.worker.query.OrderQuery;
+import com.umbrella.worker.query.StaffQuery;
 import com.umbrella.worker.query.SupplierQuery;
 import com.umbrella.worker.result.JsonResultDO;
 import com.umbrella.worker.result.JsonResultSupport;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.IOrderService;
+import com.umbrella.worker.service.IStaffService;
 import com.umbrella.worker.service.ISuppliersService;
 import com.umbrella.worker.util.PageBeanUtil;
 
@@ -34,6 +36,9 @@ public class ManagerOrderController {
 	
 	@Autowired
 	private ISuppliersService suppliersService;
+	
+	@Autowired
+	private IStaffService staffService;
 	
 	@RequestMapping(value = "/waitOrderList.html", method = RequestMethod.GET)
 	public ModelAndView waitOrderList(ModelAndView mav,
@@ -100,15 +105,24 @@ public class ManagerOrderController {
 		int supplierId = (int) request.getSession().getAttribute("MANAGER_SUPPLIER_ID");
 		ResultDO result = orderService.get(id);
 		ResultDO result2 = null;
+		ResultDO result3 = null;
 		if(supplierId == 1) {
 			SupplierQuery query = new SupplierQuery();
 			result2 = suppliersService.list(query);
+		} else {
+			StaffQuery squery = new StaffQuery();
+			squery.setSupplierId(supplierId);
+			squery.setServiceType(1);
+			squery.setStatus(1);
+			result3 = staffService.list(squery);
 		}
-		
 		if(result.isSuccess()) {
+			
 			mav.addObject("ORDER_INFO", result.getModel(ResultSupport.FIRST_MODEL_KEY));
 			if(result2 != null) {
 				mav.addObject("SUPPLIER_LIST", result2.getModel(ResultSupport.FIRST_MODEL_KEY));
+			} else {
+				mav.addObject("STAFF_LIST", result3.getModel(ResultSupport.FIRST_MODEL_KEY));
 			}
 			mav.setViewName("manager/order/assigned");
 		} else {
@@ -125,9 +139,14 @@ public class ManagerOrderController {
 		String adminName = (String) request.getSession().getAttribute("MANAGER_NAME");
 		orderDO.setStatus(3);
 		orderDO.setModifiAuthor(adminName);
+		orderDO.setOrderDetailDO(new OrderDetailDO());
 		orderDO.getOrderDetailDO().setId(orderDO.getId());
 		orderDO.getOrderDetailDO().setModifiAuthor(adminName);
-		System.out.println(orderDO.getOrderDetailDO().getwOStaffContact());
+		
+		if(orderDO.getwOSupplierId() == null) {
+			int supplierId = (int) request.getSession().getAttribute("MANAGER_SUPPLIER_ID");
+			orderDO.setwOSupplierId(supplierId);
+		}
 		ResultDO resultDO = orderService.assigned(orderDO);
 		if(resultDO.isSuccess()) {
 			jsonResultDO.setInfo("提交成功");
@@ -152,7 +171,7 @@ public class ManagerOrderController {
 		query.setSupplierId(supplierId);
 		query.setPageNO(pageNo);
 		query.setPageRows(10);
-		query.setStatus(3);
+		query.setStatus(2);
 		ResultDO result =  null;
 		if(supplierId != 1) {
 			result = orderService.cleanAssignedList(query);

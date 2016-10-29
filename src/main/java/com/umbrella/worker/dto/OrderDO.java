@@ -1,6 +1,7 @@
 package com.umbrella.worker.dto;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class OrderDO extends BaseDO {
    
@@ -16,6 +17,11 @@ public class OrderDO extends BaseDO {
     
     
     private Integer wOSupplierId;
+    
+    private Integer wStaffId;
+    private Integer wStaffId0;
+    
+    private Integer wStaffId1;
     
     
     private OrderDetailDO orderDetailDO;
@@ -64,7 +70,6 @@ public class OrderDO extends BaseDO {
 	public void setwOMembersId(Integer wOMembersId) {
 		this.wOMembersId = wOMembersId;
 	}
-
 
 	public MembersDO getMembersDO() {
 		return membersDO;
@@ -184,6 +189,35 @@ public class OrderDO extends BaseDO {
 		this.wOIsPay = wOIsPay;
 	}
 
-   
-   
+
+	public Integer getwStaffId0() {
+		return wStaffId0;
+	}
+
+
+	public void setwStaffId0(Integer wStaffId0) {
+		this.wStaffId0 = wStaffId0;
+	}
+
+
+	public Integer getwStaffId1() {
+		return wStaffId1;
+	}
+
+
+	public void setwStaffId1(Integer wStaffId1) {
+		this.wStaffId1 = wStaffId1;
+	}
+
+
+	public Integer getwStaffId() {
+		return wStaffId;
+	}
+
+
+	public void setwStaffId(Integer wStaffId) {
+		this.wStaffId = wStaffId;
+	}
+
+
 }

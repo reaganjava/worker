@@ -2,17 +2,21 @@ package com.umbrella.worker.dto;
 
 public class CommentDO extends BaseDO {
     
-    private Integer id;
+	private Integer id;
 
+   
     private Integer wMembersId;
-
-    private Integer wStaffId;
-
-    private String wCTitle;
     
-    private String wCContent;
 
-    private String wCNickname;
+    private String wCContent;
+    
+
+    private String wName;
+    
+
+    
+    private String wMobile;
+
 
 	public Integer getId() {
 		return id;
@@ -30,22 +34,6 @@ public class CommentDO extends BaseDO {
 		this.wMembersId = wMembersId;
 	}
 
-	public Integer getwStaffId() {
-		return wStaffId;
-	}
-
-	public void setwStaffId(Integer wStaffId) {
-		this.wStaffId = wStaffId;
-	}
-
-	public String getwCTitle() {
-		return wCTitle;
-	}
-
-	public void setwCTitle(String wCTitle) {
-		this.wCTitle = wCTitle;
-	}
-
 	public String getwCContent() {
 		return wCContent;
 	}
@@ -54,12 +42,21 @@ public class CommentDO extends BaseDO {
 		this.wCContent = wCContent;
 	}
 
-	public String getwCNickname() {
-		return wCNickname;
+	public String getwName() {
+		return wName;
 	}
 
-	public void setwCNickname(String wCNickname) {
-		this.wCNickname = wCNickname;
+	public void setwName(String wName) {
+		this.wName = wName;
 	}
 
+	public String getwMobile() {
+		return wMobile;
+	}
+
+	public void setwMobile(String wMobile) {
+		this.wMobile = wMobile;
+	}
+
+	
 }

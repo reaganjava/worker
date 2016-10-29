@@ -22,63 +22,33 @@
 <script type="text/javascript" src="http://lib.h-ui.net/DD_belatedPNG_0.0.8a-min.js" ></script>
 <script>DD_belatedPNG.fix('*');</script>
 <![endif]-->
-<title>添加管理员</title>
+<title>添加清洁工</title>
 </head>
 <body>
 <div class="pd-20">
-  <form action="${pageContext.request.contextPath}/admin/add.json" method="post" class="form form-horizontal" id="form-supplier-join">
+  <form action="${pageContext.request.contextPath}/staff/add.json" method="post" class="form form-horizontal" id="form-staff-add">
     <div class="row cl">
-      <label class="form-label col-3"><span class="c-red">*</span>管理员名：</label>
+      <label class="form-label col-3"><span class="c-red">*</span>姓名：</label>
       <div class="formControls col-5">
-        <input type="text" class="input-text" value="" placeholder="" id="wAUsername" name="wAUsername" datatype="*5-20" nullmsg="管理员名不能为空">
+        <input type="text" class="input-text" value="" placeholder="" id="wStaffName" name="wStaffName" datatype="*5-20" nullmsg="姓名不能为空">
       </div>
       <div class="col-4"> </div>
     </div>
     <div class="row cl">
-      <label class="form-label col-3"><span class="c-red">*</span>密码：</label>
+      <label class="form-label col-3"><span class="c-red">*</span>电话：</label>
       <div class="formControls col-5">
-        <input type="text" class="input-text" placeholder="" name="wAPassword" id="wAPassword" datatype="*8-20" nullmsg="密码不能为空">
+        <input type="text" class="input-text" placeholder="" name="wSTelephone" id="wSTelephone" datatype="*8-20" nullmsg="电话不能为空">
       </div>
       <div class="col-4"> </div>
     </div>
-    <div class="row cl">
-      <label class="form-label col-3"><span class="c-red">*</span>联系电话：</label>
+   <div class="row cl">
+      <label class="form-label col-3"><span class="c-red">*</span>家庭住址：</label>
       <div class="formControls col-5">
-        <input type="text" class="input-text" value="" placeholder="" id="wATelephone" name="wATelephone"  datatype="n8-15" nullmsg="联系电话不能为空">
+        <input type="text" class="input-text" placeholder="" name="wSAddress" id="wSAddress" datatype="*8-20" nullmsg="地址不能为空">
       </div>
       <div class="col-4"> </div>
     </div>
-    <div class="row cl">
-      <label class="form-label col-3"><span class="c-red">*</span>真实姓名：</label>
-      <div class="formControls col-5">
-        <input type="text" class="input-text" placeholder="" name="wARealName" id="wARealName" datatype="*3-8" nullmsg="真实姓名不能为空">
-      </div>
-      <div class="col-4"> </div>
-    </div>
-    <div class="row cl">
-      <span class="c-red">*</span><label class="form-label col-3">所属渠道：</label>
-      <div class="formControls col-5"> <span class="select-box">
-        <select class="select" size="1" name="wASupplierId" datatype="*" nullmsg="请选择渠道！">
-          <option value="" selected>请选渠道</option>
-          <c:forEach items="${SUPPLIER_LIST}" var="supplier">
-          <option value="${supplier.id}">${supplier.wSName}</option>
-          </c:forEach>
-         
-        </select>
-        </span> </div>
-      <div class="col-4"> </div>
-    </div>
-     <div class="row cl">
-      <span class="c-red">*</span><label class="form-label col-3">角色：</label>
-      <div class="formControls col-5"> <span class="select-box">
-        <select class="select" size="1" name="wARoleId" datatype="*" nullmsg="请选择角色！">
-          <option value="" selected>请选角色</option>
-          <option value="1">渠道管理员</option>
-          <option value="8">平台管理员</option>
-        </select>
-        </span> </div>
-      <div class="col-4"> </div>
-    </div>
+    <input type="text" name="wSType" value="1">
     <div class="row cl">
       <div class="col-9 col-offset-3">
         <input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
@@ -101,7 +71,7 @@ $(function(){
 		increaseArea: '20%'
 	});
 	
-	$("#form-supplier-join").Validform({
+	$("#form-staff-add").Validform({
 		tiptype:2,
 		ajaxPost:true,
 		callback:function(data){

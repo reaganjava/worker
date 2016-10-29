@@ -19,7 +19,7 @@ public interface IOrderService {
 	
 	public ResultDO list(OrderQuery orderQuery);
 	
-	public ResultDO confirm(int orderId);
+	public ResultDO confirm(OrderDO orderDO);
 	
 	public ResultDO get(int orderId);
 	

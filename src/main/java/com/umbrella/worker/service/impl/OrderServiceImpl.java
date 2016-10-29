@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.umbrella.worker.dao.WOrderDetailMapper;
 import com.umbrella.worker.dao.WOrderMapper;
 import com.umbrella.worker.dao.WSmsRecordMapper;
+import com.umbrella.worker.dao.WStaffMapper;
 import com.umbrella.worker.dao.WSupplierAccountMapper;
 import com.umbrella.worker.dao.WSupplierMapper;
 import com.umbrella.worker.dto.OrderDO;
@@ -24,6 +25,7 @@ import com.umbrella.worker.entity.WOrderDetail;
 import com.umbrella.worker.entity.WOrderExample;
 import com.umbrella.worker.entity.WSmsRecord;
 import com.umbrella.worker.entity.WSmsRecordExample;
+import com.umbrella.worker.entity.WStaff;
 import com.umbrella.worker.entity.WSupplier;
 import com.umbrella.worker.entity.WSupplierAccount;
 import com.umbrella.worker.entity.WSupplierExample;
@@ -55,6 +57,8 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 	private WSupplierAccountMapper supplierAccountMapper;
 	@Autowired
 	private WSmsRecordMapper smsRecordMapper;
+	@Autowired
+	private WStaffMapper staffMapper;
 	
 	@PostConstruct  
 	public void orderInit() {
@@ -222,7 +226,36 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 			return result;
 		}
 		order.setModifiTime(Calendar.getInstance().getTime());
+		List<WStaff> staffList = new ArrayList<WStaff>(); 
 		
+	
+		try {
+			WStaff staff = staffMapper.selectByPrimaryKey(orderDO.getwStaffId0());
+			staffList.add(staff);
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			logger.error("[obj:order][opt:modifi][msg:" + e.getMessage()
+					+ "]");
+			e.printStackTrace();
+			return result;
+		}
+	
+		if(orderDO.getwStaffId1() != null) {
+			try {
+				WStaff staff = staffMapper.selectByPrimaryKey(orderDO.getwStaffId1());
+				staffList.add(staff);
+			} catch (Exception e) {
+				result.setSuccess(false);
+				result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+				result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+				logger.error("[obj:order][opt:modifi][msg:" + e.getMessage()
+						+ "]");
+				e.printStackTrace();
+				return result;
+			}
+		}
 		int recordNum = -1;
 		try {
 			recordNum = orderMapper.updateByPrimaryKeySelective(order);
@@ -243,12 +276,14 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 			return result;
 		}
 		WOrderDetail orderDetail = new WOrderDetail();
-
 		result = BeanUtilsExtends.copy(orderDetail, orderDO.getOrderDetailDO());
 		// 拷贝失败
 		if (!result.isSuccess()) {
 			return result;
 		}
+		
+		orderDetail.setwOStaffTelephone(staffList.get(0).getwSTelephone());
+		orderDetail.setwOStaffContact(staffList.get(0).getwStaffName());
 		
 		recordNum = -1;
 		try {
@@ -487,21 +522,20 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 	}
 	
 	@Override
-	public ResultDO confirm(int orderId) {
+	public ResultDO confirm(OrderDO orderDO) {
 		
 		ResultSupport result = new ResultSupport();
 		
 		WOrder order = new WOrder();
-		if(!StringUtil.isGreatOne(orderId)) {
-			 result.setSuccess(false);
+		
+		result = BeanUtilsExtends.copy(order, orderDO);
+		
+		if(!result.isSuccess()) {
 			 return result;
 		} 
 		
+		order.setModifiTime(Calendar.getInstance().getTime());
 		int recordNum = -1;
-		
-		order.setId(orderId);
-		order.setwOIsConfim(1);
-		order.setStatus(6);
 		try {
 			recordNum = orderMapper.updateByPrimaryKeySelective(order);
 		} catch (Exception e) {
@@ -583,7 +617,7 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 			c.andWOSupplierIdEqualTo(orderQuery.getSupplierId());
 		}
         c.andWOServiceTypeEqualTo(0);
-		c.andStatusEqualTo(3);
+		c.andStatusEqualTo(2);
 	
 
 		if(StringUtil.isNotEmpty(orderQuery.getOrderByClause())) {	
