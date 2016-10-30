@@ -137,7 +137,7 @@ public class ManagerOrderController {
 			HttpServletRequest request) {
 		JsonResultDO jsonResultDO = new JsonResultSupport();
 		String adminName = (String) request.getSession().getAttribute("MANAGER_NAME");
-		orderDO.setStatus(3);
+		orderDO.setStatus(8);
 		orderDO.setModifiAuthor(adminName);
 		orderDO.setOrderDetailDO(new OrderDetailDO());
 		orderDO.getOrderDetailDO().setId(orderDO.getId());
@@ -171,7 +171,7 @@ public class ManagerOrderController {
 		query.setSupplierId(supplierId);
 		query.setPageNO(pageNo);
 		query.setPageRows(10);
-		query.setStatus(2);
+	
 		ResultDO result =  null;
 		if(supplierId != 1) {
 			result = orderService.cleanAssignedList(query);
@@ -270,7 +270,10 @@ public class ManagerOrderController {
 		int supplierId = (int) request.getSession().getAttribute("MANAGER_SUPPLIER_ID");
 		OrderQuery query = new OrderQuery();
 		query.setPage(true);
-		query.setSupplierId(supplierId);
+		if(supplierId != 1) {
+			query.setSupplierId(supplierId);
+			
+		}
 		if(!orderNo.equals("all")) {
 			query.setOrderNo(orderNo);
 		}
@@ -290,7 +293,29 @@ public class ManagerOrderController {
 			pageBean.setDataList((List<Object>) result.getModel(ResultSupport.FIRST_MODEL_KEY));
 			mav.addObject("PAGE_BEAN", pageBean);
 			mav.addObject("INCOME", result.getModel(ResultSupport.THIRD_MODEL_KEY));
-			mav.setViewName("manager/order/list");
+			if(supplierId != 1) {
+			switch(status) {
+			case 8: {
+				mav.setViewName("manager/order/list8");
+				break;
+			}
+			case 6:{
+				mav.setViewName("manager/order/list6");
+				break;
+			}
+			case 5:{
+				mav.setViewName("manager/order/list5");
+				break;
+			}
+			case 7:{
+				mav.setViewName("manager/order/list7");
+				break;
+			}
+			}
+			} else {
+				mav.setViewName("manager/order/list");
+			}
+			
 		} else {
 			mav.setViewName("error");
 		}

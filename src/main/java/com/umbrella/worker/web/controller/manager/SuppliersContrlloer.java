@@ -13,6 +13,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.umbrella.worker.dto.SupplierDO;
 import com.umbrella.worker.query.SmsRecordQuery;
+import com.umbrella.worker.query.SupplierAccountQuery;
+import com.umbrella.worker.query.SupplierPayrecordQuery;
 import com.umbrella.worker.query.SupplierQuery;
 import com.umbrella.worker.result.JsonResultDO;
 import com.umbrella.worker.result.JsonResultSupport;
@@ -273,14 +275,47 @@ public class SuppliersContrlloer {
 		return mav;
 	}
 	
-	@RequestMapping(value = "/smsList/{name}/{pageNo}.html", method = RequestMethod.GET)
+	@RequestMapping(value = "/accountList/{pageNo}.html", method = RequestMethod.GET)
+	public ModelAndView query(ModelAndView mav,
+			@PathVariable(value="pageNo") Integer pageNo,
+			HttpServletRequest request) {
+		
+		SupplierAccountQuery query = new SupplierAccountQuery();
+		query.setPage(true);
+		query.setPageNO(pageNo);
+		query.setPageRows(10);
+		
+		ResultDO result = suppliersService.listAccount(query);
+		
+		if(result.isSuccess()) {
+			PageBeanUtil pageBean = new PageBeanUtil();
+			long count = (Long) result.getModel(ResultSupport.SECOND_MODEL_KEY);
+			pageBean.setCurrentPage(pageNo);
+			pageBean.setPageSize(query.getPageRows());
+			pageBean.setRecordCount(count);
+			pageBean.setPageCount(count);
+			pageBean.setPages(pageNo);
+			pageBean.setDataList((List<Object>) result.getModel(ResultSupport.FIRST_MODEL_KEY));
+			mav.addObject("PAGE_BEAN", pageBean);
+			mav.setViewName("manager/supplier/accountList");
+		} else {
+			mav.setViewName("error");
+		}
+		return mav;
+		
+	}
+	
+	@RequestMapping(value = "/smsList/{pageNo}.html", method = RequestMethod.GET)
 	public ModelAndView smsList(ModelAndView mav, 
 			@PathVariable(value="pageNo") Integer pageNo,
 			HttpServletRequest request) {
-		Integer supplerId = (Integer) request.getSession().getAttribute("MANAGER_SUPPLIER_ID");
+		Integer supplierId = (Integer) request.getSession().getAttribute("MANAGER_SUPPLIER_ID");
 		SmsRecordQuery query = new SmsRecordQuery();
-		query.setSupplierId(supplerId);
+		query.setSupplierId(supplierId);
+		query.setPage(true);
 		query.setPageNO(pageNo);
+		query.setPageRows(10);
+		System.out.println(supplierId);
 		ResultDO result = smsService.recordList(query);
 		
 		if(result.isSuccess()) {
@@ -294,6 +329,38 @@ public class SuppliersContrlloer {
 			pageBean.setDataList((List<Object>) result.getModel(ResultSupport.FIRST_MODEL_KEY));
 			mav.addObject("PAGE_BEAN", pageBean);
 			mav.setViewName("manager/supplier/smsList");
+		} else {
+			mav.setViewName("error");
+		}
+		return mav;
+	}
+	
+	@RequestMapping(value = "/listPayrecord/{pageNo}.html", method = RequestMethod.GET)
+	public ModelAndView listPayrecord(ModelAndView mav, 
+			@PathVariable(value="pageNo") Integer pageNo,
+			HttpServletRequest request) {
+		Integer supplierId = (Integer) request.getSession().getAttribute("MANAGER_SUPPLIER_ID");
+		SupplierPayrecordQuery query = new SupplierPayrecordQuery();
+		if(supplierId != 1) { 
+			query.setSupplierId(supplierId);
+		}
+		query.setPage(true);
+		query.setPageNO(pageNo);
+		query.setPageRows(10);
+		
+		ResultDO result = suppliersService.listPayrecord(query);
+		
+		if(result.isSuccess()) {
+			PageBeanUtil pageBean = new PageBeanUtil();
+			long count = (Long) result.getModel(ResultSupport.SECOND_MODEL_KEY);
+			pageBean.setCurrentPage(pageNo);
+			pageBean.setPageSize(query.getPageRows());
+			pageBean.setRecordCount(count);
+			pageBean.setPageCount(count);
+			pageBean.setPages(pageNo);
+			pageBean.setDataList((List<Object>) result.getModel(ResultSupport.FIRST_MODEL_KEY));
+			mav.addObject("PAGE_BEAN", pageBean);
+			mav.setViewName("manager/supplier/listPayrecord");
 		} else {
 			mav.setViewName("error");
 		}

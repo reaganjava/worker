@@ -26,16 +26,16 @@
 <c:if test="${status == 1}">
 <li class="not-service"><a style="color:#f30;">待付款</a></li>
 <li><a href="${pageContext.request.contextPath}/order/userOrders/2.html" >待服务</a></li>
-<li><a href="${pageContext.request.contextPath}/order/userOrders/3.html">待验收</a></li>
+<li><a href="${pageContext.request.contextPath}/order/userOrders/8.html">待验收</a></li>
 <li><a href="${pageContext.request.contextPath}/order/userOrders/4.html">退款中</a></li>
 </c:if>
 <c:if test="${status == 2}">
 <li><a href="${pageContext.request.contextPath}/order/userOrders/1.html" >待付款</a></li>
 <li class="not-service"><a style="color:#f30;" >待服务</a></li>
-<li><a href="${pageContext.request.contextPath}/order/userOrders/3.html">待验收</a></li>
+<li><a href="${pageContext.request.contextPath}/order/userOrders/8.html">待验收</a></li>
 <li><a href="${pageContext.request.contextPath}/order/userOrders/4.html">退款中</a></li>
 </c:if>
-<c:if test="${status == 3}">
+<c:if test="${status == 8}">
 <li><a href="${pageContext.request.contextPath}/order/userOrders/1.html" >待付款</a></li>
 <li><a href="${pageContext.request.contextPath}/order/userOrders/2.html" >待服务</a></li>
 <li class="not-service"><a style="color:#f30;" >待验收</a></li>
@@ -44,7 +44,7 @@
 <c:if test="${status == 4}">
 <li><a href="${pageContext.request.contextPath}/order/userOrders/1.html" >待付款</a></li>
 <li><a href="${pageContext.request.contextPath}/order/userOrders/2.html" >待服务</a></li>
-<li><a href="${pageContext.request.contextPath}/order/userOrders/3.html">待验收</a></li>
+<li><a href="${pageContext.request.contextPath}/order/userOrders/8.html">待验收</a></li>
 <li class="not-service"><a style="color:#f30;" >退款中</a></li>
 </c:if>
 </ul>
@@ -79,7 +79,7 @@
 <!--内容结束--->
 <div class="footerbar">
 <ul class="footer-icon">
-<li><a href="${pageContext.request.contextPath}/order/userOrders/1.html"><img src="${pageContext.request.contextPath}/images/index-icon.png"/><span>首页</span></a></li>
+<li><a href="${pageContext.request.contextPath}/"><img src="${pageContext.request.contextPath}/images/index-icon.png"/><span>首页</span></a></li>
 <li><a href="${pageContext.request.contextPath}/order/userOrders/1.html"><img src="${pageContext.request.contextPath}/images/order-icon-now.png"/><span class="be-now">订单</span></a></li>
 <li><a href="${pageContext.request.contextPath}/members/couponList.html"><img src="${pageContext.request.contextPath}/images/sale-icon.png"/><span>优惠券</span></a></li>
 <li><a href="${pageContext.request.contextPath}/members/accountInfo.html"><img src="${pageContext.request.contextPath}/images/mine.png"/><span>我的</span></li>

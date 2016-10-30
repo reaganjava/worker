@@ -41,11 +41,11 @@
 		<tbody>
 		  <c:forEach items="${PAGE_BEAN.dataList}" var="smsRecord">
 			<tr class="text-c">
-				<td><input type="checkbox" value="${SmsRecord.id}" name="idArray"></td>
-				<td>${SmsRecord.id}</td>
-				<td>${SmsRecord.sMobile}</td>
-				<td>${SmsRecord.sFee}</td>
-				<td>${SmsRecord.formatDate}</td>
+				<td><input type="checkbox" value="${smsRecord.id}" name="idArray"></td>
+				<td>${smsRecord.id}</td>
+				<td>${smsRecord.sMobile}</td>
+				<td>${smsRecord.sFee}</td>
+				<td>${smsRecord.formatDate}</td>
 			</tr>
 		</c:forEach>
 		</tbody>
@@ -69,7 +69,7 @@ $(function(){
 		"bPaginate" : false,// 分页按钮  
 		"aoColumnDefs": [
 		  //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
-		  {"orderable":false,"aTargets":[0,8,9]}// 制定列不参与排序
+		  {"orderable":false,"aTargets":[0,3,4]}// 制定列不参与排序
 		]
 	});
 	$('.table-sort tbody').on( 'click', 'tr', function () {

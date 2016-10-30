@@ -137,6 +137,7 @@ public class SmsServiceImpl  extends BaseServiceImpl implements ISmsService {
 		
 		try {
 			list = smsRecordMapper.selectByExample(example);
+			System.out.println(list.size());
 		} catch (Exception e) {
 			result.setSuccess(false);
 	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);

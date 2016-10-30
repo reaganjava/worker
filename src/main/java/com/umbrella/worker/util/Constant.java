@@ -6,6 +6,8 @@ public class Constant {
 	
 	public static final String SMS_ORDER_ASSIGNED_KEY = "sms_order_assigned";
 	
+	public static final String SMS_STAFF_ASSIGNED_KEY = "sms_staff_assigned";
+	
 	
 	public static final String[] PAY_CHANNELS = {"微信支付", ""};
 	

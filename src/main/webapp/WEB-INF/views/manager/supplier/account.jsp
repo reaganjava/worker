@@ -37,10 +37,12 @@
 <div class="ding" style=" border:1px solid #c0c0c0; width:96%; padding:5px 0 15px 30px; margin-top:20px; background:#FFF">
 <h4>资金账户</h4>
 <ul>
-<li>账户余额：<span>${SUPPLIER_ACCOUNT.wABalance}</span></li>
-<li>最近提现金额&nbsp; &nbsp;：<span>${SUPPLIER_ACCOUNT.wALastWithdraw}</span></li>
+<li>费用：<span>人民币：${SUPPLIER_ACCOUNT.wAFee}元</span></li>
+<li>账户余额：<span>人民币：${SUPPLIER_ACCOUNT.wABalance}元</span></li>
+<li>可体现金额：<span>人民币：${SUPPLIER_ACCOUNT.wABalance}元</span></li>
+<li>最近提现金额&nbsp; &nbsp;：<span>人民币：${SUPPLIER_ACCOUNT.wALastWithdraw}元</span></li>
 <li>最近提现时间：<span>${SUPPLIER_ACCOUNT.wALastWithdrawDate}</span></li>
-<li>最近结算金额：<span>${SUPPLIER_ACCOUNT.wALastSave} </span></li>
+<li>最近结算金额：<span>人民币：${SUPPLIER_ACCOUNT.wALastSave}元</span></li>
 <li>最近结算时间：<span>${SUPPLIER_ACCOUNT.wALastSaveDate}</span></li>
 
 </ul>

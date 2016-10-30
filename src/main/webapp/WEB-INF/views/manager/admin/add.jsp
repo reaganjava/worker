@@ -73,8 +73,8 @@
       <div class="formControls col-5"> <span class="select-box">
         <select class="select" size="1" name="wARoleId" datatype="*" nullmsg="请选择角色！">
           <option value="" selected>请选角色</option>
-          <option value="1">渠道管理员</option>
-          <option value="8">平台管理员</option>
+          <option value="10">渠道管理员</option>
+          <option value="9">平台管理员</option>
         </select>
         </span> </div>
       <div class="col-4"> </div>

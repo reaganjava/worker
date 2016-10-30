@@ -24,7 +24,6 @@ import com.umbrella.worker.dto.TaskDO;
 import com.umbrella.worker.dto.ContactDO;
 import com.umbrella.worker.dto.OrderDO;
 import com.umbrella.worker.dto.OrderDetailDO;
-import com.umbrella.worker.query.ContactQuery;
 import com.umbrella.worker.query.OrderQuery;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
@@ -337,7 +336,7 @@ public class OrderController extends BaseController{
 			    		html += "<a href=\"javascript:;\" onclick=\"cancelShow(" + order.getId() + ")\">取消订单</a>";
 			    		break;
 			    	}
-			    	case 3: {
+			    	case 8: {
 			    		html += "<a href=\"javascript:;\" onclick=\"confirmOrder(" + order.getId() + ")\">确认订单</a>";
 			    		break;                                            
 			    	}

@@ -27,10 +27,8 @@
 <nav class="breadcrumb"> <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 <div class="pd-20">
 	<div class="text-c">
-		<input type="text" class="input-text" style="width:250px" placeholder="输入订单号" id="" name="">
-		<button type="submit" class="btn btn-success radius" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 搜管订单</button>
 	</div>
-	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="r">共有数据：<strong>${PAGE_BEAN.recordCount}</strong> 条</span> </div>
+	<div class="cl pd-5 bg-1 bk-gray mt-20"></div>
 	<div class="mt-20">
 	<table class="table table-border table-bordered table-hover table-bg table-sort">
 		<thead>
@@ -39,7 +37,7 @@
 				<th width="80">ID</th>
 				<th width="40">订单号</th>
 				<th width="40">客户姓名</th>
-				<th width="40">客户地址</th>
+				<th width="100">客户地址</th>
 				<th width="40">客户电话</th>
 				<th width="40">服务名称</th>
 				<th width="90">费用</th>
@@ -50,6 +48,7 @@
 		<tbody>
 		  <c:forEach items="${PAGE_BEAN.dataList}" var="order">
 			<tr class="text-c">
+				
 				<td><input type="checkbox" value="${order.id}" name="idArray"></td>
 				<td>${order.id}</td>
 				<td>${order.wOOrderNo}</td>
@@ -61,7 +60,7 @@
 				<td>${order.formatDate}</td>
 				<td class="td-manage">
 			
-				<i class="Hui-iconfont">&#xe631;</i></a> <a title="商家确认" href="javascript:;" onclick="order_assigned('商家确认','/morder/assigned/${order.id}.html','${order.id}','','510')" class="ml-5" style="text-decoration:none">
+				<i class="Hui-iconfont">&#xe631;</i></a> <a title="订单详情" href="javascript:;" onclick="order_detail('订单详情','/morder/detail/${order.id}.html','${order.id}','','510')" class="ml-5" style="text-decoration:none">
 				
 				<i class="Hui-iconfont">&#xe6df;</i></a> 
 				
@@ -101,14 +100,16 @@ $(function(){
 		}
 	});
 	
+	$("#find").on('click', function() {
+		var status = $("#status").val();
+		
+		window.location.href="${pageContext.request.contextPath}/morder/list/all/" + status + "/1.html";
+	})
 	
 });
-
-/*渠道-编辑*/
-function order_assigned(title,url,id,w,h){
+function order_detail(title,url,id,w,h){
 	layer_show(title,url,w,h);
 }
-
 </script> 
 </body>
 </html>

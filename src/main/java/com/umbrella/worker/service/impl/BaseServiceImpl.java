@@ -18,6 +18,7 @@ import com.umbrella.worker.dto.OrderDetailDO;
 import com.umbrella.worker.dto.PayrecordDO;
 import com.umbrella.worker.dto.SmsRecordDO;
 import com.umbrella.worker.dto.StaffDO;
+import com.umbrella.worker.dto.StaffTimeDO;
 import com.umbrella.worker.dto.SupplierAccountDO;
 import com.umbrella.worker.dto.SupplierDO;
 import com.umbrella.worker.dto.SupplierPayrecordDO;
@@ -37,6 +38,7 @@ import com.umbrella.worker.entity.WOrderDetail;
 import com.umbrella.worker.entity.WPayrecord;
 import com.umbrella.worker.entity.WSmsRecord;
 import com.umbrella.worker.entity.WStaff;
+import com.umbrella.worker.entity.WStaffTime;
 import com.umbrella.worker.entity.WSupplier;
 import com.umbrella.worker.entity.WSupplierAccount;
 import com.umbrella.worker.entity.WSupplierPayrecord;
@@ -310,6 +312,29 @@ public class BaseServiceImpl {
 		return resultList;
 	}
 	
+	protected StaffTimeDO getStaffTimeDO(WStaffTime obj) {
+		if(obj == null) return null;
+		StaffTimeDO dst = new StaffTimeDO();
+		return BeanUtilsExtends.copyProperties(dst, obj) ? dst : null;
+	}
+	
+	protected List<StaffTimeDO> getStaffTimeDOList(List<WStaffTime> list) {
+		List<StaffTimeDO> resultList = new ArrayList<StaffTimeDO>();
+		if(list.size() > 0) {
+			for(WStaffTime staffTime : list) {
+				StaffTimeDO staffTimeDO = this.getStaffTimeDO(staffTime);
+				if(staffTimeDO != null) {
+					resultList.add(staffTimeDO);
+				} else {
+					return null;
+				}
+			}
+		} else {
+			return null;
+		}
+		return resultList;
+	}
+	
 	protected SupplierDO getSupplierDO(WSupplier obj) {
 		if(obj == null) return null;
 		SupplierDO dst = new SupplierDO();
@@ -366,6 +391,23 @@ public class BaseServiceImpl {
 		if(obj == null) return null;
 		SupplierAccountDO dst = new SupplierAccountDO();
 		return BeanUtilsExtends.copyProperties(dst, obj) ? dst : null;
+	}
+	
+	protected List<SupplierAccountDO> getSupplierAccountDOList(List<WSupplierAccount> list) {
+		List<SupplierAccountDO> resultList = new ArrayList<SupplierAccountDO>();
+		if(list.size() > 0) {
+			for(WSupplierAccount wSupplierAccount : list) {
+				SupplierAccountDO supplierAccountDO = this.getSupplierAccountDO(wSupplierAccount);
+				if(supplierAccountDO != null) {
+					resultList.add(supplierAccountDO);
+				} else {
+					return null;
+				}
+			}
+		} else {
+			return null;
+		}
+		return resultList;
 	}
 	
 	protected SmsRecordDO getSmsRecordDO(WSmsRecord obj) {

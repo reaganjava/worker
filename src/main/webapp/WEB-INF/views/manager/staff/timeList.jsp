@@ -21,67 +21,38 @@
 <script type="text/javascript" src="http://lib.h-ui.net/DD_belatedPNG_0.0.8a-min.js" ></script>
 <script>DD_belatedPNG.fix('*');</script>
 <![endif]-->
-<title>管理员管理</title>
+<title>出勤人员表</title>
 </head>
 <body>
 <nav class="breadcrumb"> <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 <div class="pd-20">
-	<div class="text-c">
-		<input type="text" class="input-text" style="width:250px" placeholder="输入管理员名称" id="" name="">
-		<button type="submit" class="btn btn-success radius" id="" name=""><i class="Hui-iconfont">&#xe665;</i> 搜管理员</button>
-	</div>
-	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a> <a href="javascript:;" onclick="admin_add('添加管理员','/admin/add.html','','510')" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加管理员</a></span> <span class="r">共有数据：<strong>${PAGE_BEAN.recordCount}</strong> 条</span> </div>
+	
+	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="r">共有数据：<strong>${PAGE_BEAN.recordCount}</strong> 条</span> </div>
 	<div class="mt-20">
 	<table class="table table-border table-bordered table-hover table-bg table-sort">
 		<thead>
 			<tr class="text-c">
-				<th width="25"><input type="checkbox" name=""></th>
-				<th width="80">ID</th>
-				<th width="40">管理员名</th>
-				<th width="40">电话</th>
-				<th width="90">所属渠道</th>
-				<th width="90">真实姓名</th>
-				<th width="130">注册时间</th>
-				<th width="70">状态</th>
-				<th width="100">操作</th>
+				<th width="40">ID</th>
+				<th width="40">姓名</th>
+				<th width="80">手机号码</th>
+				<th width="60">服务项目</th>
+				<th width="180">服务时间</th>
+				<th width="40">客户姓名</th>
+				<th width="80">客户电话</th>
 			</tr>
 		</thead>
 		<tbody>
-		  <c:forEach items="${PAGE_BEAN.dataList}" var="admin">
+		  <c:forEach items="${PAGE_BEAN.dataList}" var="staffTime">
 			<tr class="text-c">
-				<td><input type="checkbox" value="${admin.id}" name="idArray"></td>
-				<td>${admin.id}</td>
-				<td>${admin.wAUsername}</td>
-				<td>${admin.wATelephone}</td>
-				<td>${admin.supplierName}</td>
-				<td>${admin.wARealName}</td>
-				<td>${admin.formatDate}</td>
 				
-				<td class="td-status">
-				<c:if test="${admin.status == 1}">
-				<span class="label label-success radius">已启用</span></td>
-				</c:if>
-				<c:if test="${admin.status == 0}">
-				<span class="label label-defaunt radius">已停用</span></td>
-				</c:if>
-				<c:if test="${admin.status == 2}">
-				<span class="label label-defaunt radius">待审核</span></td>
-				</c:if>
-				<td class="td-manage">
-			
-				<c:if test="${admin.status == 1}">
-				<a style="text-decoration:none" onClick="admin_stop(this,'${admin.id}')" href="javascript:;" title="停用">
-				</c:if>
-				<c:if test="${admin.status == 0}">
-				<a style="text-decoration:none" onClick="admin_start(this,'${admin.id}')" href="javascript:;" title="启用">
-				</c:if>
+				<td>${staffTime.id}</td>
+				<td>${staffTime.tStaffName}</td>
+				<td>${staffTime.tStaffMobile}</td>
+				<td>${staffTime.tServiceName}</td>
+				<td><fmt:formatDate value="${staffTime.tStartTime}"  type="BOTH" dateStyle="full"/>～<fmt:formatDate value="${staffTime.tEndTime}"  type="BOTH" dateStyle="full"/></td>
 				
-				
-				<i class="Hui-iconfont">&#xe631;</i></a> <a title="编辑" href="javascript:;" onclick="admin_edit('编辑','/admin/detail/${admin.id}.html','${admin.id}','','510')" class="ml-5" style="text-decoration:none">
-				
-				<i class="Hui-iconfont">&#xe6df;</i></a> 
-				<a title="删除" href="javascript:;" onclick="admin_del(this,'${admin.id}')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a></td>
-				
+				<td>${staffTime.tMemberName}</td>
+				<td>${staffTime.tMemberMobile}</td>
 				
 			</tr>
 		</c:forEach>

@@ -9,10 +9,10 @@ public class OrderDetailDO extends BaseDO {
 	
 	private Integer contactId;
 
-   
-	private Integer wOStiffId;
+	private Integer wOStiffOneId;
 
-	
+	private Integer wOStiffTowId;
+
     private String wOSupplierName;
 
  
@@ -67,10 +67,16 @@ public class OrderDetailDO extends BaseDO {
     private String wOTelephone;
 
     
-    private String wOStaffTelephone;
+    private String wOStaffOneTelephone;
 
     
-    private String wOStaffContact;
+    private String wOStaffOneContact;
+
+    
+    private String wOStaffTowTelephone;
+
+    
+    private String wOStaffTowContact;
 
     
     private String wOAddress;
@@ -151,33 +157,63 @@ public class OrderDetailDO extends BaseDO {
 		this.wOSupplierName = wOSupplierName;
 	}
 
-	public Integer getwOStiffId() {
-		return wOStiffId;
+	public Integer getwOStiffOneId() {
+		return wOStiffOneId;
 	}
 
 
-	public void setwOStiffId(Integer wOStiffId) {
-		this.wOStiffId = wOStiffId;
+	public void setwOStiffOneId(Integer wOStiffOneId) {
+		this.wOStiffOneId = wOStiffOneId;
 	}
 
 
-	public String getwOStaffTelephone() {
-		return wOStaffTelephone;
+	public Integer getwOStiffTowId() {
+		return wOStiffTowId;
 	}
 
 
-	public void setwOStaffTelephone(String wOStaffTelephone) {
-		this.wOStaffTelephone = wOStaffTelephone;
+	public void setwOStiffTowId(Integer wOStiffTowId) {
+		this.wOStiffTowId = wOStiffTowId;
 	}
 
 
-	public String getwOStaffContact() {
-		return wOStaffContact;
+	public String getwOStaffOneTelephone() {
+		return wOStaffOneTelephone;
 	}
 
 
-	public void setwOStaffContact(String wOStaffContact) {
-		this.wOStaffContact = wOStaffContact;
+	public void setwOStaffOneTelephone(String wOStaffOneTelephone) {
+		this.wOStaffOneTelephone = wOStaffOneTelephone;
+	}
+
+
+	public String getwOStaffOneContact() {
+		return wOStaffOneContact;
+	}
+
+
+	public void setwOStaffOneContact(String wOStaffOneContact) {
+		this.wOStaffOneContact = wOStaffOneContact;
+	}
+
+
+	public String getwOStaffTowTelephone() {
+		return wOStaffTowTelephone;
+	}
+
+
+	public void setwOStaffTowTelephone(String wOStaffTowTelephone) {
+		this.wOStaffTowTelephone = wOStaffTowTelephone;
+	}
+
+
+	public String getwOStaffTowContact() {
+		return wOStaffTowContact;
+	}
+
+
+	public void setwOStaffTowContact(String wOStaffTowContact) {
+		this.wOStaffTowContact = wOStaffTowContact;
 	}
 
 

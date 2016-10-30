@@ -28,7 +28,7 @@
 <title>嘿管家商户管理系统</title>
 </head>
 <body>
-<header class="Hui-header cl"> <a class="Hui-logo l" title="H-ui.admin v2.3" href="/manager/index.html">新生活商户管理系统</a> <span class="Hui-subtitle l">V0.1</span>
+<header class="Hui-header cl"> <a class="Hui-logo l" title="H-ui.admin v2.3" href="/manager/index.html">嘿管家商户管理系统</a> <span class="Hui-subtitle l">V0.1</span>
 	<nav class="mainnav cl" id="Hui-nav">
 		
 	</nav>

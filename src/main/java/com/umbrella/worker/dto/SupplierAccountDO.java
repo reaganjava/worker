@@ -7,7 +7,7 @@ public class SupplierAccountDO extends BaseDO {
 	
 	private Integer id;
 
-    private Integer wSupplierId;
+	private BigDecimal wAFee;
     
     private String supplierName;
 
@@ -29,12 +29,12 @@ public class SupplierAccountDO extends BaseDO {
 		this.id = id;
 	}
 
-	public Integer getwSupplierId() {
-		return wSupplierId;
+	public BigDecimal getwAFee() {
+		return wAFee;
 	}
 
-	public void setwSupplierId(Integer wSupplierId) {
-		this.wSupplierId = wSupplierId;
+	public void setwAFee(BigDecimal wAFee) {
+		this.wAFee = wAFee;
 	}
 
 	public String getSupplierName() {

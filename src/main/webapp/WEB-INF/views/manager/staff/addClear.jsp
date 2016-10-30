@@ -48,7 +48,7 @@
       </div>
       <div class="col-4"> </div>
     </div>
-    <input type="text" name="wSType" value="1">
+    <input type="hidden" name="wSType" value="1">
     <div class="row cl">
       <div class="col-9 col-offset-3">
         <input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">

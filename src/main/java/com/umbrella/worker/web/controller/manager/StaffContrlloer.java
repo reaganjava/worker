@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.umbrella.worker.dto.StaffDO;
 import com.umbrella.worker.query.StaffQuery;
+import com.umbrella.worker.query.StaffTimeQuery;
 import com.umbrella.worker.query.SupplierQuery;
 import com.umbrella.worker.result.JsonResultDO;
 import com.umbrella.worker.result.JsonResultSupport;
@@ -40,6 +41,20 @@ public class StaffContrlloer {
 		if(result.isSuccess()) {
 			mav.addObject("SUPPLIER_LIST", result.getModel(ResultSupport.FIRST_MODEL_KEY));
 			mav.setViewName("manager/staff/add");
+		} else {
+			mav.setViewName("error");
+		}
+		return mav; 
+	}
+	
+	@RequestMapping(value = "/addClear.html", method = RequestMethod.GET)
+	public ModelAndView addClear(ModelAndView mav, 
+			HttpServletRequest request) {
+		SupplierQuery query = new SupplierQuery();
+		ResultDO result = suppliersService.list(query);
+		if(result.isSuccess()) {
+			mav.addObject("SUPPLIER_LIST", result.getModel(ResultSupport.FIRST_MODEL_KEY));
+			mav.setViewName("manager/staff/addClear");
 		} else {
 			mav.setViewName("error");
 		}
@@ -231,6 +246,37 @@ public class StaffContrlloer {
 			pageBean.setDataList((List<Object>) result.getModel(ResultSupport.FIRST_MODEL_KEY));
 			mav.addObject("PAGE_BEAN", pageBean);
 			mav.setViewName("manager/task/list");
+		} else {
+			mav.setViewName("error");
+		}
+		return mav;
+		
+	}
+	
+	@RequestMapping(value = "/timeList/{status}/{pageNo}.html", method = RequestMethod.GET)
+	public ModelAndView query(ModelAndView mav,
+			@PathVariable(value="status") Integer status,
+			@PathVariable(value="pageNo") Integer pageNo,
+			HttpServletRequest request) {
+		
+		StaffTimeQuery query = new StaffTimeQuery();
+		query.setPage(true);
+		query.setPageNO(pageNo);
+		query.setPageRows(10);
+		query.setStatus(status);
+		ResultDO result = staffService.listStaffTime(query);
+		System.out.println(result);
+		if(result.isSuccess()) {
+			PageBeanUtil pageBean = new PageBeanUtil();
+			long count = (Long) result.getModel(ResultSupport.SECOND_MODEL_KEY);
+			pageBean.setCurrentPage(pageNo);
+			pageBean.setPageSize(query.getPageRows());
+			pageBean.setRecordCount(count);
+			pageBean.setPageCount(count);
+			pageBean.setPages(pageNo);
+			pageBean.setDataList((List<Object>) result.getModel(ResultSupport.FIRST_MODEL_KEY));
+			mav.addObject("PAGE_BEAN", pageBean);
+			mav.setViewName("manager/staff/timeList");
 		} else {
 			mav.setViewName("error");
 		}

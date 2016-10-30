@@ -1,5 +1,6 @@
 package com.umbrella.worker.service.impl;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -9,11 +10,18 @@ import org.springframework.stereotype.Service;
 
 import com.umbrella.worker.dao.WSupplierAccountMapper;
 import com.umbrella.worker.dao.WSupplierMapper;
+import com.umbrella.worker.dao.WSupplierPayrecordMapper;
 import com.umbrella.worker.dto.SupplierAccountDO;
 import com.umbrella.worker.dto.SupplierDO;
+import com.umbrella.worker.dto.SupplierPayrecordDO;
 import com.umbrella.worker.entity.WSupplier;
 import com.umbrella.worker.entity.WSupplierAccount;
+import com.umbrella.worker.entity.WSupplierAccountExample;
 import com.umbrella.worker.entity.WSupplierExample;
+import com.umbrella.worker.entity.WSupplierPayrecord;
+import com.umbrella.worker.entity.WSupplierPayrecordExample;
+import com.umbrella.worker.query.SupplierAccountQuery;
+import com.umbrella.worker.query.SupplierPayrecordQuery;
 import com.umbrella.worker.query.SupplierQuery;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
@@ -28,6 +36,8 @@ public class SuppliersServiceImpl  extends BaseServiceImpl implements ISuppliers
 	private WSupplierMapper supplierMapper;
 	@Autowired
 	private WSupplierAccountMapper supplierAccountMapper;
+	@Autowired
+	private WSupplierPayrecordMapper supplierPayrecordMapper;
 	@Override
 	public ResultDO create(SupplierDO supplierDO) {
 		
@@ -279,6 +289,158 @@ public class SuppliersServiceImpl  extends BaseServiceImpl implements ISuppliers
 		List<SupplierDO> supplierList = getSupplierDOList(list);
 
 		result.setModel(ResultSupport.FIRST_MODEL_KEY, supplierList);
+		
+		return result;
+	}
+	
+	@Override
+	public ResultDO listPayrecord(SupplierPayrecordQuery query) {
+		ResultSupport result = new ResultSupport();
+	
+		
+		WSupplierPayrecordExample example = new WSupplierPayrecordExample();
+		WSupplierPayrecordExample.Criteria c = example.createCriteria();
+		if(StringUtil.isGreatOne(query.getSupplierId())) {
+			c.andWPSupperIdEqualTo(query.getSupplierId());
+		}
+		c.andDatalevelEqualTo(1);
+		
+		if(StringUtil.isNotEmpty(query.getOrderByClause())) {	
+			example.setOrderByClause(" " + query.getOrderByClause() + " " + query.getSort());
+		} else {
+			example.setOrderByClause(" CREATE_TIME ASC");
+		}
+		
+		if(query.isPage()) {
+			long count = 0;
+			try {
+				count = supplierPayrecordMapper.countByExample(example);
+			} catch (Exception e) {
+				result.setSuccess(false);
+		        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+		        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+		        e.printStackTrace();
+		        logger.error("[obj:member][opt:get][msg:"+e.getMessage()+"]");
+		        return result;
+			}
+			result.setModel(ResultSupport.SECOND_MODEL_KEY, count);
+			int pageNO = query.getPageNO();
+			if(pageNO > 0) {
+				pageNO = pageNO -1;
+			}
+			System.out.println(pageNO);
+			String pageByClause = " limit " + (pageNO * query.getPageRows())
+					+ "," + query.getPageRows();
+			
+			example.setPageByClause(pageByClause);
+		}
+		
+		List<WSupplierPayrecord> list = null;
+		
+		try {
+			list = supplierPayrecordMapper.selectByExample(example);
+		} catch (Exception e) {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+	        logger.error("[obj:supplier][opt:get][msg:"+e.getMessage()+"]");
+	        return result;
+		}
+		
+		List<SupplierPayrecordDO> supplierList = getSupplierPayrecordDOList(list);
+
+		List<SupplierPayrecordDO> list2 = new ArrayList<SupplierPayrecordDO>();
+		if(supplierList != null) {
+			for(SupplierPayrecordDO supplierPayrecordDO : supplierList) {
+				try {
+					WSupplier supplier = supplierMapper.selectByPrimaryKey(supplierPayrecordDO.getwPSupperId());
+					supplierPayrecordDO.setSupplierName(supplier.getwSName());
+					list2.add(supplierPayrecordDO);
+				} catch (Exception e) {
+					result.setSuccess(false);
+			        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+			        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			        logger.error("[obj:supplier][opt:get][msg:"+e.getMessage()+"]");
+			        return result;
+				}
+			}
+		}
+		result.setModel(ResultSupport.FIRST_MODEL_KEY, list2);
+		
+		return result;
+	}
+	
+	@Override
+	public ResultDO listAccount(SupplierAccountQuery query) {
+		ResultSupport result = new ResultSupport();
+	
+		
+		WSupplierAccountExample example = new WSupplierAccountExample();
+		WSupplierAccountExample.Criteria c = example.createCriteria();
+		
+		c.andDatalevelEqualTo(1);
+		
+		if(StringUtil.isNotEmpty(query.getOrderByClause())) {	
+			example.setOrderByClause(" " + query.getOrderByClause() + " " + query.getSort());
+		} else {
+			example.setOrderByClause(" CREATE_TIME ASC");
+		}
+		
+		if(query.isPage()) {
+			long count = 0;
+			try {
+				count = supplierAccountMapper.countByExample(example);
+			} catch (Exception e) {
+				result.setSuccess(false);
+		        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+		        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+		        e.printStackTrace();
+		        logger.error("[obj:member][opt:get][msg:"+e.getMessage()+"]");
+		        return result;
+			}
+			result.setModel(ResultSupport.SECOND_MODEL_KEY, count);
+			int pageNO = query.getPageNO();
+			if(pageNO > 0) {
+				pageNO = pageNO -1;
+			}
+			System.out.println(pageNO);
+			String pageByClause = " limit " + (pageNO * query.getPageRows())
+					+ "," + query.getPageRows();
+			
+			example.setPageByClause(pageByClause);
+		}
+		
+		List<WSupplierAccount> list = null;
+		
+		try {
+			list = supplierAccountMapper.selectByExample(example);
+		} catch (Exception e) {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+	        logger.error("[obj:supplier][opt:get][msg:"+e.getMessage()+"]");
+	        return result;
+		}
+		
+		List<SupplierAccountDO> supplierList = getSupplierAccountDOList(list);
+
+		List<SupplierAccountDO> list2 = new ArrayList<SupplierAccountDO>();
+		if(supplierList != null) {
+			for(SupplierAccountDO supplierAccountDO : supplierList) {
+				try {
+					WSupplier supplier = supplierMapper.selectByPrimaryKey(supplierAccountDO.getId());
+					supplierAccountDO.setSupplierName(supplier.getwSName());
+					list2.add(supplierAccountDO);
+				} catch (Exception e) {
+					result.setSuccess(false);
+			        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+			        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			        logger.error("[obj:supplier][opt:get][msg:"+e.getMessage()+"]");
+			        return result;
+				}
+			}
+		}
+		result.setModel(ResultSupport.FIRST_MODEL_KEY, list2);
 		
 		return result;
 	}

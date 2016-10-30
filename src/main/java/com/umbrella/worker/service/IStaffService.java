@@ -2,6 +2,7 @@ package com.umbrella.worker.service;
 
 import com.umbrella.worker.dto.StaffDO;
 import com.umbrella.worker.query.StaffQuery;
+import com.umbrella.worker.query.StaffTimeQuery;
 import com.umbrella.worker.result.ResultDO;
 
 public interface IStaffService {
@@ -15,4 +16,6 @@ public interface IStaffService {
 	public ResultDO get(int staffId);
 	
 	public ResultDO list(StaffQuery staffQuery);
+	
+	public ResultDO listStaffTime(StaffTimeQuery query);
 }

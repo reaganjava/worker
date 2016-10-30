@@ -28,18 +28,16 @@
 <div class="pd-20">
 	<div class="text-c">
 		<select name="status" id="status">
-		    <c:if test="${sessionScope.MANAGER_SUPPLIER_ID == 1}">
-		    	<option value="1">未付款</option>
-		    	<option value="2">已付款</option>
-		    </c:if>
-			<option value="3">已分配</option>
+		    <option value="1">未付款</option>
+		    <option value="2">已付款</option>
+			<option value="8">已分配</option>
 			<option value="5">已取消</option>
 			<option value="6">已完成</option>
 			<option value="7">已结算</option>
 		</select>
 		<button type="submit" class="btn btn-success radius" id="find" name=""><i class="Hui-iconfont">&#xe665;</i> 搜管订单</button>
 	</div>
-	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><span class="r">总共金额：<strong>${INCOME}</strong> 元</span> </div>
+	<div class="cl pd-5 bg-1 bk-gray mt-20"> </div>
 	<div class="mt-20">
 	<table class="table table-border table-bordered table-hover table-bg table-sort">
 		<thead>
@@ -47,11 +45,13 @@
 				<th width="25"><input type="checkbox" name=""></th>
 				<th width="80">ID</th>
 				<th width="40">订单号</th>
+				<th width="40">服务渠道商</th>
+				<th width="40">客户姓名</th>
+				<th width="100">客户地址</th>
+				<th width="40">客户电话</th>
 				<th width="40">服务名称</th>
-				<th width="40">是否支付</th>
 				<th width="90">费用</th>
 				<th width="70">创建时间</th>
-				<th width="40">订单状态</th>
 				<th width="100">操作</th>
 			</tr>
 		</thead>
@@ -59,29 +59,16 @@
 		  <c:forEach items="${PAGE_BEAN.dataList}" var="order">
 			<tr class="text-c">
 				<td><input type="checkbox" value="${order.id}" name="idArray"></td>
+			
 				<td>${order.id}</td>
 				<td>${order.wOOrderNo}</td>
+				<td>${order.orderDetailDO.wOSupplierName}</td>
+				<td>${order.orderDetailDO.wOContact}</td>
+				<td>${order.orderDetailDO.wOAddress}</td>
+				<td>${order.orderDetailDO.wOTelephone}</td>
 				<td>${order.wOServiceName}</td>
-				<td>
-				<c:if test="${order.wOIsPay == 1}">
-				<span class="label label-success radius">已支付</span></td>
-				</c:if>
-				<c:if test="${order.wOIsPay == 0}">
-				<span class="label label-defaunt radius">未支付</span></td>
-				</c:if>
-				</td>
 				<td>￥${order.wOFee}元</td>
 				<td>${order.formatDate}</td>
-				<td>
-				<c:if test="${order.status == 3}">
-				<span class="label label-success radius">已分配</span></td>
-				</c:if>
-				<c:if test="${order.status == 5}">
-				<span class="label label-defaunt radius">已取消</span></td>
-				</c:if>
-				<c:if test="${order.status == 6}">
-				<span class="label label-defaunt radius">已完成</span></td>
-				</c:if></td>
 				<td class="td-manage">
 			
 				<i class="Hui-iconfont">&#xe631;</i></a> <a title="订单详情" href="javascript:;" onclick="order_detail('订单详情','/morder/detail/${order.id}.html','${order.id}','','510')" class="ml-5" style="text-decoration:none">

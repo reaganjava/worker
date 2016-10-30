@@ -3,6 +3,7 @@ package com.umbrella.worker.service.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -15,6 +16,7 @@ import com.umbrella.worker.dao.WOrderDetailMapper;
 import com.umbrella.worker.dao.WOrderMapper;
 import com.umbrella.worker.dao.WSmsRecordMapper;
 import com.umbrella.worker.dao.WStaffMapper;
+import com.umbrella.worker.dao.WStaffTimeMapper;
 import com.umbrella.worker.dao.WSupplierAccountMapper;
 import com.umbrella.worker.dao.WSupplierMapper;
 import com.umbrella.worker.dto.OrderDO;
@@ -26,6 +28,8 @@ import com.umbrella.worker.entity.WOrderExample;
 import com.umbrella.worker.entity.WSmsRecord;
 import com.umbrella.worker.entity.WSmsRecordExample;
 import com.umbrella.worker.entity.WStaff;
+import com.umbrella.worker.entity.WStaffTime;
+import com.umbrella.worker.entity.WStaffTimeExample;
 import com.umbrella.worker.entity.WSupplier;
 import com.umbrella.worker.entity.WSupplierAccount;
 import com.umbrella.worker.entity.WSupplierExample;
@@ -59,6 +63,8 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 	private WSmsRecordMapper smsRecordMapper;
 	@Autowired
 	private WStaffMapper staffMapper;
+	@Autowired
+	private  WStaffTimeMapper staffTimeMapper;
 	
 	@PostConstruct  
 	public void orderInit() {
@@ -281,13 +287,30 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 		if (!result.isSuccess()) {
 			return result;
 		}
+		orderDetail.setwOStiffOneId(staffList.get(0).getId());
+		orderDetail.setwOStaffOneTelephone(staffList.get(0).getwSTelephone());
+		orderDetail.setwOStaffOneContact(staffList.get(0).getwStaffName());
 		
-		orderDetail.setwOStaffTelephone(staffList.get(0).getwSTelephone());
-		orderDetail.setwOStaffContact(staffList.get(0).getwStaffName());
-		
+		if(staffList.size() > 1) {
+			orderDetail.setwOStiffTowId(staffList.get(1).getId());
+			orderDetail.setwOStaffTowTelephone(staffList.get(1).getwSTelephone());
+			orderDetail.setwOStaffTowContact(staffList.get(1).getwStaffName());
+		}
 		recordNum = -1;
 		try {
 			recordNum = orderDetailMapper.updateByPrimaryKeySelective(orderDetail);
+		} catch (Exception e) {
+			result.setSuccess(false);
+			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+			result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			logger.error("[obj:order][opt:modifi][msg:" + e.getMessage()
+					+ "]");
+			e.printStackTrace();
+			return result;
+		}
+		
+		try {
+			order = orderMapper.selectByPrimaryKey(order.getId());
 		} catch (Exception e) {
 			result.setSuccess(false);
 			result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
@@ -310,7 +333,70 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 			return result;
 		}
 		
-		String arg = orderDetail.getwOStaffContact() + "联系电话" + orderDetail.getwOStaffTelephone() + "本次服务由" + orderDetail.getwOSupplierName() + "为您提供！";
+		for(WStaff staff : staffList) {
+			WStaffTime staffTime = new WStaffTime();
+			staffTime.settStaffId(staff.getId());
+			staffTime.settStaffName(staff.getwStaffName());
+			staffTime.settStaffMobile(staff.getwSTelephone());
+			staffTime.settMemberName(orderDetail.getwOContact());
+			staffTime.settMemberMobile(orderDetail.getwOTelephone());
+			staffTime.settSupplierId(staff.getwSSupplierId());
+			staffTime.settOrderno(order.getwOOrderNo());
+			staffTime.settServiceName(order.getwOServiceName());
+			staffTime.settStartTime(orderDetail.getwOSubscribe());
+			staffTime.settEndTime(new Date(orderDetail.getwOSubscribe().getTime() + (orderDetail.getwOServerTime() * 60 * 60 * 1000)));
+			staffTime.setCreateAuthor("system");
+			staffTime.setModifiAuthor("system");
+			staffTime.setCreateTime(Calendar.getInstance().getTime());
+			staffTime.setModifiTime(staffTime.getCreateTime());
+			//1.正在工作 2.已结束工作
+			staffTime.setStatus(1);
+			staffTime.setDatalevel(1);
+			
+			
+			try {
+				staffTimeMapper.insertSelective(staffTime);
+			} catch (Exception e) {
+				result.setSuccess(false);
+				result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+				result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+				logger.error("[obj:order][opt:modifi][msg:" + e.getMessage()
+						+ "]");
+				e.printStackTrace();
+				return result;
+			}
+			recordNum = -1;
+			String arg = order.getwOServiceName() + "任务请和客户" + orderDetail.getwOContact() + "联系，电话号码" + orderDetail.getwOTelephone();
+			WSmsRecord smsRecord = new WSmsRecord();
+			smsRecord.setsSupplierId(orderDO.getwOSupplierId());
+			smsRecord.setsMobile(orderDetail.getwOTelephone());
+			smsRecord.setsFee(new BigDecimal(0.08));
+			smsRecord.setCreateAuthor("system");
+			smsRecord.setModifiAuthor(smsRecord.getCreateAuthor());
+			smsRecord.setCreateTime(Calendar.getInstance().getTime());
+			smsRecord.setModifiTime(smsRecord.getCreateTime());
+			smsRecord.setStatus(1);
+			smsRecord.setDatalevel(1);
+			try {
+				recordNum = smsRecordMapper.insertSelective(smsRecord);
+			} catch (Exception e) {
+				
+				logger.error("[obj:order][opt:modifi][msg:" + e.getMessage()
+						+ "]");
+				e.printStackTrace();
+			}
+			if(recordNum > 0) {
+				smsGatewayService.initSMS();
+				ResultDO resultDO = smsGatewayService.send(staff.getwSTelephone(), Constant.SMS_STAFF_ASSIGNED_KEY, arg, 1);
+				if(!resultDO.isSuccess()) {
+					result.setSuccess(false);
+				}
+			} else {
+				result.setSuccess(false);
+			}
+		}
+		
+		String arg = orderDetail.getwOStaffOneContact() + "联系电话" + orderDetail.getwOStaffOneTelephone() + "本次服务由" + orderDetail.getwOSupplierName() + "为您提供！";
 		WSmsRecord smsRecord = new WSmsRecord();
 		smsRecord.setsSupplierId(orderDO.getwOSupplierId());
 		smsRecord.setsMobile(orderDetail.getwOTelephone());
@@ -549,7 +635,37 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 		
 		if(recordNum < 1) {
 			result.setSuccess(false);
+			return result;
 		}
+		
+		WOrderDetail orderDetail = new WOrderDetail();
+		try {
+			orderDetail = orderDetailMapper.selectByPrimaryKey(order.getId());
+		} catch (Exception e) {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+	        logger.error("[obj:supplier][opt:get][msg:"+e.getMessage()+"]");
+	        e.printStackTrace();
+	        return result;
+		}
+		
+		WStaffTimeExample wstex = new WStaffTimeExample();
+		wstex.createCriteria().andTStaffIdEqualTo(orderDetail.getwOStiffOneId());
+		WStaffTime staffTime = new WStaffTime();
+		staffTime.setStatus(2);
+		
+		try {
+			staffTimeMapper.updateByExampleSelective(staffTime, wstex);
+		} catch (Exception e) {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+	        logger.error("[obj:supplier][opt:get][msg:"+e.getMessage()+"]");
+	        e.printStackTrace();
+	        return result;
+		}
+		
 		return result;
 	}
 
@@ -617,7 +733,7 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 			c.andWOSupplierIdEqualTo(orderQuery.getSupplierId());
 		}
         c.andWOServiceTypeEqualTo(0);
-		c.andStatusEqualTo(2);
+		c.andStatusEqualTo(3);
 	
 
 		if(StringUtil.isNotEmpty(orderQuery.getOrderByClause())) {	
@@ -666,7 +782,24 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 		
 		List<OrderDO> orderList = getOrderDOList(list);
 		
-		result.setModel(ResultSupport.FIRST_MODEL_KEY, orderList);
+		WOrderDetail orderDetail = null;
+		List<OrderDO> list2 = new ArrayList<OrderDO>();
+		if(orderList != null) {
+			for(OrderDO order : orderList) {
+				try {
+					orderDetail = orderDetailMapper.selectByPrimaryKey(order.getId());
+				} catch (Exception e) {
+					result.setSuccess(false);
+			        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+			        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			        logger.error("[obj:order][opt:get][msg:"+e.getMessage()+"]");
+			        return result;
+				}
+				order.setOrderDetailDO(getOrderDetailDO(orderDetail));
+				list2.add(order);
+			}
+		}
+		result.setModel(ResultSupport.FIRST_MODEL_KEY, list2);
 		
 		return result;
 	}
@@ -731,8 +864,25 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 		}
 		
 		List<OrderDO> orderList = getOrderDOList(list);
+		WOrderDetail orderDetail = null;
+		List<OrderDO> list2 = new ArrayList<OrderDO>();
+		if(orderList != null) {
+			for(OrderDO order : orderList) {
+				try {
+					orderDetail = orderDetailMapper.selectByPrimaryKey(order.getId());
+				} catch (Exception e) {
+					result.setSuccess(false);
+			        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+			        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			        logger.error("[obj:order][opt:get][msg:"+e.getMessage()+"]");
+			        return result;
+				}
+				order.setOrderDetailDO(getOrderDetailDO(orderDetail));
+				list2.add(order);
+			}
+		}
 		
-		result.setModel(ResultSupport.FIRST_MODEL_KEY, orderList);
+		result.setModel(ResultSupport.FIRST_MODEL_KEY, list2);
 		
 		return result;
 	}
@@ -809,17 +959,21 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 		}
 		
 		List<OrderDO> orderList = getOrderDOList(list);
-		if(orderQuery.getSupplierId() != null) {
-			if(orderQuery.getSupplierId() != 1) {
-				if(orderList != null) {
-					BigDecimal income = new BigDecimal(0.00);
-					for(OrderDO orderDO : orderList) {
-						if(orderDO.getStatus() == 6) {
-							income = income.add(orderDO.getwOFee());
-						}
-					}
-					result.setModel(ResultSupport.THIRD_MODEL_KEY, income);
+			if(orderList != null) {
+			WOrderDetail orderDetail = null;
+			List<OrderDO> list2 = new ArrayList<OrderDO>();
+			for(OrderDO order : orderList) {
+				try {
+					orderDetail = orderDetailMapper.selectByPrimaryKey(order.getId());
+				} catch (Exception e) {
+					result.setSuccess(false);
+			        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+			        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+			        logger.error("[obj:order][opt:get][msg:"+e.getMessage()+"]");
+			        return result;
 				}
+				order.setOrderDetailDO(getOrderDetailDO(orderDetail));
+				list2.add(order);
 			}
 		}
 		result.setModel(ResultSupport.FIRST_MODEL_KEY, orderList);
@@ -933,6 +1087,8 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 										BigDecimal balance = supplierAccount.getwABalance();
 										balance = balance.add(order.getwOFee());
 										supplierAccount.setwABalance(balance);
+										supplierAccount.setwALastSave(order.getwOFee());
+										supplierAccount.setwALastSaveDate(Calendar.getInstance().getTime());
 										recordNum = supplierAccountMapper.updateByPrimaryKey(supplierAccount);
 										if(recordNum > 0) {
 											order.setStatus(7);
@@ -954,6 +1110,7 @@ public class OrderServiceImpl  extends BaseServiceImpl implements IOrderService 
 									if(smsFee.compareTo(BigDecimal.ZERO) != 0) { 
 										balance = balance.divide(smsFee);
 										supplierAccount.setwABalance(balance);
+										supplierAccount.setwAFee(smsFee);
 										supplierAccountMapper.updateByPrimaryKey(supplierAccount);
 								}
 								

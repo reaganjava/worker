@@ -169,7 +169,7 @@ public class MenuServiceImpl  extends BaseServiceImpl implements IMenuService{
 		}
 		
 		if(StringUtil.isGreatOne(menuQuery.getRoleId())) {
-			c.andWMRoleIdLessThanOrEqualTo(menuQuery.getRoleId());
+			c.andWMRoleIdEqualTo(menuQuery.getRoleId());
 		}
 		
 		if(StringUtil.isNotEmpty(menuQuery.getOrderByClause())) {	

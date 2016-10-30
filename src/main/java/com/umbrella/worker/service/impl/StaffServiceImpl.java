@@ -10,15 +10,17 @@ import org.springframework.stereotype.Service;
 
 import com.umbrella.worker.dao.WCertificoreMapper;
 import com.umbrella.worker.dao.WStaffMapper;
+import com.umbrella.worker.dao.WStaffTimeMapper;
 import com.umbrella.worker.dao.WSupplierMapper;
-import com.umbrella.worker.dto.CertificoreDO;
 import com.umbrella.worker.dto.StaffDO;
-import com.umbrella.worker.entity.WCertificore;
-import com.umbrella.worker.entity.WCertificoreExample;
+import com.umbrella.worker.dto.StaffTimeDO;
 import com.umbrella.worker.entity.WStaff;
 import com.umbrella.worker.entity.WStaffExample;
+import com.umbrella.worker.entity.WStaffTime;
+import com.umbrella.worker.entity.WStaffTimeExample;
 import com.umbrella.worker.entity.WSupplier;
 import com.umbrella.worker.query.StaffQuery;
+import com.umbrella.worker.query.StaffTimeQuery;
 import com.umbrella.worker.result.ResultDO;
 import com.umbrella.worker.result.ResultSupport;
 import com.umbrella.worker.service.IStaffService;
@@ -34,6 +36,8 @@ public class StaffServiceImpl  extends BaseServiceImpl implements IStaffService 
 	private WCertificoreMapper certificoreMapper;
 	@Autowired
 	private WSupplierMapper supplierMapper;
+	@Autowired
+	private WStaffTimeMapper staffTimeMapper;
 
 	@Override
 	public ResultDO create(StaffDO staffDO) {
@@ -261,5 +265,55 @@ public class StaffServiceImpl  extends BaseServiceImpl implements IStaffService 
 		return result;
 	}
 	
+	@Override
+	public ResultDO listStaffTime(StaffTimeQuery query) {
+		
+		ResultSupport result = new ResultSupport();
+		
+		WStaffTimeExample example = new WStaffTimeExample();
+		WStaffTimeExample.Criteria c = example.createCriteria();
+		
+		c.andStatusEqualTo(query.getStatus());
+		if(query.isPage()) {
+			long count = 0;
+			try {
+				count = staffTimeMapper.countByExample(example);
+			} catch (Exception e) {
+				result.setSuccess(false);
+		        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+		        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+		        e.printStackTrace();
+		        logger.error("[obj:member][opt:get][msg:"+e.getMessage()+"]");
+		        return result;
+			}
+			result.setModel(ResultSupport.SECOND_MODEL_KEY, count);
+			int pageNO = query.getPageNO();
+			if(pageNO > 0) {
+				pageNO = pageNO -1;
+			}
+			String pageByClause = " limit " + (pageNO * query.getPageRows())
+					+ "," + query.getPageRows();
+			
+			example.setPageByClause(pageByClause);
+		}
+		
+		List<WStaffTime> list = null;
+		
+		try {
+			list = staffTimeMapper.selectByExample(example);
+		} catch (Exception e) {
+			result.setSuccess(false);
+	        result.setErrorCode(ResultDO.SYSTEM_EXCEPTION_ERROR);
+	        result.setErrorMsg(ResultDO.SYSTEM_EXCEPTION_ERROR_MSG);
+	        logger.error("[obj:staff][opt:get][msg:"+e.getMessage()+"]");
+	        return result;
+		}
+		
+		List<StaffTimeDO> staffTimeList = getStaffTimeDOList(list);
+		
+		result.setModel(ResultSupport.FIRST_MODEL_KEY, staffTimeList);
+		
+		return result;
+	}
 	
 }
