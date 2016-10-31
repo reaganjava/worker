@@ -62,15 +62,13 @@
 <li><a><button>返回</button></a></li></ul></div>
 </div>
 <!---弹窗开始---->
-<!-- <div id="back">  -->
-<!-- width: 200px;height: 100px;border:1px solid red;width:500px;height:380px;position:absolute;left:50%;margin-left:-250px;top:50%;margin-top:-190px;background-color: fff" -->
 <div id="cancelInfo" class=" time-pop-ups" style=" display:none;" >
-<form class="f-time">
-<input type="radio" name="time" value="1" onclick="cancel(1)">时间定错了<br>
-<input type="radio" name="time" value="2" onclick="cancel(2)">位置定错了<br>
-<input type="radio" name="time" value="3" onclick="cancel(3)">不需要了<br>
-<input type="radio" name="time" value="4" onclick="cancel(4)">其他原因<br>
-</form>
+<div class="f-time" style="padding-left:32%; font-size:16px; background:#FFF; line-height:28px; border:1px solid #B3ADAE; border-radius:4px; z-index:999;">
+<input type="radio" id="time-wrong" name="time" value="1" onclick="cancel(1)"><label for="time-wrong">时间定错</label><a href="${pageContext.request.contextPath}/order/userOrders/2.html" style="float: right;margin-right: 10px;margin-top: -3px;">x</a><br>
+<input type="radio" id="add-wrong" name="time" value="2" onclick="cancel(2)"><label for="add-wrong">位置定错</label><br>
+<input type="radio" id="no-need" name="time" value="3" onclick="cancel(3)"><label for="no-need">不需要了</label><br>
+<input type="radio" id="others" name="time" value="4" onclick="cancel(4)"><label for="others">其他原因</label><br>
+</div>
 </div>
 <!--</div> -->
 </div>
@@ -102,6 +100,8 @@
 				  if(data != 0) {
 					 alert('已经提交取消申请等待管理员确认！');
 				  }
+				  	//点击后刷新页面
+					 window.location.reload();
 			  }
 			});
 	}
@@ -158,8 +158,8 @@
 		
 	}
 
-		
-	function onDefault(id) {//设置一个默认的
+	//设置一个默认的	
+	function onDefault(id) {
 		
 		$.ajax({
 			  url: "${pageContext.request.contextPath}/members/default/" + id + ".json",

@@ -76,8 +76,11 @@ img{ border:0; padding:0; margin:0;}
 .lin-intro span{ display:block;}
 .lin-intro{ width:96%; margin:0 auto; background:#fff; margin-top:15px; height:120px; line-height:20px;}
 .remind{width:76%; margin:0 auto; margin-top:15px; clear:both;}
-.time-pop-ups form,.date-pop-ups form{ text-align:center; font-size:16px; background:#FFF; line-height:28px; width:100%}
-.time-pop-ups,.date-pop-ups{ /***用js写屏幕完全居中***/}
+/**.time-pop-ups form,.date-pop-ups form{ text-align:center; font-size:16px; background:#FFF; line-height:28px; width:100%}
+.time-pop-ups,.date-pop-ups{ /***用js写屏幕完全居中***/}**/
+.time-pop-ups form{padding-left:32%; font-size:16px; background:#FFF; line-height:28px; border:1px solid #B3ADAE; border-radius:4px; z-index:999;}
+.time-pop-ups input{ width:18px; height:18px;}
+.time-pop-ups{margin: 0 auto; width: 90%; max-width:640px; position:fixed; top:30%; left:0; right:0;z-index:999;background:#FFF;}
 /***地址管理***/
 .address-detail ul{ width:100%; border:1px solid #dadada; background:#fff;}
 .address-detail ul li{ background:url(../images/gou_af98dea.png) left center no-repeat; background-size:20px 20px; margin-left: 20px;padding-left:40px;position: relative;}

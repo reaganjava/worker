@@ -36,7 +36,7 @@
 				<section class="chooses-time">
 					<p>请选择服务时间</p>
 					<div class="time-input">
-						<a> <select id="year" name="subDate" style="width: 130px;">
+						<a> <select id="year" name="subDate" onchange="changeYear(this.value)" style="width: 130px;">
 								<c:forEach items="${WEEK_DATE_LIST}" var="dateValueDO">
 									<option value="${dateValueDO.dateValue}">${dateValueDO.weekDate}<br>
 								</c:forEach></a> <a> 
@@ -513,65 +513,92 @@
 		
 	});
 
-	function loadData() {
-		var d = new Date();
-		var year = d.getFullYear();
-		var month = d.getMonth() + 1;
-		var day = d.getDate();
-		var hour = d.getHours();
-		var min = d.getMinutes();
-		var secon = d.getSeconds();
-		var startHour = hour;
-		var startMin = min;
-		if (hour >= 16) {
+	function loadData(){
+		var d=new Date();
+		//获取年份
+		var year=d.getFullYear();
+		//获取月份，js系统时间的月份从0开始算的，也就是0月代表1月
+		var month=d.getMonth()+1;
+		//获取当前时间是这个月的第几天
+		var day=d.getDate();
+		//获取小时
+		var hour=d.getHours();
+		//获取分钟数
+		var min=d.getMinutes();
+		//小时下拉框的开始小时数
+		var startHour=hour;
+		//小时下拉框的开始分钟数(0/30)
+		var startMin=min;
+		//16点以后的情况
+		if(hour>=16){
 			d = new Date(d.valueOf() + 1 * 24 * 60 * 60 * 1000);
-			startHour = 8;
-			startMin = 0;
-		} else {
-			if (min >= 0 && min < 30) {
-				startMin = 30;
-				startHour += 2;
+			startHour=8;
+			startMin=0;
+		//6-16点之间的情况
+		}else if(hour>=6&&hour<=16){
+			if(min>=0&&min<30){
+				startMin=30;
+				startHour+=2;
 			}
-			if (min >= 30) {
-				startMin = 0;
-				startHour += 3;
+			if(min>=30){
+				startMin=0;
+				startHour+=3;
 			}
+		//16-6点之间的情况
+		}else{
+			startMin=0;
+			startHour=8;
 		}
-		var yearHTML = "";
-		var coun = 1;
-		while (true) {
-			year = d.getFullYear();
-			if (coun > 5)
-				break;//最多5天
-			month = d.getMonth() + 1;
-			month = month > 0 && month <= 9 ? "0" + month : month;
-			day = d.getDate();
-			day = day > 0 && day <= 9 ? "0" + day : day;
-			yearHTML += "<option value=\"" + (year + "-" + month + "-" + day)
-					+ "\">" + (year + " 年 " + month + " 月 " + day + " 日")
-					+ "</option>";
+		var yearHTML="";
+		var coun=1;
+		//生成日期下拉框，后面5天
+		while(true){
+			year=d.getFullYear();
+			//最多5天
+			if(coun>5) break;
+			month=d.getMonth()+1;
+			month=month>0&&month<=9?"0"+month:month;
+			day=d.getDate();
+			day=day>0&&day<=9?"0"+day:day;
+			yearHTML+="<option value=\""+(year+"年"+month+"月"+day+"日")+"\">"+(year+" 年 "+month+" 月 "+day+" 日")+"</option>";
 			d = new Date(d.valueOf() + 1 * 24 * 60 * 60 * 1000);
 			coun++;
 		}
-		document.getElementById("year").innerHTML = yearHTML;
-		var dayHTML = "";
-		for (var i = startHour; i <= 18; i++) {
-			var n = i >= 0 && i <= 9 ? "0" + i : i;
-			if (i == startHour && startMin == 30) {
-				if (i != 18) {
-					dayHTML += "<option value=\"" + (n + ":30") + "\">"
-							+ (n + " : 30") + "</option>";
+		document.getElementById("year").innerHTML=yearHTML;
+		var dayHTML="";
+		for(var i=startHour;i<=18;i++){
+			var n=i>=0&&i<=9?"0"+i:i;
+			if(i==startHour&&startMin==30){
+				if(i!=18){
+					dayHTML+="<option value=\""+(n+":30")+"\">"+(n+" : 30")+"</option>";
 				}
-			} else {
-				dayHTML += "<option value=\"" + (n + ":00") + "\">"
-						+ (n + " : 00") + "</option>";
-				if (i != 18) {
-					dayHTML += "<option value=\"" + (n + ":30") + "\">"
-							+ (n + " : 30") + "</option>";
+			}else{
+				dayHTML+="<option value=\""+(n+":00")+"\">"+(n+" : 00")+"</option>";
+				if(i!=18){
+					dayHTML+="<option value=\""+(n+":30")+"\">"+(n+" : 30")+"</option>";
 				}
 			}
 		}
-		document.getElementById("day").innerHTML = dayHTML;
+		document.getElementById("day").innerHTML=dayHTML;
+	}
+	function changeYear(val){
+		var d=new Date();
+		var year=d.getFullYear();
+		var month=d.getMonth()+1;
+		var day=d.getDate();
+		if(val==(year+"年"+month+"月"+day+"日")){
+			loadData();
+		}else{
+			var dayHTML="";
+			for(var i=8;i<=18;i++){
+				var n=i>=0&&i<=9?"0"+i:i;
+				dayHTML+="<option value=\""+(n+":00")+"\">"+(n+" : 00")+"</option>";
+				if(i!=18){
+					dayHTML+="<option value=\""+(n+":30")+"\">"+(n+" : 30")+"</option>";
+				}
+			}
+			document.getElementById("day").innerHTML=dayHTML;
+		}
 	}
 </script>
 </html>
